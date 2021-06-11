@@ -1,0 +1,106 @@
+﻿
+@{
+    ViewBag.Title = "Reporte de transacciones por confirmar";
+    ViewBag.Modulo = "Corte";
+    Layout = "~/Views/Plantillas/_Layout.cshtml";
+}
+
+    <div class="card card-primary card-outline">
+
+        <div class="card-header">
+            
+        </div>
+        <div class="card-body">
+
+            <table class="table table-bordered" id="tablereporte">
+                <thead class="thead-light">
+                    <tr>
+                        <th>Ficha</th>
+                        <th>Partida</th>
+                        <th>Doc Movimiento</th>
+                        <th>Almacen</th>
+                        <th>Cantidad</th>
+                        <th>Numero Rollo</th>
+                        <th>Situación Transacción</th>
+                    </tr>  
+                </thead>   
+                <tbody id="tbodyreporte">
+
+                    <!--
+                        <tr>
+                            <td>102035</td>
+                            <td>C020512</td>
+                            <td>1212053</td>
+                            <td>243</td>
+                            <td>5</td>
+                            <td>205024</td>
+                            <td>Confirmado</td>
+                        </tr>
+                        <tr>
+                            <td>102035</td>
+                            <td>C020512</td>
+                            <td>1212053</td>
+                            <td>243</td>
+                            <td>2</td>
+                            <td>205024</td>
+                            <td>Por Confirmar</td>
+                        </tr>
+                    -->
+
+                </tbody>   
+            </table>
+
+        </div>
+
+    </div>
+
+
+@section scripts{
+
+    <script>
+
+        $(document).ready(async function () {
+
+            //let html = $("#tbodyreporte").html();
+            //ArmarDataTable_New("reporte",html);
+            await getReporte();
+        });
+
+
+        async function getReporte() {
+
+            await get("Corte", "getReporteTransaccion", {}, true)
+                .then(response => {
+
+                    let tr = "";
+                    response.forEach((obj) => {
+
+                        tr += `
+                            <tr>
+                                <td>${obj.ficha}</td>
+                                <td>${obj.partida}</td>
+                                <td>${obj.doc_movimento}</td>
+                                <td>${obj.almacen}</td>
+                                <td>${obj.cantidad}</td>
+                                <td>${obj.rollo}</td>
+                                <td>${obj.estado}</td>
+                            </tr>
+                        `;
+
+                    });
+
+                    ArmarDataTable_New("reporte", tr);
+                        
+
+                }).catch(error => {
+                    console.log(error);
+                    AdvertirMini("Ocurrio un error, contacte a sistemas");
+                });
+
+        }
+
+
+    </script>
+
+}
+

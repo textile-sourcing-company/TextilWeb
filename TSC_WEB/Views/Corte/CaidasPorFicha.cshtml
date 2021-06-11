@@ -1,0 +1,251 @@
+﻿
+@{
+    ViewBag.Title = "Caidas Por Ficha";
+    ViewBag.Modulo = "Corte";
+
+    Layout = "~/Views/Plantillas/_Layout.cshtml";
+}
+
+<div class="card card-outline card-primary " >
+        
+    <div class="card-header">
+
+    </div>
+
+    <div class="card-body">
+
+        <form class="row justify-content-md-end mb-3" id="frmbusqueda">
+            <div class="col-md-2">
+                <label>Pendiente</label>
+                <input type="checkbox" name="name" class="form-control form-control-sm" id="radiopendiente" checked />
+            </div>
+            <div class="col-md-2">
+                <label>Realizado</label>
+                <input type="checkbox" name="name" class="form-control form-control-sm" id="radiorealizado"  />
+            </div>
+            <div class="col-md-2">
+                <label>Ficha</label>
+                <input type="text" name="name" class="form-control form-control-sm" id="txtficha" />
+            </div>
+            <div class="col-md-2">
+                <label>&nbsp;</label>
+                <button class="btn btn-primary btn-sm btn-block" type="submit">Buscar</button>
+            </div>
+        </form>
+
+
+        <div class="table-responsive">
+
+            <table class="table table-sm table-bordered" id="tablefichas">
+                <thead class="thead-light">
+                    <tr>
+                        <th nowrap>Partida</th>
+                        <th nowrap>Combo</th>
+                        <th nowrap>Versión</th>
+                        <th nowrap>Tipo Tela</th>
+                        <th nowrap>Usuario Tendido</th>
+                        <th nowrap>Fecha Tendido</th>
+                        <th nowrap>Ficha</th>
+                        <th nowrap>Cantidad Programada</th>
+                        <th nowrap>Cantidad Real</th>
+                        <th nowrap>Ficha Caida</th>
+
+
+                    </tr>
+                </thead>
+                <tbody id="tbodyfichas">
+                </tbody>
+            </table>
+
+        </div>
+
+
+    </div>
+
+</div>
+
+@section scripts {
+        
+    <script>
+
+
+        const frmbusqueda = document.getElementById("frmbusqueda");
+
+        frmbusqueda.addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            getcaidas().then(response => {
+                console.log(response);
+            })
+            .catch(error => {
+                console.log(error);
+                AdvertirMini("Ocurrio un error al obtener los datos");
+            })
+
+        });
+
+
+        $(document).ready(function () {
+
+            getcaidas().then(response => {
+                console.log(response);
+            })
+            .catch(error => {
+                console.log(error);
+                AdvertirMini("Ocurrio un error al obtener los datos");
+            })
+
+        });
+
+
+        // ARMA TABLA DE CAIDAS
+        async function getcaidas(){
+
+            MostrarCarga("Cargando...");
+
+            let datos = {
+                pendiente:  $("#radiopendiente").prop("checked") ? "1" : "0",
+                realizado: $("#radiorealizado").prop("checked") ? "1" : "0",
+                ficha: $("#txtficha").val().trim()
+            }
+
+            let response = [];
+            response = await get("corte", "getcaidas", datos, true);
+
+            let tr = "";
+            let sumpro = 0;
+            let sumrea = 0;
+            let indicemax = 0;
+
+            response.forEach((obj,index) => {
+
+                let caidaregistrada = obj.fichacaida != "" ? true : false;
+                let habilita = caidaregistrada ? "disabled" : "";
+                let habilitaboton = caidaregistrada ? "d-none" : "";
+                let checked = obj.fichacaida == obj.ficha ? "checked" : "";
+
+                indicemax = index < (response.length - 1)  ? index + 1 : index;
+                //console.log(indicemax);
+
+                tr += `
+                    <tr>
+                        <td> ${obj.partida} </td>
+                        <td> ${obj.combo} </td>
+                        <td> ${obj.version} </td>
+                        <td> ${obj.tipo_tela} </td>
+                        <td> ${obj.usuario_tendido} </td>
+                        <td> ${obj.fecha_tendido} </td>
+                        <td> ${obj.ficha} </td>
+                        <td class='text-right'> ${obj.cantidadprogramada} </td>
+                        <td class='text-right'> ${obj.cantidadreal} </td>
+                        <td>
+                            <input class='form-control form-control-sm ${obj.partida}_${obj.combo}_${obj.version}_caida'  ${habilita} ${checked} data-ficha='${obj.ficha}'  type='radio' name='${obj.partida}_${obj.combo}_${obj.version}_caida' >
+                        </td>
+                    </tr>
+                `;
+
+                sumpro += obj.cantidadprogramada;
+                sumrea += obj.cantidadreal;
+
+                // SI ES UNA PARTIDA NUEVA
+                if (obj.partida != response[indicemax].partida) {
+
+                    let diferencia = sumpro - sumrea;
+                    tr += `
+                        <tr class='bg-primary'>
+                            <td colspan='7'>
+                                <a class='btn btn-danger ${habilitaboton} btn-sm btncaida' data-id='${obj.id}' data-class='${obj.partida}_${obj.combo}_${obj.version}_caida' >
+                                    Realizar caida
+                                </a>
+                            </td>
+                            <td class='text-right'>${sumpro}</td>
+                            <td class='text-right'>${sumrea}</td>
+                            <td class='text-right'>${diferencia}</td>
+                        </tr>
+                    `;
+
+                    sumpro = 0;
+                    sumrea = 0;
+
+                }
+
+                // SI ES EL ULTIMO REGISTRO
+                if (index == response.length - 1) {
+
+                    let diferencia = sumpro - sumrea;
+                    tr += `
+                        <tr class='bg-primary'>
+                            <td colspan='7'>
+                                <a class='btn btn-danger ${habilitaboton} btn-sm btncaida' data-id='${obj.id}' data-class='${obj.partida}_${obj.combo}_${obj.version}_caida'>
+                                    Realizar caida
+                                </a>
+                            </td>
+                            <td class='text-right'>${sumpro}</td>
+                            <td class='text-right'>${sumrea}</td>
+                            <td class='text-right'>${diferencia}</td>
+                        </tr>
+                    `;
+
+                    sumpro = 0;
+                    sumrea = 0;
+                }
+
+
+                //partida = obj.partida;
+
+            });
+
+            $("#tbodyfichas").html(tr);
+            InformarMini("Reporte generado");
+                
+        }
+
+        // SELECCIONAMOS FICHAS PARA REALIZAR CAIDA
+        $("#tbodyfichas").on('click', '.btncaida', async function () {
+
+            let id = $(this).data("id");
+            
+            let clas = $(this).data("class");
+            let radios = $(`.${clas}`);
+            let seleccinado = false;
+            let fichacaida = null;
+            for (var x = 0; x < radios.length; x++) {
+                seleccinado = radios[x].checked;
+                fichacaida = radios[x].dataset.ficha;
+                if (seleccinado) break;
+            }
+
+            if (seleccinado) {
+                let respuesta = await Preguntar("Confirme para realizar caida de la ficha");
+                // PREGUNTAMOS
+                if (respuesta.value) {
+
+                    MostrarCarga("Cargando...");
+
+                    get("corte", "setCaidas", { id,fichacaida }, true)
+                        .then(async (response) => {
+                            if (response.success) {
+                                await getcaidas();
+                                InformarMini(response.rpt);
+
+                            } else {
+                                AdvertirMini(response.rpt);
+                            }       
+                        })
+                        .catch(error => {
+                            AdvertirMini("Ocurrio un error al realizar el proceso")
+                            console.log(error);
+                        })
+                }
+
+            } else {
+                AdvertirMini("Seleccione una ficha primero");
+            }
+
+            
+
+        });
+
+    </script>
+
+}

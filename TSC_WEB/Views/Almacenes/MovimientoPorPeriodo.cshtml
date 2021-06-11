@@ -1,0 +1,158 @@
+﻿
+@{
+    ViewBag.Title = "Movimiento Por Periodo";
+    Layout = "~/Views/Plantillas/_Layout.cshtml";
+}
+
+<div class="card-body">
+    <div class="row">
+        <div class="col-xl-2 col-lg-3 col-md-4 col-sm-4">
+            <h6>Fecha Inicio</h6>
+            <div class="form-group">
+                <input type="date" class="form-control numeros8 form-control-sm" id="DTFechaIni" value="" maxlength="8" onkeypress="nextFocus('DTFechaIni', 'DTFechaFin')" />
+            </div>
+        </div>
+
+        <div class="col-xl-2 col-lg-3 col-md-4 col-sm-4">
+            <h6>Fecha Fin</h6>
+            <div class="form-group">
+                <input type="date" class="form-control numeros8 form-control-sm" id="DTFechaFin" value="" maxlength="8" onkeypress="nextFocus('DTFechaFin', 'TxtLote')" />
+            </div>
+        </div>
+
+        <div class="col-xl-2 col-lg-3 col-md-4 col-sm-4">
+            <h6>Lote</h6>
+            <div class="form-group">
+                <input type="text" class="form-control numeros8 form-control-sm" id="TxtLote" value="" placeholder="Lote" onkeypress="nextFocus('TxtLote', 'TxtCodTran')" />
+            </div>
+        </div>
+        <div class="col-xl-1 col-lg-3 col-md-4 col-sm-4">
+            <h6>CodTran</h6>
+            <div class="form-group">
+                <input type="text" class="form-control form-control-sm" id="TxtCodTran" onkeypress="nextFocus('TxtCodTran', 'TxtNivel')" />
+            </div>
+        </div>
+        <div class="col-xl-2 col-lg-3 col-md-4 col-sm-4">
+            <h6>Transaccion</h6>
+            <div class="form-group">
+                <input type="text" class="form-control form-control-sm" id="TxtTransaccion" disabled />
+            </div>
+        </div>
+
+        <div class="col-xl-2 col-lg-3 col-md-4 col-sm-4">
+            <h6>Nivel</h6>
+            <div class="form-group">
+                <input type="text" class="form-control form-control-sm" id="TxtNivel" placeholder="Nivel" maxlength="1" onkeypress="nextFocus('TxtNivel', 'TxtGrupo')" />
+            </div>
+        </div>
+        <div class="col-xl-2 col-lg-3 col-md-4 col-sm-4">
+            <h6>Grupo</h6>
+            <div class="form-group">
+                <input type="text" class="form-control form-control-sm" id="TxtGrupo" placeholder="Grupo" maxlength="5" onkeypress="nextFocus('TxtGrupo', 'TxtSubGrupo')" />
+            </div>
+        </div>
+        <div class="col-xl-2 col-lg-3 col-md-4 col-sm-4">
+            <h6>SubGrupo</h6>
+            <div class="form-group">
+                <input type="text" class="form-control form-control-sm" id="TxtSubGrupo" placeholder="SubGrupo" maxlength="3" onkeypress="nextFocus('TxtSubGrupo', 'TxtItem')" />
+            </div>
+        </div>
+        <div class="col-xl-2 col-lg-3 col-md-4 col-sm-4">
+            <h6>Item</h6>
+            <div class="form-group">
+                <input type="text" class="form-control form-control-sm" id="TxtItem" placeholder="Item" maxlength="6" onkeypress="nextFocus('TxtItem', 'TxtCodAlm')" />
+            </div>
+        </div>
+
+        <div class="col-xl-2 col-lg-3 col-md-4 col-sm-4">
+            <h6>CodAlm</h6>
+            <div class="form-group">
+                <input type="text" class="form-control form-control-sm" id="TxtCodAlm" maxlength="3" onkeypress="nextFocus('TxtCodAlm', 'TxtAlmacen')" />
+            </div>
+        </div>
+        <div class="col-xl-2 col-lg-3 col-md-4 col-sm-4">
+            <h6>Almacen</h6>
+            <div class="form-group">
+                <input type="text" class="form-control form-control-sm" id="TxtAlmacen" disabled />
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 form-group">
+            <h6>&nbsp;</h6>
+            <button class="btn btn-block btnbuscar btn-sm" style="max-width:250px" type="submit" id="btnsearch">
+                <span class="btn-label">
+                    <i class="fas fa-search mr-2"></i>
+                </span>
+                Buscar
+            </button>
+        </div>
+
+        <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 form-group">
+            <h6>&nbsp;</h6>
+            <button class="btn btn-success btn-sm" style="max-width:250px" type="button" id="btnExportar">
+                <span class="btn-label">
+                    <i class="fas fa-file-excel"></i>
+                </span>
+                Exportar
+            </button>
+        </div>
+
+
+        <div class="col-12 form-group">
+            <table class="table table-bordered nowrap" style="width:100%" id="TablaMovPeriodo">
+                <thead class="table-info">
+                    <tr>
+                        <th>Fecha Mov</th>
+                        <th>Nivel</th>
+                        <th>Grupo</th>
+                        <th>SubGrupo</th>
+                        <th>Talla</th>
+                        <th>Item</th>
+                        <th>Color</th>
+                        <th>Producto</th>
+                        <th>Codigo Almacén</th>
+                        <th>Almacén</th>
+                        <th>Documento</th>
+                        <th>Doc. Movimiento</th>
+                        <th>Transacción</th>
+                        <th>Desc. Transacción</th>
+                        <th>E/S</th>
+                        <th>Lote</th>
+                        <th>Partida</th>
+                        <th>Saldo Inicial</th>
+                        <th>Entrada</th>
+                        <th>Salida</th>
+                        <th>Saldo Final</th>
+                        <th>Fecha Inserción</th>
+                        <th>Hora Inserción</th>
+                        <th>Usuario Ins</th>
+                        <th>Familia</th>
+                        <th>Cantidad</th>
+                        <th>Pedido</th>
+                        <th>Corte_Destino</th>
+                        <th>App_Ch_Destino</th>
+                        <th>TipoServicio</th>
+                        <th>NombreTaller</th>
+                    </tr>
+                </thead>
+
+                <tbody id="TablaCuerpoMovPeriodo"></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script src="~/Admin/js/JSMovPeriodo.js"></script>
+    <script>
+        //Aqui agrego un botón para exportar a Excel
+    $("#btnExportar").click(function ()
+    {
+    //if ($("#fchIni").val().trim() != "" || $("#fchFin").val().trim() != "") {
+
+        var laURLDeLaVista = '@Url.Action("ExportarExcelAcumuladoMov", "Logistica")';
+window.location = laURLDeLaVista;
+   //}
+    });
+
+    </script>
+}

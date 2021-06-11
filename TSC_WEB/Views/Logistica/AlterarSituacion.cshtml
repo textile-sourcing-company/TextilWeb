@@ -1,0 +1,1260 @@
+﻿@{
+    ViewBag.Title = "Cambio de Estado de Orden de Compra";
+    ViewBag.Modulo = "Logística";
+    Layout = "~/Views/Plantillas/_Layout.cshtml";
+
+}
+
+<div class="cont-alt-sit">
+    <div class="card">
+
+        <div class="card-body">
+
+            <ul class="nav nav-tabs nav-justified md-tabs indigo" id="myTabJust" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" id="pendiente-tab-just" data-toggle="tab" href="#pendiente-just" role="tab" aria-controls="pendiente-just"
+                       aria-selected="true">Pendientes</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="aprobados-tab-just" data-toggle="tab" href="#aprobadas-just" role="tab" aria-controls="aprobadas-just"
+                       aria-selected="false">Aprobados</a>
+                </li>
+            </ul>
+
+            <div class="tab-content card pt-1" id="myTabContentJust">
+                <div class="tab-pane fade show active" id="pendiente-just" role="tabpanel" aria-labelledby="pendiente-tab-just">
+                    <div class="p-3">
+                        <div class="card cont-header-ap-rec">
+                            <div class="cont-seccion2-btn-pendiente">
+
+                                <div class="cont-seccion1-pend">
+                                    <button type="button" class="btn btn-sm btn-outline-dark" id="btnAlterarSituacion"><i class="fas fa-edit"></i>Alterar Situación</button>
+                                    <button type="button" class="btn btn-sm btn-outline-primary ml-1" id="btnActualizarList"><i class="fas fa-sync"></i>Actualizar Lista</button>
+                                </div>
+
+                                <div class="cont-seccion2-pend">
+                                    <button type="button" class="btn btn-sm btn-success" id="btnExportarPend"><i class="fas fa-file-excel mr-1"></i> Exportar</button>
+                                    <button type="button" class="btn btn-sm btn-primary" id="btnResumenTot" data-toggle="modal" data-target=".bd-example-modal-lg">Resumen Presupuesto</button>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="mt-1">
+                            <table class="table table-sm table-bordered table-hover dt-responsive nowrap" id="tablaPrincipal" style="width:100%;">
+                                <thead>
+                                    <tr>
+                                        <th class="all"></th>
+                                        <th>Disponible</th>
+                                        <th class='col-ocultar'>Periodo</th>
+                                        <th class="all">Pedido</th>
+                                        <th class="col-ocultar">Gerencia</th>
+                                        <th>C. Costo</th>
+                                        <th>Fecha</th>
+                                        <th>Proveedor</th>
+                                        <th>Comprador</th>
+                                        <th>Descripción de pago</th>
+                                        <th class="all">Total</th>
+                                        <th class="all">Acción</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tablaCabeceraContenido"></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="tab-pane fade seccion-ap-rech" id="aprobadas-just" role="tabpanel" aria-labelledby="aprobadas-tab-just">
+                    <div class="p-3">
+
+                        <div class="card cont-header-ap-rec">
+
+                            <div class="cont-seccion1-ap-rec">
+                                <div>
+                                    <input required="" type="text" class="form-control form-control-sm input-fecha" id="AprobFechaIni" placeholder="Fecha Inicio" onfocus="(this.type='date')" />
+                                </div>
+                                <div>
+                                    <input required="" type="text" class="form-control form-control-sm input-fecha-fin" id="AprobFechaFin" placeholder="Fecha Fin" onfocus="(this.type='date')" />
+                                </div>
+                                <div>
+                                    <button type="button" class="btn btn-primary btn-buscar btn-sm btn-buscar-his" id="btnBuscarAprob">Buscar</button>
+                                </div>
+                            </div>
+
+                            <div class="cont-seccion2-ap-rec">
+                                <div>
+                                    <button type="button" class="btn btn-success btn-sm" id="btnExportarDetalle"><i class="fas fa-file-excel mr-1"></i> Ver Detalle</button>
+                                </div>
+                            </div>
+
+
+                        </div>
+
+
+                        <div class="mt-1">
+                            <table class="table table-sm table-bordered table-hover dt-responsive nowrap" id="tablaPrincipal2" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th class="all">Pedido</th>
+                                        <th>Fecha</th>
+                                        <th>Proveedor</th>
+                                        <th>Comprador</th>
+                                        <th>Tipo. Pago.</th>
+                                        <th>Total</th>
+                                        <th class="all">Fecha Mod.</th>
+                                        <th class="all">Usuario</th>
+                                        <th class="col-ocultar">EST_EXC</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tablaCabeceraContenido2"></tbody>
+                            </table>
+                        </div>
+
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+    <!-- MODAL -->
+
+    <div class="modal" tabindex="-1" role="dialog" id="modalInformacion">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Detalle Orden Compra</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="table-responsive" style="height:250px">
+                        <table class="table table-bordered table-hover" style="width:100%" id="tablaDetalle">
+                            <thead>
+                                <tr>
+                                    <th>Secuencia</th>
+                                    <th>Descripcion</th>
+                                    <th nowrap>C.x| Costo</th>
+                                    <th>Descripción C. Costo</th>
+                                    <th>UM</th>
+                                    <th>Reserva Plane.</th>
+                                    <th>Qtde. Pedida</th>
+                                    <th>Valor Unit.</th>
+                                    <th>Valor Total</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tablaDetalleContenido"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="modal_plancont_det" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Detalle de Disponible</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    <table class="table table-bordered table-hover" style="width:100%" id="tablaPlanCont">
+                        <thead>
+                            <tr>
+                                <th>Plan Contable</th>
+                                <th>Disponible</th>
+                                <th>Valor OC x Cuenta</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tablaPlanContDet"></tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Aceptar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Large modal -->
+
+
+    <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Resumen</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    <div class="card">
+
+                        <div class="form-row m-1">
+                            <div class="col-md-4">
+                                <select id="IdCbxPeriodo" class="form-control form-control-sm classCbxPeriodo">
+                                </select>
+                            </div>
+
+                            <div class="col-md-2">
+                                <button type="button" class="btn btn-primary btn-buscar btn-sm" id="btnBuscarResumen"><i class="fas fa-search"></i></button>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <table class="table table-sm table-bordered table-hover nowrap" style="width:100%" id="tblTotales">
+                        <thead class="thead-light">
+                            <tr>
+                                <th>Centro de Costo</th>
+                                <th>Cuenta</th>
+                                <th>Presupuesto</th>
+                                <th>Comprado</th>
+                                <th>Saldo</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tblTotalesDet"></tbody>
+                    </table>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Aceptar</button>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+
+
+
+    <style>
+
+        #btnAlterarSituacion {
+            min-width: 180px;
+        }
+
+        .cont-alt-sit .cdisponible {
+            border-radius: 5px;
+            background-color: #2ECC71;
+            text-align: center;
+            color: #fff;
+            font-weight: bold;
+            font-size: 13px;
+        }
+
+        .cont-alt-sit .cigual {
+            border-radius: 5px;
+            background-color: #99A3A4;
+            text-align: center;
+            color: #fff;
+            font-weight: bold;
+            font-size: 13px;
+        }
+
+        .cont-alt-sit .cexcedido {
+            border-radius: 5px;
+            background-color: #E74C3C;
+            text-align: center;
+            color: #fff;
+            font-weight: bold;
+            font-size: 13px;
+        }
+
+        .col-ocultar {
+            display: none;
+        }
+
+        .cont-alt-sit #tablaPrincipal .tplancont {
+            cursor: pointer;
+        }
+
+
+        .cont-alt-sit #tablaPrincipal2 .oc-pendiente {
+            background-color: #F9E79F;
+        }
+
+        .cont-alt-sit #tablaPrincipal2 .oc-rechazado {
+            background-color: #F5B7B1;
+        }
+
+        .cont-alt-sit #tablaPrincipal2 .oc-normal {
+            background-color: #ffffff;
+        }
+
+        .cmonto {
+            text-align: right;
+        }
+
+        .cont-seccion2-btn-pendiente {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+        }
+
+        @@media (min-width: 320px) and (max-width: 479.98px) {
+            #btnAlterarSituacion {
+                min-width: 140px !important;
+            }
+
+            #btnActualizarList {
+                min-width: 130px !important;
+            }
+
+
+            #btnLiberar {
+                width: 100%;
+            }
+
+            #btnModalRechazar {
+                width: 100%;
+                margin-left: 0px;
+                margin-top: 3px;
+            }
+        }
+
+        @@media (min-width: 480px) and (max-width: 767.98px) {
+
+            .cont-header-ap-rec {
+                padding: 5px;
+            }
+
+                .cont-header-ap-rec .cont-seccion2-btn-firma {
+                    border-top: 0px !important;
+                    margin-top: 0px !important;
+                    display: flex;
+                    justify-content: flex-end;
+                    padding: 5px;
+                }
+
+
+            #btnModalRechazar {
+                margin-top: 0px;
+            }
+
+
+            .cont-header-ap-rec .cont-seccion1-ap-rec {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+
+                .cont-header-ap-rec .cont-seccion1-ap-rec .input-fecha-fin {
+                    width: 100%;
+                    margin-top: 2px;
+                }
+
+                .cont-header-ap-rec .cont-seccion1-ap-rec .btn-buscar-his {
+                    width: 100%;
+                    margin-left: 3px;
+                }
+
+                .cont-header-ap-rec .cont-seccion1-ap-rec .btn-excel-hist {
+                    width: 100%;
+                    margin-top: 3px;
+                    margin-left: 0px;
+                }
+
+
+
+            .cont-header-ap-rec .cont-seccion2-rech {
+                width: 100%;
+                border-top: 1px solid #EAECEE;
+            }
+
+                .cont-header-ap-rec .cont-seccion2-rech .kpi-cant {
+                    width: 100%;
+                }
+
+                .cont-header-ap-rec .cont-seccion2-rech .kpi-total {
+                    width: 100%;
+                    margin-top: 2px;
+                }
+        }
+
+        @@media (min-width: 768px) and (max-width: 991.98px) {
+
+            .cont-header-ap-rec {
+                width: 100%;
+                padding: 10px;
+            }
+
+                .cont-header-ap-rec .cont-seccion1-ap-rec {
+                    width: 100%;
+                    margin: 0px !important;
+                    display: flex;
+                    justify-content: space-between;
+                }
+
+                .cont-header-ap-rec .cont-seccion2-rech {
+                    border-top: 1px solid #EAECEE;
+                    width: 100%;
+                    margin-top: 10px !important;
+                    display: flex;
+                    justify-content: space-around;
+                }
+
+                .cont-header-ap-rec .cont-seccion2-btn-firma {
+                    border-top: 0px !important;
+                    margin-top: 0px !important;
+                    display: flex;
+                    justify-content: flex-end;
+                }
+
+
+
+                .cont-header-ap-rec .cont-seccion2-rech .cont-item12-ap-re {
+                    width: 50%;
+                    text-align: center;
+                }
+
+                .cont-header-ap-rec .cont-seccion2-rech .cont-item22-ap-rec {
+                    width: 50%;
+                    text-align: center;
+                }
+                /*sdk*/
+                .cont-header-ap-rec .cont-seccion2-rech .cont-item12-btn-firmar {
+                    width: 30%;
+                    text-align: center;
+                }
+
+                .cont-header-ap-rec .cont-seccion2-rech .cont-item22-btn-firmar {
+                    width: 30%;
+                    text-align: center;
+                }
+
+
+
+                .cont-header-ap-rec .cont-seccion2-rech .cont-item12-ap-re .kpi-cant {
+                    width: 80%
+                }
+
+                .cont-header-ap-rec .cont-seccion2-rech .cont-item22-ap-rec .kpi-total {
+                    width: 80%
+                }
+
+                .cont-header-ap-rec .cont-seccion2-rech .cont-item12-btn-firmar {
+                    width: 60%;
+                }
+
+                .cont-header-ap-rec .cont-seccion2-rech .cont-item22-btn-firmar {
+                    width: 60%;
+                }
+        }
+
+        @@media (min-width: 992px) and (max-width: 1199.98px) {
+            .cont-header-ap-rec {
+                width: 100%;
+                padding: 10px;
+            }
+
+                .cont-header-ap-rec .cont-seccion1-ap-rec {
+                    width: 100%;
+                    margin: 0px !important;
+                    display: flex;
+                    justify-content: space-between;
+                }
+
+                .cont-header-ap-rec .cont-seccion2-rech {
+                    border-top: 1px solid #EAECEE;
+                    width: 100%;
+                    margin-top: 10px !important;
+                    display: flex;
+                    justify-content: space-around;
+                }
+
+                .cont-header-ap-rec .cont-seccion2-btn-firma {
+                    border-top: 0px !important;
+                    margin-top: 0px !important;
+                    display: flex;
+                    justify-content: flex-end;
+                }
+
+
+                .cont-header-ap-rec .cont-seccion2-rech .cont-item12-ap-re {
+                    width: 50%;
+                    text-align: center;
+                }
+
+                .cont-header-ap-rec .cont-seccion2-rech .cont-item22-ap-rec {
+                    width: 50%;
+                    text-align: center;
+                }
+
+                .cont-header-ap-rec .cont-seccion2-rech .cont-item12-btn-firmar {
+                    width: 30%;
+                    text-align: center;
+                }
+
+                .cont-header-ap-rec .cont-seccion2-rech .cont-item22-btn-firmar {
+                    width: 30%;
+                    text-align: center;
+                }
+
+                .cont-header-ap-rec .cont-seccion2-rech .cont-item12-ap-re .kpi-cant {
+                    width: 80%
+                }
+
+                .cont-header-ap-rec .cont-seccion2-rech .cont-item22-ap-rec .kpi-total {
+                    width: 80%
+                }
+        }
+
+        @@media (min-width: 1200px) {
+
+            .cont-header-ap-rec {
+                width: 100%;
+                padding: 10px;
+                display: flex;
+                justify-content: space-between;
+                flex-direction: row;
+            }
+
+                .cont-header-ap-rec .cont-seccion1-ap-rec {
+                    width: 50%;
+                    margin: 0px !important;
+                    display: flex;
+                }
+
+                    .cont-header-ap-rec .cont-seccion1-ap-rec .input-fecha-fin {
+                        margin-left: 3px;
+                    }
+
+                    .cont-header-ap-rec .cont-seccion1-ap-rec .btn-buscar-his {
+                        margin-left: 5px;
+                    }
+
+                    .cont-header-ap-rec .cont-seccion1-ap-rec .btn-excel-hist {
+                        margin-left: 5px;
+                    }
+
+
+                .cont-header-ap-rec .cont-seccion2-rech {
+                    border-top: 0px !important;
+                    width: 50%;
+                    margin-top: 0px !important;
+                    display: flex;
+                    justify-content: space-between;
+                }
+
+                .cont-header-ap-rec .cont-seccion2-btn-firma {
+                    border-top: 0px !important;
+                    width: 50%;
+                    margin-top: 0px !important;
+                    display: flex;
+                    justify-content: flex-end;
+                }
+
+                .cont-header-ap-rec .cont-seccion2-rech .cont-item12-ap-re {
+                    width: 50%;
+                    text-align: right;
+                }
+
+                .cont-header-ap-rec .cont-seccion2-rech .cont-item22-ap-rec {
+                    width: 50%;
+                    text-align: right;
+                    margin-left: 4px;
+                }
+
+
+                .cont-header-ap-rec .cont-seccion2-rech .cont-item12-ap-re .kpi-cant {
+                    width: 80%
+                }
+
+                .cont-header-ap-rec .cont-seccion2-rech .cont-item22-ap-rec .kpi-total {
+                    width: 80%
+                }
+        }
+    </style>
+
+</div>
+
+@section scripts {
+
+    <script>
+
+        // Variables Globales
+        var PEDIDOS = [];
+
+        var codPeriodo = 0;
+
+        $(document).ready(function () {
+
+
+            Listar();
+            getPeriodos();
+
+
+            //AGREGAMOS Y QUITAMOS ORDENES DE COMPRA
+            $("#tablaPrincipal").on('click', '.liberar', function () {
+
+                let oc = $(this).attr("data-pedido");
+                let periodo = $(this).attr("data-cod-per");
+                let gerencia = $(this).attr("data-cod-ger");
+
+                //AGREGANDO AL ARRAY
+                if ($(this).prop("checked")) {
+
+                    PEDIDOS.push({ oc: oc, periodo: periodo, gerencia: gerencia });
+
+                } else {//QUITA DEL ARRAY
+
+                    for (var i = 0; i < PEDIDOS.length; i++) {
+
+                        if (PEDIDOS[i].oc == oc &&
+                            PEDIDOS[i].periodo == periodo &&
+                            PEDIDOS[i].gerencia == gerencia) {
+
+                            PEDIDOS.splice(i, 1);
+                        }
+                    }
+                }
+            });
+
+            $("#tablaPrincipal").on('click', '.tplancont', function () {
+
+                var codpedcompra = $(this).attr("data-codoc");
+                var codcc = $(this).attr("data-codcc");
+                var codperiodo = $(this).attr("data-cod-per");
+
+                var datos = {
+                    'codpedcompra': codpedcompra,
+                    'codperiodo': codperiodo,
+                    'codcc': codcc
+                }
+
+                ListarPlanContDetalle(datos);
+            });
+
+            $("#btnActualizarList").click(function () {
+
+                MostrarCarga("Actualizando Lista...");
+
+                $.ajax({
+                    type: "GET",
+                    url: '/logistica/ListarOCAlterarSituacion',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (data) {
+
+                        if (data.isRedirect) {
+                            window.location.href = data.redirectUrl;
+                        }
+                        else {
+
+                            let tabla = $("#tablaPrincipal").DataTable();
+                            tabla.destroy();
+                            var tr = "";
+
+                            var clase = "";
+                            var vDisponible = 0;
+                            var vTotal = 0;
+
+                            data.lista.forEach((obj) => {
+
+                                vDisponible = obj.vDisponible;
+                                vTotal = obj.vTotalPedido;
+
+                                if (vDisponible > vTotal) {
+                                    clase = "cdisponible";
+                                }
+                                else if (vDisponible == vTotal) {
+                                    clase = "cigual";
+                                }
+                                else if (vDisponible < vTotal) {
+                                    clase = "cexcedido";
+                                }
+
+                                tr += "<tr> "
+                                    + " <td> </td> "
+                                    + " <td  data-codoc='" + obj.PEDIDO + "' data-codcc='" + obj.CENTROCOSTO + "' data-cod-per='" + obj.COD_PERIODO + "' class='tplancont " + clase + "'> U$ " + obj.DISPONIBLE + "</td>"
+                                    + " <td  class='col-ocultar'> " + obj.COD_PERIODO + "</td> "
+                                    //+ " <td ><span data-codoc='" + obj.PEDIDO + "' data-codcc='" + obj.CENTROCOSTO + "' data-cod-per='" + obj.COD_PERIODO + "' class='tplancont " + clase + "'> U$ " + obj.DISPONIBLE + "</span></td> "
+                                    //+ " <td class='col-ocultar'> " + obj.COD_PERIODO + "</td> "
+                                    + " <td> " + obj.PEDIDO + "</td> "
+                                    + " <td  class='col-ocultar'> " + obj.COD_GERENCIA + "</td> "
+                                    + " <td> " + obj.CENTROCOSTO + "</td>"
+                                    + " <td> " + obj.FECHA + "</td>"
+                                    + " <td> " + obj.PROVEEDOR + "</td> "
+                                    + " <td> " + obj.COMPRADOR + "</td> "
+                                    + " <td> " + obj.DESCRIPCIONPAGO + "</td>"
+                                    + " <td> " + obj.SIMBOLO_MOEDA + " " + obj.TOTAL_PEDIDO + "</td> "
+                                    + " <td class='text-center'>"
+                                    + "<span class='cursor-pointer mr-1 detalle' data-pedido='" + obj.PEDIDO + "'><i class='fas fa-eye' style='color:#007bff;'></i></span>"
+                                    + "<input type='checkbox' data-cod-per='" + obj.COD_PERIODO + "' data-cod-ger='" + obj.COD_GERENCIA + "' data-pedido='" + obj.PEDIDO + "' class='liberar ml-1'>"
+                                    + "</td>"
+                                    + "</tr>";
+
+                            });
+
+                            $("#tablaCabeceraContenido").html(tr);
+
+                            $("#tablaPrincipal").DataTable(
+                                {
+                                    'language': { 'url': '/libs/datatables/spanish.json' },
+                                    lengthMenu: [[5, 10, 20, -1], [5, 10, 20, 'Todos']]
+                                }
+                            );
+
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Mostrando datos',
+                                text: 'Textile Sourcing Company',
+                                showConfirmButton: false,
+                                timer: 2500,
+                            });
+
+                        }
+                    },
+                    failure: function () {
+                        console.error('error al cargar los periodos');
+
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error al mostrar datos',
+                            text: 'Textile Sourcing Company',
+                            showConfirmButton: false,
+                            timer: 2500,
+                        });
+
+                    }
+                });
+
+
+            });
+
+            $("#btnAlterarSituacion").click(function () {
+
+                if (PEDIDOS.length > 0) {
+
+                    //MOSTRANDO PANEL DE CARGA
+                    MostrarCarga("Liberando...");
+
+                    $.ajax({
+                        url: '/logistica/AlterarSituacionOcMasivo/',
+                        type: 'post',
+                        contentType: 'application/json',
+                        data: JSON.stringify({ parametros: PEDIDOS }),
+                        success: function (e) {
+
+                            if (e.isRedirect) {
+                                window.location.href = e.redirectUrl;
+                            }
+                            else {
+                                // Solicitador aprobacion de GG
+                                if (e.id_estado == 7 || e.id_estado == 6) {
+
+                                    Swal.fire({
+                                        title: "Solicitar Aprobación de Gerencia",
+                                        text: "La Orden de compra no tiene presupuesto para la liberación, indique el motivo para la aprobación: ",
+                                        input: 'text',
+                                        inputAttributes: {
+                                            autocapitalize: 'off'
+                                        },
+                                        showCancelButton: true,
+                                        confirmButtonText: 'Enviar',
+                                        showLoaderOnConfirm: true,
+                                        preConfirm: (motivo) => {
+
+                                            var datos = {
+                                                'ordencompra': e.oc,
+                                                'motivo': motivo
+                                            }
+
+                                            $.ajax({
+                                                url: "/logistica/RegistrarSoliExc",
+                                                type: "post",
+                                                data: datos,
+                                                dataType: "json",
+                                                success: function (resultado) {
+                                                    if (resultado.isRedirect) {
+                                                        window.location.href = resultado.redirectUrl;
+                                                    }
+                                                    else {
+                                                        if (resultado.success) {
+                                                            Swal.fire({
+                                                                icon: 'success',
+                                                                title: resultado.mensaje,
+                                                                text: "Textile Sourcing Company",
+                                                                showConfirmButton: false,
+                                                                timer: 1600
+                                                            });
+                                                        } else {
+                                                            Advertir(resultado.mensaje);
+                                                        }
+                                                        ListarOCs(datoslista);
+                                                    }
+                                                },
+                                                error: function (xhr, ajaxOptions, thrownError) {
+
+                                                }
+                                            });
+
+                                        },
+                                        allowOutsideClick: () => !Swal.isLoading()
+                                    }).then((result) => {
+                                        Swal.fire({
+                                            text: "Cargando...",
+                                            showConfirmButton: false,
+                                            timer: 1000
+                                        });
+
+                                        Listar();
+                                    })
+                                }
+                                else {
+                                    if (e.success) {
+                                        Swal.fire({
+                                            icon: 'success',
+                                            title: e.mensaje,
+                                            text: e.mensajedet,
+                                            showConfirmButton: false,
+                                            timer: 2500,
+                                        });
+
+                                    } else {
+                                        Swal.fire({
+                                            icon: 'error',
+                                            title: e.mensaje,
+                                            text: e.mensajedet,
+                                            showConfirmButton: false,
+                                            timer: 2500,
+                                        });
+                                    }
+                                    Listar();
+                                }
+
+                            }
+                        }
+                    });
+
+                    PEDIDOS = [];
+
+                } else {
+                    Advertir("Por favor seleccione al menos una pedido para liberar");
+                }
+
+            });
+
+            $("#tablaPrincipal").on('click', '.detalle', function () {
+                var pedido = $(this).attr("data-pedido");
+                var datos = { 'ordencompra': pedido }
+                ListarDetalleOC(datos);
+            });
+
+            function Listar() {
+
+                $.ajax({
+                    type: "GET",
+                    url: '/logistica/ListarOCAlterarSituacion',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (data) {
+
+                        if (data.isRedirect) {
+                            window.location.href = data.redirectUrl;
+                        }
+                        else {
+
+                            let tabla = $("#tablaPrincipal").DataTable();
+                            tabla.destroy();
+                            var tr = "";
+
+                            var clase = "";
+                            var vDisponible = 0;
+                            var vTotal = 0;
+
+                            data.lista.forEach((obj) => {
+
+                                vDisponible = obj.vDisponible;
+                                vTotal = obj.vTotalPedido;
+
+                                if (vDisponible > vTotal) {
+                                    clase = "cdisponible";
+                                }
+                                else if (vDisponible == vTotal) {
+                                    clase = "cigual";
+                                }
+                                else if (vDisponible < vTotal) {
+                                    clase = "cexcedido";
+                                }
+
+                                tr += "<tr> "
+                                    + " <td> </td> "
+                                    + " <td  data-codoc='" + obj.PEDIDO + "' data-codcc='" + obj.CENTROCOSTO + "' data-cod-per='" + obj.COD_PERIODO + "' class='tplancont " + clase + "'> U$ " + obj.DISPONIBLE + "</td>"
+                                    + " <td  class='col-ocultar'> " + obj.COD_PERIODO + "</td> "
+                                    //+ " <td ><span data-codoc='" + obj.PEDIDO + "' data-codcc='" + obj.CENTROCOSTO + "' data-cod-per='" + obj.COD_PERIODO + "' class='tplancont " + clase + "'> U$ " + obj.DISPONIBLE + "</span></td> "
+                                    //+ " <td class='col-ocultar'> " + obj.COD_PERIODO + "</td> "
+                                    + " <td> " + obj.PEDIDO + "</td> "
+                                    + " <td class='col-ocultar'> " + obj.COD_GERENCIA + "</td> "
+                                    + " <td> " + obj.CENTROCOSTO + "</td>"
+                                    + " <td> " + obj.FECHA + "</td>"
+                                    + " <td> " + obj.PROVEEDOR + "</td> "
+                                    + " <td> " + obj.COMPRADOR + "</td> "
+                                    + " <td> " + obj.DESCRIPCIONPAGO + "</td>"
+                                    + " <td> " + obj.SIMBOLO_MOEDA + " " + obj.TOTAL_PEDIDO + "</td> "
+                                    + " <td class='text-center'>"
+                                    + "<span class='cursor-pointer mr-1 detalle' data-pedido='" + obj.PEDIDO + "'><i class='fas fa-eye' style='color:#007bff;'></i></span>"
+                                    + "<input type='checkbox' data-cod-per='" + obj.COD_PERIODO + "' data-cod-ger='" + obj.COD_GERENCIA + "' data-pedido='" + obj.PEDIDO + "' class='liberar ml-1'>"
+                                    + "</td>"
+                                    + "</tr>";
+
+                            });
+
+                            $("#tablaCabeceraContenido").html(tr);
+
+                            $("#tablaPrincipal").DataTable(
+                                {
+                                    'language': { 'url': '/libs/datatables/spanish.json' },
+                                    lengthMenu: [[5, 10, 20, -1], [5, 10, 20, 'Todos']]
+                                }
+                            );
+
+
+                        }
+                    },
+                    failure: function () {
+                        console.error('error al cargar los periodos');
+                    }
+                });
+
+            }
+
+            function ListarPlanContDetalle(datos) {
+                $.ajax({
+                    url: '/logistica/ListarPlanContDetalle/',
+                    type: 'get',
+                    data: datos,
+                    success: function (e) {
+                        var tr = "";
+                        e.forEach((obj) => {
+                            tr += "<tr>"
+                                + "<td>" + obj.CUENTA + "</td>"
+                                + "<td>" + obj.SIM_PRE + " " + obj.DISPONIBLE + "</td>"
+                                + "<td>" + obj.SIM_OC + " " + obj.VALOR_OC + "</td>"
+                                + "</tr>";
+                        });
+                        $("#tablaPlanContDet").html(tr);
+                        $("#modal_plancont_det").modal("show");
+                    }
+                });
+            }
+
+            //LISTA DETALLE
+            function ListarDetalleOC(datos) {
+                $.ajax({
+                    url: '/logistica/ListarDetalleOCAlterSit/',
+                    type: 'get',
+                    data: datos,
+                    success: function (e) {
+                        var tr = "";
+                        e.forEach((obj) => {
+                            tr += "<tr>"
+                                + "<td>" + obj.seq_item_pedido + "</td>"
+                                + "<td>" + obj.descricao_item + "</td>"
+                                + "<td>" + obj.centro_custo + "</td>"
+                                + "<td>" + obj.DESCRICAO + "</td>"
+                                + "<td>" + obj.unidade_conv + "</td>"
+                                + "<td>" + obj.reservaplane + "</td>"
+                                + "<td>" + obj.QTDE_PEDIDA_ITEM + "</td>"
+                                + "<td>" + obj.VALOR_CONV + "</td>"
+                                + "<td>" + obj.total + "</td>"
+                                + "</tr>";
+                        });
+
+                        $("#tablaDetalleContenido").html(tr);
+                        $("#modalInformacion").modal("show");
+                    }
+                });
+            }
+
+
+            //OBTENER LISTA DE APROBADOS.
+            $("#btnBuscarAprob").click(function () {
+
+                let fechaIni = $('#AprobFechaIni').val();
+                let fechaFin = $('#AprobFechaFin').val();
+
+
+                if (fechaIni == null ||
+                    fechaFin == null ||
+                    typeof (fechaIni) == "undefined" ||
+                    typeof (fechaFin) == "undefined" ||
+                    fechaIni.trim() == "" ||
+                    fechaFin.trim() == "") {
+
+                    Swal.fire('Seleccione la fecha, por favor')
+                }
+                else {
+
+                    var datos =
+                    {
+                        'fechaIni': fechaIni,
+                        'fechaFin': fechaFin
+                    }
+
+                    MostrarCarga("Cargando...");
+
+
+                    $.ajax({
+                        type: "GET",
+                        url: '/logistica/AlterSitListaAprobados',
+                        contentType: "application/json; charset=utf-8",
+                        data: datos,
+                        dataType: "json",
+                        success: function (data) {
+
+                            if (data.isRedirect) {
+                                window.location.href = data.redirectUrl;
+                            }
+                            else {
+
+                                let tabla = $("#tablaPrincipal2").DataTable();
+
+                                tabla.destroy();
+                                var tr = "";
+                                let cantidad = 0;
+                                let monto = 0;
+                                let clasecolor = "";
+
+                                data.lista.forEach((obj) => {
+
+                                    if (obj.EST_EXC == 2) {
+                                        clasecolor = "oc-pendiente";
+                                    }
+                                    else if (obj.EST_EXC == 0) {
+                                        clasecolor = "oc-rechazado";
+                                    }
+                                    else {
+                                        clasecolor = "oc-normal";
+                                    }
+
+                                    tr += "<tr class='" + clasecolor + "'>"
+                                        + " <td> <span class='" + clasecolor + "'>" + obj.PEDIDO + "</td>"
+                                        + " <td> " + obj.FECHA + "</td>"
+                                        + " <td> " + obj.PROVEEDOR + "</td>"
+                                        + " <td> " + obj.COMPRADOR + "</td>"
+                                        + " <td> " + obj.DESCRIPCIONPAGO + "</td>"
+                                        + " <td> " + obj.SIMBOLO_MOEDA + " " + formatoNumero(obj.TOTAL_PEDIDO) + "</td>"
+                                        + " <td> " + obj.FECHA_APROB + "</td>"
+                                        + " <td> " + obj.USUARIO + "</td>"
+                                        + " <td class='col-ocultar'> " + obj.EST_EXC + "</td>"
+                                        + "</tr>";
+
+                                    cantidad = cantidad + 1;
+                                    monto = monto + obj.VALOR_DOLAR;
+                                });
+
+
+                                $("#tablaCabeceraContenido2").html(tr);
+                                $("#tablaPrincipal2").DataTable(
+                                    {
+                                        'language': { 'url': '/libs/datatables/spanish.json' },
+                                        lengthMenu: [[5, 10, 20, -1], [5, 10, 20, 'Todos']]
+                                    });
+
+
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Mostrando Datos',
+                                    text: 'Textile Sourcing Company',
+                                    showConfirmButton: false,
+                                    timer: 2500,
+                                });
+                            }
+                        },
+                        failure: function () {
+                            console.error('error al cargar los periodos');
+
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error al mostrar lista',
+                                text: 'Textile Sourcing Company',
+                                showConfirmButton: false,
+                                timer: 2500,
+                            });
+                        }
+                    });
+
+                }
+            });
+
+            function formatoNumero(x) {
+                x = x.toFixed(2);
+                return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            }
+
+            $("#btnBuscarResumen").click(function () {
+
+                if (codPeriodo != 0 && typeof (codPeriodo) != "undefined" && codPeriodo != null) {
+
+                    let parametros = { periodo: codPeriodo };
+
+                    listarResumen(parametros);
+                }
+            });
+
+            function listarResumen(parametros) {
+                $.ajax({
+                    type: "GET",
+                    url: '/logistica/AltSit_ListarTotales',
+                    contentType: "application/json; charset=utf-8",
+                    data: parametros,
+                    dataType: "json",
+                    success: function (data) {
+
+                        let tabla = $("#tblTotales").DataTable();
+
+                        tabla.destroy();
+                        var tr = "";
+
+                        data.lista.forEach((obj) => {
+
+                            tr += "<tr>"
+                                + " <td> " + obj.CECO + "</td>"
+                                + " <td> " + obj.CUENTA + " - " + obj.CUENTA_DESC + "</td>"
+                                + " <td class='cmonto'> $ " + formatoNumero(obj.PRESUPUESTO) + "</td>"
+                                + " <td class='cmonto'> $ " + formatoNumero(obj.CONSUMIDO) + "</td>"
+                                + " <td class='cmonto' style='font-weight: bold'> $ " + formatoNumero(obj.PRESUPUESTO - obj.CONSUMIDO) + "</td>"
+                                + "</tr>";
+                        });
+
+                        $("#tblTotalesDet").html(tr);
+                        $("#tblTotales").DataTable(
+                            {
+                                'language': { 'url': '/libs/datatables/spanish.json' },
+                                "scrollX": true,
+                                lengthMenu: [[5, 10, 20, -1], [5, 10, 20, 'Todos']]
+                            });
+
+                    },
+                    failure: function () {
+                        console.error('error al cargar los periodos');
+
+                    }
+                });
+            }
+
+
+
+            function getPeriodos() {
+                $.ajax({
+                    type: "GET",
+                    url: '/logistica/ListarPeriodos',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (data) {
+
+                        $("#IdCbxPeriodo").empty();
+
+                        $.each(data, function () {
+                            $("#IdCbxPeriodo").append($("<option/>").val(this.COD_PERIODO).text(this.DESC_PERIODO));
+                        });
+
+                        $("#IdCbxPeriodo").val(0);
+                    },
+                    failure: function () {
+                        console.error('error al cargar tipos periodos');
+                    }
+                });
+            }
+
+
+            $("select.classCbxPeriodo").change(function () {
+                codPeriodo = $(this).children("option:selected").val();
+            });
+
+
+
+            $("#btnExportarDetalle").click(function () {
+                let fechaIni = $('#AprobFechaIni').val();
+                let fechaFin = $('#AprobFechaFin').val();
+
+                if (fechaIni == null ||
+                    fechaFin == null ||
+                    typeof (fechaIni) == "undefined" ||
+                    typeof (fechaFin) == "undefined" ||
+                    fechaIni == "Fecha Inicio" ||
+                    fechaFin == "Fecha Fin" ||
+                    fechaIni.trim() == "" ||
+                    fechaFin.trim() == "") {
+
+                    Swal.fire('Seleccione la fecha, por favor')
+                }
+                else {
+                    var datos =
+                    {
+                        'fechaIni': fechaIni,
+                        'fechaFin': fechaFin
+                    }
+                    exportarExcelAprob(datos);
+                }
+            });
+
+
+            function exportarExcelAprob(datos) {
+
+                $.ajax({
+                    url: '@Url.Action("ReporteExcelAprobados", "Logistica")',
+                    contentType: 'application/json; charset=utf-8',
+                    datatype: 'json',
+                    type: "GET",
+                    data: datos,
+                    success: function () {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Reporte Generado con Éxito',
+                            text: 'Textile Sourcing Company',
+                            showConfirmButton: false,
+                            timer: 1200,
+                            onClose: () => {
+                                window.location = "/Logistica/ReporteExcelAprobados?fechaIni=" + datos.fechaIni + "&fechaFin=" + datos.fechaFin;
+                            }
+                        });
+                    }
+                });
+            }
+
+
+            $("#btnExportarPend").click(function () {
+
+                $.ajax({
+                    url: '@Url.Action("ReporteExcelOCPendiente", "Logistica")',
+                    contentType: 'application/json; charset=utf-8',
+                    datatype: 'json',
+                    type: "GET",
+                    success: function () {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Reporte Generado con Éxito',
+                            text: 'Textile Sourcing Company',
+                            showConfirmButton: false,
+                            timer: 1200,
+                            onClose: () => {
+                                window.location = "/Logistica/ReporteExcelOCPendiente";
+                            }
+                        });
+                    }
+                });
+            });
+
+
+
+        });
+
+
+    </script>
+}

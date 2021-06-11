@@ -1,0 +1,124 @@
+﻿
+@{
+    ViewBag.Title = "ReportePenalidades";
+    Layout = "~/Views/Plantillas/_Layout.cshtml";
+}
+
+<div class="card">
+
+    <div class="card-header">
+        <h3 class="card-title">Filtros</h3>
+    </div>
+
+    <div class="card-body">
+        @* Fila de Filtros*@
+        <div class="row">
+            <div class="form-group col-md-2">
+                <div style="font-weight: normal; ">Cliente</div>
+                <input type="text" class="form-control form-control-sm input-sm" placeholder="Cliente" autocomplete="off" id="txtcliente" />
+            </div>
+            <div class="form-group col-md-2">
+                <div style="font-weight: normal; ">Documento</div>
+                <input type="text" class="form-control form-control-sm input-sm" placeholder="Documento" autocomplete="off" id="txtdocumento" />
+            </div>
+
+            <div class="form-group col-md-3">
+                <div style="font-weight: bold; ">Fecha Inicio</div>
+                <input required="" type="date" class="form-control form-control-sm input-fecha-fin" id="FechaInicio"  placeholder="Fecha Fin" />
+            </div>
+
+            <div class="form-group col-md-3">
+                <div style="font-weight: bold; ">Fecha Fin</div>
+                <input required="" type="date" class="form-control form-control-sm input-fecha-fin" id="FechaFin" placeholder="Fecha Fin" />
+            </div>
+            <div class="form-group col-md-2">
+                <div style="font-weight:bold ; color: #ffffff; ">.</div>
+                <button class="btn btn-primary btn-block btn-sm" id="btnBuscar">Buscar</button>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="card-body">
+        <table class="table table-sm table-bordered nowrap" id="tablaPrincipal" style="width:100%;">
+            <thead class="thead-light">
+                <tr>
+                    @*<th>Cuenta Contable</th>*@
+                    <th>Mes</th>
+                    <th>Fecha</th>
+                    <th>Cliente</th>
+                    <th>Num Documento</th>
+                    <th>Moneda</th>
+                    <th>Concepto</th>
+                    <th>Descripcion</th>
+                    <th>Centro Costo</th>
+                    <th>OPCION</th>
+
+                </tr>
+            </thead>
+            <tbody id="tablaCabeceraContenido1"></tbody>
+        </table>
+    </div>
+</div>
+
+@*INJCIO DE MODAL PARA HACER EL REGISTRO*@ 
+<div class="modal fade" id="ModalEdicion" tabindex="-1" role="dialog" aria-labelledby="ModalEdicionlabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="ModalEdicionlabel">INGRESAR DATOS</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <div class="row">
+
+                    <div class="input-group mt-0">
+                        <h6>Numero de Documento</h6>
+                    </div>
+                    <div class="input-group mt-0">
+                        <input asp-form="documento" type="text" class="form-control form-control-sm input-sm" id="txtnumerodocumento" disabled value="0" />
+                    </div>
+                    <div class="input-group mt-1">
+                        <h6>Concepto</h6>
+                    </div>
+                    <div class="input-group mt-1">
+                        <input asp-form="concepto" type="text" class="form-control form-control-sm input-sm" id="txtconcepto" autocomplete="off" value="" />
+                    </div>
+                    <div class="input-group mt-1">
+                        <h6>Descripcion</h6>
+                    </div>
+                    <div class="input-group mt-1">
+                        <input asp-form="descripcion" type="text" class="form-control form-control-sm input-sm" id="txtdescripcion" autocomplete="off" value="" />
+                    </div>
+                    <div class="input-group mt-1">
+                        <h6>Centro Costo</h6>
+                    </div>
+                    @*<div class="input-group mt-1">
+                         <select class="form-control select2 select2-danger" data-dropdown-css-class="select2-danger" id="cboCentroCosto" style="width: 100%"></select>
+                    </div>*@
+                    <div class="input-group mt-1">
+                        <input list="listaCentroCosto" name="listaCentroCosto" class="form-control form-control-sm input-sm" style="text-transform: uppercase;" id="txtListaCC" required>
+                        <datalist id="listaCentroCosto"></datalist>
+                    </div>
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 form-group">
+                    <button type="submit" class="btn btn-block btninsert" id="btninsertar">Insertar</button>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 form-group">
+                    <button type="button" class="btn btn-block btnCancel" data-dismiss="modal">Cerrar</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script src="~/Admin/js/Comercial/JSReportePenalidades.js"></script>
+}

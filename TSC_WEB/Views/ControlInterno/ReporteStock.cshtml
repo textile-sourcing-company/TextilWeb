@@ -1,0 +1,129 @@
+﻿@{
+    ViewBag.Title = "ReporteStock";
+    Layout = "~/Views/Plantillas/_Layout.cshtml";
+}
+
+
+<div class="card card-primary card-outline">
+
+    <div class="card-header">
+
+    </div>
+
+    <div class="card-body">
+
+        <div class="row">
+            <div class="col-md-4">
+                <label>Codigo Almacen</label>
+                <input type="text" id="codalmacen" class="form-control form-control-sm">
+            </div>
+
+            <div class="col-md-2">
+                <label>&nbsp;</label>
+                <button id="btnBuscar" class="btn btn-primary btn-block btn-sm">Buscar</button>
+            </div>
+
+            <div class="cont-btn-excel">
+                <button id="btnExportarExcel" class="btn btn-success ml-2">Exportar Excel</button>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+<div class="card card-outline card-body card-primary">
+
+    <div class="card-header">
+
+    </div>
+    <div class="card-body">
+
+        <table class="table table-sm table-bordered" id="tablereporte" style="width:100%">
+
+            <thead class="thead-light">
+                <tr>
+                    <th>LINEA</th>
+                    <th>SUB LINEA</th>
+                    <th>STOCK</th>
+                    <th>PRECIO</th>
+                    <th>GENERO</th>
+                    <th>TALLA</th>
+                    <th>COLOR</th>
+                    <th>ALMACEN</th>
+                    <th>CODIGOPRODUCTO</th>
+                </tr>
+            </thead>
+            <tbody id="tbodyreporte">
+
+
+            </tbody>
+
+        </table>
+
+
+    </div>
+
+</div>
+<h2>ReporteStock</h2>
+
+
+
+@section scripts {
+
+    <script>
+
+        // Variables Globales
+        var cod_almacen  = [];
+        $(document).ready(function ()
+        {
+            $("#btnBuscar").click(function () {
+                    Listar();
+            });
+            function Listar() {
+                var datos = {
+                    'codalmacen': $("#codalmacen").val(),
+                }
+
+                $.ajax({
+                    type: "post",
+                    url: '/ControlInterno/ListarReporteStock',
+                    data: datos,
+                    dataType: "json",
+                    success: function (data) {
+
+                        console.log(data)
+                        let tr = "";
+                        for (let item of data) {
+                            tr += "<tr>";
+                            tr += "<td>" + item.CH_LINEA +"</td>";
+                            tr += "<td>" + item.CH_SUB_LINEA + "</td>";
+                            tr += "<td>" + item.I_STOCK + "</td>";
+                            tr += "<td>" + item.I_PRECIO + "</td>";
+                            tr += "<td>" + item.CH_GENERO + "</td>";
+                            tr += "<td>" + item.CH_TALLA + "</td>";
+                            tr += "<td>" + item.CH_COLOR + "</td>";
+                            tr += "<td>" + item.CH_DESCRPICION + "</td>";
+                            tr += "<td>" + item.CH_CH_COD_PRODUCTO + "</td>";
+                            tr += "</tr>";
+
+                        }
+                        //$("#tbodyreporte").html(tr); 
+                        ArmarDataTable_New("reporte", tr, false, true, true, true);
+                    },
+                    failure: function () {
+                        console.error('error al cargar los periodos');
+                    }
+                });
+
+            }
+
+
+
+            
+
+        });
+
+
+    </script>
+}

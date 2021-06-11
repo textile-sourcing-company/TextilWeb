@@ -1,0 +1,158 @@
+﻿
+@{
+    ViewBag.Title = "Cubo de Información Actualizado";
+    Layout = "~/Views/Plantillas/_Layout.cshtml";
+}
+
+<div class="card-body">
+    <div class="row">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+            <label><input type="checkbox" id="ChkOC"> Buscar por OC</label><br>
+        </div>
+
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+            <h6>&nbsp;</h6>
+        </div>
+
+        <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4">
+            <h6>Fecha Inicio</h6>
+            <div class="form-group">
+                <input type="date" class="form-control numeros8 form-control-sm" id="DTFechaIni" value="" maxlength="8" disabled />
+            </div>
+        </div>
+
+        <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4">
+            <h6>Fecha Fin</h6>
+            <div class="form-group">
+                <input type="date" class="form-control numeros8 form-control-sm" id="DTFechaFin" value="" maxlength="8" disabled />
+            </div>
+        </div>
+
+        <div class="col-xl-2 col-lg-3 col-md-4 col-sm-4">
+            <h6>Numero OC</h6>
+            <div class="form-group">
+                <input type="text" class="form-control numeros8 form-control-sm" id="TxtOC" value="" placeholder="Numero OC" />
+            </div>
+        </div>
+
+        <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4">
+            <h6>Proveedor</h6>
+            <div class="form-group">
+                <input type="text" class="form-control numeros8 form-control-sm" id="TxtProveedor" value="" placeholder="Proveedor" style='text-transform:uppercase' />
+            </div>
+        </div>
+
+        <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4">
+            <h6>Comprador</h6>
+            <div class="form-group">
+                <input type="text" class="form-control numeros8 form-control-sm" id="TxtComprador" value="" placeholder="Comprador" style='text-transform:uppercase' />
+            </div>
+        </div>
+
+        <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4">
+            <h6>Almacén</h6>
+            <div class="form-group">
+                <input type="text" class="form-control form-control-sm" id="TxtAlmacen" placeholder="Almacén" style='text-transform:uppercase' />
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 form-group">
+            <h6>&nbsp;</h6>
+            <button class="btn btn-block btnbuscar btn-sm" style="max-width:250px" type="submit" id="btnsearch">
+                <span class="btn-label">
+                    <i class="fas fa-search mr-2"></i>
+                </span>
+                Buscar
+            </button>
+        </div>
+
+        <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 form-group">
+            <h6>&nbsp;</h6>
+            <button class="btn btn-success btn-sm" style="max-width:250px" type="button" id="btnExportar">
+                <span class="btn-label">
+                    <i class="fas fa-file-excel"></i>
+                </span>
+                Exportar
+            </button>
+        </div>
+
+
+        <div class="col-12 form-group">
+            <table class="table table-bordered nowrap" style="width:100%" id="TablaCuboInfoActualizado">
+                <thead class="table-info">
+
+                    <tr>
+                        <th>N° Requisición </th>
+                        <th>Cantidad Requerida</th>
+                        <th>Pedido Compra</th>
+                        <th>Fecha Registro OC</th>
+                        <th>Fecha Entrega Prevista OC</th>
+                        <th>Codigo Proveedor</th>
+                        <th>Descripción Proveedor</th>
+                        <th>Codigo Local Entrega</th>
+                        <th>Descripción Local Entrega</th>
+                        <th>Codigo Local Cobranza</th>
+                        <th>Descripción Local Cobranza</th>
+                        <th>Código Condición Pago</th>
+                        <th>Descripción Condición Pago</th>
+                        <th>Código Comprador</th>
+                        <th>Descripción Comprador</th>
+                        <th>Contacto</th>
+                        <th>Código Moneda</th>
+                        <th>Descripción Moneda</th>
+                        <th>Observacion OC</th>
+                        <th>Secuencia OC</th>
+                        <th>Código Producto OC</th>
+                        <th>Descripción Producto OC</th>
+                        <th>Unidad Consumo</th>
+                        <th>Unidad Compra</th>
+                        <th>Cantidad Solicitada Unidad Consumo</th>
+                        <th>Cantidad Solicitud Unidad Compra</th>
+                        <th>Valor Unidad Consumo</th>
+                        <th>Valor Total Unidad Consumo</th>
+                        <th>% Descuento</th>
+                        <th>% Impuesto</th>
+                        <th>Código Almacén</th>
+                        <th>Descripción Almacén</th>
+                        <th>Código Centro Costo</th>
+                        <th>Descripción Centro Costo</th>
+                        <th>Orden Planeamiento</th>
+                        <th>Grupo Planeamiento</th>
+                        <th>Fecha Prevista Entrega OC</th>
+                        <th>Fecha Proveedor</th>
+                        <th>Estado Ítem OC</th>
+                        <th>Usuario Registro OC</th>
+                        <th>Fecha Aprobación Firmante OC 1</th>
+                        <th>Login Firmante OC 1</th>
+                        <th>Fecha Aprobación Firmante OC 2</th>
+                        <th>Login Firmante OC 2</th>
+                        <th>Fecha Aprobación Firmante OC 3</th>
+                        <th>Login Firmante OC 3</th>
+                        <th>Cantidad Ingresada al almacén</th>
+                        <th>Fecha ingresada al almacén</th>
+                        <th>Última fecha ingresada al almacén</th>
+                        <th>Veces ingresada al almacén</th>
+                        <th>Cantidad devuelta</th>
+                        <th>Cantidad Total</th>
+                    </tr>
+
+                </thead>
+                <tbody id="TablaCuerpoCuboInfoActualizado"></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script src="~/Admin/js/Logistica/CuboInfoActualizado.js"></script>
+    <script>
+        //Aqui agrego un botón para exportar a Excel
+    $("#btnExportar").click(function ()
+    {
+    //if ($("#fchIni").val().trim() != "" || $("#fchFin").val().trim() != "") {
+    var laURLDeLaVista = '@Url.Action("ExpExcelCubo", "Logistica")';
+    window.location = laURLDeLaVista;
+   //}
+    });
+
+    </script>
+}

@@ -1,0 +1,98 @@
+﻿
+@{
+    ViewBag.Title = "Seguimiento por Programa";
+    Layout = "~/Views/Plantillas/_Layout.cshtml";
+}
+
+
+<div class="card">
+    <div class="card-header">
+
+        @*<div class="card-tools">
+                <button type="button" class="btn btn-tool" data-widget="collapse"><i class="fas fa-minus"></i></button>
+            </div>*@
+
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-xl-2 col-lg-3 col-md-4 col-sm-4">
+                <div class="form-group">
+                    <input type="text" class="form-control numeros8 form-control-sm" id="txtprogrma" value="" placeholder="Nro. Programa" style="text-transform:uppercase" />
+                </div>
+            </div>
+            <div class="col-xl-2 col-lg-3 col-md-4 col-sm-4">
+                <div class="form-group">
+                    <input type="text" class="form-control numeros8 form-control-sm" id="txtpedido" value="" placeholder="Nro. Pedido" />
+                </div>
+            </div>
+            <div class="col-xl-2 col-lg-3 col-md-4 col-sm-4">
+                <div class="form-group">
+                    <input type="text" class="form-control form-control-sm" id="txtPO" placeholder="Nro. PO" style='text-transform:uppercase' />
+                </div>
+            </div>
+            <div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 form-group">
+                <button class="btn btn-block btnbuscar btn-sm" style="max-width:400px" type="submit" id="btnsearch">
+                    <span class="btn-label">
+                        <i class="fas fa-search mr-2"></i>
+                    </span>
+                    Buscar
+                </button>
+                <button class="btn btn-block btnexcel btn-sm" style="max-width:400px" type="submit" id="btnExportar">
+                    <span class="btn-label">
+                        <i class="fas fa-file-excel"></i>
+                    </span>
+                    Exportar
+                </button>
+
+            </div>
+        </div>
+        <div class="form-group">
+
+            <table class="table table-sm table-bordered nowrap" style="width:100%" id="TablaSegPro">
+                <thead class="table-info">
+                    <tr>
+                        <th>CLIENTE</th>
+                        <th>FECHA CREACION PEDIDO</th>
+                        <th>FECHA EXFACTORY</th>
+                        <th>PROGRAMA</th>
+                        <th>ESTILO CLIENTE</th>
+                        <th>PEDIDO</th>
+                        <th>FECHA EMISIÓN REQ.</th>
+                        <th>REQUERIMIENTO</th>
+                        <th>PO</th>
+                        <th>FECHA ASIGNACION AVIO</th>
+                        <th>AVIO</th>
+                        <th>DESCRIPCION AVIO</th>
+                        <th>ORDEN COMPRA</th>
+                        <th>FECHA EMISION OC</th>
+                        <th>FECHA COMPROMISO OC</th>
+                        <th>QTDE. REQUERIDA PROGRAMA</th>
+                        <th>QTDE. REQUERIMIENTO</th>
+                        <th>QTDE. OC</th>
+                        <th>QTDE. RECIBIDA</th>
+                        <th>FECHA INGRESO ALMACEN</th>
+                        <th>PERIODO BOOKING</th>
+                        <th>ORDEM PLANEAMIENTO</th>
+                    </tr>
+                </thead>
+                <tbody id="TablaCuerpoSegPro"></tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+@section scripts{
+    <script src="~/Admin/js/Logistica/JSSeguimientoAvioProgr.js"></script>
+    <script>
+        //Aqui agrego un botón para exportar a Excel
+    $("#btnExportar").click(function ()
+    {
+        //if ($("#fchIni").val().trim() != "" || $("#fchFin").val().trim() != "") {
+        var laURLDeLaVista = '@Url.Action("/ExportarExcelSegOCAvio")';
+        window.location = laURLDeLaVista;
+       //}
+    });
+
+    </script>
+}
+

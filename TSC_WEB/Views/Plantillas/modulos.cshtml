@@ -1,0 +1,114 @@
+﻿<li class="nav-item">
+    <a href="/dashboard/index" id="Modulo_dashboard" class="nav-link active Modulos">
+        <i class="nav-icon fas fa-th"></i>
+        <p>    Dashboard    </p>
+    </a>
+</li>
+<li class="nav-header">MODULOS</li>
+
+@if (Session["usuario"] != null)
+{
+
+    int idtag = 0;
+
+    var Modulos = (List<TSC_WEB.Models.Entidades.Sistema.ModulosEntidad>)Session["modulos_new"];
+    var Opciones = (List<TSC_WEB.Models.Entidades.Sistema.ModulosEntidad>)Session["submodulos_new"];
+
+
+    var modu = string.Empty;
+    var submodu = string.Empty;
+    var menu = string.Empty;
+
+
+
+    foreach (var modulo in Modulos)
+    {
+
+        //if (modulo.nombretag == "Operaciones Proceso")
+        //{
+        //    modu = "Modulo_operaciones";
+        //    submodu = "SubModulo_operaciones";
+        //    menu = "Menu_operaciones";
+        //}
+        //else
+        //{
+        string md = modulo.nombretag.Replace(" ", "");
+        string smd = modulo.nombretag.Replace(" ", "");
+        string men = modulo.nombretag.Replace(" ", "");
+
+        modu = "Modulo_" + md;
+        submodu = "SubModulo_" + smd;
+        menu = "Menu_" + men;
+        //}
+
+
+
+        <li class="nav-item has-treeview" id="@menu">
+            <a href="#" id="@modu" class="nav-link Modulos">
+                <i class="nav-icon @modulo.icono nav-icon"></i>
+                <p>
+                    @modulo.nombretag
+                    <i class="right fas fa-angle-left"></i>
+                </p>
+            </a>
+
+            <ul class="nav nav-treeview" style="display: none;" id="@submodu">
+
+                @foreach (var opcion in Opciones)
+                {
+
+                    if (opcion.tipoopcion == "M" && opcion.idtag == modulo.idtag)
+                    {
+
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" id="@opcion.nombresubmodulo">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>
+                                    @opcion.detnombretag
+                                    <i class="right fas fa-angle-left"></i>
+                                </p>
+                            </a>
+
+                            <ul class="nav nav-treeview">
+
+                                @foreach (var opcion2 in Opciones)
+                                {
+                                    if (opcion2.modulopadre == opcion.idsubmodulo)
+                                    {
+                                        <li class="nav-item">
+                                            <a href="@opcion2.ruta" class="nav-link">
+                                                <i class="far fa-dot-circle nav-icon"></i>
+                                                <p>@opcion2.detnombretag</p>
+                                            </a>
+                                        </li>
+                                    }
+                                }
+
+                            </ul>
+                        </li>
+                    }
+
+                    if (opcion.tipoopcion == "A" && opcion.idtag == modulo.idtag && (opcion.modulopadre == null || opcion.modulopadre == ""))
+                    {
+                        <li class="nav-item">
+                            <a href="@opcion.ruta" class="nav-link submodulos" id="@opcion.nombresubmodulo">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>@opcion.detnombretag</p>
+                            </a>
+                        </li>
+                    }
+
+
+                }
+
+            </ul>
+
+        </li>
+
+        idtag = modulo.idtag;
+
+    }
+
+
+
+}

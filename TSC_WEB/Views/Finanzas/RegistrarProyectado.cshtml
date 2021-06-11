@@ -1,0 +1,430 @@
+﻿@{
+    ViewBag.Title = "Registro Proyectado";
+    ViewBag.Modulo = "Finanzas";
+    Layout = "~/Views/Plantillas/_Layout.cshtml";
+}
+
+<div class="cont-regpro">
+
+
+    <div class="card">
+        <div class="card-body">
+
+            <div class="tab-content card pt-1" id="myTabContentJust">
+                <div class="tab-pane fade show active" id="firma-just" role="tabpanel" aria-labelledby="firma-tab-just">
+
+                    <div class="card container-fluid controles">
+
+                        <div class="form-row">
+                            <div class="form-group col-md-4">
+                                <label for="IdCbxUbicacion">Ubicación</label>
+                                <select id="IdCbxUbicacion" class="form-control classCbxUbicacion">
+                                </select>
+                            </div>
+
+                            <div class="form-group col-md-4">
+                                <label for="IdCbxTipoPeriodo">Tipo Periodo</label>
+                                <select id="IdCbxTipoPeriodo" class="form-control classCbxTipoPeriodo ">
+                                </select>
+                            </div>
+
+                            <div class="form-group col-md-4">
+                                <label for="IdCbxPeriodo">Periodo</label>
+                                <select id="IdCbxPeriodo" class="form-control classCbxPeriodo ">
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group col-md-4">
+                                <label for="IdCbxCodEF">Cod. EF</label>
+                                <select id="IdCbxCodEF" class="form-control classIdCbxCodEF ">
+                                </select>
+                            </div>
+
+                            <div class="form-group col-md-4">
+                                <label for="IdCbxRS">RS - Concepto</label>
+                                <select id="IdCbxRS" class="form-control classIdCbxRS ">
+                                </select>
+                            </div>
+
+                            <div class="form-group col-md-4">
+                                <label for="idMonto">Monto (Dolar)</label>
+                                <input type="text" class="form-control" id="idMonto">
+                            </div>
+
+                        </div>
+                        <div class="form-row">
+                            <button id="btnGuardar" type="button" class="btn btn-primary"> Guardar</button>
+                        </div>
+                    </div>
+
+                    <div class="card tabla-contenido">
+                        <table class="table table-sm table-bordered nowrap" id="tablaPrincipal" style="width:100%;">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th>Periodo</th>
+                                    <th>Actividad</th>
+                                    <th>CodEFx</th>
+                                    <th>RS-x</th>
+                                    <th>Fecha Inicio</th>
+                                    <th>Fecha Fin</th>
+                                    <th>Monto (Dolar)</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tablaCabeceraContenido"></tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+
+</div>
+
+
+<style>
+
+    #dtdtFechaIniciocio {
+        min-width: 200px;
+    }
+
+    #dtFechaFin {
+        min-width: 200px;
+    }
+
+    .tab-pane {
+        padding: 10px;
+    }
+
+    .cont-regpro .controles {
+        padding: 10px;
+    }
+
+    .controles div select, button {
+    }
+
+    .cont-fcaja .tabla-contenido {
+        padding: 5px;
+    }
+
+        .cont-fcaja .tabla-contenido .class-monto {
+            text-align: right;
+        }
+
+    .cont-fcaja .cfmontototal {
+        text-align: right !important;
+    }
+
+    .cont-fcaja table {
+        width: 100%;
+    }
+
+
+
+
+    @@media (min-width: 320px) and (max-width: 479.98px) {
+    }
+
+    @@media (min-width: 480px) and (max-width: 767.98px) {
+    }
+
+    @@media (min-width: 768px) and (max-width: 991.98px) {
+    }
+
+    @@media (min-width: 992px) and (max-width: 1199.98px) {
+    }
+
+    @@media (min-width: 1200px) {
+    }
+</style>
+
+
+@section scripts {
+    <script>
+
+        var tipoPeriodo = 0;
+        var periodo = 0;
+        var ubicacion = 0;
+        var codEF = "";
+        var idRs = 0;
+        var monto = 0;
+
+        var lstTituloPeriodo = [];
+        var lstTitulo = []
+
+        $(document).ready(function () {
+
+            Inicializar();
+
+
+            function Inicializar() {
+                getUbicaciones();
+                getTiposPeriodo();
+                Listar();
+            }
+
+    
+            function getTiposPeriodo() {
+                $.ajax({
+                    type: "GET",
+                    url: '/Finanzas/RegPro_GetTiposPeriodos',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (data) {
+                        $("#IdCbxTipoPeriodo").empty();
+                        $.each(data.lista, function () {
+                            $("#IdCbxTipoPeriodo").append($("<option/>").val(this.IdTipo).text(this.DescTipo));
+                        });
+
+                        $("#IdCbxTipoPeriodo").val(0);
+                    },
+                    failure: function () {
+                        console.error('error al cargar tipos periodos');
+                    }
+                });
+            }
+
+            $("select.classCbxTipoPeriodo").change(function () {
+                tipoPeriodo = $(this).children("option:selected").val();
+
+                if (tipoPeriodo != 0 && typeof (tipoPeriodo) != "undefined" && tipoPeriodo != null) {
+                    let parametros = { tipoPeriodo: tipoPeriodo };
+                    getPeriodos(parametros);
+                }
+            });
+
+
+            function getPeriodos(parametros) {
+                $.ajax({
+                    type: "GET",
+                    url: '/Finanzas/RegPro_GetPeriodos',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    data: parametros,
+                    success: function (data) {
+                        $("#IdCbxPeriodo").empty();
+
+                        $.each(data.lista, function () {
+                            $("#IdCbxPeriodo").append($("<option/>").val(this.IdPeriodo).text(this.Periodo));
+                        });
+
+                        $("#IdCbxPeriodo").val(0);
+                    },
+                    failure: function () {
+                        console.error('error al cargar tipos periodos');
+                    }
+                });
+            }
+
+
+            function getUbicaciones() {
+                $.ajax({
+                    type: "GET",
+                    url: '/Finanzas/RegPro_GetUbicacion',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (data) {
+                        $("#IdCbxUbicacion").empty();
+                        $.each(data.lista, function () {
+                            $("#IdCbxUbicacion").append($("<option/>").val(this.IdTipoAct).text(this.Actividad));
+                        });
+
+                        $("#IdCbxUbicacion").val(0);
+                    },
+                    failure: function () {
+                        console.error('error al cargar tipos periodos');
+                    }
+                });
+            }
+
+            $("select.classCbxUbicacion").change(function () {
+                ubicacion = $(this).children("option:selected").val();
+
+                if (ubicacion != 0 && typeof (ubicacion) != "undefined" && ubicacion != null) {
+                    let parametros = { idTipoAct: ubicacion };
+                    getEF(parametros);
+                }
+            });
+
+
+            function getEF(parametros) {
+                $.ajax({
+                    type: "GET",
+                    url: '/Finanzas/RegPro_GetEF',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    data: parametros,
+                    success: function (data) {
+                        $("#IdCbxCodEF").empty();
+                        $.each(data.lista, function () {
+                            $("#IdCbxCodEF").append($("<option/>").val(this.CodEFx).text(this.DescCodEf));
+                        });
+
+                        $("#IdCbxCodEF").val(0);
+                    },
+                    failure: function () {
+                        console.error('error al cargar tipos periodos');
+                    }
+                });
+            }
+
+            $("select.classIdCbxCodEF").change(function () {
+                codEF = $(this).children("option:selected").val();
+
+                if (codEF != "0" && typeof (codEF) != "undefined" && codEF != null) {
+                    let parametros = { codEFx: codEF };
+                    getConceptos(parametros);
+                }
+            });
+
+
+            function getConceptos(parametros) {
+                $.ajax({
+                    type: "GET",
+                    url: '/Finanzas/RegPro_GetConceptos',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    data: parametros,
+                    success: function (data) {
+                        $("#IdCbxRS").empty();
+                        $.each(data.lista, function () {
+                            $("#IdCbxRS").append($("<option/>").val(this.IdRSx).text(this.Concepto));
+                        });
+
+                        $("#IdCbxRS").val(0);
+                    },
+                    failure: function () {
+                        console.error('error al cargar tipos periodos');
+                    }
+                });
+            }
+
+            $("select.classCbxUbicacion").change(function () {
+                ubicacion = $(this).children("option:selected").val();
+
+                if (ubicacion != 0 && typeof (ubicacion) != "undefined" && ubicacion != null) {
+                    let parametros = { idTipoAct: ubicacion };
+                    getEF(parametros);
+                }
+            });
+
+
+
+            $("#btnGuardar").click(function () {
+
+                tipoPeriodo = $("#IdCbxTipoPeriodo").children("option:selected").val();
+                ubicacion = $("#IdCbxUbicacion").children("option:selected").val();
+                periodo = $("#IdCbxPeriodo").children("option:selected").val();
+                codEF = $("#IdCbxCodEF").children("option:selected").val();
+                idRs = $("#IdCbxRS").children("option:selected").val();
+                monto = $("#idMonto").val();
+
+                if (tipoPeriodo != 0 && typeof (tipoPeriodo) != "undefined" && tipoPeriodo != null &&
+                    ubicacion != 0 && typeof (ubicacion) != "undefined" && ubicacion != null &&
+                    periodo != 0 && typeof (periodo) != "undefined" && periodo != null &&
+                    codEF != "0" && typeof (codEF) != "undefined" && codEF != null &&
+                    idRs != 0 && typeof (idRs) != "undefined" && idRs != null) {
+
+                    let parametros = { 'idRSx': idRs, 'idTipoPeriodo': tipoPeriodo, 'idPeriodo': periodo, 'monto': monto };
+
+                    setGuardar(parametros);
+                }
+            });
+
+            function setGuardar(parametros) {
+
+                $.ajax({
+                    type: "post",
+                    url: '/Finanzas/RegPro_InsertarProyectado/',
+                    data: parametros,
+                    success: function (data) {
+
+                        if (data.respuesta.IdEstado == 1) {
+                            //Swal.fire({
+                            //    icon: 'success',
+                            //    title: "Registro Correcto",
+                            //    text: "Textile Sourcing Company",
+                            //    allowEscapeKey: false,
+                            //    showConfirmButton: false,
+                            //    timer: 1500,
+                            //});
+                        }
+
+                        InicializarControles();
+                        Listar();
+                    },
+                    failure: function () {
+                        console.error('error al cargar tipos periodos');
+                    }
+                });
+
+            }
+
+            function Listar() {
+
+                $.ajax({
+                    type: "GET",
+                    url: '/finanzas/RegPro_ListarRegistrado',
+                    dataType: "json",
+                    success: function (data) {
+
+                        let tabla = $("#tablaPrincipal").DataTable();
+                        tabla.destroy();
+                        var tr = "";
+                        data.lista.forEach((obj) => {
+
+                            tr += "<tr> "
+                                + " <td>" + obj.Periodo + "</td>"
+                                + " <td>" + obj.Actividad + "</td>"
+                                + " <td>" + obj.CodEFx + "</td>"
+                                + " <td>" + obj.Concepto + "</td>"
+                                + " <td>" + obj.FechaInicio + "</td>"
+                                + " <td>" + obj.FechaFin + "</td>"
+                                + " <td>" + formatoNumero(obj.monto) + "</td>"
+                                + "</tr>";
+                        });
+
+                        $("#tablaCabeceraContenido").html(tr);
+
+                        $("#tablaPrincipal").DataTable(
+                            {
+                                'language': { 'url': '/libs/datatables/spanish.json' },
+                                "scrollX": true,
+                                lengthMenu: [[10, 15, 20, -1], [10, 15, 20, 'Todos']]
+                            });
+                    },
+                    failure: function () {
+                        console.error('error al cargar los periodos');
+                    }
+                });
+            }
+
+
+            function formatoNumero(x) {
+                x = x.toFixed(2);
+                return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            }
+
+            function InicializarControles() {
+                $("#idMonto").val("");
+            }
+
+
+
+
+
+        });
+
+
+
+    </script>
+
+}
+

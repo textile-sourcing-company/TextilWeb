@@ -1,0 +1,445 @@
+﻿@{
+    ViewBag.Title = "Ordenes de Compra pendientes de Firma";
+    ViewBag.Modulo = "Logística";
+    Layout = "~/Views/Plantillas/_Layout.cshtml";
+
+}
+
+<div class="oc-pend-fir">
+
+    <div class="card">
+
+        <div class="card-header">
+
+
+            <div class="form-row">
+                <div class="form-group col-md-3">
+                    <input required="" type="text" class="form-control-sm" id="FechaIni" placeholder="Fecha Inicio" onfocus="(this.type='date')" />
+                </div>
+
+                <div class="form-group col-md-3">
+                    <input required="" type="text" class="form-control-sm" id="FechaFin" placeholder="Fecha Fin" onfocus="(this.type='date')" />
+                </div>
+
+                <div class="form-group col-md-2">
+                    <select class="form-control form-control-sm selectFirmas" multiple="multiple" id="cboFirmas" placeholder="Tipos Firmas"></select>
+                </div>
+
+                <div class="form-group col-md-2">
+                    <button type="button" class="btn btn-primary form-control-sm btn-sm" id="btnBuscar">Buscar</button>
+                </div>
+
+                <div class="form-group col-md-2">
+                    <button id="btnExportarExcel" class="btn btn-success form-control-sm btn-sm">Exportar Excel <i class="fas fa-file-excel" style="margin-left: 7px;"></i></button>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="card-body">
+            <table class="table table-sm table-bordered table-hover dt-responsive nowrap" id="tablaPrincipal" style="width:100%;">
+                <thead>
+                    <tr>
+                        <th>Detalle</th>
+                        <th class="all">Pedido</th>
+                        <th>Fecha</th>
+                        <th>Descripcion Pago</th>
+                        <th>Proveedor</th>
+                        <th>Comprador</th>
+                        <th class="all">Valor OC</th>
+                        <th class="all">1º</th>
+                        <th class="all">2º</th>
+                        <th class="all">3º</th>
+                    </tr>
+                </thead>
+                <tbody id="tablaCabeceraContenido"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="modal" tabindex="-1" role="dialog" id="modalInformacion">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Detalle Orden Compra</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    <div class="card">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item"><span style="font-weight:bold">Orden de Compra: </span><span id="info-pedido"></span></li>
+                            <li class="list-group-item"><span style="font-weight:bold">Firmas: </span><span id="info-firmas"></span></li>
+                        </ul>
+                    </div>
+
+                    <div class="table-responsive" style="height:250px">
+                        <table class="table table-bordered table-hover" style="width:100%" id="tablaDetalle">
+                            <thead>
+                                <tr>
+                                    <th>Secuencia</th>
+                                    <th>CeCo</th>
+                                    <th>Codigo</th>
+                                    <th>Descripción</th>
+                                    <th>UN. Conv.</th>
+                                    <th>Cantidad</th>
+                                    <th>Valor</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tablaDetalleContenido"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<style>
+
+    /* Estilos Especiales */
+
+    .oc-pend-fir #btnExportarExcel {
+        min-width: 150px;
+    }
+
+    #tablaPrincipal .table td, .table th {
+        padding: 0.45rem !important;
+    }
+    /* Custom, iPhone Retina */
+    @@media only screen and (min-width : 320px) {
+        .card-header .seccion-1 {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: row;
+            flex-wrap: wrap;
+            width: 100%;
+        }
+
+            .card-header .seccion-1 .cont-btn-buscar {
+                margin-top: 3px;
+            }
+
+        .card-header .seccion-2 {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: row;
+            flex-wrap: wrap;
+            width: 100%;
+            border-top: 1px solid #EBEDEF;
+            margin-top: 15px;
+            padding-top: 8px;
+        }
+    }
+
+    /* Extra Small Devices, Phones */
+    @@media only screen and (min-width : 480px) {
+    }
+
+    /* Small Devices, Tablets */
+    @@media only screen and (min-width : 768px) {
+        .card-header .seccion-1 {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            flex-direction: row;
+            flex-wrap: wrap;
+            width: 50%;
+        }
+
+
+        .card-header .seccion-2 {
+            display: flex;
+            justify-content: flex-end;
+            flex-direction: row;
+            flex-wrap: wrap;
+            width: 50%;
+            border-top: none;
+            margin-top: 0px;
+            padding-top: 0px;
+        }
+    }
+
+    /* Medium Devices, Desktops */
+    @@media only screen and (min-width : 992px) {
+    }
+
+    /* Large Devices, Wide Screens */
+    @@media only screen and (min-width : 1100px) {
+    }
+</style>
+
+@section scripts {
+
+    <script>
+
+        var PEDIDOS = [];
+        var cod_firmas = [];
+
+        $(document).ready(function () {
+
+            $("#cboFirmas").multipleSelect();
+
+            LlenarCBO_Firmas();
+
+            function LlenarCBO_Firmas() {
+                $.ajax({
+                    type: "GET",
+                    url: '/logistica/ListarPendCboFirmas',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (data) {
+                        $.each(data, function () {
+                            $("#cboFirmas").append($("<option/>").val(this.CODFIRMA).text(this.NIVEL_FIRMA));
+                        });
+                        $('#cboFirmas').multipleSelect("refresh");
+                    },
+                    failure: function () {
+                        console.error('error al cargar los periodos');
+                    }
+                });
+            }
+
+            $("select.selectFirmas").change(function () {
+                cod_firmas = $("#cboFirmas").val();
+            });
+
+            $("#btnBuscar").click(function () {
+
+                let fechaIni = $('#FechaIni').val();
+                let fechaFin = $('#FechaFin').val();
+
+
+                if (cod_firmas.length == 0) {
+                    Swal.fire('Seleccione los tipos de firma')
+                }
+                else if (fechaIni == null ||
+                    fechaFin == null ||
+                    typeof (fechaIni) == "undefined" ||
+                    typeof (fechaFin) == "undefined" ||
+                    fechaIni == "Fecha Inicio" ||
+                    fechaFin == "Fecha Fin" ||
+                    fechaIni.trim() == "" ||
+                    fechaFin.trim() == "") {
+
+                    Swal.fire('Seleccione la fecha, por favor')
+                }
+                else {
+
+                    var vFirmas = "";
+
+                    for (var i = 0; i < cod_firmas.length; i++) {
+                        vFirmas = vFirmas + cod_firmas[i] + ","
+                    }
+                    vFirmas = vFirmas.slice(0, vFirmas.length - 1);
+
+                    var datos =
+                    {
+                        'firmas': vFirmas,
+                        'fechaIni': fechaIni,
+                        'fechaFin': fechaFin
+                    }
+
+                    Listar(datos);
+                }
+            });
+
+            function Listar(datos) {
+
+                $.ajax({
+                    type: "GET",
+                    url: '/logistica/ListarPendienteFirma',
+                    dataType: "json",
+                    data: datos,
+                    success: function (data) {
+                        let tabla = $("#tablaPrincipal").DataTable();
+                        tabla.destroy();
+                        var tr = "";
+                        var firmas = "";
+
+                        data.lista.forEach((obj) => {
+                            tr += "<tr> "
+                                + "<td class='text-center'>"
+                                + "<button data-pedido='" + obj.PEDIDO + "' class='btn btn-sm btn-detalle'><i class='fas fa-eye' style='color:#007bff;'></i></button>"
+                                + "</td>"
+                                + " <td> " + obj.PEDIDO + "</td>"
+                                + " <td> " + obj.FECHA + "</td>"
+                                + " <td style='max-width: 140px;'> " + obj.DESCRIPCIONPAGO + "</td>"
+                                + " <td style='max-width: 170px;'>" + obj.PROVEEDOR + "</td>"
+                                + " <td> " + obj.COMPRADOR + "</td>"
+                                + " <td> " + obj.SIMBOLO_MOEDA + " " + formatoNumero(obj.TOTAL_PEDIDO) + "</td>"
+
+                            if (obj.NIVEL == 0) {
+
+                                firmas = "<td class='text-center' style='max-width: 35px;'></td>"
+                                    + "<td class='text-center' style='max-width: 35px;'></td>"
+                                    + "<td class='text-center' style='max-width: 35px;'></td>";
+
+                            } else if (obj.NIVEL == 1) {
+                                firmas = "<td class='text-center' style='min-width: 35px;'>"
+                                        + "<span class='icono-firma' data-pedido='" + obj.PEDIDO + "'><i class='fas fa-check-circle' style='color:#2ECC71;'></i></span>"
+                                    + "</td>"
+                                    + "<td class='text-center' style='max-width: 35px;'></td>"
+                                    + "<td class='text-center' style='max-width: 35px;'></td>";
+
+                            } else if (obj.NIVEL == 2) {
+
+                                firmas = "<td class='text-center' style='max-width: 35px;min-width: 35px;'>"
+                                    + "<span class='icono-firma' data-pedido='" + obj.PEDIDO + "'><i class='fas fa-check-circle' style='color:#2ECC71;'></i></span>"
+                                    + "</td>"
+                                    + "<td class='text-center' style='max-width: 35px;min-width: 35px;'>"
+                                    + "<span class='icono-firma' data-pedido='" + obj.PEDIDO + "'><i class='fas fa-check-circle' style='color:#2ECC71;'></i></span>"
+                                    + "</td>"
+                                    + "<td class='text-center' style='max-width: 35px;min-width: 35px;'></td>";
+
+                            } else if (obj.NIVEL == 3) {
+
+                                firmas = "<td class='text-center' style='max-width: 35px;'>"
+                                    + "<span class='icono-firma' data-pedido='" + obj.PEDIDO + "'><i class='fas fa-check-circle' style='color:#2ECC71;'></i></span>"
+                                    + "</td>"
+                                    + "<td class='text-center' style='max-width: 35px;'>"
+                                    + "<span class='icono-firma' data-pedido='" + obj.PEDIDO + "'><i class='fas fa-check-circle' style='color:#2ECC71;'></i></span>"
+                                    + "</td>"
+                                    + "<td class='text-center' style='max-width: 35px;'>"
+                                    + "<span class='icono-firma' data-pedido='" + obj.PEDIDO + "'><i class='fas fa-check-circle' style='color:#2ECC71;'></i></span>"
+                                    + "</td>";
+                            }
+
+                            tr = tr + firmas + "</tr>";
+                        });
+
+                        $("#tablaCabeceraContenido").html(tr);
+
+                        $("#tablaPrincipal").DataTable(
+                            {
+                                'language': { 'url': '/libs/datatables/spanish.json' },
+                                lengthMenu: [[5, 10, 20, -1], [5, 10, 20, 'Todos']]
+                            }
+                        );
+                    },
+                    failure: function () {
+                        console.error('error al cargar los periodos');
+                    }
+                });
+
+            }
+
+            $("#btnExportarExcel").click(function () {
+
+                let fechaIni = $('#FechaIni').val();
+                let fechaFin = $('#FechaFin').val();
+
+                if (cod_firmas.length == 0) {
+                    Swal.fire('Seleccione los tipos de firma')
+                }
+                else if (fechaIni == null ||
+                    fechaFin == null ||
+                    typeof (fechaIni) == "undefined" ||
+                    typeof (fechaFin) == "undefined" ||
+                    fechaIni == "Fecha Inicio" ||
+                    fechaFin == "Fecha Fin" ||
+                    fechaIni.trim() == "" ||
+                    fechaFin.trim() == "") {
+
+                    Swal.fire('Seleccione la fecha, por favor')
+                }
+                else {
+
+                    var vFirmas = "";
+
+                    for (var i = 0; i < cod_firmas.length; i++) {
+                        vFirmas = vFirmas + cod_firmas[i] + ","
+                    }
+                    vFirmas = vFirmas.slice(0, vFirmas.length - 1);
+
+                    var datos =
+                    {
+                        'firmas': vFirmas,
+                        'fechaIni': fechaIni,
+                        'fechaFin': fechaFin
+                    }
+
+                    exportarExcel(datos);
+                }
+            });
+
+            function exportarExcel(datos) {
+
+                $.ajax({
+                    url: '@Url.Action("ReporteExcelPendientes", "Logistica")',
+                    contentType: 'application/json; charset=utf-8',
+                    datatype: 'json',
+                    type: "GET",
+                    data: datos,
+                    success: function () {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Reporte Generado con Éxito',
+                            text: 'Textile Sourcing Company',
+                            showConfirmButton: false,
+                            timer: 1500,
+                            onClose: () => {
+                                window.location = "/Logistica/ReporteExcelPendientes?firmas=" + datos.firmas + "&fechaIni=" + datos.fechaIni + "&fechaFin=" + datos.fechaFin;
+                            }
+                        });
+                    }
+                });
+            }
+
+
+            function formatoNumero(x) {
+                x = x.toFixed(2);
+                return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            }
+
+            $("#tablaPrincipal").on('click', '.btn-detalle', function () {
+
+                var pedido = $(this).attr("data-pedido");
+                var datos = { 'oc': pedido }
+
+                $("#modalInformacion #info-pedido").text(pedido);
+
+                ListarDetalleOC(datos);
+            });
+
+            function ListarDetalleOC(datos) {
+
+                $.ajax({
+                    url: '/logistica/ListarPendOCDetalle',
+                    type: 'get',
+                    data: datos,
+                    success: function (e) {
+                        var tr = "";
+
+                        e.forEach((obj) => {
+                            tr += "<tr>"
+                                + "<td>" + obj.SECUENCIA + "</td>"
+                                + "<td>" + obj.CECO + "</td>"
+                                + "<td>" + obj.CODIGO + "</td>"
+                                + "<td>" + obj.DESCRIPCION + "</td>"
+                                + "<td>" + obj.UNI_CONV + "</td>"
+                                + "<td>" + obj.CANTIDAD + "</td>"
+                                + "<td>" + formatoNumero(obj.TOTAL) + "</td>"
+                                + "</tr>";
+
+                            $("#modalInformacion #info-firmas").text(obj.FIRMAS);
+                        });
+
+                        $("#tablaDetalleContenido").html(tr);
+                        $("#modalInformacion").modal("show");
+                    }
+                });
+            }
+
+        });
+
+
+    </script>
+}

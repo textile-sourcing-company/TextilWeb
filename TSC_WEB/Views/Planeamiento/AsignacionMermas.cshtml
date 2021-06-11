@@ -1,0 +1,262 @@
+﻿@{
+
+    ViewBag.Title = "Merma por Clientes";
+    ViewBag.Modulo = "Planeamiento";
+    Layout = "~/Views/Plantillas/_Layout.cshtml";
+}
+
+
+
+<div class="card">
+    <div class="card-header">
+
+        <h3 class="card-title">Filtros</h3>
+        <div class="card-tools">
+            <button type="button" class="btn btn-tool" data-widget="collapse"><i class="fas fa-minus"></i></button>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-xl-3 col-lg-3 col-md-4 col-sm-4">
+                <div class="form-group">
+                    <select class="form-control select2 select2-danger" data-dropdown-css-class="select2-danger" style="width: 100%" id="cbcliente"></select>
+                </div>
+            </div>              
+            <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 form-group">
+       
+                <button class="btn btn-block btnbuscar" type="submit" id="btnsearch">
+                    <span class="btn-label">
+                        <i class="fas fa-search mr-2"></i>
+                    </span>
+                    Buscar
+                </button>
+                </div>
+            <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 form-group">
+            
+                <button class="btn btn-block btnProc1" type="submit" id="btnadd">
+                    <span class="btn-label">
+                        <i class="fas fa-user mr-2"></i>
+                    </span>
+                    Generar Individual
+                </button>
+            </div>
+            <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 form-group">
+            
+                <button class="btn btn-block btnProc2" type="submit" id="btnaddmas">
+                    <span class="btn-label">
+                        <i class="fas fa-users mr-2"></i>
+                    </span>
+                    Generar Masivo
+                </button>
+            </div>
+
+        </div>
+        <div class="form-group">
+            <table class="table table-sm table-bordered dt-responsive nowrap" style="width:100%" id="TablaMermas">
+                <thead>
+                    <tr>
+                        <th>Clientes</th>
+                        <th>Cantidad Inicial</th>
+                        <th>Cantidad Final</th>
+                        <th>Cantidad Perdida</th>
+                        <th>% Perdida</th>
+                        <th>Operacion</th>
+
+                    </tr>
+                </thead>
+                <tbody id="tablaCuerpoMermas"></tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+@* MODAL INDIVUAL *@
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">REGISTRO DE MERMA</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+       
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                            <h6>Cliente</h6>
+                            <select class="form-control select2 select2-danger" data-dropdown-css-class="select2-danger" style="width: 100%" id="cbclientepop"></select>
+                            <h6>&nbsp;</h6>
+                        </div>
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 form-group">
+                            <h6>Inicial</h6>
+                            <input type="text" class="form-control numeros4" id="txtCantinimdl" value="0" />
+
+                        </div>
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 form-group">
+                            <h6>Final</h6>
+                            <input type="text" class="form-control numeros4" id="txtCantfinmdl" value="0" />
+                        </div>
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 form-group">
+                            <h6>Cantidad Perd.</h6>
+                            <input type="text" class="form-control numeros4" id="txtcantpermdl" value="0" />
+                        </div>
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 form-group">
+                            <h6>% Perd.</h6>
+                            <input type="text" class="form-control decimales" id="txtprcmermdl" value=" 000.00">
+                        </div>
+                        <div class="col-xl-12 col-lg-12 col-md-8 col-sm-8 form-group">
+                            <div class="form-group">
+                                <table class="table table-sm table-bordered dt-responsive nowrap" style="width:100%" id="TablaMermasmodal">
+                                    <thead>
+                                        <tr>                                           
+                                            <th>Cantidad Inicial</th>
+                                            <th>Cantidad Final</th>
+                                            <th>Cantidad Perdida</th>
+                                            <th>% Perdida</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tablaCuerpoMermasmodal"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                        </div>
+                </div>
+            <div class="modal-footer">
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 form-group">
+                    <button type="button" class="btn btn-block btninsert" id="btnreg">Registra</button>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 form-group">
+                    <button type="button" class="btn btn-block btnCancel" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+         
+        </div>
+    </div>
+    </div>
+@* MODAL MASIVO *@
+<div class="modal fade" id="ModalMasivo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">REGISTRO DE MERMA MASIVA</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="row">
+                       
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 form-group">
+                            <h6>Inicial</h6>
+                            <input type="text" class="form-control numeros4" id="txtCantini" value="0" />
+
+                        </div>
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 form-group">
+                            <h6>Final</h6>
+                            <input type="text" class="form-control numeros4" id="txtCantfin" value="0" />
+                        </div>
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 form-group">
+                            <h6>Cantidad Perd.</h6>
+                            <input type="text" class="form-control numeros4" id="txtcantper" value="0" />
+                        </div>
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 form-group">
+                            <h6>% Perd.</h6>
+                            <input type="text" class="form-control decimales" id="txtprcprdmas" value="00.00">
+                        </div>
+                        <h6>Seleccionar cliente</h6>
+                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                      
+                            <select class="form-control select2 select2-danger" data-dropdown-css-class="select2-danger" style="width: 100%" id="cbclientemas"></select>
+                            <h6>&nbsp;</h6>
+                        </div>
+                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                            <button type="button" class="btn btn-block btnagregar-item" id="btnaddclimasivo"><i class="fas fa-chevron-circle-down"></i></button>
+                        </div>
+                      
+                            
+                       
+                            <div class="col-xl-12 col-lg-12 col-md-8 col-sm-8 form-group">
+                                <div class="form-group">
+                                    <h6>&nbsp;</h6>
+                                    <table class="table table-sm table-bordered dt-responsive nowrap" style="width:100%" id="TablaMermasmodalMasivo">
+                                        <thead>
+                                            <tr>
+                                                <th>Clientes</th>
+                                                <th>Operacio</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="tablaCuerpoMermasmodalMasivo"></tbody>
+                                    </table>
+                                </div>
+                            </div>
+</div>
+                </div>
+                <div class="modal-footer">
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 form-group">
+                        <button type="button" class="btn btn-block btninsert" id="btnregmas">Registra</button>
+                    </div>
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 form-group">
+                        <button type="button" class="btn btn-block btnCancel" data-dismiss="modal">Cerrar</button>
+                    </div>
+                    
+                </div>
+
+            </div>
+        </div>
+    </div>
+@* MODAL EDICION*@
+<div class="modal fade" id="ModalEdicion" tabindex="-1" role="dialog" aria-labelledby="ModalEdicionlabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="ModalEdicionlabel">EDICION DE MERMA POR CLIENTES</h5>
+                
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 form-group">
+                        <h6 id="lblcliente"></h6>
+                    </div>
+                    <h6>&nbsp;</h6>
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 form-group">
+                        <h6>Inicial</h6>
+                        <input type="text" class="form-control numeros4" id="txtCantiniedit" value="0" />
+
+                    </div>
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 form-group">
+                        <h6>Final</h6>
+                        <input type="text" class="form-control numeros4" id="txtCantfinedit" value="0" />
+                    </div>
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 form-group">
+                        <h6>Cantidad Perd.</h6>
+                        <input type="text" class="form-control numeros4" id="txtcantperedit" value="0" />
+                    </div>
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 form-group">
+                        <h6>% Perd.</h6>
+                        <input type="text" class="form-control decimales" id="txtprcedit" value="00.00">
+                    </div>
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 form-group">
+                    <button type="button" class="btn btn-block btnupdate" id="btnedit">Modificar</button>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 form-group">
+                    <button type="button" class="btn btn-block btnCancel" data-dismiss="modal">Close</button>
+                </div>
+                
+            </div>
+            @*data-dismiss="modal"*@
+        </div>
+    </div>
+</div>    
+@section scripts{       
+<script src="~/Admin/js/Planeamiento/JSMermaClientes.js"></script>
+    }

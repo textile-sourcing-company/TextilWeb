@@ -1,0 +1,126 @@
+﻿
+@{
+    ViewBag.Title = "Seguimiento de OC por Mes";
+    Layout = "~/Views/Plantillas/_Layout.cshtml";
+
+}
+
+<div class="card">
+    <div class="card-header">
+
+        @*<div class="card-tools">
+                <button type="button" class="btn btn-tool" data-widget="collapse"><i class="fas fa-minus"></i></button>
+            </div>*@
+
+    </div>
+
+    <div class="card-body">
+        <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                    <input type="checkbox" aria-label="Checkbox for following text input" id="checkmovi" placeholder="Busar por Fecha">
+                    @*<input type="checkbox" id="checkmovi" value="1" onclick="check_(this);"/>*@
+                    <h7 class="buscar_fecha">Buscar por Fecha</h7>
+                </div>
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                    <h6>&nbsp;</h6>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4">
+                    <h6>Fecha Inicio</h6>
+                    <div class="form-group">
+                        <input type="month" class="form-control numeros8 form-control-sm" style="width: 100% "  id="dtfechaini" value="" disabled />
+                    </div>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4">
+                    <h6>Fecha Fin</h6>
+                    <div class="form-group">
+                        <input type="month" class="form-control numeros8 form-control-sm" style="width: 100% "  id="dtfechafin" value="" disabled />
+                    </div>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4">
+                    <input type="checkbox" aria-label="Checkbox for following text input" id="checkccosto" placeholder="Busar por Centro Costo">
+                    @*<input type="checkbox" id="checkmovi" value="1" onclick="check_(this);"/>*@
+                    <h7 class="buscar_fecha">Buscar por Centro de Costo</h7>
+                    <div class="form-group">
+                        <select class="form-control select2 select2-danger" data-dropdown-css-class="select2-danger" style="width: 90% "  id="cbccosto" disabled></select>
+                    </div>
+                </div>
+
+                <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4">
+               
+                    <div class="form-group">
+                        <input type="text" class="form-control numeros8 form-control-sm" id="txtproveedor" value="" placeholder="Proveedor" style='text-transform:uppercase' />
+                    </div>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4">
+                    @* <h6>&nbsp;</h6>*@
+                    <div class="form-group">
+                        <input type="text" class="form-control numeros8 form-control-sm" id="txtcomprador" value="" placeholder="Comprador" style='text-transform:uppercase' />
+                    </div>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4">
+                    <div class="form-group">
+                        <input type="text" class="form-control form-control-sm" id="txtfamilia" placeholder="Familia" style='text-transform:uppercase' />
+                    </div>
+                </div>
+                <div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 form-group">
+                    <button class="btn btn-block btnbuscar btn-sm" style="max-width:500px" type="submit" id="btnsearch">
+                        <span class="btn-label">
+                            <i class="fas fa-search mr-2"></i>
+                        </span>
+                        Buscar
+                    </button>
+                </div>
+                <div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 form-group">
+                    <button class="btn btn-block btnexcel btn-sm" style="max-width:500px" type="submit" id="btnExportar">
+                        <span class="btn-label">
+                            <i class="fas fa-file-excel"></i>
+                        </span>
+                        Exportar
+                    </button>
+                </div>
+        </div>
+        <div class="form-group">
+
+            <table class="table table-bordered display nowrap" style="width:100%" id="TablaSegPro">
+                <thead class="table-info">
+                    <tr>
+                        <th>CLIENTE</th>
+                        <th>MES</th>
+                        <th>PROGRAMA</th>
+                        <th>FAMILIA</th>
+                        <th>COD. PRODUCTO</th>
+                        <th>PRODUCTO</th>
+                        <th>ORDEN DE COMPRA</th>
+                        <th>PROVEEDOR</th>
+                        <th>COMPRADOR</th>
+                        <th>FECHA EMISION OC</th>
+                        <th>FECHA COMPROMISO</th>
+                        <th>COND. PAGO</th>
+                        <th>CANTIDAD OC</th>
+                        <th>PRECIO UNITARIO</th>
+                        <th>TOTAL</th>
+                        <th>CODIGO CCOSTO</th>
+                        <th>DESCR. CCOSTO</th>
+                    </tr>
+                </thead>
+                <tbody id="TablaCuerpoSegPro"></tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+@section scripts{
+    <script src="~/Admin/js/Logistica/JSSegOcMes.js"></script>
+
+    <script>
+        //Aqui agrego un botón para exportar a Excel
+    $("#btnExportar").click(function ()
+    {
+        //if ($("#fchIni").val().trim() != "" || $("#fchFin").val().trim() != "") {
+        var laURLDeLaVista = '@Url.Action("/ExportarExcelOC")';
+        window.location = laURLDeLaVista;
+       //}
+    });
+
+    </script>
+}

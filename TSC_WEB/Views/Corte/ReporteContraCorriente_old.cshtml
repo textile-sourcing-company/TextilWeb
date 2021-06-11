@@ -1,0 +1,535 @@
+﻿
+@{
+    ViewBag.Title = "Reporte Contra Corriente";
+    ViewBag.Modulo = "Corte";
+    Layout = "~/Views/Plantillas/_Layout.cshtml";
+}
+
+<!-- BUSQUEDA -->
+
+<div class="card card-primary card-outline">
+
+    <div class="card-header">
+        <h3 class="card-title">Versiones</h3>
+        <div class="card-tools">
+            <button type="button" id="btnmodalbuscar" class="btn btn-tool"><i class="fas fa-search"></i></button>
+        </div>
+    </div>
+
+    <div class="card-body">
+
+        <table class="table table-hover table-sm table-bordered dt-responsive nowrap" style="width:100%;text-align:center" id="tableversiones">
+            <thead class="thead-light">
+                <tr>
+                    <th>Ver</th>
+                    <th>Combo</th>
+                    <th>Version</th>
+                    <th>Registro</th>
+                    <th>Usuario</th>
+                    <th>Tipo Tela</th>
+                </tr>
+            </thead>
+            <tbody id="tbodyversiones"></tbody>
+        </table>
+
+    </div>
+
+</div>
+
+<!-- DATA GENERAL -->
+<div class="card card-primary card-outline">
+
+    <div class="card-header">
+        <h3 class="card-title">Calculos</h3>
+    </div>
+    <div class="card-body">
+
+        <div class="table-responsive">
+
+            <table class="table table-bordered table-sm table-hover tablainput" id="tablecal">
+                <thead class="thead-light text-center" id="theadcal">
+
+                </thead>
+                <tbody id="tbodycal">
+                </tbody>
+            </table>
+
+        </div>
+
+
+    </div>
+
+</div>
+
+<!-- DATA GIRO -->
+<div class="card card-primary card-outline">
+
+    <div class="card-header">
+        <h3 class="card-title">Giro</h3>
+    </div>
+    <div class="card-body">
+
+        <div class="table-responsive">
+
+            <table class="table table-bordered table-sm table-hover tablainput" id="tablecalculos">
+                <thead class="thead-light text-center" id="theadcalculos">
+
+                </thead>
+                <tbody id="tbodycalculos">
+                </tbody>
+            </table>
+
+        </div>
+
+
+    </div>
+
+</div>
+
+
+@section scripts{
+
+    <script>
+        let FICHA = null;
+        let btnmodalbuscar = document.getElementById("btnmodalbuscar");
+        var CONTADORCALCULOS = 0;
+        let TOTALCOLUMNAS = 0;
+        let TOTALFILAS = 0;
+
+        // EVENTO DE BUSQUEDA DE VERSIONES
+        btnmodalbuscar.addEventListener('click', async () => {
+
+            const { value: ficha } = await Swal.fire({
+                title: 'Ingrese ficha a buscar',
+                input: 'number',
+                inputPlaceholder: 'Ficha',
+                //val: 112981
+            })
+
+            if (ficha) {
+                FICHA = ficha;
+                await BuscarVersiones(ficha);
+            }
+
+        });
+
+        // FUNCION BUSQUEDA DE VERSIONES
+        async function BuscarVersiones(ficha) {
+            await get("Corte", "ListarVersiones", { ficha }, true)
+                .then(response => {
+
+                    let rows = "";
+
+                    response.forEach(function (obj) {
+
+                        if (obj.contenido > 0) {
+                            rows += `
+                                        <tr style='background-color:#6c757d;color:white'>
+                                        <td class='text-center'><a href='#' data-combo='${obj.combo}' data-idversiones='${obj.VERSIONES}' data-idtela='${obj.TIPO_TELA}' class ="ver" ><i style='color:#138d75 ' class='fas fa-check-double'></i></a></td>
+                                        <td>${obj.combo}</td>
+                                        <td>${obj.VERSIONES}</td>
+                                        <td>${obj.F_REGISTRO}</td>
+                                        <td>${obj.U_REGISTRO}</td>
+                                        <td>${obj.TIPO_TELA}</td>
+                                        </tr>
+                                    `;
+                        } else {
+                            rows += `
+                                        <tr>
+                                        <td class='text-center'><a href='#' data-combo='${obj.combo}' data-idversiones='${obj.VERSIONES}' data-idtela='${obj.TIPO_TELA}' class ="ver" ><i style='color:#138d75 ' class='fas fa-check-double'></i></a></td>
+                                        <td>${obj.combo}</td>
+                                        <td>${obj.VERSIONES}</td>
+                                        <td>${obj.F_REGISTRO}</td>
+                                        <td>${obj.U_REGISTRO}</td>
+                                        <td>${obj.TIPO_TELA}</td>
+                                        </tr>
+                                    `;
+                        }
+                    });
+
+                    //ArmarDataTable_New('versiones',rows);
+                    $("#tbodyversiones").html(rows);
+                    InformarMini(`${response.length} registros encontradas`);
+
+
+                })
+                .catch(error => {
+                    console.log(error);
+                    AdvertirMini("Ocurrio un error contacte a sistemas");
+                });
+        }
+
+        // BUSCAR CABECERA
+        $("#tbodyversiones").on('click', '.ver', async function () {
+
+            MostrarCarga("Cargando...");
+
+            let ficha = FICHA;
+            let combo = $(this).data("combo");
+            let version = $(this).data("idversiones");
+            let tipotela = $(this).data("idtela");
+
+
+            await getdatageneral(ficha, version, tipotela, combo);
+            await VerProporciones(ficha, version, tipotela, combo);
+
+
+            InformarMini("Listo..!!!", 1000);
+
+
+        });
+
+        // VER PROPORCIONES
+        async function VerProporciones(ficha, version, tela, combo) {
+
+            await get("Corte", "ListaProporcionesContraCorriente", {
+                ficha, version, tela, combo
+            }).then(response => {
+                let js = response;
+
+                console.log(js);
+                setcantcalculos(js);
+
+
+                let th = "<tr>";
+                let th2 = "<tr>";
+                let contador = 0;
+                let contador2 = 0;
+                let estiloant = "PAÑOS";
+                let cantcolumnas = 0;
+
+                //console.log(js[0]);
+
+                let totalcolumnas = Object.keys(js[0]).length;
+                //console.log(totalcolumnas);
+
+                for (var key in js) {
+                    contador++;
+                    if (contador == 1) {
+
+                        for (var key2 in js[key]) {
+                            contador2++;
+                            if (contador2 >= 2) {
+
+                                // CABECERAS
+                                cantcolumnas++;
+
+                                let estilo = key2.replace(/'/g, "");
+                                estilo = estilo.split("_");
+                                estilo = estilo[0];
+                                console.log(estilo, estiloant);
+
+                                if (estilo != estiloant || contador2 == totalcolumnas) {
+
+                                    cantcolumnas = estiloant == "PAÑOS" ? 1 : cantcolumnas;
+                                    cantcolumnas = contador2 == totalcolumnas ? (cantcolumnas + 1) : cantcolumnas;
+                                    estiloant = estiloant == "PAÑOS" ? "" : estiloant;
+
+                                    th += `colspan='${cantcolumnas}'  > ${estiloant}</th >`;
+
+                                    cantcolumnas = 0;
+                                } else {
+                                    th += `<th style="vertical-align:middle;" class='text-center' `;
+                                }
+                                estiloant = estilo;
+
+                                // CABECERAS DOS
+                                let talla = key2.replace(/'/g, "");
+                                talla = talla.split("_");
+                                //console.log(talla);
+                                talla = talla[talla.length - 1];
+                                th2 += `<th style="vertical-align:middle;" class='text-center columnas' >${talla}</th>`;
+                            }
+                        }
+                    }
+
+                }
+
+                TOTALCOLUMNAS = cantcolumnas;
+
+                th += "</tr>";
+                th2 += "</tr>";
+
+                th += th2;
+
+                $("#theadcalculos").html(th);
+
+                //ARMA CUERPO
+                let tr = "";
+                let td = "";
+                let cont = 0;
+                let cont2 = 0;
+                let validar = false;
+                let valor = "";
+                //console.log(js.length, "LONGITUD");
+                let longitud = js.length;
+                for (var key in js) {
+                    td = "";
+                    cont++;
+                    if (cont == 1 || cont == longitud - 1 || cont == longitud) {
+                        tr += `<tr style='background-color:#25495c;color:white' class='filas' id='filapro${cont}'>`;
+
+                        let colnum = 0;
+                        for (var key2 in js[key]) {
+
+                            valor = js[key][key2].toString();
+
+                            if (key2 != "UBICA") {
+
+                                colnum++;
+
+
+                                if (valor.includes("Calculo")) {
+                                    valor = "Prendas por talla";
+                                }
+
+                                if (valor == "==>>" && cont == longitud) {
+                                    valor = "Prendas a recuperar";
+                                }
+
+                                if ((valor == "==>>" || valor == "==>") && cont != longitud) {
+                                    valor = "Prendas Totales";
+                                }
+
+                                let aling = !isNaN(valor) ? 'text-right' : '';
+
+                                tr += `<td nowrap class='${aling} colnumcal${colnum}'>${valor}</td>`;
+
+                            }
+
+                        }
+
+
+                    } else if (cont > 2) {
+                        tr += `<tr id='filapro${cont}' class='filas'>`;
+                        if (cont <= (CONTADORCALCULOS + 2)) {
+
+                            let colnum = 0;
+                            for (var key2 in js[key]) {
+
+
+
+                                valor = js[key][key2].toString();
+                                valor = valor == "0" ? " " : valor;
+
+                                if (key2 != "UBICA") {
+
+                                    colnum++;
+
+                                    if (valor.includes("Calculo")) {
+                                        valor = "Prendas por talla";
+                                    }
+
+                                    if (valor == "==>>") {
+                                        valor = "Prendas a recuperar";
+                                    }
+
+                                    let numero = parseFloat(valor);
+
+                                    //console.log(key2);
+                                    if (key2 == "'PAÑOS'" && !isNaN(numero)) {
+                                        //console.log(valor);
+                                        tr += `<td nowrap>
+                                                <input value='${valor}' type='number' data-fila='${cont}' class='inputtabla panos calculos colnum${colnum}'> </input>
+                                            </td>`;
+                                    } else {
+                                        tr += `<td nowrap class='calculos colnum${colnum}'>${valor}</td>`;
+                                    }
+
+
+                                }
+
+                            }
+
+                        }
+                    }
+
+                    tr += "</tr>";
+
+                }
+
+
+                //console.log(tr);
+                TOTALFILAS = cont;
+                $("#tbodycalculos").html(tr);
+
+
+            }).catch(error => {
+                console.log(error);
+                AdvertirMini("Ocurrio un error contacte a sistemas");
+            });
+
+        }
+
+        $("#tbodycalculos").on('keyup', '.panos', function () {
+
+            let valor = $(this).val().trim();
+            let fila = $(this).data("fila");
+            CalculaProporciones(valor, fila);
+
+        });
+
+        // DATA GENERAL
+        async function getdatageneral(ficha, version, tipotela, combo) {
+
+                let cabe = await get("Corte", "getCabeceraReporteContracorriente", {
+                    operacion: 1, ficha, combo, version, tipotela
+                });
+
+                let tallas = await get("Corte", "getCabeceraReporteContracorriente", {
+                    operacion: 2, ficha, combo, version, tipotela
+                });
+
+                // ARMAMOS CABECERA
+                let thead = `
+                    <tr>
+                        <th nowrap>PROGRAMA</th>
+                        <th nowrap>ESTILO</th>
+                        <th nowrap>PEDIDO</th>
+                        <th nowrap>EXFACTORY</th>
+                        <th nowrap>COLOR</th>
+                `;
+
+                let canttallas = "";
+
+                // ARMAMOS TALLAS
+                tallas.forEach((obj) => {
+                    thead += `<th nowrap>${obj.TALLAESTILO}</th>`;
+                    canttallas += "<td nowrap data-estilo='destilo'></td>";
+                });
+
+
+                thead += "<th nowrap >TOTAL</th>";
+                canttallas += "<td nowrap data-estilo='destilo'></td>";
+                
+                thead += "</tr>";
+                $("#theadcal").html(thead);
+
+                console.log(canttallas);
+
+                let tr = "";
+                // ARMAMOS DATOS
+                cabe.forEach((obj) => {
+
+                    canttallas.replaceAll(/destilo/g, obj.ESTILOCLIENTE);
+                    console.log(canttallas);
+
+
+                    tr += `
+                        
+                        <tr>
+                            <td nowrap>${obj.PROGRAMA}</td>
+                            <td nowrap>${obj.ESTILOCLIENTE}</td>
+                            <td nowrap>${obj.PEDIDO_VENDA}</td>
+                            <td nowrap>${obj.EXFACTORY}</td>
+                            <td nowrap>${obj.COLOR}</td>
+                            ${canttallas}
+                        </tr>
+                        <tr class='text-primary'>
+                            <td nowrap></td>
+                            <td nowrap></td>
+                            <td nowrap></td>
+                            <td nowrap></td>
+                            <td nowrap>AVANCE</td>
+                            ${canttallas}
+                        </tr>
+                        <tr class='text-danger'>
+                            <td nowrap></td>
+                            <td nowrap></td>
+                            <td nowrap></td>
+                            <td nowrap></td>
+                            <td nowrap>%</td>
+                            ${canttallas}
+                        </tr>
+    
+                    `;
+
+                });
+
+                $("#tbodycal").html(tr);
+
+
+                console.log(cabe);
+        }
+
+        // PROPORCIONES
+        function CalculaProporciones(valor, fila) {
+            fila = parseFloat(fila);
+
+            let tr_cantidad = $(`#filapro${fila} .calculos`);
+            fila += 1;
+            let tr_calculos = $(`#filapro${fila} .calculos`);
+
+
+            for (let i = 0; i < tr_calculos.length; i++) {
+
+                let cant = parseFloat(tr_cantidad[i].innerText == " " ? 0 : tr_cantidad[i].innerText);
+                let calculo = cant * valor;
+                tr_calculos[i].innerText = isNaN(calculo) ? "" : calculo;
+            }
+
+
+            // TOTALES DE COLUMNAS
+            CalculaTotalesColumnas();
+        }
+
+        // CALCULA TOTALES COLUMNAS
+        function CalculaTotalesColumnas() {
+
+            let columnas = $("#theadcalculos .columnas");
+            let suma = 0;
+
+            // RECORREMOS COLUMNAS
+            for (let x = 0; x < columnas.length; x++) {
+
+                if (x > 1) {
+
+                    let filas = $(`#tbodycalculos .filas .colnum${x}`);
+                    suma = 0;
+
+                    for (let y = 0; y < filas.length; y++) {
+
+                        if (y % 2 == 1) {
+                            let cant = parseFloat(filas[y].innerText == "" ? 0 : filas[y].innerText);
+                            suma += isNaN(cant) ? 0 : cant;
+                        }
+                    }
+
+                    //console.log(suma);
+                    let cabe = $(`#tbodycalculos .filas .colnumcal${x}`)[0].innerText;
+                    cabe = parseFloat(cabe);
+                    $(`#tbodycalculos .filas .colnumcal${x}`)[1].innerText = suma;
+                    $(`#tbodycalculos .filas .colnumcal${x}`)[2].innerText = suma - cabe;
+
+
+                }
+
+
+            }
+
+
+        }
+
+        // ASIGNA CANTIDAD DE CALCULOS
+        function setcantcalculos(response) {
+
+
+            response.forEach((obj,i) => {
+                console.log(i);
+                console.log(obj);
+
+                if (i > 1 && i % 2 == 0) {
+
+                    if (obj["'PAÑOS'"]  != "0") {
+                        CONTADORCALCULOS = i;
+                    }
+                }
+
+            });
+
+        }
+
+    </script>
+
+}
+

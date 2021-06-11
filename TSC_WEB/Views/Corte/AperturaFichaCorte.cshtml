@@ -1,0 +1,387 @@
+﻿@*@{
+        ViewBag.Title = "Aperturar Ficha de Corte";
+        Layout = "~/Views/Plantillas/_Layout.cshtml";
+    }
+
+
+    <div class="card card-outline card-primary">
+
+        <div class="card-header">
+
+        </div>
+
+        <div class="card-body">
+
+            <form class="row" id="frmbusqueda">
+
+                <div class="col-md-5 form-group">
+                    <label>Partida</label>
+                    <input type="text" class="form-control form-control-sm" id="txtpartida" />
+                </div>
+
+                <div class="col-md-5 form-group">
+                    <label>Ficha</label>
+                    <input type="tel" class="form-control form-control-sm" id="txtficha" />
+                </div>
+
+                <div class="col-md-2 form-group">
+                    <label>&nbsp;</label>
+                    <button class="btn btn-sm btn-block btn-primary" type="submit">Buscar</button>
+                </div>
+
+
+
+            </form>
+
+
+            <table class="table table-bordered" id="tablereporte">
+                <thead class="thead-light">
+                    <tr>
+                        <th>Partida</th>
+                        <th>Combo</th>
+                        <th>Versión</th>
+                        <th>Fichas</th>
+                        <th>Fecha Rechazo</th>
+                        <th>Situación</th>
+                        <th>Operaciones</th>
+                    </tr>
+                </thead>
+                <tbody id="tbodytablereporte">
+                </tbody>
+            </table>
+
+        </div>
+
+
+    </div>
+
+    @section scripts {
+
+        <script>
+
+            let frmbusqueda = document.getElementById("frmbusqueda");
+
+
+            // BUSQUEDA
+            frmbusqueda.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                await Buscar();
+            });
+
+
+            // BUSCAR
+            async function Buscar() {
+
+                MostrarCarga("Cargando...");
+
+                let partida = $("#txtpartida").val().trim();
+                let ficha   = $("#txtficha").val().trim();
+
+
+                await get("Corte", "BuscarFichasAperturarCorte", {
+                    partida, ficha
+                }).then(response => {
+
+                    let tr = "";
+                    let estado = "";
+
+                    response.forEach((obj) => {
+
+                        if (obj.ESTADOREPORTE == "1" && obj.ESTADOCORTE == "0"){
+                            estado = "APROBADO";
+                        }else if (obj.ESTADOREPORTE == "0" && obj.ESTADOCORTE == "0" && obj.FECHA_RECHAZO == null) {
+                            estado = "PENDIENTE";
+                        } else if (obj.ESTADOREPORTE == "0" && obj.ESTADOCORTE == "1" ) {
+                            estado = "APERTURADO";
+                        }
+                        else if (obj.ESTADOREPORTE == "0" && obj.ESTADOCORTE == "0" && obj.FECHA_RECHAZO != "") {
+                            estado = "RECHAZADO";
+                        }
+
+                        let fecharechazo = obj.FECHA_RECHAZO == null ? "" : obj.FECHA_RECHAZO;
+
+                        tr += `
+                            <tr>
+                                <td>${obj.PARTIDA}</td>
+                                <td>${obj.COMBO}</td>
+                                <td>${obj.VERSIONES}</td>
+                                <td>${obj.FICHAS}</td>
+                                <td>${fecharechazo}</td>
+                                <td>${estado}</td>
+                                <td class='text-center'>
+
+                                    <div class="dropdown dropdown-sm">
+                                        <button class="btn  bg-light dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                          <i class="fas fa-cog"></i>
+                                        </button>
+                                        <div class="dropdown-menu  dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+                                          <a class="dropdown-item operacion" data-text='Aprobar'    data-tipo='1'   data-version='${obj.VERSIONES}' data-combo='${obj.COMBO}' data-tipotela='${obj.TIPO_TELA}' data-partida='${obj.PARTIDA}' href="#"><i class="fas fa-check" style='color:green'></i>Aprobar</a>
+                                          <a class="dropdown-item operacion" data-text='Rechazar'   data-tipo='0'   data-version='${obj.VERSIONES}' data-combo='${obj.COMBO}' data-tipotela='${obj.TIPO_TELA}' data-partida='${obj.PARTIDA}' href="#"><i class="fas fa-times" style='color:red' ></i>Rechazar</a>
+                                          <a class="dropdown-item operacion" data-text='Aperturar'  data-tipo='2' data-version='${obj.VERSIONES}' data-combo='${obj.COMBO}' data-tipotela='${obj.TIPO_TELA}' data-partida='${obj.PARTIDA}' href="#"><i class="fas fa-lock-open" ></i>Aperturar</a>
+                                        </div>
+                                    </div>
+
+                                </td>
+                            </tr>
+                        `
+
+                    });
+
+                    $("#tbodytablereporte").html(tr);
+
+                    InformarMini("Busqueda concluida",1500);
+
+
+                }).catch(error => {
+                    AdvertirMini("Ocurrio un error, contacte a sistemas");
+                    console.log(error);
+                });
+
+            }
+
+            // APROBAR - RECHAZAR - APERTURAR
+            $("#tbodytablereporte").on('click', '.operacion', async function () {
+                let operacion   = $(this).data("operacion");
+                let tipo        = $(this).data("tipo");
+                let partida     = $(this).data("partida");
+                let version     = $(this).data("version");
+                let combo = $(this).data("combo");
+                let tipotela = $(this).data("tipotela");
+
+                let rpt = await Preguntar(`Confirme para ${operacion} ficha`);
+
+                if (rpt.value) {
+
+                    let response = await get("Corte", "AperturarFichasCorte", {
+                        operacion: tipo,
+                        partida,
+                        combo,
+                        version,
+                        tipotela
+                    });
+
+                    if (response) {
+                        await Buscar();
+                        /*InformarMini("Realizado correctamente", 1500);
+                        setTimeout(async () => {
+                            await Buscar();
+                        }, 1550);*/
+                    } else {
+                        AdvertirMini("Ocurrio un error :(");
+                    }
+
+
+                }
+
+            });
+
+        </script>
+
+    }*@
+
+
+@{
+    ViewBag.Title = "Aperturar Ficha de Corte";
+    ViewBag.Modulo = "Corte";
+
+    Layout = "~/Views/Plantillas/_Layout.cshtml";
+}
+
+
+<div class="card card-outline card-primary">
+
+    <div class="card-header">
+
+    </div>
+
+    <div class="card-body">
+
+        <form class="row" id="frmbusqueda">
+
+            <div class="col-md-4 form-group">
+                <label>Partida</label>
+                <input type="text" class="form-control form-control-sm" id="txtpartida" />
+            </div>
+
+            <div class="col-md-4 form-group">
+                <label>Ficha</label>
+                <input type="tel" class="form-control form-control-sm numeros" id="txtficha" />
+            </div>
+
+            <div class="col-md-2 form-group">
+                <label>Estado</label>
+                @*<input class="form-control" type="checkbox" id="chkestado">*@
+                <select name="" id="cboEstado" class="custom-select custom-select-sm">
+                    <option value="">[TODOS LOS ESTADOS]</option>
+                    <option value="0" selected>Pendiente</option>
+                    <option value="1">Aprobado</option>
+                    <option value="2">Aperturado</option>
+                </select>
+            </div>
+
+            <div class="col-md-2 form-group">
+                <label>&nbsp;</label>
+                <button class="btn btn-sm btn-block btn-primary" type="submit">Buscar</button>
+            </div>
+
+
+
+        </form>
+
+
+        <table class="table table-bordered" id="tablereporte">
+            <thead class="thead-light">
+                <tr>
+                    <th>Partida</th>
+                    <th>Combo</th>
+                    <th>Versión</th>
+                    <th>Fichas</th>
+                    <th>Fichas Despachadas</th>
+                    <th>Situación</th>
+                    <th>Operaciones</th>
+                </tr>
+            </thead>
+            <tbody id="tbodytablereporte">
+            </tbody>
+        </table>
+
+    </div>
+
+
+</div>
+
+@section scripts {
+
+    <script>
+
+        window.addEventListener('load', async () => {
+            await Buscar();
+        });
+
+
+        let frmbusqueda = document.getElementById("frmbusqueda");
+        let estadocorte = "0";
+
+        // BUSQUEDA
+        frmbusqueda.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            await Buscar();
+        });
+
+        //$("#chkestado").change(function () {
+        //    estadotendido = estadotendido == "0" ? "1" : "0";
+        //});
+
+
+        // BUSCAR
+        async function Buscar() {
+
+            MostrarCarga("Cargando...");
+
+            let partida = $("#txtpartida").val().trim();
+            let ficha = $("#txtficha").val().trim();
+            estadocorte = $("#cboEstado").val();
+            estadocorte = estadocorte == "" ? null : estadocorte;
+
+            await get("Corte", "BuscarFichasAperturar", {
+                partida, ficha, estadotendido:null, estadocorte
+            }).then(response => {
+
+                let tr = "";
+                let estado = "";
+
+                response.forEach((obj) => {
+
+                    let color = "";
+                    let estado = "";
+
+
+                    if (obj.ESTADOCORTE == "0") estado = "Pendiente";
+                    if (obj.ESTADOCORTE == "1") estado = "Aprobado";
+                    if (obj.ESTADOCORTE == "2") estado = "Aperturado";
+
+
+                    let fichadespacho = obj.FICHASDES;
+                    fichadespacho = fichadespacho ? fichadespacho : "<label class='text-danger'>Despacho pendiente</label>";
+
+                    tr += `
+                            <tr class='${color}'>
+                                <td>${obj.PARTIDA}</td>
+                                <td>${obj.COMBO}</td>
+                                <td>${obj.VERSION}</td>
+                                <td>${obj.FICHAS}</td>
+                                <td>${fichadespacho}</td>
+                                <td>${estado}</td>
+                                <td class='text-center text-dark'>
+
+                                    <div class="dropdown dropdown-sm">
+                                        <button class="btn  bg-light dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                          <i class="fas fa-cog"></i>
+                                        </button>
+                                        <div class="dropdown-menu  dropdown-menu-right" aria-labelledby="dropdownMenuButton">`;
+
+                    if ((obj.FICHAS == obj.FICHASDES) || obj.FLAT == 1)  {
+                        tr += `<a class="dropdown-item operacion " data-text='Aprobar' data-tipo='1' data-version='${obj.VERSION}' data-combo='${obj.COMBO}' data-tipotela='${obj.TIPO_TELA}' data-partida='${obj.PARTIDA}' href="#"><i class="fas fa-check" style='color:green'></i>Aprobar</a>`;
+                    }
+
+
+                    tr += `
+                                          <a class="dropdown-item operacion" data-text='Aperturar'  data-tipo='2' data-version='${obj.VERSION}'       data-combo='${obj.COMBO}' data-tipotela='${obj.TIPO_TELA}' data-partida='${obj.PARTIDA}' href="#"><i class="fas fa-lock-open" ></i>Aperturar</a>
+
+                                        </div>
+                                    </div>
+
+                                </td>
+                            </tr>
+                        `
+
+                });
+
+                $("#tbodytablereporte").html(tr);
+
+                InformarMini("Busqueda concluida", 1500);
+
+
+            }).catch(error => {
+                AdvertirMini("Ocurrio un error, contacte a sistemas");
+                console.log(error);
+            });
+
+        }
+
+        // APROBAR - RECHAZAR - APERTURAR
+        $("#tbodytablereporte").on('click', '.operacion', async function () {
+            let operacion = $(this).data("text");
+            let tipo = $(this).data("tipo");
+            let partida = $(this).data("partida");
+            let version = $(this).data("version");
+            let combo = $(this).data("combo");
+            let tipotela = $(this).data("tipotela");
+
+
+            let rpt = await Preguntar(`Confirme para ${operacion} ficha`);
+
+            if (rpt.value) {
+
+                let response = await get("Corte", "AperturarFichasCorte", {
+                    operacion: tipo,
+                    partida,
+                    combo,
+                    version,
+                    tipotela
+                });
+
+                if (response) {
+                    await Buscar();
+                } else {
+                    AdvertirMini("Ocurrio un error :(");
+                }
+
+
+            }
+
+        });
+
+    </script>
+
+} 

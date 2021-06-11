@@ -1,0 +1,1178 @@
+﻿@{
+    ViewBag.Title = "Control Presupuestal - Gráficos";
+    ViewBag.Modulo = "Logística";
+    Layout = "~/Views/Plantillas/_Layout.cshtml";
+}
+
+<div class="cont-graf">
+
+    <div class="card">
+        <div class="card-body">
+
+            <div class="card">
+
+                <div class="cont-header">
+                    <select class="form-control selectPanel selectPeriodos" multiple="multiple" id="cbxPeriodos" placeholder="Periodo"></select>
+                    <select class="form-control selectPanel selectGerencias" multiple="multiple" id="cbxGerencias" placeholder="Gerencias"></select>
+                    <select class="form-control selectPanel selectCeCo" multiple="multiple" id="cbxCeCo" placeholder="Centro Costo"></select>
+                    <select class="form-control selectPanel selectFamilia" multiple="multiple" id="cbxFamilias" placeholder="Familias"></select>
+                </div>
+
+            </div>
+
+            <div class="card cont-grafico">
+                <div class="tipos-graf">
+                    <button id="btnLineas" class="btn btn-sm btn-primary"> <i class='fas fa-chart-line' style='color:#ffffff;'></i> </button>
+                    <button id="btnTorta" class="btn btn-sm btn-primary ml-1"> <i class='fas fa-chart-pie' style='color:#ffffff;'></i> </button>
+                    <button id="btnBar" class="btn btn-sm btn-primary ml-1"> <i class='fas fa-chart-bar' style='color:#ffffff;'></i> </button>
+                </div>
+
+
+                <div class="grafLineas">
+                    <div class="grafLineas1">
+                        <canvas id="line-chart" width="450" height="180"></canvas>
+                    </div>
+                </div>
+
+
+                <div class="grafTorta">
+                    <div class="grafTorta1 card">
+                        <canvas id="doughnut-chart-pre"></canvas>
+                    </div>
+                </div>
+
+                <div class="grafBar">
+                    <canvas id="bar-chart-grouped" width="450" height="250"></canvas>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+
+<style>
+
+    .cont-header {
+        display: flex;
+        justify-content: space-between;
+        margin: 10px;
+    }
+
+        .cont-header .selectPanel:hover {
+            -webkit-transition: opacity 800ms, visibility 800ms;
+            transition: opacity 800ms, visibility 800ms;
+        }
+
+    #line-chart {
+        width: 90%;
+        margin: auto;
+    }
+
+    .cont-grafico {
+        padding: 10px;
+    }
+
+    .tipos-graf {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-end;
+    }
+
+        .tipos-graf .grafLineas1 {
+            width: 95%;
+            margin: auto;
+        }
+
+    .grafTorta {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        width: 100%;
+    }
+
+        .grafTorta .grafTorta1 {
+            display: block;
+            height: 690px;
+            /*width: 950px;*/
+            width: 95%;
+            margin: 5px auto;
+            padding: 5px;
+        }
+
+
+
+    @@media (min-width: 320px) and (max-width: 479.98px) {
+    }
+
+    @@media (min-width: 480px) and (max-width: 767.98px) {
+    }
+
+    @@media (min-width: 768px) and (max-width: 991.98px) {
+        .selectPanel {
+            max-width: 250px;
+        }
+    }
+
+    @@media (min-width: 992px) and (max-width: 1199.98px) {
+        .selectPanel {
+            max-width: 250px;
+        }
+    }
+
+    @@media (min-width: 1200px) {
+        .selectPanel {
+            max-width: 250px;
+        }
+    }
+</style>
+
+
+@section scripts {
+    <script>
+
+
+        var arrayCodPeriodo = [];
+        var arrayCodGerencia = [];
+        var arrayCeCo = [];
+        var arrayFamilias = [];
+
+        var arrayCodPeriodoSelect = [];
+        var arrayCodGerenciaSelect = [];
+        var arrayCodGerenciaTempSelect = [];
+        var arrayCeCoSelect = [];
+        var arrayCeCoTempSelect = [];
+        var arrayFamiliasSelect = [];
+
+        var chartLineas;
+        var chartDonusPre;
+        var chartTortaCon;
+        var chartBar;
+
+        var NUM_GRAFICO = 0;
+
+        $(document).ready(function () {
+
+            NUM_GRAFICO = 1; // Grafico de Lineas (Default)
+
+            Inicializar();
+
+            ListarPeriodos();
+            ListarGerencias();
+
+            function Inicializar() {
+                $("#cbxPeriodos").multipleSelect();
+                $("#cbxGerencias").multipleSelect();
+                $("#cbxCeCo").multipleSelect();
+                $("#cbxFamilias").multipleSelect();
+
+                $("#btnLineas").removeClass("btn-primary").addClass("btn-secondary");
+                $("#btnTorta").removeClass("btn-secondary").addClass("btn-primary");
+
+                $(".grafTorta").css("display", "none");
+                $(".grafBar").css("display", "none");
+
+            }
+
+            function ListarPeriodos() {
+                $.ajax({
+                    type: "GET",
+                    url: '/logistica/Graf_ListarPeriodos',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (data) {
+                        $.each(data, function () {
+                            $("#cbxPeriodos").append($("<option/>").val(this.COD_PERIODO).text(this.DESC_PERIODO));
+                        });
+                        $('#cbxPeriodos').multipleSelect("refresh");
+                    },
+                    failure: function () {
+                        console.error('error al cargar los periodos');
+                    }
+                });
+            }
+
+            function ListarGerencias() {
+                $.ajax({
+                    type: "GET",
+                    url: '/logistica/Graf_ListarGerencias',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (data) {
+                        $.each(data, function () {
+                            $("#cbxGerencias").append($("<option/>").val(this.COD_GER).text(this.DESC_GER));
+                        });
+                        $('#cbxGerencias').multipleSelect("refresh");
+                    },
+                    failure: function () {
+                        console.error('error al cargar los periodos');
+                    }
+                });
+            }
+
+            function ListarCeCo(parametro) {
+                $.ajax({
+                    type: "GET",
+                    url: '/logistica/Graf_ListarCeCo',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    data: parametro,
+                    success: function (data) {
+
+                        $.each(data, function () {
+                            let index = arrayCeCo.findIndex(x => x.CODCC == this.CODCC);
+
+                            if (index == -1) {
+                                $("#cbxCeCo").append($("<option/>").val(this.CODCC).text(this.CC));
+
+                                arrayCeCo.push({ CODCC: this.CODCC, CC: this.CC, COD_GER: this.COD_GER });
+                            }
+                        });
+                        $('#cbxCeCo').multipleSelect("refresh");
+
+                    },
+                    failure: function () {
+                        console.error('error al cargar los periodos');
+                    }
+                });
+            }
+
+            function ListarFamilias(parametro) {
+                $.ajax({
+                    type: "GET",
+                    url: '/logistica/Graf_ListarFamilia',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    data: parametro,
+                    success: function (data) {
+                        $.each(data, function () {
+                            let index = arrayFamilias.findIndex(x => x.CODFAMILIA == this.CODFAMILIA);
+                            if (index == -1) {
+                                $("#cbxFamilias").append($("<option/>").val(this.CODFAMILIA).text(this.FAMILIA));
+                                arrayFamilias.push({ CODFAMILIA: this.CODFAMILIA, FAMILIA: this.FAMILIA, CODCC: this.CODCC });
+                            }
+                        });
+                        $('#cbxFamilias').multipleSelect("refresh");
+                    },
+                    failure: function () {
+                        console.error('error al cargar los periodos');
+                    }
+                });
+            }
+
+
+            $("select.selectPeriodos").change(function () {
+                arrayCodPeriodoSelect = $("#cbxPeriodos").val();
+
+                if (arrayCodPeriodoSelect.length == 0) {
+
+                    if (NUM_GRAFICO == 1 || NUM_GRAFICO == 2) {
+                        $("#cbxGerencias").multipleSelect('uncheckAll');
+                        $('#cbxCcbxGerenciaseCo').multipleSelect("refresh");
+                        arrayCodGerenciaSelect = [];
+
+                        $("#cbxCeCo").multipleSelect('uncheckAll');
+                        $("#cbxCeCo").find('option').remove();
+                        $("#cbxCeCo").find('li').remove();
+                        $('#cbxCeCo').multipleSelect("refresh");
+                        arrayCeCo = [];
+                        arrayCeCoSelect = [];
+
+                    }
+
+                    if (NUM_GRAFICO == 1 || NUM_GRAFICO == 3) {
+
+                        $("#cbxFamilias").multipleSelect('uncheckAll');
+                        $("#cbxFamilias").find('option').remove();
+                        $("#cbxFamilias").find('li').remove();
+                        $('#cbxFamilias').multipleSelect("refresh");
+                        arrayFamilias = [];
+                        arrayFamiliasSelect = [];
+                    }
+
+
+                    if (chartLineas) { chartLineas.destroy(); }
+                    if (chartDonusPre) { chartDonusPre.destroy(); }
+                    //if (chartTortaCon) { chartTortaCon.destroy(); }
+
+                }
+                else if (
+                    arrayCodGerenciaSelect.length > 0 &&
+                    arrayCeCoSelect.length > 0 &&
+                    arrayFamiliasSelect.length == 0 &&
+                    (NUM_GRAFICO == 1 || NUM_GRAFICO == 2)
+                ) {
+
+                    let parametros = {};
+
+                    let vpPeriodos = "";
+                    let vpGerencias = "";
+                    let vpCeCo = "";
+
+                    for (var i = 0; i < arrayCodPeriodoSelect.length; i++) {
+                        vpPeriodos = vpPeriodos + arrayCodPeriodoSelect[i] + ","
+                    }
+                    vpPeriodos = vpPeriodos.slice(0, vpPeriodos.length - 1);
+
+                    for (var i = 0; i < arrayCodGerenciaSelect.length; i++) {
+                        vpGerencias = vpGerencias + arrayCodGerenciaSelect[i] + ","
+                    }
+                    vpGerencias = vpGerencias.slice(0, vpGerencias.length - 1);
+
+                    for (var i = 0; i < arrayCeCoSelect.length; i++) {
+                        vpCeCo = vpCeCo + arrayCeCoSelect[i] + ","
+                    }
+                    vpCeCo = vpCeCo.slice(0, vpCeCo.length - 1);
+
+                    parametros = { pCodPeriodos: vpPeriodos, pCodGerencias: vpGerencias, pCodCeCo: vpCeCo };
+
+                    if (NUM_GRAFICO == 1) {
+                        ListarFamilias(parametros);
+                    }
+                    else if (NUM_GRAFICO == 2) {
+                        Grafico2Torta(parametros);
+                    }
+                }
+                else if (
+                    arrayCodPeriodoSelect.length != 0 &&
+                    arrayCodGerenciaSelect.length != 0 &&
+                    arrayCeCoSelect.length != 0 &&
+                    arrayFamiliasSelect.length != 0 &&
+                    (NUM_GRAFICO == 1 || NUM_GRAFICO == 2)
+                ) {
+
+                    let parametros = {};
+
+                    let vpPeriodos = "";
+                    let vpGerencias = "";
+                    let vpCeCo = "";
+                    let vpFamilia = "";
+
+                    for (var i = 0; i < arrayCodPeriodoSelect.length; i++) {
+                        vpPeriodos = vpPeriodos + arrayCodPeriodoSelect[i] + ","
+                    }
+                    vpPeriodos = vpPeriodos.slice(0, vpPeriodos.length - 1);
+
+                    for (var i = 0; i < arrayCodGerenciaSelect.length; i++) {
+                        vpGerencias = vpGerencias + arrayCodGerenciaSelect[i] + ","
+                    }
+                    vpGerencias = vpGerencias.slice(0, vpGerencias.length - 1);
+
+                    for (var i = 0; i < arrayCeCoSelect.length; i++) {
+                        vpCeCo = vpCeCo + arrayCeCoSelect[i] + ","
+                    }
+                    vpCeCo = vpCeCo.slice(0, vpCeCo.length - 1);
+
+                    for (var i = 0; i < arrayFamiliasSelect.length; i++) {
+                        vpFamilia = vpFamilia + arrayFamiliasSelect[i] + ","
+                    }
+                    vpFamilia = vpFamilia.slice(0, vpFamilia.length - 1);
+
+                    parametros = { pCodPeriodos: vpPeriodos, pCodGerencias: vpGerencias, pCodCeCo: vpCeCo, pCodFamilia: vpFamilia };
+
+                    Grafico1Lineas(parametros);
+
+                }
+                else if (arrayCodPeriodoSelect.length != 0 && NUM_GRAFICO == 3) {
+
+                    let parametros = {};
+
+                    let vpPeriodos = "";
+                    let vpGerencias = "";
+                    let vpCeCo = "";
+
+
+                    for (var i = 0; i < arrayCodPeriodoSelect.length; i++) {
+                        vpPeriodos = vpPeriodos + arrayCodPeriodoSelect[i] + ","
+                    }
+                    vpPeriodos = vpPeriodos.slice(0, vpPeriodos.length - 1);
+
+                    parametros = { pCodPeriodos: vpPeriodos, pCodGerencias: vpGerencias, pCodCeCo: vpCeCo };
+
+                    if (arrayFamiliasSelect.length != 0) {
+
+                        let parametrosGraf = {};
+                        let vpFamilia = "";
+
+                        for (var i = 0; i < arrayFamiliasSelect.length; i++) {
+                            vpFamilia = vpFamilia + arrayFamiliasSelect[i] + ","
+                        }
+                        vpFamilia = vpFamilia.slice(0, vpFamilia.length - 1);
+
+                        parametrosGraf = { pCodPeriodos: vpPeriodos, pCodFamilia: vpFamilia };
+
+                        ListarFamilias(parametros);
+                        Grafico3Bar(parametrosGraf);
+                    }
+                    else {
+                        ListarFamilias(parametros);
+                    }
+                }
+
+
+            });
+
+            $("select.selectGerencias").change(function () {
+
+                arrayCodGerenciaSelect = $("#cbxGerencias").val();
+
+
+                if (arrayCodGerenciaSelect.length != 0) {
+
+                    let vCodGerencias = "";
+                    let parametros = {};
+
+                    for (var i = 0; i < arrayCodGerenciaSelect.length; i++) {
+                        vCodGerencias = vCodGerencias + arrayCodGerenciaSelect[i] + ","
+                    }
+                    vCodGerencias = vCodGerencias.slice(0, vCodGerencias.length - 1);
+
+                    if (arrayCodGerenciaSelect.length < arrayCodGerenciaTempSelect.length) {
+
+                        let arrayCeCoNew = [];
+                        let arrayQuitados = arrayCodGerenciaTempSelect.filter(x => !arrayCodGerenciaSelect.includes(x));
+
+                        for (i = 0; i < arrayCeCo.length; ++i) {
+                            for (j = 0; j < arrayQuitados.length; ++j) {
+                                if (arrayCeCo[i].COD_GER != arrayQuitados[j]) {
+                                    let index = arrayCeCoNew.findIndex(x => x.CODCC == arrayCeCo[i].CODCC);
+
+                                    if (index == -1) {
+                                        arrayCeCoNew.push(arrayCeCo[i])
+                                    }
+                                }
+                            }
+                        }
+
+                        arrayCeCo = [];
+                        arrayCeCo = arrayCeCoNew;
+
+                        $("#cbxCeCo").multipleSelect('uncheckAll');
+                        $("#cbxCeCo").find('option').remove();
+                        $("#cbxCeCo").find('li').remove();
+
+                        for (i = 0; i < arrayCeCo.length; ++i) {
+                            $("#cbxCeCo").append($("<option/>").val(arrayCeCo[i].CODCC).text(arrayCeCo[i].CC));
+                        }
+
+                        $('#cbxCeCo').multipleSelect("refresh");
+                    }
+                    else {
+                        arrayCeCo = [];
+                        parametros = { pCodGerencias: vCodGerencias };
+                        ListarCeCo(parametros);
+                    }
+
+                    arrayCodGerenciaTempSelect = arrayCodGerenciaSelect;
+                }
+                else {
+                    arrayCodGerenciaTempSelect = [];
+
+                    $("#cbxCeCo").multipleSelect('uncheckAll');
+                    $("#cbxCeCo").find('option').remove();
+                    $("#cbxCeCo").find('li').remove();
+                    $('#cbxCeCo').multipleSelect("refresh");
+                    arrayCeCoSelect = [];
+
+                    if (NUM_GRAFICO == 1) {
+
+                        $("#cbxFamilias").multipleSelect('uncheckAll');
+                        $("#cbxFamilias").find('option').remove();
+                        $("#cbxFamilias").find('li').remove();
+                        $('#cbxFamilias').multipleSelect("refresh");
+                        arrayFamilias = [];
+                        arrayFamiliasSelect = [];
+
+                    }
+                    else if (NUM_GRAFICO == 2) {
+
+                        if (chartDonusPre) {
+                            chartDonusPre.destroy();
+                        }
+                        //if (chartTortaCon) {
+                        //    chartTortaCon.destroy();
+                        //}
+                    }
+                }
+            });
+
+            $("select.selectCeCo").change(function () {
+                arrayCeCoSelect = $("#cbxCeCo").val();
+
+                if (arrayCodPeriodoSelect.length != 0 && arrayCeCoSelect.length != 0 && arrayCodGerenciaSelect.length != 0) {
+
+                    let parametros = {};
+
+                    let vpPeriodos = "";
+                    let vpGerencias = "";
+                    let vpCeCo = "";
+
+                    for (var i = 0; i < arrayCodPeriodoSelect.length; i++) {
+                        vpPeriodos = vpPeriodos + arrayCodPeriodoSelect[i] + ","
+                    }
+                    vpPeriodos = vpPeriodos.slice(0, vpPeriodos.length - 1);
+
+                    for (var i = 0; i < arrayCodGerenciaSelect.length; i++) {
+                        vpGerencias = vpGerencias + arrayCodGerenciaSelect[i] + ","
+                    }
+                    vpGerencias = vpGerencias.slice(0, vpGerencias.length - 1);
+
+                    for (var i = 0; i < arrayCeCoSelect.length; i++) {
+                        vpCeCo = vpCeCo + arrayCeCoSelect[i] + ","
+                    }
+                    vpCeCo = vpCeCo.slice(0, vpCeCo.length - 1);
+
+                    parametros = { pCodPeriodos: vpPeriodos, pCodGerencias: vpGerencias, pCodCeCo: vpCeCo };
+
+                    if (arrayCeCoSelect.length < arrayCeCoTempSelect.length) {
+                        if (NUM_GRAFICO == 1) {
+
+                            let arrayFamiliaNew = [];
+                            let arrayQuitados = arrayCeCoTempSelect.filter(x => !arrayCeCoSelect.includes(x));
+
+                            $("#cbxFamilias").multipleSelect('uncheckAll');
+                            $("#cbxFamilias").find('option').remove();
+                            $("#cbxFamilias").find('li').remove();
+
+                            for (i = 0; i < arrayFamilias.length; ++i) {
+                                for (j = 0; j < arrayQuitados.length; ++j) {
+                                    if (arrayFamilias[i].CODCC != arrayQuitados[j]) {
+                                        let index = arrayFamiliaNew.findIndex(x => x.CODFAMILIA == arrayFamilias[i].CODFAMILIA);
+
+                                        if (index == -1) {
+                                            arrayFamiliaNew.push(arrayFamilias[i])
+                                        }
+                                    }
+                                }
+                            }
+
+                            arrayFamilias = [];
+                            arrayFamilias = arrayFamiliaNew;
+
+                            for (i = 0; i < arrayFamilias.length; ++i) {
+                                $("#cbxFamilias").append($("<option/>").val(arrayFamilias[i].CODFAMILIA).text(arrayFamilias[i].FAMILIA));
+                            }
+                            $('#cbxFamilias').multipleSelect("refresh");
+                        }
+                        else if (NUM_GRAFICO == 2) {
+                            Grafico2Torta(parametros);
+                        }
+                    }
+                    else {
+
+                        if (NUM_GRAFICO == 1) {
+                            ListarFamilias(parametros);
+                        }
+                        else if (NUM_GRAFICO == 2) {
+                            Grafico2Torta(parametros);
+                        }
+                    }
+
+                    arrayCeCoTempSelect = arrayCeCoSelect;
+                }
+                else if (arrayCodPeriodoSelect.length != 0 && arrayCeCoSelect.length == 0 && arrayCodGerenciaSelect.length != 0) {
+
+                    if (NUM_GRAFICO == 1) {
+
+                        let parametros = {};
+                        let vCodGerencias = "";
+
+                        $("#cbxFamilias").multipleSelect('uncheckAll');
+                        $("#cbxFamilias").find('option').remove();
+                        $("#cbxFamilias").find('li').remove();
+                        $('#cbxFamilias').multipleSelect("refresh");
+                        arrayFamilias = [];
+                        arrayFamiliasSelect = [];
+
+                        for (var i = 0; i < arrayCodGerenciaSelect.length; i++) {
+                            vCodGerencias = vCodGerencias + arrayCodGerenciaSelect[i] + ","
+                        }
+                        vCodGerencias = vCodGerencias.slice(0, vCodGerencias.length - 1);
+
+                        parametros = { pCodGerencias: vCodGerencias };
+                        ListarCeCo(parametros);
+
+
+                    }
+                    else if (NUM_GRAFICO == 2) {
+
+                        if (chartDonusPre) {
+                            chartDonusPre.destroy();
+                        }
+                        if (chartTortaCon) {
+                            chartTortaCon.destroy();
+                        }
+                    }
+
+                }
+                else {
+
+                    if (NUM_GRAFICO == 1) {
+
+                        $("#cbxFamilias").multipleSelect('uncheckAll');
+                        $("#cbxFamilias").find('option').remove();
+                        $("#cbxFamilias").find('li').remove();
+                        $('#cbxFamilias').multipleSelect("refresh");
+                        arrayFamilias = [];
+                        arrayFamiliasSelect = [];
+                    }
+                    else if (NUM_GRAFICO == 2) {
+
+                        if (chartDonusPre) {
+                            chartDonusPre.destroy();
+                        }
+                        if (chartTortaCon) {
+                            chartTortaCon.destroy();
+                        }
+                    }
+                }
+            });
+
+            $("select.selectFamilia").change(function () {
+                arrayFamiliasSelect = $("#cbxFamilias").val();
+
+                if (
+                    arrayCodPeriodoSelect.length != 0 &&
+                    arrayCeCoSelect.length != 0 &&
+                    arrayCodGerenciaSelect.length != 0 &&
+                    arrayFamiliasSelect.length != 0 &&
+                    (NUM_GRAFICO == 1 || NUM_GRAFICO == 2)
+                ) {
+
+                    let parametros = {};
+
+                    let vpPeriodos = "";
+                    let vpGerencias = "";
+                    let vpCeCo = "";
+                    let vpFamilia = "";
+
+                    for (var i = 0; i < arrayCodPeriodoSelect.length; i++) {
+                        vpPeriodos = vpPeriodos + arrayCodPeriodoSelect[i] + ","
+                    }
+                    vpPeriodos = vpPeriodos.slice(0, vpPeriodos.length - 1);
+
+                    for (var i = 0; i < arrayCodGerenciaSelect.length; i++) {
+                        vpGerencias = vpGerencias + arrayCodGerenciaSelect[i] + ","
+                    }
+                    vpGerencias = vpGerencias.slice(0, vpGerencias.length - 1);
+
+                    for (var i = 0; i < arrayCeCoSelect.length; i++) {
+                        vpCeCo = vpCeCo + arrayCeCoSelect[i] + ","
+                    }
+                    vpCeCo = vpCeCo.slice(0, vpCeCo.length - 1);
+
+                    for (var i = 0; i < arrayFamiliasSelect.length; i++) {
+                        vpFamilia = vpFamilia + arrayFamiliasSelect[i] + ","
+                    }
+                    vpFamilia = vpFamilia.slice(0, vpFamilia.length - 1);
+
+                    parametros = { pCodPeriodos: vpPeriodos, pCodGerencias: vpGerencias, pCodCeCo: vpCeCo, pCodFamilia: vpFamilia };
+
+                    Grafico1Lineas(parametros);
+                }
+                else if (arrayCodPeriodoSelect.length != 0 && arrayFamiliasSelect.length != 0 && NUM_GRAFICO == 3) {
+
+                    let parametros = {};
+
+                    let vpPeriodos = "";
+                    let vpFamilia = "";
+
+                    for (var i = 0; i < arrayCodPeriodoSelect.length; i++) {
+                        vpPeriodos = vpPeriodos + arrayCodPeriodoSelect[i] + ","
+                    }
+                    vpPeriodos = vpPeriodos.slice(0, vpPeriodos.length - 1);
+
+                    for (var i = 0; i < arrayFamiliasSelect.length; i++) {
+                        vpFamilia = vpFamilia + arrayFamiliasSelect[i] + ","
+                    }
+                    vpFamilia = vpFamilia.slice(0, vpFamilia.length - 1);
+
+                    parametros = { pCodPeriodos: vpPeriodos, pCodFamilia: vpFamilia };
+
+                    Grafico3Bar(parametros);
+
+                }
+                else if (arrayFamiliasSelect.length == 0) {
+
+                    if (chartLineas) {
+                        chartLineas.destroy();
+                    }
+                    if (chartDonusPre) {
+                        chartDonusPre.destroy();
+                    }
+                    if (chartTortaCon) {
+                        chartTortaCon.destroy();
+                    }
+                    if (chartBar) {
+                        chartBar.destroy();
+                    }
+                }
+            });
+
+            function Grafico1Lineas(parametro) {
+
+                $.ajax({
+                    type: "GET",
+                    url: '/logistica/Graf_Grafico1_Lineas',
+                    contentType: "application/json; charset=utf-8",
+                    data: parametro,
+                    dataType: "json",
+                    success: function (data) {
+
+                        if (chartLineas) {
+                            chartLineas.destroy();
+                        }
+
+                        chartLineas = new Chart(document.getElementById("line-chart"), {
+                            type: "line",
+                            data: {
+                                labels: data.vLabels,
+                                datasets: [{
+                                    label: data.vLabel1,
+                                    data: data.vData1,
+                                    fill: true,
+                                    borderColor: "rgb(46, 204, 113)",
+                                    lineTension: 0.1
+                                }, {
+                                    label: data.vLabel2,
+                                    data: data.vData2,
+                                    fill: false,
+                                    borderColor: "rgb(44, 62, 80)",
+                                    lineTension: 0.1
+                                }]
+                            },
+                            options: {
+                                tooltips: {
+                                    callbacks: {
+                                        label: function (tooltipItem, data) {
+                                            var dataLabel = data.labels[tooltipItem.index];
+                                            var value = ': $' + data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index].toLocaleString();
+                                            if (Chart.helpers.isArray(dataLabel)) {
+                                                dataLabel = dataLabel.slice();
+                                                dataLabel[0] += value.toString();
+                                            } else {
+                                                dataLabel += value.toString();
+                                            }
+                                            return dataLabel.toString();
+                                        }
+                                    }
+                                },
+
+                            }
+                        });
+                    },
+                    failure: function () {
+                        console.error('error al cargar los periodos');
+                    }
+                });
+
+            }
+
+            function Grafico2Torta(parametros) {
+
+                $.ajax({
+                    type: "GET",
+                    url: '/logistica/Graf_Grafico2_TortaV2',
+                    contentType: "application/json; charset=utf-8",
+                    data: parametros,
+                    dataType: "json",
+                    success: function (data) {
+
+                        if (chartDonusPre) { chartDonusPre.destroy(); }
+                        if (chartTortaCon) { chartTortaCon.destroy(); }
+
+                        /* Grafico */
+
+                        chartDonusPre = new Chart(document.getElementById("doughnut-chart-pre"), {
+                            type: 'doughnut',
+                            data: {
+                                labels: data.labelPre,
+                                datasets: [
+                                    {
+                                        label: "Presupuesto",
+                                        backgroundColor: data.colorPre,
+                                        data: data.dataPre
+                                    },
+                                    {
+                                        label: "Comprado",
+                                        backgroundColor: data.colorCon,
+                                        data: data.dataCon
+                                    }
+                                ]
+                            },
+                            options: {
+                                title: {
+                                    display: true,
+                                    text: 'Presupuesto y Comprado'
+                                },
+                                legend: {
+                                    position: 'left',
+                                    labels: {
+                                        usePointStyle: true  //<-- set this
+                                    }
+                                },
+                                tooltips: {
+                                    callbacks: {
+                                        label: function (tooltipItem, data) {
+                                            var dataLabel = data.labels[tooltipItem.index];
+                                            var value = ': $' + data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index].toLocaleString();
+                                            if (Chart.helpers.isArray(dataLabel)) {
+                                                dataLabel = dataLabel.slice();
+                                                dataLabel[0] += value.toString();
+                                            } else {
+                                                dataLabel += value.toString();
+                                            }
+                                            return dataLabel.toString();
+                                        }
+                                    }
+                                },
+                            }
+                        });
+
+
+
+                        //chartDonusPre = new Chart(document.getElementById("pie-chart-pre"), {
+                        //    type: 'pie',
+                        //    data: {
+                        //        labels: data.labelPre,
+                        //        datasets: [{
+                        //            label: "Population (millions)",
+                        //            backgroundColor: data.colorPre,
+                        //            data: data.dataPre
+                        //        }]
+                        //    },
+                        //    options: {
+                        //        title: {
+                        //            display: true,
+                        //            text: 'Monto Presupuestado'
+                        //        },
+                        //        legend: {
+                        //            position: 'left',
+                        //            labels: {
+                        //                usePointStyle: true  //<-- set this
+                        //            }
+                        //        },
+                        //        tooltips: {
+                        //            callbacks: {
+                        //                label: function (tooltipItem, data) {
+                        //                    var dataLabel = data.labels[tooltipItem.index];
+                        //                    var value = ': $' + data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index].toLocaleString();
+                        //                    if (Chart.helpers.isArray(dataLabel)) {
+                        //                        dataLabel = dataLabel.slice();
+                        //                        dataLabel[0] += value.toString();
+                        //                    } else {
+                        //                        dataLabel += value.toString();
+                        //                    }
+                        //                    return dataLabel.toString();
+                        //                }
+                        //            }
+                        //        },
+                        //        onClick: function (event) {
+
+
+
+                        //        }
+                        //    }
+                        //});
+
+                        //chartTortaCon = new Chart(document.getElementById("pie-chart-con"), {
+                        //    type: 'pie',
+                        //    data: {
+                        //        labels: data.labelCon,
+                        //        datasets: [{
+                        //            label: "Population (millions)",
+                        //            backgroundColor: data.colorCon,
+                        //            data: data.dataCon
+                        //        }]
+                        //    },
+                        //    options: {
+                        //        legend: {
+                        //            display: false
+                        //        },
+                        //        tooltips: {
+                        //            callbacks: {
+                        //                label: function (tooltipItem, data) {
+                        //                    var dataLabel = data.labels[tooltipItem.index];
+                        //                    var value = ': $' + data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index].toLocaleString();
+                        //                    if (Chart.helpers.isArray(dataLabel)) {
+                        //                        dataLabel = dataLabel.slice();
+                        //                        dataLabel[0] += value.toString();
+                        //                    } else {
+                        //                        dataLabel += value.toString();
+                        //                    }
+                        //                    return dataLabel.toString();
+                        //                }
+                        //            }
+                        //        },
+                        //        title: {
+                        //            display: true,
+                        //            text: 'Monto Comprado'
+                        //        }
+                        //    },
+
+                        //});
+
+
+                    },
+                    failure: function () {
+                        console.error('error al cargar los periodos');
+                    }
+                });
+            }
+
+            function Grafico3Bar(parametros) {
+
+                $.ajax({
+                    type: "GET",
+                    url: '/logistica/Graf_Grafico3_Bar',
+                    contentType: "application/json; charset=utf-8",
+                    data: parametros,
+                    dataType: "json",
+                    success: function (data) {
+
+                        if (chartBar) { chartBar.destroy(); }
+
+                        chartBar = new Chart(document.getElementById("bar-chart-grouped"), {
+                            type: 'bar',
+                            data: {
+                                labels: data.vLabels,
+                                datasets: [
+                                    {
+                                        label: "Presupuesto",
+                                        backgroundColor: "#3e95cd",
+                                        data: data.vData1
+                                    }, {
+                                        label: "Comprado",
+                                        backgroundColor: "#8e5ea2",
+                                        data: data.vData2
+                                    }
+                                ]
+                            },
+                            options: {
+                                tooltips: {
+                                    callbacks: {
+                                        label: function (tooltipItem, data) {
+                                            var dataLabel = data.labels[tooltipItem.index];
+                                            var value = ': $' + data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index].toLocaleString();
+                                            if (Chart.helpers.isArray(dataLabel)) {
+                                                dataLabel = dataLabel.slice();
+                                                dataLabel[0] += value.toString();
+                                            } else {
+                                                dataLabel += value.toString();
+                                            }
+                                            return dataLabel.toString();
+                                        }
+                                    }
+                                },
+                                title: {
+                                    display: true,
+                                    text: 'Acumulado por Gerencia'
+                                }
+                            }
+                        });
+
+                    },
+                    failure: function () {
+                        console.error('error al cargar los periodos');
+                    }
+                });
+
+            }
+
+
+            $("#btnLineas").click(function () {
+
+                if (NUM_GRAFICO != 1) {
+
+                    NUM_GRAFICO = 1;
+
+                    $(".selectGerencias").css("display", "block");
+                    $(".selectCeCo").css("display", "block");
+                    $(".selectFamilia").css("display", "block");
+
+
+                    $(".grafLineas").css("display", "block");
+                    $(".grafTorta").css("display", "none");
+                    $(".grafBar").css("display", "none");
+
+                    $("#btnLineas").removeClass("btn-primary").addClass("btn-secondary");
+                    $("#btnTorta").removeClass("btn-secondary").addClass("btn-primary");
+                    $("#btnBar").removeClass("btn-secondary").addClass("btn-primary");
+
+                    if (chartDonusPre) {
+                        chartDonusPre.destroy();
+                    }
+                    //if (chartTortaCon) {
+                    //    chartTortaCon.destroy();
+                    //}
+
+                    $("#cbxCeCo").multipleSelect('uncheckAll');
+                    $('#cbxCeCo').multipleSelect("refresh");
+                    arrayCeCoSelect = [];
+
+                    $("#cbxFamilias").multipleSelect('uncheckAll');
+                    $("#cbxFamilias").find('option').remove();
+                    $("#cbxFamilias").find('li').remove();
+                    $('#cbxFamilias').multipleSelect("refresh");
+                    arrayFamilias = [];
+                    arrayFamiliasSelect = [];
+                }
+            });
+
+            $("#btnTorta").click(function () {
+
+                if (NUM_GRAFICO != 2) {
+
+                    if (NUM_GRAFICO == 3) {
+                        arrayCodGerenciaTempSelect = [];
+                    }
+
+                    NUM_GRAFICO = 2;
+
+                    $(".selectGerencias").css("display", "block");
+                    $(".selectCeCo").css("display", "block");
+
+                    $(".grafLineas").css("display", "none");
+                    $(".grafTorta").css("display", "flex");
+                    $(".grafBar").css("display", "none");
+
+                    $("#btnLineas").removeClass("btn-secondary").addClass("btn-primary");
+                    $("#btnTorta").removeClass("btn-primary").addClass("btn-secondary");
+                    $("#btnBar").removeClass("btn-secondary").addClass("btn-primary");
+
+                    $("#cbxFamilias").multipleSelect('uncheckAll');
+                    $('#cbxFamilias').multipleSelect("refresh");
+                    arrayFamiliasSelect = [];
+                    $(".selectFamilia").css("display", "none");
+
+
+                    if (chartLineas) {
+                        chartLineas.destroy();
+                    }
+
+
+                    if (arrayCodPeriodoSelect.length != 0 && arrayCodGerenciaSelect.length != 0 && arrayCeCoSelect.length != 0) {
+                        let parametros = {};
+
+                        let vpPeriodos = "";
+                        let vpGerencias = "";
+                        let vpCeCo = "";
+
+                        for (var i = 0; i < arrayCodPeriodoSelect.length; i++) {
+                            vpPeriodos = vpPeriodos + arrayCodPeriodoSelect[i] + ","
+                        }
+                        vpPeriodos = vpPeriodos.slice(0, vpPeriodos.length - 1);
+
+                        for (var i = 0; i < arrayCodGerenciaSelect.length; i++) {
+                            vpGerencias = vpGerencias + arrayCodGerenciaSelect[i] + ","
+                        }
+                        vpGerencias = vpGerencias.slice(0, vpGerencias.length - 1);
+
+                        for (var i = 0; i < arrayCeCoSelect.length; i++) {
+                            vpCeCo = vpCeCo + arrayCeCoSelect[i] + ","
+                        }
+                        vpCeCo = vpCeCo.slice(0, vpCeCo.length - 1);
+
+                        parametros = { pCodPeriodos: vpPeriodos, pCodGerencias: vpGerencias, pCodCeCo: vpCeCo };
+
+                        Grafico2Torta(parametros);
+                    }
+                }
+            });
+
+            $("#btnBar").click(function () {
+
+                if (NUM_GRAFICO != 3) {
+
+                    NUM_GRAFICO = 3;
+
+                    $(".grafLineas").css("display", "none");
+                    $(".grafTorta").css("display", "none");
+                    $(".grafBar").css("display", "block");
+
+                    $("#btnLineas").removeClass("btn-secondary").addClass("btn-primary");
+                    $("#btnTorta").removeClass("btn-secondary").addClass("btn-primary");
+                    $("#btnBar").removeClass("btn-primary").addClass("btn-secondary");
+
+                    $("#cbxGerencias").multipleSelect('uncheckAll');
+                    $("#cbxCcbxGerenciaseCo").find('option').remove();
+                    $("#cbxCcbxGerenciaseCo").find('li').remove();
+                    $('#cbxCcbxGerenciaseCo').multipleSelect("refresh");
+                    arrayCodGerencia = [];
+                    arrayCodGerenciaSelect = [];
+
+                    $("#cbxCeCo").multipleSelect('uncheckAll');
+                    $("#cbxCeCo").find('option').remove();
+                    $("#cbxCeCo").find('li').remove();
+                    $('#cbxCeCo').multipleSelect("refresh");
+                    arrayCeCo = [];
+                    arrayCeCoSelect = [];
+
+                    $(".selectFamilia").css("display", "block");
+
+                    $(".selectGerencias").css("display", "none");
+                    $(".selectCeCo").css("display", "none");
+
+
+                    if (chartLineas) {
+                        chartLineas.destroy();
+                    }
+                    if (chartDonusPre) {
+                        chartDonusPre.destroy();
+                    }
+                    //if (chartTortaCon) {
+                    //    chartTortaCon.destroy();
+                    //}
+
+                    if (arrayCodPeriodoSelect.length != 0 && arrayFamiliasSelect.length != 0) {
+
+                        let parametros = {};
+
+                        let vpPeriodos = "";
+                        let vpFamilia = "";
+
+                        for (var i = 0; i < arrayCodPeriodoSelect.length; i++) {
+                            vpPeriodos = vpPeriodos + arrayCodPeriodoSelect[i] + ","
+                        }
+                        vpPeriodos = vpPeriodos.slice(0, vpPeriodos.length - 1);
+
+                        for (var i = 0; i < arrayFamiliasSelect.length; i++) {
+                            vpFamilia = vpFamilia + arrayFamiliasSelect[i] + ","
+                        }
+                        vpFamilia = vpFamilia.slice(0, vpFamilia.length - 1);
+
+                        parametros = { pCodPeriodos: vpPeriodos, pCodFamilia: vpFamilia };
+
+                        Grafico3Bar(parametros);
+                    }
+                    else if (arrayCodPeriodoSelect.length != 0 && arrayFamiliasSelect.length == 0) {
+
+                        let parametros = {};
+
+                        let vpPeriodos = "";
+                        let vpGerencias = "";
+                        let vpCeCo = "";
+
+
+                        for (var i = 0; i < arrayCodPeriodoSelect.length; i++) {
+                            vpPeriodos = vpPeriodos + arrayCodPeriodoSelect[i] + ","
+                        }
+                        vpPeriodos = vpPeriodos.slice(0, vpPeriodos.length - 1);
+
+                        parametros = { pCodPeriodos: vpPeriodos, pCodGerencias: vpGerencias, pCodCeCo: vpCeCo };
+
+                        ListarFamilias(parametros);
+                    }
+                }
+
+
+            });
+
+
+        });
+
+    </script>
+
+}

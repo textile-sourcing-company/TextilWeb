@@ -1,0 +1,1123 @@
+﻿@{
+    ViewBag.Title = "Estado de Flujo de Efectivo";
+    ViewBag.Modulo = "Finanzas";
+    Layout = "~/Views/Plantillas/_Layout.cshtml";
+}
+
+<div class="cont-fefe">
+
+
+    <div class="card">
+        <div class="card-body">
+
+            <div class="tab-content card pt-1" id="myTabContentJust">
+                <div class="tab-pane fade show active" id="firma-just" role="tabpanel" aria-labelledby="firma-tab-just">
+
+                    <div class="card container-fluid controles">
+                        <div class="hseccion1">
+                            <select class="form-control form-control-sm classCbxTipoHorario select2" id="IdCbxTipoPeriodo"></select>
+                            <select class="form-control form-control-sm classCbxPeriodoIni select2" id="IdCbxPeriodoIni"></select>
+                            <select class="form-control form-control-sm classCbxPeriodoFin select2" id="IdCbxPeriodoFin"></select>
+                        </div>
+                        <div class="hseccion2">
+                            <button id="btnBuscar" type="button" class="btn btn-sm btn-primary form-control-sm"> Consultar <i class="fas fa-search"></i></button>
+                            <button id="btnExcel" type="button" class="btn btn-sm btn-success form-control-sm"> Excel Resumen <i class="fas fa-file-excel"></i></button>
+                            <button id="btnExcelDet" type="button" class="btn btn-sm btn-success form-control-sm"> Excel Detalle <i class="fas fa-file-excel"></i></button>
+                        </div>
+                    </div>
+
+                    <div class="card tabla-contenido">
+
+                        <table class="table table-sm table-bordered display nowrap" id="tablaPrincipal">
+                            <thead class="thead-light" id="tituloTabla"></thead>
+                            <tbody id="contenidoTabla"></tbody>
+                        </table>
+
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+
+</div>
+
+
+<style>
+
+    #dtdtFechaIniciocio {
+        min-width: 200px;
+    }
+
+    #dtFechaFin {
+        min-width: 200px;
+    }
+
+    .tab-pane {
+        padding: 10px;
+    }
+
+    .controles {
+        display: flex;
+        justify-content: space-between;
+        flex-direction: row;
+        padding: 4px;
+        flex-wrap: wrap;
+    }
+
+        .controles .hseccion1 {
+            display: flex;
+            justify-content: flex-start;
+        }
+
+        .controles .hseccion2 {
+            display: flex;
+            justify-content: flex-end;
+        }
+
+
+    .cont-fefe .tabla-contenido {
+        padding: 5px;
+    }
+
+        .cont-fefe .tabla-contenido .class-monto {
+            text-align: right;
+        }
+
+    .cont-fefe .cfmontototal {
+        text-align: right !important;
+    }
+
+    .cont-fefe table {
+        width: 100%;
+    }
+
+
+    .hseccion2 > button {
+        width: 140px;
+    }
+
+    .hseccion1 > .select2 {
+        min-width: 190px;
+    }
+
+    @@media (min-width: 320px) and (max-width: 479.98px) {
+        .controles {
+            width: 100%;
+        }
+
+            .controles .hseccion1 {
+                display: block;
+                width: 100%;
+            }
+
+                .controles .hseccion1 .select2 {
+                    margin-left: 0px;
+                    margin-top: 3px;
+                    display: block;
+                    width: 100% !important;
+                    min-width: 0px !important;
+                }
+
+
+            .controles .hseccion2 {
+                display: block;
+                width: 100%;
+            }
+
+                .controles .hseccion2 > button {
+                    margin-left: 0px;
+                    margin-top: 3px;
+                    display: block;
+                    width: 100% !important;
+                    min-width: 0px !important;
+                }
+    }
+
+    @@media (min-width: 480px) and (max-width: 767.98px) {
+        .controles {
+            width: 100%;
+
+        }
+
+            .controles .hseccion1 {
+                display: block;
+                width: 100%;
+            }
+
+                .controles .hseccion1 .select2 {
+                    margin-left: 0px;
+                    margin-top: 3px;
+                    display: block;
+                    width: 100% !important;
+                    min-width: 0px !important;
+                }
+
+
+            .controles .hseccion2 {
+                display: block;
+                width: 100%;
+            }
+
+                .controles .hseccion2 > button {
+                    margin-left: 0px;
+                    margin-top: 3px;
+                    display: block;
+                    width: 100% !important;
+                    min-width: 0px !important;
+                }
+    }
+
+    @@media (min-width: 768px) and (max-width: 991.98px) {
+
+        .controles {
+            width: 100%;
+
+        }
+
+            .controles .hseccion1 {
+                display: block;
+                width: 100%;
+            }
+
+                .controles .hseccion1 .select2 {
+                    margin-left: 0px;
+                    margin-top: 3px;
+                    display: block;
+                    width: 100% !important;
+                    min-width: 0px !important;
+                }
+
+
+            .controles .hseccion2 {
+                width: 100%;
+                margin-top: 3px;
+                justify-content: center;
+            }
+
+                .controles .hseccion2 #btnBuscar {
+                    margin-left: 3px;
+                }
+
+                .controles .hseccion2 #btnExcel {
+                    margin-left: 3px;
+                }
+
+                .controles .hseccion2 #btnExcelDet {
+                    margin-left: 3px;
+                }
+    }
+
+    @@media (min-width: 992px) and (max-width: 1199.98px) {
+
+        .controles {
+            width: 100%;
+        }
+
+            .controles .hseccion1 {
+                width: 100%;
+                display: flex;
+                justify-content: space-around;
+            }
+
+                .controles .hseccion1 .select2 {
+                    margin-left: 3px;
+                    flex-grow: 1;
+                }
+
+                .controles .hseccion1 .select2 {
+                    margin-left: 3px;
+                    flex-grow: 1;
+                }
+
+            .controles .hseccion2 {
+                width: 100%;
+                margin-top: 3px;
+                justify-content: center;
+            }
+
+                .controles .hseccion2 #btnBuscar {
+                    margin-left: 3px;
+                }
+
+                .controles .hseccion2 #btnExcel {
+                    margin-left: 3px;
+                }
+
+                .controles .hseccion2 #btnExcelDet {
+                    margin-left: 3px;
+                }
+    }
+
+    @@media (min-width: 1200px) {
+
+        .controles {
+            width: 100%;
+        }
+
+            .controles .hseccion1 {
+                width: 40%;
+                min-width: 560px;
+            }
+
+                .controles .hseccion1 .select2 {
+                    margin-left: 3px;
+                }
+
+                .controles .hseccion1 .select2 {
+                    margin-left: 3px;
+                }
+
+
+
+            .controles .hseccion2 {
+                width: 40%;
+                min-width: 400px;
+            }
+
+                .controles .hseccion2 #btnExcel {
+                    margin-left: 3px;
+                }
+
+                .controles .hseccion2 #btnExcelDet {
+                    margin-left: 3px;
+                }
+    }
+</style>
+
+
+@section scripts {
+    <script>
+
+        var tipoPeriodo = 0;
+        var periodoInicio = 0;
+        var periodoFin = 0;
+
+        var lstTituloPeriodo = [];
+        var lstTitulo = []
+
+        $(document).ready(function () {
+
+            Inicializar();
+
+
+            function Inicializar() {
+
+                getTiposPeriodo();
+            }
+
+            $("select.classCbxTipoHorario").change(function () {
+                tipoPeriodo = $(this).children("option:selected").val();
+
+                if (tipoPeriodo != 0 && typeof (tipoPeriodo) != "undefined" && tipoPeriodo != null) {
+                    let parametros = { tipoPeriodo: tipoPeriodo };
+                    getPeriodos(parametros);
+                }
+            });
+
+            function getTiposPeriodo() {
+                $.ajax({
+                    type: "GET",
+                    url: '/Finanzas/FluEfe_GetTipoPeriodo',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (data) {
+                        $("#IdCbxTipoPeriodo").empty();
+                        $.each(data.lista, function () {
+                            $("#IdCbxTipoPeriodo").append($("<option/>").val(this.IdTipo).text(this.DescTipo));
+                        });
+                        $("#IdCbxTipoPeriodo").val(0);
+                    },
+                    failure: function () {
+                        console.error('error al cargar tipos periodos');
+                    }
+                });
+            }
+
+            function getPeriodos(parametros) {
+                $.ajax({
+                    type: "GET",
+                    url: '/Finanzas/FluEfe_GetPeriodos',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    data: parametros,
+                    success: function (data) {
+                        $("#IdCbxPeriodoIni").empty();
+                        $("#IdCbxPeriodoFin").empty();
+
+                        $.each(data.lista, function () {
+                            $("#IdCbxPeriodoIni").append($("<option/>").val(this.IdPeriodo).text(this.Periodo));
+                            $("#IdCbxPeriodoFin").append($("<option/>").val(this.IdPeriodo).text(this.Periodo));
+                        });
+
+                        $("#IdCbxPeriodoIni").val(0);
+                        $("#IdCbxPeriodoFin").val(0);
+                    },
+                    failure: function () {
+                        console.error('error al cargar tipos periodos');
+                    }
+                });
+            }
+
+            $("#btnExcel").click(function () {
+                tipoPeriodo = $("#IdCbxTipoPeriodo").children("option:selected").val();
+                periodoInicio = $("#IdCbxPeriodoIni").children("option:selected").val();
+                periodoFin = $("#IdCbxPeriodoFin").children("option:selected").val();
+
+                if (tipoPeriodo != 0 && typeof (tipoPeriodo) != "undefined" && tipoPeriodo != null &&
+                    periodoInicio != 0 && typeof (periodoInicio) != "undefined" && periodoInicio != null &&
+                    periodoFin != 0 && typeof (periodoFin) != "undefined" && periodoFin != null) {
+
+                    let parametros = { TipoPeriodo: tipoPeriodo, IdPeriodoIni: periodoInicio, IdPeriodoFin: periodoFin };
+                    exportarResumen(parametros);
+                }
+            });
+
+            function exportarResumen(parametros) {
+
+                MostrarCarga("Cargando...");
+
+                $.ajax({
+                    url: '@Url.Action("FluEfe_ExportarFlujoEfectivo", "Finanzas")',
+                    contentType: 'application/json; charset=utf-8',
+                    datatype: 'json',
+                    type: "GET",
+                    data: parametros,
+                    success: function () {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Reporte Generado con Éxito',
+                            text: 'Textile Sourcing Company',
+                            showConfirmButton: false,
+                            timer: 1500,
+                            onClose: () => {
+                                window.location = "/Finanzas/FluEfe_ExportarFlujoEfectivo?TipoPeriodo=" + parametros.TipoPeriodo + "&IdPeriodoIni=" + parametros.IdPeriodoIni + "&IdPeriodoFin=" + parametros.IdPeriodoFin;
+                            }
+                        });
+                    }
+                });
+            }
+
+
+            $("#btnExcelDet").click(function () {
+                tipoPeriodo = $("#IdCbxTipoPeriodo").children("option:selected").val();
+                periodoInicio = $("#IdCbxPeriodoIni").children("option:selected").val();
+                periodoFin = $("#IdCbxPeriodoFin").children("option:selected").val();
+
+                if (tipoPeriodo != 0 && typeof (tipoPeriodo) != "undefined" && tipoPeriodo != null &&
+                    periodoInicio != 0 && typeof (periodoInicio) != "undefined" && periodoInicio != null &&
+                    periodoFin != 0 && typeof (periodoFin) != "undefined" && periodoFin != null) {
+
+                    let parametros = { TipoPeriodo: tipoPeriodo, IdPeriodoIni: periodoInicio, IdPeriodoFin: periodoFin };
+                    exportarDetalle(parametros);
+                }
+            });
+
+            function exportarDetalle(parametros) {
+
+                MostrarCarga("Cargando...");
+
+                $.ajax({
+                    url: '@Url.Action("FluEfe_ExcelDetFlujoEfectivo", "Finanzas")',
+                    contentType: 'application/json; charset=utf-8',
+                    datatype: 'json',
+                    type: "GET",
+                    data: parametros,
+                    success: function () {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Reporte Generado con Éxito',
+                            text: 'Textile Sourcing Company',
+                            showConfirmButton: false,
+                            timer: 1500,
+                            onClose: () => {
+                                window.location = "/Finanzas/FluEfe_ExcelDetFlujoEfectivo?TipoPeriodo=" + parametros.TipoPeriodo + "&IdPeriodoIni=" + parametros.IdPeriodoIni + "&IdPeriodoFin=" + parametros.IdPeriodoFin;
+                            }
+                        });
+                    }
+                });
+            }
+
+
+
+            $("#btnBuscar").click(function () {
+
+                tipoPeriodo = $("#IdCbxTipoPeriodo").children("option:selected").val();
+                periodoInicio = $("#IdCbxPeriodoIni").children("option:selected").val();
+                periodoFin = $("#IdCbxPeriodoFin").children("option:selected").val();
+
+                if (tipoPeriodo != 0 && typeof (tipoPeriodo) != "undefined" && tipoPeriodo != null &&
+                    periodoInicio != 0 && typeof (periodoInicio) != "undefined" && periodoInicio != null &&
+                    periodoFin != 0 && typeof (periodoFin) != "undefined" && periodoFin != null) {
+
+                    let parametros = { TipoPeriodo: tipoPeriodo, IdPeriodoIni: periodoInicio, IdPeriodoFin: periodoFin };
+                    getLista(parametros);
+                }
+            });
+
+
+            function getLista(parametros) {
+
+                MostrarCarga("Cargando...");
+
+                $.ajax({
+                    url: '/Finanzas/FluEfe_ListarFlujoEfectivo',
+                    type: 'GET',
+                    contenType: 'json',
+                    data: parametros,
+                    success: function (data) {
+
+                        tituloTabla = "";
+                        footerTabla = "";
+
+                        lstTitulo = [];
+                        let i = 0, lstTitPerTmp = [], lstTitPer = [], lstTituloPeriodo = [];
+
+                        for (i = 0; i < data.lista.length; i++) {
+                            let periodoOrden = data.lista[i].efperorden;
+                            if (lstTitPerTmp.indexOf(periodoOrden) < 0) {
+                                lstTitPerTmp.push(periodoOrden);
+                            }
+                        }
+
+                        let j = 0, k = 0;
+                        for (j = 0; j < data.lista.length; j++) {
+                            for (k = 0; k < lstTitPerTmp.length; k++) {
+                                if (data.lista[j].efperorden == lstTitPerTmp[k]) {
+                                    if (lstTitPer.indexOf(data.lista[j].efperiodo) < 0) {
+                                        //
+                                        lstTitPer.push(data.lista[j].efperiodo);
+                                        lstTituloPeriodo.push({ orden: data.lista[j].efperorden, periodo: data.lista[j].efperiodo });
+                                    }
+                                }
+                            }
+                        }
+
+                        lstTitulo = lstTituloPeriodo.sort((a, b) => (a.orden <  b.orden) ? -1 : 1);
+
+                        tituloTabla += "<tr>"
+                            + "<th>Ubicación</th>"
+                            + "<th>Cod EF-x</th>"
+                            + "<th>Descrip Cod EF-x</th>"
+                            + "<th>RS-X</th>";
+
+                        footerTabla += "<tr class='table-primary'>"
+                            + "<td></td>"
+                            + "<td></td>"
+                            + "<td></td>"
+                            + "<td></td>";
+
+                        let l = 0, thPeriodo = "", tfPeriodo = "";
+                        let iSumColumn = 4; //
+
+                        for (l = 0; l < lstTitulo.length; l++) {
+                            thPeriodo += "<th class='chPeriodos'>" + lstTitulo[l].periodo + "</th>";
+                            tfPeriodo += "<td class='cfmontototal fp" + iSumColumn.toString() + "'>0</td>";
+                            iSumColumn = iSumColumn + 1;
+                        }
+                        thPeriodo += "</tr>";
+                        tfPeriodo += "</tr>";
+
+                        tituloTabla += thPeriodo;
+                        footerTabla += tfPeriodo;
+
+
+                        let tr = "", m = 0, trPer = "", lstConceptos = [], listaTmp = [], lstOrdenMontos = [], lstTotalGrupos = [], lstDistinctCptos = [],
+                            lstGrupo = [], lstValidUlt = [], lstSeccion = [], lstDistinctSeccion = [], lstValidUltSeccion = [], lstTotalSeccion = [],
+                            lstTotal = [], lstDistinctTotal = [], lstValidTotal = [];
+
+                        var w = 0;
+                        for (w = 0; w < data.lista.length; w++) {
+                            let existeItem = lstDistinctTotal.some(x => x.idTipoAct == data.lista[w].efIdTipoAct && x.codEFx == data.lista[w].efCodEFx && x.idRSx == data.lista[w].efIdRSx);
+                            if (!existeItem) {
+                                lstDistinctTotal.push({ idTipoAct: data.lista[w].efIdTipoAct, codEFx: data.lista[w].efCodEFx, idRSx: data.lista[w].efIdRSx, registrado: 0 });
+                            }
+                        }
+
+                        data.lista.forEach(function (obj) {
+
+                            if (lstSeccion.length == 0) {
+                                let lstSeccion = data.lista.filter(x => x.efIdTipoAct == obj.efIdTipoAct);
+
+                                for (var i = 0; i < lstSeccion.length; i++) {
+                                    let existeIdTipoAct = lstDistinctSeccion.some(x => x.idTipoAct == lstSeccion[i].efIdTipoAct && x.codEFx == lstSeccion[i].efCodEFx && x.idRSx == lstSeccion[i].efIdRSx);
+                                    if (!existeIdTipoAct) {
+                                        lstDistinctSeccion.push({ idTipoAct: lstSeccion[i].efIdTipoAct, codEFx: lstSeccion[i].efCodEFx, idRSx: lstSeccion[i].efIdRSx, registrado: 0 });
+                                    }
+                                }
+                            }
+
+                            let existeConcepto = lstConceptos.some(el => el.IdTipoAct == obj.efIdTipoAct && el.CodEFx == obj.efCodEFx && el.IdRSx == obj.efIdRSx);
+
+
+                            if (!existeConcepto) {
+
+                                if (lstGrupo.length == 0) {
+                                    let lstGrupo = data.lista.filter(x => x.efCodEFx == obj.efCodEFx);
+
+                                    for (var i = 0; i < lstGrupo.length; i++) {
+                                        let existeIdRSx = lstDistinctCptos.some(x => x.idRSx == lstGrupo[i].efIdRSx && x.codEFx == lstGrupo[i].efCodEFx);
+                                        if (!existeIdRSx) {
+                                            lstDistinctCptos.push({ idRSx: lstGrupo[i].efIdRSx, codEFx: lstGrupo[i].efCodEFx, registrado : 0 });
+                                        }
+                                    }
+
+                                    lstDistinctCptos = lstDistinctCptos.sort((a, b) => (a.idRSx < b.idRSx) ? -1 : 1);
+                                }
+
+
+                                tr += "<tr>"
+                                    + " <td> " + IsNull(obj.efActividad) + "</td>"
+                                    + " <td> " + IsNull(obj.efCodEFx) + "</td>"
+                                    + " <td> " + IsNull(obj.efDescCodEf) + "</td>"
+                                    + " <td> " + IsNull(obj.efConcepto) + "</td>";
+
+                                listaTmp = [];
+                                lstOrdenMontos = [];
+                                listaTmp = data.lista.filter(x => x.efIdTipoAct == obj.efIdTipoAct && x.efCodEFx == obj.efCodEFx && x.efIdRSx == obj.efIdRSx);
+
+                                trPer = "";
+                                for (var n = 0; n < listaTmp.length; n++) {
+
+                                    let existePeriodo = lstConceptos.some(el => el.IdTipoAct == listaTmp[n].efIdTipoAct && el.CodEFx == listaTmp[n].efCodEFx && el.IdRSx == listaTmp[n].efIdRSx && el.perorden == listaTmp[n].efperorden);
+
+                                    if (!existePeriodo) {
+
+                                        for (m = 0; m < lstTitulo.length; m++) {
+
+                                            if (lstTitulo[m].orden == listaTmp[n].efperorden) {
+
+                                                let objeto = data.lista.find(v => v.efIdTipoAct == listaTmp[n].efIdTipoAct && v.efCodEFx == listaTmp[n].efCodEFx && v.efIdRSx == listaTmp[n].efIdRSx && v.efperorden == listaTmp[n].efperorden);
+
+                                                if (typeof (objeto) != "undefined" && objeto != null) {
+                                                    lstOrdenMontos.push({ orden: lstTitulo[m].orden, monto: objeto.mdolar });
+                                                }
+                                            }
+                                            else {
+                                                let existePerConcepto = listaTmp.some(el => el.efperorden == lstTitulo[m].orden);
+
+                                                if (!existePerConcepto) {
+
+                                                    let existeOrdMonto = lstOrdenMontos.some(x => x.orden == lstTitulo[m].orden);
+
+                                                    if (!existeOrdMonto) {
+                                                        lstOrdenMontos.push({ orden: lstTitulo[m].orden, monto: 0 });
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        lstConceptos.push({ IdTipoAct: obj.efIdTipoAct, CodEFx: obj.efCodEFx, IdRSx: obj.efIdRSx, perorden: obj.efperorden });
+                                    }
+                                }
+
+                                let p = 0;
+                                for (p = 0; p < lstTitulo.length; p++) {
+
+                                    let existeMonto = lstOrdenMontos.some(x => x.orden == lstTitulo[p].orden);
+                                    if (existeMonto) {
+                                        let objeto = lstOrdenMontos.find(x => x.orden == lstTitulo[p].orden);
+                                        trPer += "<td class='class-monto'>" + formatoNumero(objeto.monto) + "</td>";
+
+                                        let existeOrden = lstTotalGrupos.some(x => x.orden == lstTitulo[p].orden);
+
+                                        if (existeOrden) {
+                                            for (var i = 0; i < lstTotalGrupos.length; i++) {
+                                                if (lstTotalGrupos[i].orden == lstTitulo[p].orden) {
+                                                    lstTotalGrupos[i].monto = lstTotalGrupos[i].monto + objeto.monto;
+                                                }
+                                            }
+                                        }
+                                        else {
+                                            lstTotalGrupos.push({ orden: lstTitulo[p].orden, monto: objeto.monto });
+                                        }
+                                    }
+                                }
+
+
+                                tr += trPer;
+
+                                tr += "</tr>";
+
+                                for (var s = 0; s < lstDistinctCptos.length; s++) {
+                                    if (lstDistinctCptos[s].idRSx == obj.efIdRSx) {
+                                        lstDistinctCptos[s].registrado = 1;
+                                    }
+                                }
+
+
+                                lstValidUlt = lstDistinctCptos.filter(x => x.registrado == 0);
+
+                                if (lstValidUlt.length == 0) {
+
+                                    tr += "<tr class='table-info'>"
+                                        + " <td>" + IsNull(obj.efActividad) + "</td>"
+                                        + " <td>" + IsNull(obj.efCodEFx) + "</td>"
+                                        + " <td>" + IsNull(obj.efDescCodEf) + "</td>"
+                                        + " <td> SubTotal </td>";
+
+                                    let r = 0, trSumaT = "";
+                                    for (r = 0; r < lstTitulo.length; r++) {
+                                        let existeMontoT = lstTotalGrupos.some(x => x.orden == lstTitulo[r].orden);
+                                        if (existeMontoT) {
+                                            let objeto = lstTotalGrupos.find(x => x.orden == lstTitulo[r].orden);
+                                            trSumaT += "<td class='class-monto'>" + formatoNumero(objeto.monto) + "</td>";
+                                        }
+                                    }
+                                    tr += trSumaT;
+                                    tr += "</tr>";
+
+                                    var t = 0;
+                                    for (t = 0; t < lstTitulo.length; t++) {
+                                        let existeMontoT = lstTotalGrupos.some(x => x.orden == lstTitulo[t].orden);
+                                        if (existeMontoT) {
+
+                                            let existeOrden = lstTotalSeccion.some(x => x.orden == lstTitulo[t].orden);
+                                            let objeto = lstTotalGrupos.find(x => x.orden == lstTitulo[t].orden);
+
+                                            if (existeOrden) {
+                                                for (var i = 0; i < lstTotalSeccion.length; i++) {
+                                                    if (lstTotalSeccion[i].orden == lstTitulo[t].orden) {
+                                                        lstTotalSeccion[i].monto = lstTotalSeccion[i].monto + objeto.monto;
+                                                    }
+                                                }
+                                            }
+                                            else {
+                                                lstTotalSeccion.push({ orden: lstTitulo[t].orden, monto: objeto.monto });
+                                            }
+                                        }
+                                    }
+                                    lstTotalGrupos = [];
+                                }
+
+
+                                for (var s = 0; s < lstDistinctSeccion.length; s++) {
+                                    if (lstDistinctSeccion[s].idRSx == obj.efIdRSx) {
+                                        lstDistinctSeccion[s].registrado = 1;
+                                    }
+                                }
+
+                                lstValidUltSeccion = lstDistinctSeccion.filter(x => x.registrado == 0);
+
+                                if (lstValidUltSeccion.length == 0) {
+
+                                    tr += "<tr class='bg-info'>"
+                                        + " <td>" + IsNull(obj.efActividad) + "</td>"
+                                        + " <td></td>"
+                                        + " <td></td>"
+                                        + " <td> Total </td>";
+
+                                    let r = 0, trSumaT = "";
+                                    for (r = 0; r < lstTitulo.length; r++) {
+                                        let existeMontoT = lstTotalSeccion.some(x => x.orden == lstTitulo[r].orden);
+                                        if (existeMontoT) {
+                                            let objeto = lstTotalSeccion.find(x => x.orden == lstTitulo[r].orden);
+                                            trSumaT += "<td class='class-monto'>" + formatoNumero(objeto.monto) + "</td>";
+                                        }
+                                    }
+                                    tr += trSumaT;
+
+                                    tr += "</tr>";
+
+
+                                    var u = 0;
+                                    for (u = 0; u < lstTitulo.length; u++) {
+                                        let existeMontoT = lstTotalSeccion.some(x => x.orden == lstTitulo[u].orden);
+                                        if (existeMontoT) {
+
+                                            let existeOrden = lstTotal.some(x => x.orden == lstTitulo[u].orden);
+                                            let objeto = lstTotalSeccion.find(x => x.orden == lstTitulo[u].orden);
+
+                                            if (existeOrden) {
+                                                for (var i = 0; i < lstTotal.length; i++) {
+                                                    if (lstTotal[i].orden == lstTitulo[u].orden) {
+                                                        lstTotal[i].monto = lstTotal[i].monto + objeto.monto;
+                                                    }
+                                                }
+                                            }
+                                            else {
+                                                lstTotal.push({ orden: lstTitulo[u].orden, monto: objeto.monto });
+                                            }
+                                        }
+                                    }
+
+                                    lstTotalSeccion = [];
+                                }
+
+
+                                for (var v = 0; v < lstDistinctTotal.length; v++) {
+                                    if (lstDistinctTotal[v].idRSx == obj.efIdRSx) {
+                                        lstDistinctTotal[v].registrado = 1;
+                                    }
+                                }
+
+                                lstValidTotal = lstDistinctTotal.filter(x => x.registrado == 0);
+
+                                if (lstValidTotal.length == 0) {
+
+
+                                    tr += "<tr style='background-color: #273746; color: #FDFEFE; '>"
+                                        + " <td>" + "Total General" + "</td>"
+                                        + " <td>" + "" + "</td>"
+                                        + " <td></td>"
+                                        + " <td></td>";
+
+                                    let r = 0, trSumaT = "";
+                                    for (r = 0; r < lstTitulo.length; r++) {
+                                        let existeMontoT = lstTotal.some(x => x.orden == lstTitulo[r].orden);
+                                        if (existeMontoT) {
+                                            let objeto = lstTotal.find(x => x.orden == lstTitulo[r].orden);
+                                            trSumaT += "<td class='class-monto'>" + formatoNumero(objeto.monto) + "</td>";
+                                        }
+                                    }
+                                    tr += trSumaT;
+
+                                    tr += "</tr>";
+
+                                    lstTotal = [];
+                                }
+                            }
+
+                        });
+
+                        console.log(lstTotal);
+
+
+                        $(".tabla-contenido").empty();
+                        $(".tabla-contenido").html("<table class='table table-sm table-bordered display nowrap' id='tablaPrincipal'>"
+                            + "<thead class='thead-light' id = 'tituloTabla'></thead>"
+                            + "<tbody id='contenidoTabla'></tbody>"
+                            //+ "<tfoot id='footerTabla'></tfoot>"
+                            + "</table>");
+
+
+                        $("#tituloTabla").html(tituloTabla);
+                        $("#footerTabla").html(footerTabla);
+
+                        //console.log(tituloTabla);
+                        //console.log(tr);
+
+                        var table = $('#tablaPrincipal').DataTable();
+                        table.destroy();
+
+                        $("#contenidoTabla").html(tr);
+
+                        $("#tablaPrincipal").DataTable(
+                            {
+                                "language": { 'url': '/libs/datatables/spanish.json' },
+                                "initComplete": function (settings, json) {
+                                   // var api = this.api();
+
+                                },
+                                "footerCallback": function (row, data, start, end, display) {
+                                    //var api = this.api(), data;
+                                    //sumaMontos(this);
+                                    return;
+                                },
+                                "scrollX": true,
+                                "bSort": false,
+                                //dom: 'Bfrtip',
+                                //buttons: [
+                                //    'excel','pdf', 'print'
+                                //],
+                                scrollY: '60vh',
+                                scrollCollapse: true,
+                                paging: false
+                            });
+
+
+                        Swal.fire({
+                            icon: 'success',
+                            title: "Mostrando Datos",
+                            //text: "Textile Sourcing Company",
+                            allowEscapeKey: false,
+                            showConfirmButton: false,
+                            timer: 1200,
+                        });
+                    }
+                });
+            }
+
+            function formatoNumero(x) {
+                x = x.toFixed(2);
+                return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            }
+
+            function sumaMontos(table) {
+                try {
+                    var intVal = function (i) {
+                        return typeof i === 'string' ?
+                            i.replace(/[\$,]/g, '') * 1 :
+                            typeof i === 'number' ?
+                                i : 0;
+                    };
+                    var api = table.api();
+                    var lstColumnIndex = [];
+
+                    api.columns(".chPeriodos").eq(0).each(function (index) {
+
+                        var column = api.column(index, { page: 'current' });
+                        var sum = column
+                            .data()
+                            .reduce(function (a, b) {
+                                return intVal(a) + intVal(b);
+                            }, 0);
+
+                        let colIndex = column[0]
+                        let existe = lstColumnIndex.some(x => x == colIndex[0]);
+
+                        if (!existe) {
+
+                            $("div.dataTables_scrollBody td.fp" + colIndex[0].toString() + " div.dataTables_sizing").html(formatoNumero(sum));
+                            $("div.dataTables_scrollFoot td.fp" + colIndex[0].toString() + "").html(formatoNumero(sum));
+
+                            lstColumnIndex.push(colIndex[0]);
+                        }
+                    });
+
+                } catch (e) {
+                    console.log('Error in CalculateTableSummary');
+                }
+            }
+
+
+            $("#btn_Buscar").click(function () {
+                let fechaInicio = $('#dtFechaInicio').val();
+                let fechaFin = $('#dtFechaFin').val();
+
+                if (fechaInicio == null ||
+                    fechaFin == null ||
+                    typeof (fechaInicio) == "undefined" ||
+                    typeof (fechaFin) == "undefined" ||
+                    fechaInicio == "Fecha Inicio" ||
+                    fechaFin == "Fecha Fin" ||
+                    fechaInicio.trim() == "" ||
+                    fechaFin.trim() == "") {
+
+                    Swal.fire('Seleccione la fecha, por favor')
+                }
+                else {
+
+                    var datos =
+                    {
+                        'tipoPeriodo': tipoPeriodo,
+                        'fechaInicio': formatoFecha(fechaInicio),
+                        'fechaFin': formatoFecha(fechaFin)
+                    }
+
+                    Listar(datos);
+                }
+            });
+
+            function formatoFecha(date) {
+                var d = new Date(date),
+                    month = '' + (d.getMonth() + 1),
+                    day = '' + d.getDate(),
+                    year = d.getFullYear();
+
+                if (month.length < 2)
+                    month = '0' + month;
+                if (day.length < 2)
+                    day = '0' + day;
+
+                return [year, month, day].join('');
+            }
+
+
+            $("#btn_ExportarExcel").click(function () {
+
+
+
+                //let dtFechaInicio = $('#dtFechaInicio').val();
+                //let fechaFin = $('#FechaFin').val();
+
+                //if (dtFechaInicio == null ||
+                //    fechaFin == null ||
+                //    typeof (dtFechaInicio) == "undefined" ||
+                //    typeof (fechaFin) == "undefined" ||
+                //    dtFechaInicio == "Fecha Inicio" ||
+                //    fechaFin == "Fecha Fin" ||
+                //    dtFechaInicio.trim() == "" ||
+                //    fechaFin.trim() == "") {
+
+                //    Swal.fire('Seleccione la fecha, por favor')
+                //}
+                //else {
+                //    var datos =
+                //    {
+                //        'dtFechaInicio': dtFechaInicio,
+                //        'fechaFin': fechaFin
+                //    }
+
+                //    exportarExcel(datos);
+                //}
+            });
+
+
+
+
+
+
+            function exportarExcel(datos) {
+
+                $.ajax({
+                    url: '@Url.Action("ReporteExcelFact", "Facturacion")',
+                    contentType: 'application/json; charset=utf-8',
+                    datatype: 'json',
+                    type: "GET",
+                    data: datos,
+                    success: function () {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Reporte Generado con Éxito',
+                            text: 'Textile Sourcing Company',
+                            showConfirmButton: false,
+                            timer: 1500,
+                            onClose: () => {
+                                window.location = "/Facturacion/ReporteExcelFact?dtFechaInicio=" + datos.dtFechaInicio + "&fechaFin=" + datos.fechaFin;
+                            }
+                        });
+                    }
+                });
+            }
+
+            function ListarFacturas() {
+
+                MostrarCarga("Cargando...");
+
+
+                let dtFechaInicio = $('#dtFechaInicio').val();
+                let fechaFin = $('#FechaFin').val();
+
+                var datos =
+                {
+                    'dtFechaInicio': dtFechaInicio,
+                    'fechaFin': fechaFin
+                }
+
+                $.ajax({
+                    url: '/Facturacion/ListarFacturas',
+                    type: 'GET',
+                    contenType: 'json',
+                    data: datos,
+                    success: function (e) {
+
+                        if (e.isRedirect) {
+                            window.location.href = e.redirectUrl;
+                        }
+                        else {
+
+                            let tabla = $("#tablaPrincipal").DataTable();
+
+                            tabla.destroy();
+                            let tr = "";
+                            e.lista.forEach(function (obj) {
+
+                                tr += "<tr>"
+                                    + " <td> " + IsNull(obj.RUC) + "</td>"
+                                    + " <td> " + IsNull(obj.SERIE_NUM) + "</td>"
+                                    + " <td> " + IsNull(obj.RS) + "</td>"
+                                    + " <td> " + IsNull(obj.FECHA_EMI) + "</td>"
+                                    + " <td> " + IsNull(obj.FECHA_VEN) + "</td>"
+                                    + " <td> " + IsNull(obj.COND_PAGO) + "</td>"
+                                    + " <td> " + IsNull(obj.OC) + "</td>"
+                                    + " <td> " + IsNull(obj.GR) + "</td>"
+                                    + " <td> " + IsNull(obj.MONEDA) + "</td>"
+                                    + " <td> " + IsNull(obj.V_VENTA) + "</td>"
+                                    + " <td> " + IsNull(obj.V_IGV) + "</td>"
+                                    + " <td> " + IsNullWithFormat(obj.TOTAL) + "</td>"
+                                    + " <td> " + IsNullWithFormat(obj.TOTAL_S) + "</td>"
+                                    + " <td> " + IsNullWithFormat(obj.TOTAL_D) + "</td>"
+                                    + " <td class='col-ocultar'> " + IsNull(obj.TOTAL_S) + "</td>"
+                                    + " <td class='col-ocultar'> " + IsNull(obj.TOTAL_D) + "</td>"
+
+                                   + "</tr>";
+                            });
+
+                            $("#tablaCabeceraContenido").html(tr);
+
+                            $("#tablaPrincipal").DataTable(
+                                {
+                                    'language': { 'url': '/libs/datatables/spanish.json' },
+                                    "initComplete": function (settings, json) {
+                                        var api = this.api();
+                                        CalculoSuma(this);
+                                    },
+                                    "footerCallback": function (row, data, start, end, display) {
+                                        var api = this.api(), data;
+                                        CalculoSuma(this);
+                                        return;
+                                    },
+                                    //"scrollX": true,
+                                    //"scrollY": "300px",
+                                    //"scrollCollapse": true,
+                                    //"paging": false,
+
+                                    scrollY: '50vh',
+                                    scrollCollapse: true,
+                                    paging: false
+
+                                    //,
+                                    //lengthMenu: [[5, 10, 20, -1], [5, 10, 20, 'Todos']]
+                                });
+
+                            Swal.fire({
+                                icon: 'success',
+                                title: "Mostrando Datos",
+                                text: "Textile Sourcing Company",
+                                allowEscapeKey: false,
+                                showConfirmButton: false,
+                                timer: 1500,
+                            });
+
+                        }
+
+                        UltimaActualizacion();
+                    }
+                });
+            }
+
+            function IsNull(valor) {
+                if (valor == null) {
+                    return "";
+                } else {
+                    return valor;
+                }
+            }
+
+            function IsNullWithFormat(valor) {
+                if (valor == null) {
+                    return "";
+                } else {
+                    return formatoNumero(valor);
+                }
+            }
+
+            function UltimaActualizacion() {
+                $.ajax({
+                    url: '/Facturacion/UltimaActualizacion',
+                    type: 'GET',
+                    contenType: 'json',
+                    success: function (e) {
+
+                        if (e.isRedirect) {
+                            window.location.href = e.redirectUrl;
+                        }
+                        else {
+                            $('#ultimaAct').text("Ultima Actualización: " + e.ultAct);
+                        }
+                    }
+                });
+            };
+
+
+        });
+
+
+
+    </script>
+
+}
+

@@ -1,0 +1,151 @@
+﻿
+@{
+    ViewBag.Title = "Reporte Control de Uso Liquidación";
+    ViewBag.Modulo = "Corte";
+    Layout = "~/Views/Plantillas/_Layout.cshtml";
+}
+
+
+<div class="card">
+    <div class="card-body">
+        <form class="row" id="frmbusqueda">
+            <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6 form-group">
+                <label>Fecha Inicio:</label>   
+                <input type="date" id="txtFechaInicio" class="form-control form-control-sm" />
+            </div>
+            <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6 form-group">
+                <label>Fecha Fin:</label>
+                <input type="date" id="txtFechaFin" class="form-control form-control-sm" />
+            </div>
+            <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6 form-group">
+                <label>Partida:</label>
+                <input type="text" id="txtPartida" class="form-control form-control-sm" />
+            </div>
+            <div class="col-xl-2 col-lg-2 col-md-4 col-sm-6 form-group">
+                <label>Ficha:</label>
+                <input type="tel" id="txtFicha" class="form-control numeros form-control-sm" />
+            </div>
+            <div class="col-xl-1 col-lg-1 col-md-4 col-sm-6 form-group">
+                <label>&nbsp;</label>
+                <button class="btn btn-primary btn-block btn-sm" id="btnBuscar" type="submit"> <i class="fas fa-search"></i> </button>  
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<div class="card">
+
+    <div class="card-body">
+
+        <table class="table table-bordered  nowrap" id="tablereporte" style="width:100%">
+            <thead class="thead-light">
+                <tr>
+                    <th>Partida</th>
+                    <th>Combo</th>
+                    <th>Versiones</th>
+                    <th>Ficha</th>
+                    <th>Fecha</th>
+                    <th>Tizado</th>
+                    <th>Tendido</th>
+                    <th>Corte</th>
+                    <th>Cantidad Programada</th>
+                    <th>Etapas</th>
+                </tr>
+            </thead>
+            <tbody id="tbodyreporte">
+
+            </tbody>
+        </table>
+
+    </div>
+
+</div>
+
+
+@section scripts{
+
+    <script>
+        let frmbusqueda = document.getElementById("frmbusqueda");
+        //CLICK BUSCAR
+        frmbusqueda.addEventListener("submit", (e) => {
+            e.preventDefault();
+            Buscar();
+
+        });
+
+
+        function Buscar() {
+
+            MostrarCarga("Generando Reporte...");
+
+
+            var datos = {
+                'fechainicio'   : $("#txtFechaInicio").val(),
+                'fechafin'      : $("#txtFechaFin").val(),
+                'partida'       : $("#txtPartida").val(),
+                'ficha'         : $("#txtFicha").val() == "" ? null : $("#txtFicha").val() ,
+            }
+
+            $.ajax({
+                url: '/corte/ReporteControlUsoListar/',
+                type: 'POST',
+                data: datos,
+                success: function (e) {
+
+
+                    if(e.mensaje == ""){
+
+                        //ARMANDO REGISTROS
+                        var tr = "";
+                        //MOSTRANDO CARGA
+                        e.registros.forEach((obj) => {
+                            var icono = "";
+                            let bg = obj.maximo == obj.versiones ? "bg-info" : "";
+
+                            tr += `
+                            <tr class ='${bg}'>
+                                <td>${obj.partida}</td>
+                                <td>${obj.combo}</td>
+                                <td>${obj.versiones}</td>
+                                <td>${obj.ficha}</td>
+                                <td>${obj.f_registro}</td>
+                                <td>${obj.tizado}</td>
+                                <td>${obj.tendido}</td>
+                                <td>${obj.corte}</td>
+                                <td>${obj.cantidadprogramada}</td>`
+                                ;
+                            if (obj.etapas) {
+                                tr += `<td class='text-center'><i class='fas fa-check' style="color:green"></i></td>`;
+                            } else {
+                                tr += `<td class='text-center'><i class='fas fa-times-circle' style="color:red"></i></td>`;
+                            }
+
+
+                            tr += `   </tr>`;
+
+                        });
+
+                        //$("#tblCuerpo").html(tr);
+                        //ARMAMOS DATATABLE
+                        ArmarDataTable_New("reporte",tr, false,true,true,true);
+                        InformarMini("Reporte Generado");
+
+                    } else {
+                        Advertir(e.mensaje);
+                    }
+                   
+                    
+                }
+
+            })
+
+
+        }
+            
+
+    </script>
+
+}
+
+

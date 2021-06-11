@@ -1,0 +1,107 @@
+﻿@{
+    ViewBag.Title = "Requerimientos Programador";
+    ViewBag.Modulo = "Seguridad";
+    Layout = "~/Views/Plantillas/_Layout.cshtml";
+}
+
+    <div class="card">
+
+        <div class="card-header">
+            <h3 class="card-title">Filtros</h3>
+        </div>
+
+        <div class="card-body">
+            @*Primera Fila de Filtros*@
+            <div class="row">
+                @*<div class="form-group col-md-2">
+            <div style="font-weight: bold; ">Fecha Creacion</div>
+            <input required="" type="date" class="form-control form-control-sm input-fecha" id="FechaCrea" />
+        </div>*@
+                <div class="form-group col-md-2">
+                    <div style="font-weight: bold; ">Tipo Fecha</div>
+                    <select class="form-control select2 select2-danger" data-dropdown-css-class="select2-danger" id="cboTipoFecha">
+                        <option value='TODO'>TODOS LAS FECHAS</option>
+                        <option value='CRE'>FECHA CREACION</option>
+                        <option value='INI'>FECHA INICIO</option>
+                        <option value='FIN'>FECHA FIN</option>
+                        <option value='INIFIN'>FECHA INICIO/FIN</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-3">
+                    <div style="font-weight: bold; ">Fecha Inicio</div>
+                    <input required="" type="date" class="form-control form-control-sm input-fecha-fin" id="FechaIni" />
+                </div>
+
+                <div class="form-group col-md-3">
+                    <div style="font-weight: bold; ">Fecha Fin</div>
+                    <input required="" type="date" class="form-control form-control-sm input-fecha-fin" id="FechaFin" />
+                </div>
+                <div class="form-group col-md-2">
+                    <div style="font-weight: bold; ">Gerencias </div>
+                    <select class="form-control form-control-sm selectSeries" multiple="multiple" id="cboGerencias" placeholder="Gerencias"></select>
+                </div>
+                <div class="form-group col-md-2">
+                    <div style="font-weight: bold; ">Solicitante</div>
+                    <input type="text" class="form-control form-control-sm input-sm" placeholder="Solicitante" id="txtSolicitante" />
+                </div>
+            </div>
+
+            @*Segunda Fila de Filtros*@
+            <div class="row">
+                <div class="form-group col-md-2">
+                    <div style="font-weight: bold; ">N° Requermiento</div>
+                    <input type="text" class="form-control form-control-sm input-sm" placeholder="N° Requerimiento" id="txtRequerimiento" />
+                </div>
+
+                <div class="form-group col-md-3">
+                    <div style="font-weight: bold; ">Responsables</div>
+                    <select class="form-control select2 select2-danger" data-dropdown-css-class="select2-danger" id="cboResponsables"></select>
+                </div>
+
+                <div class="form-group col-md-3">
+                    <div style="font-weight: bold; ">Areas</div>
+                    <select class="form-control select2 select2-danger" data-dropdown-css-class="select2-danger" id="cboAreas"></select>
+                </div>
+                <div class="form-group col-md-2">
+                    <div style="font-weight: bold; ">Estados </div>
+                    <select class="form-control form-control-sm selectSeries" multiple="multiple" id="cboEstados" placeholder="Estado Req."></select>
+                </div>
+                <div class="form-group col-md-2">
+                    <div style="font-weight: bold; color: #ffffff;">.</div>
+                    <button class="btn btn-primary btn-block btn-sm" id="btnBuscar">Buscar</button>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="card-body">
+            @* <table class="table table-sm table-bordered table-hover  dt-responsive nowrap" id="tablaPrincipal" style="width:100%;">*@
+            <table class="table table-sm table-bordered nowrap" id="tablaPrincipal" style="width:100%;">
+                <thead class="thead-light">
+                    <tr>
+                        <th>ID</th>
+                        <th>Descripcion Requerimiento</th>
+                        <th>Fecha Creación</th>
+                        <th>Solicitante</th>
+                        <th>Area</th>
+                        <th>Gerencia</th>
+                        <th>Responsable</th>
+                        <th>Fecha Inicio</th>
+                        <th>Fecha Fin</th>
+                        <th>FEcha Inicio Real</th>
+                        <th>Observaciones</th>
+                        <th>Estado Req.</th>
+                    </tr>
+                </thead>
+                <tbody id="tablaCabeceraContenido"></tbody>
+            </table>
+        </div>
+
+    </div>
+
+
+  
+@section scripts{
+    <script src="~/Admin/js/Seguridad/JSRequerimientos.js"></script>
+}

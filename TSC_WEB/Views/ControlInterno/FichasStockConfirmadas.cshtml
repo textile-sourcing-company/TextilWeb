@@ -1,0 +1,61 @@
+﻿@model List<TSC_WEB.Models.Entidades.Corte.FichasEntidad>
+
+
+@{
+    ViewBag.Title = "Stock de fichas confirmadas";
+    ViewBag.Modulo = "Corte";
+    Layout = "~/Views/Plantillas/_Layout.cshtml";
+}
+
+
+
+<div class="card card-outline card-body card-primary">
+
+    <div class="card-header">
+
+    </div>
+    <div class="card-body">
+
+        <table class="table table-sm table-bordered" id="tablereporte" style="width:100%">
+
+            <thead class="thead-light">
+                <tr>
+                    <th>Ficha</th>
+                    <th>Tipo</th>
+                    <th>Usuario</th>
+                    <th>Fecha</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                @foreach (var obj in Model)
+                {
+                <tr>
+                    <td>@obj.FICHA</td>
+                    <td>@obj.tipo</td>
+                    <td>@obj.usuario</td>
+                    <td>@obj.fecha</td>
+                </tr>
+                }
+
+            </tbody>
+
+        </table>
+
+
+    </div>
+
+</div>
+
+@section scripts {
+    
+<script>
+
+    $(document).ready(function () {
+        setDataTableSimple("reporte");
+    });
+        
+
+</script>
+
+} 

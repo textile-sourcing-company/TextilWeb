@@ -1,0 +1,61 @@
+﻿@model List<TSC_WEB.Models.Entidades.Logistica.AprobacionOC.OrdenCompraEntidad>
+@{
+    ViewBag.Title = "Orden de compra Pendientes de firma";
+    ViewBag.Modulo = "Logistica";
+    Layout = "~/Views/Plantillas/_Layout.cshtml";
+}
+
+
+<div class="card">
+    <!--<div class="card-header">
+
+    </div>-->
+    <div class="card-body">
+
+        <table class="table table-bordered table-hover dt-responsive nowrap" id="tablaPrincipal" style="width:100%">
+            <thead>
+                <tr>
+                    <th class="all">Pedido</th>
+                    <th>Moneda</th>
+                    <th>C. Costo</th>
+                    <th>Fecha</th>
+                    <th>Proveedor</th>
+                    <th>Comprador</th>
+                    <th>Descripción de pago</th>
+                    <th>Total</th>
+                    <!--<th >Observación</th>-->
+                    <th>Firmantes</th>
+
+                </tr>
+            </thead>
+            <tbody id="tablaCuerpo">
+                @foreach (var obj in Model)
+                {
+                    <tr>
+                        <td>@obj.pedido </td>
+                        <td>@obj.moneda</td>
+                        <td>@obj.centrocosto</td>
+                        <td>@obj.fecha</td>
+                        <td>@obj.proveedor</td>
+                        <td>@obj.comprador</td>
+                        <td>@obj.descripcionpago</td>
+                        <td>@obj.total_pedido</td>
+
+                        <td>@obj.firmantes</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+    </div>
+</div>
+
+
+@section scripts{
+
+    <script>
+        // $("#tablaPrincipal").DataTable();
+        ArmarDataTable('tablaPrincipal', true);
+    </script>
+
+}

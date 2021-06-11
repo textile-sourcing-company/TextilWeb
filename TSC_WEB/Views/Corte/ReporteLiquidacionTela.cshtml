@@ -1,0 +1,439 @@
+﻿
+@{
+    ViewBag.Title = "Reporte de Liquidación de Tela";
+    ViewBag.Modulo = "Corte";
+    Layout = "~/Views/Plantillas/_Layout.cshtml";
+}
+
+
+<div class="card">
+
+    <div class="card-body">
+
+        <form class="row" id="frmReporte">
+            <!-- FECHA INICIO -->
+            <div class="col-md-2 form-group">
+                <label>Fecha Inicio</label>
+                <input type="date" class="form-control form-control-sm" id="txtFechaI" />
+            </div>
+            <!-- FECHA FIN -->
+            <div class="col-md-2 form-group">
+                <label>Fecha Fin</label>
+                <input type="date" class="form-control form-control-sm" id="txtFechaF" />
+            </div>
+            <!-- FICHA -->
+            <div class="col-md-2 form-group">
+                <label>Ficha</label>
+                <input type="text" class="form-control form-control-sm" id="txtFicha" />
+            </div>
+            <!-- TURNO -->
+            <div class="col-md-2 form-group">
+                <label>Turno</label>
+                <select class="custom-select custom-select-sm" id="cboTurno">
+                    <option value="">[SELECCIONE]</option>
+                    <option value="1">Turno 1</option>
+                    <option value="2">Turno 2</option>
+                    <option value="3">Turno 3</option>
+
+                </select>
+            </div>
+            <!-- PARTIDA -->
+            <div class="col-md-2 form-group">
+                <label>Partida</label>
+                <input type="text" class="form-control form-control-sm" id="txtPartida" />
+            </div>
+            <!-- PROGRAMA -->
+            <div class="col-md-2 form-group">
+                <label>Programa</label>
+                <input type="text" class="form-control form-control-sm" id="txtPrograma" />
+            </div>
+
+            <!-- CLIENTE -->
+            <div class="col-md-3 form-group">
+                <label>Cliente</label>
+                <!--<input type="text" class="form-control" id="txtCliente" />-->
+                <select class="custom-select custom-select-sm select2" id="cboCliente" style="width:100%"></select>
+            </div>
+
+
+
+            <!-- ESTADO DEL REPORTE  TENDIDO  -->
+            <div class="col-md-2 form-group">
+                <label>Estado Tendido</label>
+                <select class="custom-select custom-select-sm" id="cboestadotendido">
+                    <option value="">[SELECCIONAR]</option>
+                    <option value="0">[PENDIENTE]</option>
+                    <option value="1">[VALIDADO]</option>
+                </select>
+            </div>
+
+            <!-- ESTADO DEL REPORTE  CORTE  -->
+            <div class="col-md-2 form-group">
+                <label>Estado Corte</label>
+                <select class="custom-select custom-select-sm" id="cboestadocorte">
+                    <option value="">[SELECCIONAR]</option>
+                    <option value="0">[PENDIENTE]</option>
+                    <option value="1">[VALIDADO]</option>
+                </select>
+            </div>
+
+            <!-- COMBO -->
+            <div class="col-md-2 form-group">
+                <label>N° Combo</label>
+                <input type="tel" class="form-control form-control-sm" id="txtcombo" />
+            </div>
+
+            <!-- BUSQUEDA -->
+            <div class="col-md-1 form-group">
+                <label>&nbsp;</label>
+                <button class="btn btn-primary btn-block btn-sm" type="submit">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+
+            <!-- EXPORTAR -->
+            <div class="col-md-2 form-group">
+                <label>&nbsp;</label>
+                <button class="btn btn-success btn-block btn-sm d-none" id="btnExportar" type="button">Exportar</button>
+            </div>
+
+        </form>
+
+
+    </div>
+</div>
+
+<!-- CUERPO DE TABLA -->
+<div class="card">
+
+    <div class="card-body">
+
+        <div class="table-responsive">
+
+            <table id="tablaRegistros" class="table table-bordered nowrap" style="width:100%">
+                <thead class="thead-light">
+                    <tr>
+                        <th class="resumido">FECHA DE LIQUIDACIÓN</th>
+                        <th class="resumido">TURNO</th>
+                        <th class="resumido">CÉLULA</th>
+                        <th class="resumido">USUARIO</th>
+                        <th class="resumido">FICHA</th>
+                        <th class="resumido">PEDIDO</th>
+                        <th class="resumido">PARTIDA</th>
+                        <th class="resumido">COMBO</th>
+                        <th class="resumido">VERSIÓN</th>
+                        <th class="resumido">PROGRAMA </th>
+                        <th class="resumido">ESTILO</th>
+                        <th class="resumido">COLOR</th>
+                        <th class="resumido">CODIGO TELA</th>
+                        <th class="resumido">DESCRIPCIÓN DE TELA </th>
+                        <th class='resumido'>PRENDAS PROG.</th>
+                        <th class='resumido'>PRENDAS REALES  </th>
+                        <th class='resumido'>DIFERENCIA </th>
+                        <th class='resumido'>%</th>
+                        <th class='resumido'>CONSUMO NETO PROGRAMADO</th>
+                        <th class='resumido'>CONSUMO NETO REAL</th>
+                        <th class='resumido'>CONSUMO BRUTO COTIZACIÓN</th>
+                        <th class='resumido'>CONSUMO BRUTO EXPLOSIÓN</th>
+                        <th class='resumido'>CONSUMO BRUTO PROGRAMADO</th>
+                        <th class='resumido'>CONSUMO BRUTO TIZADOS</th>
+                        <th class='resumido'>CONSUMO BRUTO REAL</th>
+                        <th class='resumido'>DIFERENCIA</th>
+                        <th class='resumido'>TELA TENDIDA NETA</th>
+                        <th class='resumido'>TELA COLLARETA</th>
+                        <th class='resumido'>PUNTAS</th>
+                        <th class='resumido'>RETAZOS</th>
+                        <th class='resumido'>EMPALMES</th>
+                        <th class='resumido'>CONOS</th>
+                        <th class='resumido'>BOLSAS</th>
+                        <th class='resumido'>TOTAL DE MERMA TENDIDO</th>
+                        <th class='resumido'>MERMA DE TENDIDO PROGRAMADA</th>
+                        <th class='resumido'>MERMA DE TENDIDO REAL</th>
+                        <th class='resumido'>TELA ADICIONAL</th>
+                        <th class='resumido'>MOTIVO REQUERIMIENTO</th>
+                        <th class='resumido'>DEVOLUCIÓN DE PRIMERAS</th>
+                        <th class='resumido'>MOTIVO</th>
+                        <th class='resumido'>DEVOLUCIÓN DE SEGUNDAS</th>
+                        <th class='resumido'>MOTIVO</th>
+                        <th class='resumido'>DEVOLUCIÓN ERP</th>
+                        <th class='resumido'>CÓDIGO ERP</th>
+                        <th class='resumido'>TELA PROGRAMADA</th>
+                        <th class='resumido'>TELA ASIGNADA POR TIZADOS</th>
+                        <th class='resumido'>TELA DESPACHADA</th>
+                        <th class='resumido'>TELA DESPACHADA + ADICIONAL</th>
+                        <th class='resumido'>TELA LIQUIDADA</th>
+                        <th class='resumido'>DIFERENCIA KG</th>
+                        <th class='resumido'>% LIQUIDACION</th>
+                        <th class='resumido'>ENTRECORTE</th>
+                        <th class='resumido'>ORILLOS</th>
+                        <th class='resumido'>EXTREMOS</th>
+                        <th class='resumido'>TOTAL MERMA</th>
+                        <th class='resumido'>EFICIENCIA COTIZADA</th>
+                        <th class='resumido'>EFICIENCIA DE EXPLOSIÓN</th>
+                        <th class='resumido'>EFICIENCIA PROGRAMADA</th>
+                        <th class='resumido'>EFICIENCIA REAL</th>
+                        <th class='resumido'>DIFERENCIA %</th>
+                        <th class='resumido'>ANCHO TOTAL COTIZADO</th>
+                        <th class='resumido'>ANCHO TOTAL DE EXPLOSIÓN</th>
+                        <th class='resumido'>ANCHO TOTAL PROGRAMADO</th>
+                        <th class='resumido'>ANCHO TOTAL REAL</th>
+                        <th class='resumido'>DIFERENCIA DE ANCHO</th>
+                        <th class='resumido'>VARIACIÓN DE ANCHO</th>
+                        <th class='resumido'>DENSIDAD DE COTIZACIÓN</th>
+                        <th class='resumido'>DENSIDAD DE EXPLOSIÓN</th>
+                        <th class='resumido'>DENSIDAD PROGRAMADA</th>
+                        <th class='resumido'>DENSIDAD REAL</th>
+                        <th class='resumido'>VARIACIÓN DE DENSIDAD</th>
+                        <th class='resumido'>CONSUMO LINEAL-COTIZACIÓN</th>
+                        <th class='resumido'>CONSUMO LINEAL-EXPLOSIÓN</th>
+                        <th class='resumido'>CONSUMO LINEAL-PROGRAMADO</th>
+                        <th class='resumido'>CONSUMO LINEAL-REAL</th>
+                    </tr>
+                </thead>
+                <tbody id="tbodyRegistros">
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+
+</div>
+
+
+@section scripts{
+
+    <script>
+
+        const frmReporte = document.getElementById("frmReporte");
+        let idcliente = null;
+        //var DETALLADO = true;
+        ListarClientes();
+
+        $(document).ready(function () {
+            setTabla("");
+        });
+
+
+        // EVENTO BUSCAR
+        frmReporte.addEventListener('submit', (e) => {
+
+            e.preventDefault();
+            BuscarReporte();
+        })
+
+        //LISTAMOS CLIENTES
+        function ListarClientes() {
+            $.ajax({
+                url: '/operaciones/ListarClientesFtec/',
+                type: 'GET',
+                datatype: 'json',
+                success: function (e) {
+                    //console.log(e);
+                    let option = "<option value=''>SELECCIONE</option>";
+                    e.forEach(function (obj) {
+                        option += `<option value='${obj.cliente9}.${obj.cliente4}.${obj.cliente2}' >${obj.nombre_cliente}</option>`;
+                    });
+
+                    $("#cboCliente").html(option);
+                }
+            });
+        }
+
+        // BUSCAMOS REPORTE
+        async function BuscarReporte() {
+
+            //OCULTAMOS BOTON PARA EXPORTAR
+            $("#btnExportar").addClass("d-none");
+
+            MostrarCarga("Buscando...");
+            //string fechainicio, string fechafin, int ? ficha, int ? turno, string partida, string programa, 
+            //string cliente, string estadotendido, string estadocorte, int ? combo
+
+            let datos = {
+                fechainicio:    $('#txtFechaI').val(),
+                fechafin:       $('#txtFechaF').val(),
+                partida:        $('#txtPartida').val().trim(),
+                turno:          $('#cboTurno').val(),
+                programa:       $('#txtPrograma').val().trim(),
+                cliente:        $("#cboCliente").val(),
+                ficha:          $('#txtFicha').val().trim(),
+                combo:          $('#txtcombo').val().trim(),
+                estadotendido:  $('#cboestadotendido').val(),
+                estadocorte:    $('#cboestadocorte').val()
+            }
+
+            get("Corte", "getReporteLiquidacionNew", datos, true)
+            .then(response => {
+                console.log(response);
+                //InformarMini("Correcto");
+                ArmarTabla(response);
+            })
+            .catch(error => {
+                console.log(error);
+                AdvertirMini("Ocurrio un error, contacte a sistemas");
+            });
+
+        }
+
+        function ArmarTabla(dato) {
+
+            var tr = "";
+
+
+            if (dato.length > 0) {
+
+
+                for (let obj of dato) {
+                    tr += `
+                        <tr>
+                            <td>${obj.fechaliquidacion}</td>
+                            <td>${obj.turno}</td>
+                            <td>${obj.celula}</td>
+                            <td>${obj.usuario}</td>
+                            <td>${obj.ficha}</td>
+                            <td>${obj.pedido}</td>
+                            <td>${obj.partida}</td>
+                            <td>${obj.combo}</td>
+                            <td>${obj.version}</td>
+                            <td>${obj.programa}</td>
+                            <td>${obj.estilo}</td>
+                            <td>${obj.color}</td>
+                            <td>${obj.codigotela}</td>
+                            <td>${obj.descripciontela}</td>
+
+                            <td>${obj.prendasprogramadas}</td>
+                            <td>${obj.prendasliquidadas}</td>
+                            <td>${obj.difprendasprog}</td>
+                            <td>${obj.difprendasprogporc}</td>
+
+                            <td>${obj.consumonetoprog}</td>
+                            <td>${obj.consumonetoreal}</td>
+                            <td>${obj.consumobrutocotizacion}</td>
+                            <td>${obj.consumobrutoprogramado}</td>
+                            <td>${obj.consumobrutoreal}</td>
+                            <td>${obj.difconsbrutorealprogpor}</td>
+                            <td>${obj.telatendidakg}</td>
+                            <td>${obj.telacollaretakg}</td>
+                            <td>${obj.telacollaretakg}</td>
+                            <td>${obj.puntas}</td>
+                            <td>${obj.retazos}</td>
+                            <td>${obj.empalmes}</td>
+                            <td>${obj.conos}</td>
+                            <td>${obj.bolsas}</td>
+                            <td>${obj.totalmermatendido}</td>
+                            <td>${obj.totalmermatendidoprogpor}</td>
+                            <td>${obj.totalmermatendidoprogpor}</td>
+                            <td>${obj.totalmermatendidorealpor}</td>
+                            <td>${obj.adicional}</td>
+                            <td>${obj.motivoadicional}</td>
+                            <td>${obj.devolucionprimera}</td>
+                            <td>${obj.motivoprimera}</td>
+                            <td>${obj.devolucionsegunda}</td>
+                            <td>${obj.motivosegunda}</td>
+                            <td>${obj.devolucionerp}</td>
+                            <td>${obj.codigoerp}</td>
+                            <td>${obj.telaprogramadakg}</td>
+                            <td>${obj.telatizadakg}</td>
+                            <td>${obj.teladespachadakg}</td>
+                            <td>${obj.teladespachadaadicional}</td>
+                            <td>${obj.telaliquidada}</td>
+                            
+                            <td>${obj.difteladespadictelaliqui}</td>
+                            <td>${obj.porcentajeliquidacion}</td>
+                            <td>${obj.entrecorte}</td>
+                            <td>${obj.orillos}</td>
+                            <td>${obj.extremos}</td>
+                            <td>${obj.totalmermacorte}</td>
+                            <td>${obj.eficienciacotizada}</td>
+                            <td>${obj.eficienciaexplosion}</td>
+                            <td>${obj.eficienciaprogramadatizados}</td>
+                            <td>${obj.eficienciarealtizados}</td>
+                            <td>${obj.difefiprorealtizadospor}</td>
+                            <td>${obj.anchototalcotizado}</td>
+                            <td>${obj.anchototalexplosion}</td>
+                            <td>${obj.anchototalprogramado}</td>
+                            <td>${obj.anchototalreal}</td>
+                            <td>${obj.difanchproreal}</td>
+                            <td>${obj.variacionancho}</td>
+                            <td>${obj.densidadcotizacion}</td>
+                            <td>${obj.densidadexplosion}</td>
+                            <td>${obj.densidadprogramada}</td>
+                            <td>${obj.densidadreal}</td>
+                            <td>${obj.variaciondedensidad}</td>
+                            <td>${obj.consumolinealcotizacion}</td>
+                            <td>${obj.consumolinealexplosion}</td>
+                            <td>${obj.consumolinealprogramado}</td>
+                            <td>${obj.consumolinealreal}</td>
+
+                        </tr>
+                    `;
+                }
+
+            } else {
+                Advertir("Datos no encontrados");
+            }
+
+            setTabla(tr);
+            //MOSTRAMOS BOTON PARA EXPORTAR
+            $("#btnExportar").removeClass("d-none");
+            // INFORMAMOS
+            InformarMini("Reporte generado");
+        }
+
+        function setTabla(tr) {
+
+            let tabla = $("#tablaRegistros").DataTable();
+            tabla.destroy();
+
+
+           $("#tbodyRegistros").html(tr);
+
+            var objeto = {};
+            objeto.language = { 'url': "/Libs/datatables/Spanish.json" };
+            objeto.ordering = false;
+            objeto.scrollX = true;
+
+            if (true) {
+                objeto.lengthMenu = [[5, 10, 20, -1], [5, 10, 20, 'Todos']];
+            }
+
+            $("#tablaRegistros").DataTable(objeto);
+
+        }
+
+        // EXPORTAR
+        $("#btnExportar").click(function(){
+
+            MostrarCarga("Generando...");
+            /*
+            get("Corte","getReporteLiquidacionExcel",{},true)
+                .then(response => {
+                    InformarMini("Reporte generado correctamente");
+                })
+                .catch(error => {
+                    console.log(error);
+                    AdvertirMini("Ocurrio un error contacte a sistemas");
+                })*/
+
+            $.ajax({
+                url: '@Url.Action("getReporteLiquidacionExcelNew", "Corte")',
+                contentType: 'application/json; charset=utf-8',
+                datatype: 'json',
+                type: "GET",
+                //data: datos,
+                success: function () {
+                    InformarMini("Reporte generado correctamente");
+                    window.location = "/Corte/getReporteLiquidacionExcelNew";
+
+                }
+            });
+
+        });
+
+
+    </script>
+
+}
+
+
+

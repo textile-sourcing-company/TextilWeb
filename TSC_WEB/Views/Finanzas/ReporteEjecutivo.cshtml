@@ -1,0 +1,1203 @@
+﻿@{
+    ViewBag.Title = "Reporte Ejecutivo";
+    ViewBag.Modulo = "Finanzas";
+    Layout = "~/Views/Plantillas/_Layout.cshtml";
+}
+
+<div class="rpte-ejecutivo">
+
+    <div class="card">
+        <div class="card-body">
+
+            <ul class="nav nav-tabs nav-justified md-tabs indigo" id="myTabJust" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" id="tab1-tab-just" data-toggle="tab" href="#tab1-just" role="tab" aria-controls="tab1-just"
+                       aria-selected="true">Código EFE - Nivel 2°</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="tab2-tab-just" data-toggle="tab" href="#tab2-just" role="tab" aria-controls="tab2-just"
+                       aria-selected="false">Razón Social EFE - Nivel 3°</a>
+                </li>
+            </ul>
+
+            <div class="tab-content card pt-1" id="myTabContentJust">
+
+                <div class="tab-pane fade show active" id="tab1-just" role="tabpanel" aria-labelledby="tab1-tab-just">
+
+                    <div class="card container-fluid controles">
+                        <div class="hseccion1">
+                            <select class="form-control form-control-sm selectRpteEje classCbxTipoHorario2 select2" id="IdCbxTipoPeriodo2"></select>
+                            <select class="form-control form-control-sm selectRpteEje classCbxPeriodoIni2 select2" id="IdCbxPeriodoIni2"></select>
+                            <select class="form-control form-control-sm selectRpteEje classCbxPeriodoFin2 select2" id="IdCbxPeriodoFin2"></select>
+                        </div>
+                        <div class="hseccion2">
+                            <button id="btnBuscar2" type="button" class="btn btn-sm btnRpteEje btn-primary form-control-sm"> Consultar <i class="fas fa-search"></i></button>
+                            <button id="btnGrafico2" type="button" class="btn btn-sm btnRpteEje btn-primary form-control-sm"> Gráfico  <i class='fas fa-chart-line' style='color:#ffffff;'></i> </button>
+                        </div>
+                    </div>
+
+
+                    <div class="card tabla-contenido2 p-1">
+                        <table class="table table-sm table-bordered display nowrap" id="tablaPrincipal2">
+                            <thead class="thead-light" id="tituloTabla2"></thead>
+                            <tbody id="contenidoTabla2"></tbody>
+                        </table>
+                    </div>
+
+                </div>
+
+
+                <div class="tab-pane fade" id="tab2-just" role="tabpanel" aria-labelledby="tab2-tab-just">
+
+                    <div class="card container-fluid controles">
+                        <div class="hseccion1">
+                            <select class="form-control form-control-sm selectRpteEje classCbxTipoHorario3 select2" id="IdCbxTipoPeriodo3"></select>
+                            <select class="form-control form-control-sm selectRpteEje classCbxPeriodoIni3 select2" id="IdCbxPeriodoIni3"></select>
+                            <select class="form-control form-control-sm selectRpteEje classCbxPeriodoFin3 select2" id="IdCbxPeriodoFin3"></select>
+                        </div>
+                        <div class="hseccion2">
+                            <button id="btnBuscar3" type="button" class="btn btn-sm btnRpteEje btn-primary form-control-sm"> Consultar <i class="fas fa-search"></i></button>
+                            <button id="btnGrafico3" type="button" class="btn btn-sm btnRpteEje btn-primary form-control-sm"> Gráfico  <i class='fas fa-chart-line' style='color:#ffffff;'></i> </button>
+                        </div>
+                    </div>
+
+                    <div class="card tabla-contenido3 p-1">
+                        <table class="table table-sm table-bordered display nowrap" id="tablaPrincipal3">
+                            <thead class="thead-light" id="tituloTabla3"></thead>
+                            <tbody id="contenidoTabla3"></tbody>
+                        </table>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+
+
+<div class="modal fade bd-example-modal-lg"
+     tabindex="-1"
+     role="dialog"
+     aria-labelledby="myLargeModalLabel"
+     id="modalChartLine"
+     aria-hidden="true">
+
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="card">
+                <canvas id="line-chart"></canvas>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+
+<style>
+
+    #dtdtFechaIniciocio {
+        min-width: 200px;
+    }
+
+    #dtFechaFin {
+        min-width: 200px;
+    }
+
+    .tab-pane {
+        padding: 10px;
+    }
+
+    .controles {
+        display: flex;
+        justify-content: space-between;
+        flex-direction: row;
+        padding: 4px;
+        flex-wrap: wrap;
+    }
+
+        .controles .hseccion1 {
+            display: flex;
+            justify-content: flex-start;
+        }
+
+        .controles .hseccion2 {
+            display: flex;
+            justify-content: flex-end;
+        }
+
+
+    .cont-fefe .tabla-contenido {
+        padding: 5px;
+    }
+
+        .cont-fefe .tabla-contenido .class-monto {
+            text-align: right;
+        }
+
+    .cont-fefe .cfmontototal {
+        text-align: right !important;
+    }
+
+    .cont-fefe table {
+        width: 100%;
+    }
+
+
+    .hseccion2 > button {
+        width: 140px;
+    }
+
+    .hseccion1 > .select2 {
+        min-width: 190px;
+    }
+
+    #line-chart {
+        min-height: 500px;
+        background-color: azure;
+    }
+
+    #modalChartLine {
+    }
+
+
+
+    @@media (min-width: 320px) and (max-width: 479.98px) {
+        .controles {
+            width: 100%;
+        }
+
+            .controles .hseccion1 {
+                display: block;
+                width: 100%;
+            }
+
+                .controles .hseccion1 .select2 {
+                    margin-left: 0px;
+                    margin-top: 3px;
+                    display: block;
+                    width: 100% !important;
+                    min-width: 0px !important;
+                }
+
+
+            .controles .hseccion2 {
+                display: block;
+                width: 100%;
+            }
+
+                .controles .hseccion2 > button {
+                    margin-left: 0px;
+                    margin-top: 3px;
+                    display: block;
+                    width: 100% !important;
+                    min-width: 0px !important;
+                }
+    }
+
+    @@media (min-width: 480px) and (max-width: 767.98px) {
+        .controles {
+            width: 100%;
+        }
+
+            .controles .hseccion1 {
+                display: block;
+                width: 100%;
+            }
+
+                .controles .hseccion1 .select2 {
+                    margin-left: 0px;
+                    margin-top: 3px;
+                    display: block;
+                    width: 100% !important;
+                    min-width: 0px !important;
+                }
+
+
+            .controles .hseccion2 {
+                display: block;
+                width: 100%;
+            }
+
+                .controles .hseccion2 > button {
+                    margin-left: 0px;
+                    margin-top: 3px;
+                    display: block;
+                    width: 100% !important;
+                    min-width: 0px !important;
+                }
+    }
+
+    @@media (min-width: 768px) and (max-width: 991.98px) {
+
+        .controles {
+            width: 100%;
+        }
+
+            .controles .hseccion1 {
+                display: block;
+                width: 100%;
+            }
+
+                .controles .hseccion1 .select2 {
+                    margin-left: 0px;
+                    margin-top: 3px;
+                    display: block;
+                    width: 100% !important;
+                    min-width: 0px !important;
+                }
+
+
+            .controles .hseccion2 {
+                width: 100%;
+                margin-top: 3px;
+                justify-content: center;
+            }
+
+                .controles .hseccion2 .selectRpteEje {
+                    margin-left: 3px;
+                }
+
+                .controles .hseccion2 .btnRpteEje {
+                    margin-left: 3px;
+                }
+    }
+
+    @@media (min-width: 992px) and (max-width: 1199.98px) {
+
+        .controles {
+            width: 100%;
+        }
+
+            .controles .hseccion1 {
+                width: 100%;
+                display: flex;
+                justify-content: space-around;
+            }
+
+                .controles .hseccion1 .select2 {
+                    margin-left: 3px;
+                    flex-grow: 1;
+                }
+
+                .controles .hseccion1 .select2 {
+                    margin-left: 3px;
+                    flex-grow: 1;
+                }
+
+            .controles .hseccion2 {
+                width: 100%;
+                margin-top: 3px;
+                justify-content: center;
+            }
+
+                .controles .hseccion2 .selectRpteEje {
+                    margin-left: 3px;
+                }
+
+                .controles .hseccion2 .btnRpteEje {
+                    margin-left: 3px;
+                }
+    }
+
+    @@media (min-width: 1200px) {
+
+        .controles {
+            width: 100%;
+        }
+
+            .controles .hseccion1 {
+                width: 40%;
+                min-width: 560px;
+            }
+
+                .controles .hseccion1 .select2 {
+                    margin-left: 3px;
+                }
+
+                .controles .hseccion1 .select2 {
+                    margin-left: 3px;
+                }
+
+
+
+            .controles .hseccion2 {
+                width: 40%;
+                min-width: 400px;
+            }
+
+                .controles .hseccion2 .selectRpteEje {
+                    margin-left: 3px;
+                }
+
+                .controles .hseccion2 .btnRpteEje {
+                    margin-left: 3px;
+                }
+    }
+</style>
+
+
+@section scripts {
+    <script>
+
+        var tipoPeriodo2 = 0;
+        var periodoInicio2 = 0;
+        var periodoFin2 = 0;
+
+        var lstTituloPeriodo2 = [];
+        var lstTitulo2 = []
+
+        var tipoPeriodo3 = 0;
+        var periodoInicio3 = 0;
+        var periodoFin3 = 0;
+
+        var lstTituloPeriodo3 = [];
+        var lstTitulo3 = []
+
+
+        $(document).ready(function () {
+
+            Inicializar();
+
+            function Inicializar() {
+                getTiposPeriodo2();
+                getTiposPeriodo3();
+            }
+
+            // Nivel 2 : Descripción de Codigo de estado de efectivo
+
+            $("select.classCbxTipoHorario2").change(function () {
+                tipoPeriodo = $(this).children("option:selected").val();
+
+                if (tipoPeriodo != 0 && typeof (tipoPeriodo) != "undefined" && tipoPeriodo != null) {
+                    let parametros = { tipoPeriodo: tipoPeriodo };
+                    getPeriodos2(parametros);
+                }
+            });
+
+            function getTiposPeriodo2() {
+                $.ajax({
+                    type: "GET",
+                    url: '/Finanzas/FluCaj_GetTipoPeriodo',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (data) {
+                        $("#IdCbxTipoPeriodo2").empty();
+                        $.each(data.lista, function () {
+                            $("#IdCbxTipoPeriodo2").append($("<option/>").val(this.IdTipo).text(this.DescTipo));
+                        });
+
+                        $("#IdCbxTipoPeriodo2").val(0);
+                    },
+                    failure: function () {
+                        console.error('error al cargar tipos periodos');
+                    }
+                });
+            }
+
+            function getPeriodos2(parametros) {
+                $.ajax({
+                    type: "GET",
+                    url: '/Finanzas/FluCaj_GetPeriodos',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    data: parametros,
+                    success: function (data) {
+                        $("#IdCbxPeriodoIni2").empty();
+                        $("#IdCbxPeriodoFin2").empty();
+
+                        $.each(data.lista, function () {
+                            $("#IdCbxPeriodoIni2").append($("<option/>").val(this.IdPeriodo).text(this.Periodo));
+                            $("#IdCbxPeriodoFin2").append($("<option/>").val(this.IdPeriodo).text(this.Periodo));
+                        });
+
+                        $("#IdCbxPeriodoIni2").val(0);
+                        $("#IdCbxPeriodoFin2").val(0);
+                    },
+                    failure: function () {
+                        console.error('error al cargar tipos periodos');
+                    }
+                });
+            }
+
+            function getLista2(parametros) {
+
+                MostrarCarga("Cargando...");
+
+                $.ajax({
+                    url: '/Finanzas/RpteEjecEfe_ListarFlujoEfectivo2',
+                    type: 'GET',
+                    contenType: 'json',
+                    data: parametros,
+                    success: function (data) {
+
+                        tituloTabla = "";
+                        footerTabla = "";
+
+                        lstTitulo2 = [];
+                        let i = 0, lstTitPerTmp = [], lstTitPer = [], lstTituloPeriodo2 = [];
+
+                        for (i = 0; i < data.lista.length; i++) {
+                            let periodoOrden = data.lista[i].efperorden;
+                            if (lstTitPerTmp.indexOf(periodoOrden) < 0) {
+                                lstTitPerTmp.push(periodoOrden);
+                            }
+                        }
+
+                        let j = 0, k = 0;
+                        for (j = 0; j < data.lista.length; j++) {
+                            for (k = 0; k < lstTitPerTmp.length; k++) {
+                                if (data.lista[j].efperorden == lstTitPerTmp[k]) {
+                                    if (lstTitPer.indexOf(data.lista[j].efperiodo) < 0) {
+                                        lstTitPer.push(data.lista[j].efperiodo);
+                                        lstTituloPeriodo2.push({ orden: data.lista[j].efperorden, periodo: data.lista[j].efperiodo });
+                                    }
+                                }
+                            }
+                        }
+                        lstTitulo2 = lstTituloPeriodo2.sort((a, b) => (a.orden < b.orden) ? -1 : 1);
+
+                        tituloTabla += "<tr>"
+                            + "<th>Ubicación</th>"
+                            + "<th>Cod EF-x</th>"
+                            + "<th>Descrip Cod EF-x</th>";
+
+                        footerTabla += "<tr class='table-primary'>"
+                            + "<td></td>"
+                            + "<td></td>"
+                            + "<td></td>";
+
+                        let l = 0, thPeriodo = "", tfPeriodo = "";
+                        let iSumColumn = 3; //
+
+                        for (l = 0; l < lstTitulo2.length; l++) {
+                            thPeriodo += "<th class='chPeriodos'>" + lstTitulo2[l].periodo + "</th>";
+                            tfPeriodo += "<td class='cfmontototal fp" + iSumColumn.toString() + "'>0</td>";
+                            iSumColumn = iSumColumn + 1;
+                        }
+                        thPeriodo += "</tr>";
+                        tfPeriodo += "</tr>";
+
+                        tituloTabla += thPeriodo;
+                        footerTabla += tfPeriodo;
+
+                        let tr = "", m = 0, trPer = "", lstConceptos = [], listaTmp = [], lstOrdenMontos = [], lstTotalGrupos = [], lstDistinctCptos = [],
+                            lstSeccion = [], lstDistinctSeccion = [], lstValidUltSeccion = [], lstTotalSeccion = [],
+                            lstTotal = [], lstDistinctTotal = [], lstValidTotal = [];
+
+                        var w = 0;
+                        for (w = 0; w < data.lista.length; w++) {
+                            let existeItem = lstDistinctTotal.some(x => x.idTipoAct == data.lista[w].efIdTipoAct && x.codEFx == data.lista[w].efCodEFx);
+                            if (!existeItem) {
+                                lstDistinctTotal.push({ idTipoAct: data.lista[w].efIdTipoAct, codEFx: data.lista[w].efCodEFx, registrado: 0 });
+                            }
+                        }
+
+
+                        data.lista.forEach(function (obj) {
+
+                            if (lstSeccion.length == 0) {
+                                let lstSeccion = data.lista.filter(x => x.efIdTipoAct == obj.efIdTipoAct);
+
+                                for (var i = 0; i < lstSeccion.length; i++) {
+                                    let existeIdTipoAct = lstDistinctSeccion.some(x => x.idTipoAct == lstSeccion[i].efIdTipoAct && x.codEFx == lstSeccion[i].efCodEFx);
+                                    if (!existeIdTipoAct) {
+                                        lstDistinctSeccion.push({ idTipoAct: lstSeccion[i].efIdTipoAct, codEFx: lstSeccion[i].efCodEFx, registrado: 0 });
+                                    }
+                                }
+                            }
+
+                            let existeConcepto = lstConceptos.some(el => el.IdTipoAct == obj.efIdTipoAct && el.CodEFx == obj.efCodEFx);
+
+                            if (!existeConcepto) {
+
+                                tr += "<tr>"
+                                    + " <td> " + IsNull(obj.efActividad) + "</td>"
+                                    + " <td> " + IsNull(obj.efCodEFx) + "</td>"
+                                    + " <td> " + IsNull(obj.efDescCodEf) + "</td>";
+
+                                listaTmp = [];
+                                lstOrdenMontos = [];
+                                listaTmp = data.lista.filter(x => x.efIdTipoAct == obj.efIdTipoAct && x.efCodEFx == obj.efCodEFx);
+
+                                trPer = "";
+                                for (var n = 0; n < listaTmp.length; n++) {
+
+                                    let existePeriodo = lstConceptos.some(el => el.IdTipoAct == listaTmp[n].efIdTipoAct && el.CodEFx == listaTmp[n].efCodEFx && el.perorden == listaTmp[n].efperorden);
+
+                                    if (!existePeriodo) {
+
+                                        for (m = 0; m < lstTitulo2.length; m++) {
+
+                                            if (lstTitulo2[m].orden == listaTmp[n].efperorden) {
+
+                                                let objeto = data.lista.find(v => v.efIdTipoAct == listaTmp[n].efIdTipoAct && v.efCodEFx == listaTmp[n].efCodEFx && v.efperorden == listaTmp[n].efperorden);
+
+                                                if (typeof (objeto) != "undefined" && objeto != null) {
+                                                    lstOrdenMontos.push({ orden: lstTitulo2[m].orden, monto: objeto.mdolar });
+                                                }
+                                            }
+                                            else {
+                                                let existePerConcepto = listaTmp.some(el => el.efperorden == lstTitulo2[m].orden);
+
+                                                if (!existePerConcepto) {
+
+                                                    let existeOrdMonto = lstOrdenMontos.some(x => x.orden == lstTitulo2[m].orden);
+
+                                                    if (!existeOrdMonto) {
+                                                        lstOrdenMontos.push({ orden: lstTitulo2[m].orden, monto: 0 });
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        lstConceptos.push({ IdTipoAct: obj.efIdTipoAct, CodEFx: obj.efCodEFx, IdRSx: obj.efIdRSx, perorden: obj.efperorden });
+                                    }
+                                }
+
+                                let p = 0;
+
+                                for (p = 0; p < lstTitulo2.length; p++) {
+
+                                    let existeMonto = lstOrdenMontos.some(x => x.orden == lstTitulo2[p].orden);
+                                    if (existeMonto) {
+                                        let objeto = lstOrdenMontos.find(x => x.orden == lstTitulo2[p].orden);
+                                        trPer += "<td class='class-monto'>" + formatoNumero(objeto.monto) + "</td>";
+
+                                        let existeOrden = lstTotalSeccion.some(x => x.orden == lstTitulo2[p].orden);
+
+                                        if (existeOrden) {
+                                            for (var i = 0; i < lstTotalSeccion.length; i++) {
+                                                if (lstTotalSeccion[i].orden == lstTitulo2[p].orden) {
+                                                    lstTotalSeccion[i].monto = lstTotalSeccion[i].monto + objeto.monto;
+                                                }
+                                            }
+                                        }
+                                        else {
+                                            lstTotalSeccion.push({ orden: lstTitulo2[p].orden, monto: objeto.monto });
+                                        }
+                                    }
+                                }
+
+                                tr += trPer;
+
+                                tr += "</tr>";
+
+                                for (var s = 0; s < lstDistinctSeccion.length; s++) {
+                                    if (lstDistinctSeccion[s].codEFx == obj.efCodEFx) {
+                                        lstDistinctSeccion[s].registrado = 1;
+                                    }
+                                }
+
+                                lstValidUltSeccion = lstDistinctSeccion.filter(x => x.registrado == 0);
+
+                                if (lstValidUltSeccion.length == 0) {
+
+                                    tr += "<tr class='bg-info'>"
+                                        + " <td>" + IsNull(obj.efActividad) + "</td>"
+                                        + " <td></td>"
+                                        + " <td> Total </td>";
+
+                                    let r = 0, trSumaT = "";
+                                    for (r = 0; r < lstTitulo2.length; r++) {
+                                        let existeMontoT = lstTotalSeccion.some(x => x.orden == lstTitulo2[r].orden);
+                                        if (existeMontoT) {
+                                            let objeto = lstTotalSeccion.find(x => x.orden == lstTitulo2[r].orden);
+                                            trSumaT += "<td class='class-monto'>" + formatoNumero(objeto.monto) + "</td>";
+                                        }
+                                    }
+                                    tr += trSumaT;
+                                    tr += "</tr>";
+
+
+                                    var u = 0;
+                                    for (u = 0; u < lstTitulo2.length; u++) {
+                                        let existeMontoT = lstTotalSeccion.some(x => x.orden == lstTitulo2[u].orden);
+                                        if (existeMontoT) {
+
+                                            let existeOrden = lstTotal.some(x => x.orden == lstTitulo2[u].orden);
+                                            let objeto = lstTotalSeccion.find(x => x.orden == lstTitulo2[u].orden);
+
+                                            if (existeOrden) {
+                                                for (var i = 0; i < lstTotal.length; i++) {
+                                                    if (lstTotal[i].orden == lstTitulo2[u].orden) {
+                                                        lstTotal[i].monto = lstTotal[i].monto + objeto.monto;
+                                                    }
+                                                }
+                                            }
+                                            else {
+                                                lstTotal.push({ orden: lstTitulo2[u].orden, monto: objeto.monto });
+                                            }
+                                        }
+                                    }
+
+                                    lstTotalSeccion = [];
+                                }
+
+                                for (var v = 0; v < lstDistinctTotal.length; v++) {
+                                    if (lstDistinctTotal[v].codEFx == obj.efCodEFx) {
+                                        lstDistinctTotal[v].registrado = 1;
+                                    }
+                                }
+
+                                lstValidTotal = lstDistinctTotal.filter(x => x.registrado == 0);
+
+                                if (lstValidTotal.length == 0) {
+                                    tr += "<tr style='background-color: #273746; color: #FDFEFE; '>"
+                                        + " <td>" + "Total General" + "</td>"
+                                        + " <td></td>"
+                                        + " <td></td>";
+                                    let r = 0, trSumaT = "";
+                                    for (r = 0; r < lstTitulo2.length; r++) {
+                                        let existeMontoT = lstTotal.some(x => x.orden == lstTitulo2[r].orden);
+                                        if (existeMontoT) {
+                                            let objeto = lstTotal.find(x => x.orden == lstTitulo2[r].orden);
+                                            trSumaT += "<td class='class-monto'>" + formatoNumero(objeto.monto) + "</td>";
+                                        }
+                                    }
+                                    tr += trSumaT;
+                                    tr += "</tr>";
+                                    lstTotal = [];
+                                }
+
+                            }
+
+                        });
+
+                        $(".tabla-contenido2").empty();
+                        $(".tabla-contenido2").html("<table class='table table-sm table-bordered display nowrap' id='tablaPrincipal2'>"
+                            + "<thead class='thead-light' id='tituloTabla2'></thead>"
+                            + "<tbody id='contenidoTabla2'></tbody>"
+                            + "</table>");
+
+                        $("#tituloTabla2").html(tituloTabla);
+                        $("#footerTabla2").html(footerTabla);
+
+                        var table = $('#tablaPrincipal2').DataTable();
+                        table.destroy();
+
+                        $("#contenidoTabla2").html(tr);
+
+                        $("#tablaPrincipal2").DataTable(
+                            {
+                                "language": { 'url': '/libs/datatables/spanish.json' },
+                                "initComplete": function (settings, json) {
+                                },
+                                "footerCallback": function (row, data, start, end, display) {
+                                    return;
+                                },
+                                "scrollX": true,
+                                "bSort": false,
+                                scrollY: '50vh',
+                                scrollCollapse: true,
+                                paging: false
+                            });
+
+
+                        Swal.fire({
+                            icon: 'success',
+                            title: "Mostrando Datos",
+                            text: "Textile Sourcing Company",
+                            allowEscapeKey: false,
+                            showConfirmButton: false,
+                            timer: 1200,
+                        });
+                    }
+                });
+            }
+
+            $("#btnBuscar2").click(function () {
+                tipoPeriodo2 = $("#IdCbxTipoPeriodo2").children("option:selected").val();
+                periodoInicio2 = $("#IdCbxPeriodoIni2").children("option:selected").val();
+                periodoFin2 = $("#IdCbxPeriodoFin2").children("option:selected").val();
+
+                if (tipoPeriodo2 != 0 && typeof (tipoPeriodo2) != "undefined" && tipoPeriodo2 != null &&
+                    periodoInicio2 != 0 && typeof (periodoInicio2) != "undefined" && periodoInicio2 != null &&
+                    periodoFin2 != 0 && typeof (periodoFin2) != "undefined" && periodoFin2 != null) {
+
+                    let parametros = { TipoPeriodo: tipoPeriodo2, IdPeriodoIni: periodoInicio2, IdPeriodoFin: periodoFin2 };
+                    getLista2(parametros);
+                }
+            });
+
+            $("#btnGrafico2").click(function () {
+                $("#modalChartLine").modal("show");
+            });
+
+
+            // Nivel 3 : Concepto de estado de efectivo.
+
+            $("select.classCbxTipoHorario3").change(function () {
+                tipoPeriodo = $(this).children("option:selected").val();
+
+                if (tipoPeriodo != 0 && typeof (tipoPeriodo) != "undefined" && tipoPeriodo != null) {
+                    let parametros = { tipoPeriodo: tipoPeriodo };
+                    getPeriodos3(parametros);
+                }
+            });
+
+            function getTiposPeriodo3() {
+                $.ajax({
+                    type: "GET",
+                    url: '/Finanzas/FluCaj_GetTipoPeriodo',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (data) {
+                        $("#IdCbxTipoPeriodo3").empty();
+                        $.each(data.lista, function () {
+                            $("#IdCbxTipoPeriodo3").append($("<option/>").val(this.IdTipo).text(this.DescTipo));
+                        });
+
+                        $("#IdCbxTipoPeriodo3").val(0);
+                    },
+                    failure: function () {
+                        console.error('error al cargar tipos periodos');
+                    }
+                });
+            }
+
+            function getPeriodos3(parametros) {
+                $.ajax({
+                    type: "GET",
+                    url: '/Finanzas/FluCaj_GetPeriodos',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    data: parametros,
+                    success: function (data) {
+                        $("#IdCbxPeriodoIni3").empty();
+                        $("#IdCbxPeriodoFin3").empty();
+
+                        $.each(data.lista, function () {
+                            $("#IdCbxPeriodoIni3").append($("<option/>").val(this.IdPeriodo).text(this.Periodo));
+                            $("#IdCbxPeriodoFin3").append($("<option/>").val(this.IdPeriodo).text(this.Periodo));
+                        });
+
+                        $("#IdCbxPeriodoIni3").val(0);
+                        $("#IdCbxPeriodoFin3").val(0);
+                    },
+                    failure: function () {
+                        console.error('error al cargar tipos periodos');
+                    }
+                });
+            }
+
+            function getLista3(parametros) {
+
+                MostrarCarga("Cargando...");
+
+                $.ajax({
+                    url: '/Finanzas/RpteEjecEfe_ListarFlujoEfectivo3',
+                    type: 'GET',
+                    contenType: 'json',
+                    data: parametros,
+                    success: function (data) {
+
+                        tituloTabla = "";
+                        footerTabla = "";
+
+                        lstTitulo = [];
+                        let i = 0, lstTitPerTmp = [], lstTitPer = [], lstTituloPeriodo3 = [];
+
+                        for (i = 0; i < data.lista.length; i++) {
+                            let periodoOrden = data.lista[i].efperorden;
+                            if (lstTitPerTmp.indexOf(periodoOrden) < 0) {
+                                lstTitPerTmp.push(periodoOrden);
+                            }
+                        }
+
+                        let j = 0, k = 0;
+                        for (j = 0; j < data.lista.length; j++) {
+                            for (k = 0; k < lstTitPerTmp.length; k++) {
+                                if (data.lista[j].efperorden == lstTitPerTmp[k]) {
+                                    if (lstTitPer.indexOf(data.lista[j].efperiodo) < 0) {
+                                        //
+                                        lstTitPer.push(data.lista[j].efperiodo);
+                                        lstTituloPeriodo3.push({ orden: data.lista[j].efperorden, periodo: data.lista[j].efperiodo });
+                                    }
+                                }
+                            }
+                        }
+
+                        lstTitulo = lstTituloPeriodo3.sort((a, b) => (a.orden < b.orden) ? -1 : 1);
+
+                        tituloTabla += "<tr>"
+                            + "<th>Ubicación</th>"
+                            + "<th>Cod EF-x</th>"
+                            + "<th>Descrip Cod EF-x</th>"
+                            + "<th>RS-X</th>";
+
+                        footerTabla += "<tr class='table-primary'>"
+                            + "<td></td>"
+                            + "<td></td>"
+                            + "<td></td>"
+                            + "<td></td>";
+
+                        let l = 0, thPeriodo = "", tfPeriodo = "";
+                        let iSumColumn = 4; //
+
+                        for (l = 0; l < lstTitulo.length; l++) {
+                            thPeriodo += "<th class='chPeriodos'>" + lstTitulo[l].periodo + "</th>";
+                            tfPeriodo += "<td class='cfmontototal fp" + iSumColumn.toString() + "'>0</td>";
+                            iSumColumn = iSumColumn + 1;
+                        }
+                        thPeriodo += "</tr>";
+                        tfPeriodo += "</tr>";
+
+                        tituloTabla += thPeriodo;
+                        footerTabla += tfPeriodo;
+
+
+                        let tr = "", m = 0, trPer = "", lstConceptos = [], listaTmp = [], lstOrdenMontos = [], lstTotalGrupos = [], lstDistinctCptos = [],
+                            lstGrupo = [], lstValidUlt = [], lstSeccion = [], lstDistinctSeccion = [], lstValidUltSeccion = [], lstTotalSeccion = [],
+                            lstTotal = [], lstDistinctTotal = [], lstValidTotal = [];
+
+                        var w = 0;
+                        for (w = 0; w < data.lista.length; w++) {
+                            let existeItem = lstDistinctTotal.some(x => x.idTipoAct == data.lista[w].efIdTipoAct && x.codEFx == data.lista[w].efCodEFx && x.idRSx == data.lista[w].efIdRSx);
+                            if (!existeItem) {
+                                lstDistinctTotal.push({ idTipoAct: data.lista[w].efIdTipoAct, codEFx: data.lista[w].efCodEFx, idRSx: data.lista[w].efIdRSx, registrado: 0 });
+                            }
+                        }
+
+                        data.lista.forEach(function (obj) {
+
+                            if (lstSeccion.length == 0) {
+                                let lstSeccion = data.lista.filter(x => x.efIdTipoAct == obj.efIdTipoAct);
+
+                                for (var i = 0; i < lstSeccion.length; i++) {
+                                    let existeIdTipoAct = lstDistinctSeccion.some(x => x.idTipoAct == lstSeccion[i].efIdTipoAct && x.codEFx == lstSeccion[i].efCodEFx && x.idRSx == lstSeccion[i].efIdRSx);
+                                    if (!existeIdTipoAct) {
+                                        lstDistinctSeccion.push({ idTipoAct: lstSeccion[i].efIdTipoAct, codEFx: lstSeccion[i].efCodEFx, idRSx: lstSeccion[i].efIdRSx, registrado: 0 });
+                                    }
+                                }
+                            }
+
+                            let existeConcepto = lstConceptos.some(el => el.IdTipoAct == obj.efIdTipoAct && el.CodEFx == obj.efCodEFx && el.IdRSx == obj.efIdRSx);
+
+                            if (!existeConcepto) {
+
+                                if (lstGrupo.length == 0) {
+                                    let lstGrupo = data.lista.filter(x => x.efCodEFx == obj.efCodEFx);
+
+                                    for (var i = 0; i < lstGrupo.length; i++) {
+                                        let existeIdRSx = lstDistinctCptos.some(x => x.idRSx == lstGrupo[i].efIdRSx && x.codEFx == lstGrupo[i].efCodEFx);
+                                        if (!existeIdRSx) {
+                                            lstDistinctCptos.push({ idRSx: lstGrupo[i].efIdRSx, codEFx: lstGrupo[i].efCodEFx, registrado: 0 });
+                                        }
+                                    }
+
+                                    lstDistinctCptos = lstDistinctCptos.sort((a, b) => (a.idRSx < b.idRSx) ? -1 : 1);
+                                }
+
+
+                                tr += "<tr>"
+                                    + " <td> " + IsNull(obj.efActividad) + "</td>"
+                                    + " <td> " + IsNull(obj.efCodEFx) + "</td>"
+                                    + " <td> " + IsNull(obj.efDescCodEf) + "</td>"
+                                    + " <td> " + IsNull(obj.efConcepto) + "</td>";
+
+                                listaTmp = [];
+                                lstOrdenMontos = [];
+                                listaTmp = data.lista.filter(x => x.efIdTipoAct == obj.efIdTipoAct && x.efCodEFx == obj.efCodEFx && x.efIdRSx == obj.efIdRSx);
+
+                                trPer = "";
+                                for (var n = 0; n < listaTmp.length; n++) {
+
+                                    let existePeriodo = lstConceptos.some(el => el.IdTipoAct == listaTmp[n].efIdTipoAct && el.CodEFx == listaTmp[n].efCodEFx && el.IdRSx == listaTmp[n].efIdRSx && el.perorden == listaTmp[n].efperorden);
+
+                                    if (!existePeriodo) {
+
+                                        for (m = 0; m < lstTitulo.length; m++) {
+
+                                            if (lstTitulo[m].orden == listaTmp[n].efperorden) {
+
+                                                let objeto = data.lista.find(v => v.efIdTipoAct == listaTmp[n].efIdTipoAct && v.efCodEFx == listaTmp[n].efCodEFx && v.efIdRSx == listaTmp[n].efIdRSx && v.efperorden == listaTmp[n].efperorden);
+
+                                                if (typeof (objeto) != "undefined" && objeto != null) {
+                                                    lstOrdenMontos.push({ orden: lstTitulo[m].orden, monto: objeto.mdolar });
+                                                }
+                                            }
+                                            else {
+                                                let existePerConcepto = listaTmp.some(el => el.efperorden == lstTitulo[m].orden);
+
+                                                if (!existePerConcepto) {
+
+                                                    let existeOrdMonto = lstOrdenMontos.some(x => x.orden == lstTitulo[m].orden);
+
+                                                    if (!existeOrdMonto) {
+                                                        lstOrdenMontos.push({ orden: lstTitulo[m].orden, monto: 0 });
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        lstConceptos.push({ IdTipoAct: obj.efIdTipoAct, CodEFx: obj.efCodEFx, IdRSx: obj.efIdRSx, perorden: obj.efperorden });
+                                    }
+                                }
+
+                                let p = 0;
+                                for (p = 0; p < lstTitulo.length; p++) {
+
+                                    let existeMonto = lstOrdenMontos.some(x => x.orden == lstTitulo[p].orden);
+                                    if (existeMonto) {
+                                        let objeto = lstOrdenMontos.find(x => x.orden == lstTitulo[p].orden);
+                                        trPer += "<td class='class-monto'>" + formatoNumero(objeto.monto) + "</td>";
+
+                                        let existeOrden = lstTotalGrupos.some(x => x.orden == lstTitulo[p].orden);
+
+                                        if (existeOrden) {
+                                            for (var i = 0; i < lstTotalGrupos.length; i++) {
+                                                if (lstTotalGrupos[i].orden == lstTitulo[p].orden) {
+                                                    lstTotalGrupos[i].monto = lstTotalGrupos[i].monto + objeto.monto;
+                                                }
+                                            }
+                                        }
+                                        else {
+                                            lstTotalGrupos.push({ orden: lstTitulo[p].orden, monto: objeto.monto });
+                                        }
+                                    }
+                                }
+
+
+                                tr += trPer;
+
+                                tr += "</tr>";
+
+                                for (var s = 0; s < lstDistinctCptos.length; s++) {
+                                    if (lstDistinctCptos[s].idRSx == obj.efIdRSx) {
+                                        lstDistinctCptos[s].registrado = 1;
+                                    }
+                                }
+
+                                lstValidUlt = lstDistinctCptos.filter(x => x.registrado == 0);
+
+                                if (lstValidUlt.length == 0) {
+
+                                    tr += "<tr class='table-info'>"
+                                        + " <td>" + IsNull(obj.efActividad) + "</td>"
+                                        + " <td>" + IsNull(obj.efCodEFx) + "</td>"
+                                        + " <td>" + IsNull(obj.efDescCodEf) + "</td>"
+                                        + " <td> SubTotal </td>";
+
+                                    let r = 0, trSumaT = "";
+                                    for (r = 0; r < lstTitulo.length; r++) {
+                                        let existeMontoT = lstTotalGrupos.some(x => x.orden == lstTitulo[r].orden);
+                                        if (existeMontoT) {
+                                            let objeto = lstTotalGrupos.find(x => x.orden == lstTitulo[r].orden);
+                                            trSumaT += "<td class='class-monto'>" + formatoNumero(objeto.monto) + "</td>";
+                                        }
+                                    }
+                                    tr += trSumaT;
+                                    tr += "</tr>";
+
+                                    var t = 0;
+                                    for (t = 0; t < lstTitulo.length; t++) {
+                                        let existeMontoT = lstTotalGrupos.some(x => x.orden == lstTitulo[t].orden);
+                                        if (existeMontoT) {
+
+                                            let existeOrden = lstTotalSeccion.some(x => x.orden == lstTitulo[t].orden);
+                                            let objeto = lstTotalGrupos.find(x => x.orden == lstTitulo[t].orden);
+
+                                            if (existeOrden) {
+                                                for (var i = 0; i < lstTotalSeccion.length; i++) {
+                                                    if (lstTotalSeccion[i].orden == lstTitulo[t].orden) {
+                                                        lstTotalSeccion[i].monto = lstTotalSeccion[i].monto + objeto.monto;
+                                                    }
+                                                }
+                                            }
+                                            else {
+                                                lstTotalSeccion.push({ orden: lstTitulo[t].orden, monto: objeto.monto });
+                                            }
+                                        }
+                                    }
+                                    lstTotalGrupos = [];
+                                }
+
+
+                                for (var s = 0; s < lstDistinctSeccion.length; s++) {
+                                    if (lstDistinctSeccion[s].idRSx == obj.efIdRSx) {
+                                        lstDistinctSeccion[s].registrado = 1;
+                                    }
+                                }
+
+                                lstValidUltSeccion = lstDistinctSeccion.filter(x => x.registrado == 0);
+
+                                if (lstValidUltSeccion.length == 0) {
+
+                                    tr += "<tr class='bg-info'>"
+                                        + " <td>" + IsNull(obj.efActividad) + "</td>"
+                                        + " <td></td>"
+                                        + " <td></td>"
+                                        + " <td> Total </td>";
+
+                                    let r = 0, trSumaT = "";
+                                    for (r = 0; r < lstTitulo.length; r++) {
+                                        let existeMontoT = lstTotalSeccion.some(x => x.orden == lstTitulo[r].orden);
+                                        if (existeMontoT) {
+                                            let objeto = lstTotalSeccion.find(x => x.orden == lstTitulo[r].orden);
+                                            trSumaT += "<td class='class-monto'>" + formatoNumero(objeto.monto) + "</td>";
+                                        }
+                                    }
+                                    tr += trSumaT;
+
+                                    tr += "</tr>";
+
+
+                                    var u = 0;
+                                    for (u = 0; u < lstTitulo.length; u++) {
+                                        let existeMontoT = lstTotalSeccion.some(x => x.orden == lstTitulo[u].orden);
+                                        if (existeMontoT) {
+
+                                            let existeOrden = lstTotal.some(x => x.orden == lstTitulo[u].orden);
+                                            let objeto = lstTotalSeccion.find(x => x.orden == lstTitulo[u].orden);
+
+                                            if (existeOrden) {
+                                                for (var i = 0; i < lstTotal.length; i++) {
+                                                    if (lstTotal[i].orden == lstTitulo[u].orden) {
+                                                        lstTotal[i].monto = lstTotal[i].monto + objeto.monto;
+                                                    }
+                                                }
+                                            }
+                                            else {
+                                                lstTotal.push({ orden: lstTitulo[u].orden, monto: objeto.monto });
+                                            }
+                                        }
+                                    }
+                                    lstTotalSeccion = [];
+                                }
+
+
+                                for (var v = 0; v < lstDistinctTotal.length; v++) {
+                                    if (lstDistinctTotal[v].idRSx == obj.efIdRSx) {
+                                        lstDistinctTotal[v].registrado = 1;
+                                    }
+                                }
+
+                                lstValidTotal = lstDistinctTotal.filter(x => x.registrado == 0);
+
+                                if (lstValidTotal.length == 0) {
+
+
+                                    tr += "<tr style='background-color: #273746; color: #FDFEFE; '>"
+                                        + " <td>" + "Total General" + "</td>"
+                                        + " <td>" + "" + "</td>"
+                                        + " <td></td>"
+                                        + " <td></td>";
+
+                                    let r = 0, trSumaT = "";
+                                    for (r = 0; r < lstTitulo.length; r++) {
+                                        let existeMontoT = lstTotal.some(x => x.orden == lstTitulo[r].orden);
+                                        if (existeMontoT) {
+                                            let objeto = lstTotal.find(x => x.orden == lstTitulo[r].orden);
+                                            trSumaT += "<td class='class-monto'>" + formatoNumero(objeto.monto) + "</td>";
+                                        }
+                                    }
+                                    tr += trSumaT;
+
+                                    tr += "</tr>";
+
+                                    lstTotal = [];
+                                }
+                            }
+
+                        });
+
+                        console.log(lstTotal);
+
+
+                        $(".tabla-contenido3").empty();
+                        $(".tabla-contenido3").html("<table class='table table-sm table-bordered display nowrap' id='tablaPrincipal3'>"
+                            + "<thead class='thead-light' id='tituloTabla3'></thead>"
+                            + "<tbody id='contenidoTabla3'></tbody>"
+                            + "</table>");
+
+
+                        $("#tituloTabla3").html(tituloTabla);
+                        $("#footerTabla3").html(footerTabla);
+
+                        var table = $('#tablaPrincipal3').DataTable();
+                        table.destroy();
+
+                        $("#contenidoTabla3").html(tr);
+
+                        $("#tablaPrincipal3").DataTable(
+                            {
+                                "language": { 'url': '/libs/datatables/spanish.json' },
+                                "initComplete": function (settings, json) {
+
+                                },
+                                "footerCallback": function (row, data, start, end, display) {
+                                    //var api = this.api(), data;
+                                    //sumaMontos(this);
+                                    return;
+                                },
+                                "scrollX": true,
+                                "bSort": false,
+                                //dom: 'Bfrtip',
+                                //buttons: [
+                                //    'excel','pdf', 'print'
+                                //],
+                                scrollY: '50vh',
+                                scrollCollapse: true,
+                                paging: false
+                            });
+
+
+                        Swal.fire({
+                            icon: 'success',
+                            title: "Mostrando Datos",
+                            //text: "Textile Sourcing Company",
+                            allowEscapeKey: false,
+                            showConfirmButton: false,
+                            timer: 1200,
+                        });
+                    }
+                });
+            }
+
+            $("#btnBuscar3").click(function () {
+
+                tipoPeriodo3 = $("#IdCbxTipoPeriodo3").children("option:selected").val();
+                periodoInicio3 = $("#IdCbxPeriodoIni3").children("option:selected").val();
+                periodoFin3 = $("#IdCbxPeriodoFin3").children("option:selected").val();
+
+                if (tipoPeriodo3 != 0 && typeof (tipoPeriodo3) != "undefined" && tipoPeriodo3 != null &&
+                    periodoInicio3 != 0 && typeof (periodoInicio3) != "undefined" && periodoInicio3 != null &&
+                    periodoFin3 != 0 && typeof (periodoFin3) != "undefined" && periodoFin3 != null) {
+
+                    let parametros = { TipoPeriodo: tipoPeriodo3, IdPeriodoIni: periodoInicio3, IdPeriodoFin: periodoFin3 };
+                    getLista3(parametros);
+                }
+            });
+
+            $("#btnGrafico3").click(function () {
+                $("#modalGraf3").modal("show");
+            });
+
+
+            // Funciones
+            function formatoNumero(x) {
+                x = x.toFixed(2);
+                return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            }
+
+
+            function IsNull(valor) {
+                if (valor == null) {
+                    return "";
+                } else {
+                    return valor;
+                }
+            }
+
+
+        });
+
+
+
+    </script>
+
+}
+

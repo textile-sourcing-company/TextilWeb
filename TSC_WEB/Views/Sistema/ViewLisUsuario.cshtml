@@ -1,0 +1,73 @@
+﻿@{
+
+    ViewBag.Title = "Usuario ERP";
+    ViewBag.Modulo = "Seguridad";
+    Layout = "~/Views/Plantillas/_Layout.cshtml";
+}
+
+
+
+<div class="card">
+    <div class="card-header">
+
+        <h3 class="card-title">Filtros</h3>
+        <div class="card-tools">
+            <button type="button" class="btn btn-tool" data-widget="collapse"><i class="fas fa-minus"></i></button>
+        </div>
+
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-xl-2 col-lg-3 col-md-4 col-sm-4">
+                <div class="form-group">
+                    <h6>DNI</h6>
+                    <input type="text" class="form-control numeros8" id="txtdni" value="" />
+                </div>
+            </div>
+            <div class="col-xl-2 col-lg-3 col-md-4 col-sm-4">
+                <div class="form-group">
+                    <h6>FOTOCHECK</h6>
+                    <input type="text" class="form-control numeros8" id="txtfotocheck" value="" />
+                </div>
+            </div>
+            <div class="col-xl-2 col-lg-3 col-md-4 col-sm-4">
+                <div class="form-group">
+                    <h6>USUARIO</h6>
+                    <input type="text" class="form-control" id="txtusuario" style='text-transform:uppercase' />
+                </div>
+            </div>
+            <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 form-group">
+                <h6>&nbsp;</h6>
+                <button class="btn btn-block btnbuscar" type="submit" id="btnsearch">
+                    <span class="btn-label">
+                        <i class="fas fa-search mr-2"></i>
+                    </span>
+                    Buscar
+                </button>
+            </div>
+        </div>
+        <div class="form-group">
+            <table class="table table-sm table-bordered dt-responsive nowrap" style="width:100%" id="TablaUsuarios">        
+                <thead>
+                    <tr>
+                        <th>DNI</th>
+                        <th>NOMBRE</th>
+                        <th>CARGO</th>
+                        <th>CENTRO DE COSTO</th>
+                        <th>FOTOCHECK</th>
+                        <th>USUARIO</th>
+                        <th>PASSWORD</th>                        
+                        <th>ACCESOS</th>
+
+                    </tr>
+                </thead>
+                <tbody id="TablacurpoUsuarios"></tbody>
+            </table>
+        </div>
+   </div>
+
+</div>
+
+@section scripts{       
+<script src="~/Admin/js/Sistema/JSViewLisUsuario.js"></script>
+    }

@@ -1,0 +1,403 @@
+﻿
+@{
+    ViewBag.Title = "Reporte de Liquidación de Tela";
+    ViewBag.Modulo = "Corte";
+    Layout = "~/Views/Plantillas/_Layout.cshtml";
+}
+
+
+<div class="card">
+
+    <div class="card-body">
+
+        <form class="row" id="frmReporte">
+            <!-- FECHA -->
+            <div class="col-md-3 form-group">
+                <label>Fecha Inicio</label>
+                <input type="date" class="form-control form-control-sm" id="txtFechaI" />
+            </div>
+            <div class="col-md-3 form-group">
+                <label>Fecha Fin</label>
+                <input type="date" class="form-control form-control-sm" id="txtFechaF" />
+            </div>
+            <!-- FECHA -->
+            <div class="col-md-3 form-group">
+                <label>Ficha</label>
+                <input type="text" class="form-control form-control-sm" id="txtFicha" />
+            </div>
+            <!-- FECHA -->
+            <div class="col-md-3 form-group">
+                <label>Turno</label>
+                <select class="custom-select custom-select-sm" id="cboTurno">
+                    <option value="0">[SELECCIONE]</option>
+                    <option value="1">Turno 1</option>
+                    <option value="2">Turno 2</option>
+                    <option value="3">Turno 3</option>
+
+                </select>
+            </div>
+            <!-- FECHA -->
+            <div class="col-md-2 form-group">
+                <label>Partida</label>
+                <input type="text" class="form-control form-control-sm" id="txtPartida" />
+            </div>
+            <!-- FECHA -->
+            <div class="col-md-3 form-group">
+                <label>Programa</label>
+                <input type="text" class="form-control form-control-sm" id="txtPrograma" />
+            </div>
+            <!-- FECHA -->
+            <div class="col-md-3 form-group">
+                <label>Cliente</label>
+                <!--<input type="text" class="form-control" id="txtCliente" />-->
+                <select class="custom-select custom-select-sm select2" id="cboCliente" style="width:100%"></select>
+            </div>
+            <!-- TIPO -->
+            <div class="col-md-2 form-group">
+                <label>Tipo Reporte</label>
+                <select class="custom-select custom-select-sm" id="cboTipo">
+                    <option value="1">[DETALLADO]</option>
+                    <option value="0">[RESUMIDO]</option>
+                </select>
+            </div>
+
+            <!-- BUSQUEDA -->
+            <div class="col-md-2 form-group">
+                <label>&nbsp;</label>
+                <button class="btn btn-primary btn-block btn-sm" type="submit">Buscar</button>
+            </div>
+        </form>
+
+
+    </div>
+</div>
+
+
+<div class="card">
+    <div class="card-body">
+
+        <table id="tablaRegistros" class="table table-bordered dt-responsive nowrap" style="width:100%">
+            <thead class="thead-light">
+                <tr>
+                    @*<th class="detallado">FECHA DE LIQUIDACION  </th>
+                        <th class="detallado">FICHAS  </th>
+                        <th class="detallado">PEDIDO  </th>
+                        <th class="detallado">PARTIDA </th>
+                        <th class="detallado">PROGRAMA  </th>
+                        <th class="detallado">ESTILO  </th>
+                        <th class="detallado">COLOR </th>
+                        <th class="detallado">CODIGO TELA</th>
+                        <th class="detallado">DESCRIPCION DE TELA </th>
+                        <th class='d-none'>PRENDAS PROG. </th>
+                        <th class='d-none'>PRENDAS REALES  </th>
+                        <th class='d-none'>DIFERENCIAS </th>
+                        <th class='d-none'>KG.PROGRAMADOS</th>
+                        <th class='d-none'> KG. TIZADOS</th>
+                        <th class='d-none'> KG. REALES  </th>
+                        <th class='d-none'>LARGO TIZADO  </th>
+                        <th class='d-none'>LARGO PAÑO REAL </th>
+                        <th class='d-none'>TALLAS  </th>
+                        <th class='d-none'>PAÑOS </th>
+                        <th class='d-none'>PESO PAÑOS PROG.  </th>
+                        <th class='d-none'>PESO PAÑO REAL  </th>
+                        <th class='d-none'>CONSUMO NETO PROG.  </th>
+                        <th class='d-none'>CONSUMO NETO REAL </th>
+                        <th class='d-none'>MERMA TENDIDO PROG. </th>
+                        <th class='d-none'>MERMA TENDIDO REAL.  </th>
+                        <th class='d-none'>CONSUMO BRUTO PROG. </th>
+                        <th class='d-none'>CONSUMO BRUTO REAL  </th>
+                        <th class='d-none'>DIFERENCIA  </th>
+                        <th class='d-none'>EFICIENCIA PROGRAMADA </th>
+                        <th class='d-none'>EFICIENCIA REAL </th>
+                        <th class='d-none'>DIFERENCIA  </th>
+                        <th class='d-none'>PUNTAS  </th>
+                        <th class='d-none'>RETAZOS </th>
+                        <th class='d-none'>EMPALMES  </th>
+                        <th class='d-none'>MERMA PROGRAMA  </th>
+                        <th class='d-none'>MERMA REAL  </th>
+                        <th class='d-none'>ENTRECORTE  </th>
+                        <th class='d-none'>CONOS </th>
+                        <th class='d-none'>BOLSAS  </th>
+                        <th class='d-none'>DEVOLUCION PRIMERAS </th>
+                        <th class='d-none'>DEVOLUCION SEGUNDAS </th>
+                        <th class='d-none'>DEVOLUCION ERP  </th>
+                        <th class='d-none'>CODIGO ERP  </th>
+                        <th class='d-none'>ANCHO PROGRAMADO  </th>
+                        <th class='d-none'>ANCHO REAL  </th>
+                        <th class='d-none'>DIFERENCIA  </th>
+                        <th class='d-none'>ANCHO TIZADO UTIL </th>
+                        <th class='d-none'>DIFERENCIA METROS </th>
+                        <th class='d-none'>% DIFERENCIA METROS </th>
+                        <th class='d-none'>DENSIDAD PROGRAMADA </th>
+                        <th class='d-none'>DIFERENCIA DENSIDAD </th>
+                        <th class='d-none'>CUADRE TELA </th>
+                        <th class='d-none'>DIFERENCIAS</th>*@
+                    <th class="resumido">FECHA DE LIQUIDACION  </th>
+                    <th class="resumido">FICHAS  </th>
+                    <th class="resumido">PEDIDO  </th>
+                    <th class="resumido">PARTIDA </th>
+                    <th class="resumido">PROGRAMA  </th>
+                    <th class="resumido">ESTILO  </th>
+                    <th class="resumido">COLOR </th>
+                    <th class="resumido">CODIGO TELA</th>
+                    <th class="resumido">DESCRIPCION DE TELA </th>
+                    <th class='d-none resumido'>PRENDAS PROG. </th>
+                    <th class='d-none resumido'>PRENDAS REALES  </th>
+                    <th class='d-none resumido'>DIFERENCIAS </th>
+                    <th class='d-none resumido'>KG.PROGRAMADOS</th>
+                    <th class='d-none resumido'> KG. TIZADOS</th>
+                    <th class='d-none resumido'> KG. REALES  </th>
+                    <th class='d-none resumido'> ADICIONAL  </th>
+                    <th class='d-none detallado'>LARGO TIZADO  </th>
+                    <th class='d-none detallado'>LARGO PAÑO REAL </th>
+                    <th class='d-none detallado'>TALLAS  </th>
+                    <th class='d-none detallado'>PAÑOS </th>
+                    <th class='d-none detallado'>PESO PAÑOS PROG.  </th>
+                    <th class='d-none detallado'>PESO PAÑO REAL  </th>
+                    <th class='d-none detallado'>CONSUMO NETO PROG.  </th>
+                    <th class='d-none detallado'>CONSUMO NETO REAL </th>
+                    <th class='d-none detallado'>MERMA TENDIDO PROG. </th>
+                    <th class='d-none detallado'>MERMA TENDIDO REAL.  </th>
+                    <th class='d-none detallado'>CONSUMO BRUTO PROG. </th>
+                    <th class='d-none detallado'>CONSUMO BRUTO REAL  </th>
+                    <th class='d-none detallado'>DIFERENCIA  </th>
+                    <th class='d-none resumido'>EFICIENCIA PROGRAMADA </th>
+                    <th class='d-none resumido'>EFICIENCIA REAL </th>
+                    <th class='d-none resumido'>DIFERENCIA  </th>
+                    <th class='d-none resumido'>COLLARETA</th>
+                    <th class='d-none resumido'>PUNTAS  </th>
+                    <th class='d-none resumido'>RETAZOS </th>
+                    <th class='d-none resumido'>EMPALMES  </th>
+                    <th class='d-none detallado'>MERMA PROGRAMA  </th>
+                    <th class='d-none detallado'>MERMA REAL  </th>
+                    <th class='d-none resumido'>ENTRECORTE  </th>
+                    <th class='d-none resumido'>CONOS </th>
+                    <th class='d-none detallado'>BOLSAS  </th>
+                    <th class='d-none detallado'>DEVOLUCION PRIMERAS </th>
+                    <th class='d-none detallado'>DEVOLUCION SEGUNDAS </th>
+                    <th class='d-none detallado'>DEVOLUCION ERP  </th>
+                    <th class='d-none detallado'>CODIGO ERP  </th>
+                    <th class='d-none detallado'>ANCHO PROGRAMADO  </th>
+                    <th class='d-none detallado'>ANCHO REAL  </th>
+                    <th class='d-none detallado'>DIFERENCIA  </th>
+                    <th class='d-none detallado'>ANCHO TIZADO UTIL </th>
+                    <th class='d-none detallado'>DIFERENCIA METROS </th>
+                    <th class='d-none detallado'>% DIFERENCIA METROS </th>
+                    <th class='d-none detallado'>DENSIDAD PROGRAMADA </th>
+                    <th class='d-none detallado'>DIFERENCIA DENSIDAD </th>
+                    <th class='d-none resumido'>CUADRE TELA </th>
+                    <th class='d-none resumido'>DIFERENCIAS</th>
+                </tr>
+            </thead>
+            <tbody id="tbodyRegistros">
+            </tbody>
+        </table>
+
+    </div>
+
+</div>
+
+
+@section scripts{
+
+    <script>
+
+        const frmReporte = document.getElementById("frmReporte");
+        let idcliente = null;
+        var DETALLADO = true;
+        ListarClientes();
+
+
+        // TIPO DE REPORTE
+        $("#cboTipo").change(function () {
+            let valor = $(this).val();
+
+            DETALLADO = valor == "1" ? true : false;
+        });
+
+
+        frmReporte.addEventListener('submit', (e) => {
+
+            e.preventDefault();
+            BuscarReporte();
+        })
+
+        //LISTAMOS CLIENTES
+        function ListarClientes() {
+            $.ajax({
+                url: '/operaciones/ListarClientesFtec/',
+                type: 'GET',
+                datatype: 'json',
+                success: function (e) {
+                    //console.log(e);
+                    let option = "<option value='0'>SELECCIONE</option>";
+                    e.forEach(function (obj) {
+                        option += `<option value='${obj.cliente9}.${obj.cliente4}.${obj.cliente2}' >${obj.nombre_cliente}</option>`;
+                    });
+
+                    $("#cboCliente").html(option);
+                }
+            });
+        }
+
+
+        // BUSCAMOS REPORTE
+        function BuscarReporte() {
+
+
+            MostrarCarga("Buscando...");
+
+            let datos = {
+                i_fechai: $('#txtFechaI').val(),
+                i_fechaf: $('#txtFechaF').val(),
+                i_partida: $('#txtPartida').val().trim(),
+                i_turno: $('#cboTurno').val(),
+                i_programa: $('#txtPrograma').val().trim(),
+                i_cliente: $("#cboCliente").val(),
+                i_ficha: $('#txtFicha').val().trim(),
+            }
+            console.log(datos);
+
+            $.ajax({
+                url: '/corte/getReporteLiquidacion/',
+                type: 'get',
+                data: datos,
+                success: function (e) {
+
+
+                    ArmarTabla(e);
+                }
+            })
+
+
+        }
+
+        function ArmarTabla(dato) {
+
+            var tr = "";
+
+
+            if (dato.length > 0) {
+
+
+                dato.forEach((obj) => {
+
+                    tr += `
+                                <tr> <td>${obj.fechaliquidacion}</td>
+                                    <td>${obj.fichas}</td>
+                                    <td>${obj.pedido}</td>
+                                    <td>${obj.partida}</td>
+                                    <td>${obj.programa}</td>
+                                    <td>${obj.estilo}</td>
+                                    <td>${obj.color}</td>
+                                    <td>${obj.codigotela}</td>
+                                    <td>${obj.descripciontela}</td>
+                                    <td class='d-none'>${obj.prendasprogramadas}</td>
+                                    <td class='d-none'>${obj.prendasreales}</td>
+                                    <td class='d-none'>${obj.diferencia1}</td>
+                                    <td class='d-none'>${obj.kilosprogramados}</td>
+                                    <td class='d-none'>${obj.kilostizados}</td>
+                                    <td class='d-none'>${obj.kilosreales}</td>
+                                    <td class='d-none'>${obj.adicional}</td>
+                                    <td class='d-none'>${obj.largotizado}</td>
+                                    <td class='d-none'>${obj.largopanoreal}</td>
+                                    <td class='d-none'>${obj.tallas}</td>
+                                    <td class='d-none'>${obj.panos}</td>
+                                    <td class='d-none'>${obj.pesopanoprogramado}</td>
+                                    <td class='d-none'>${obj.pesopanoreal}</td>
+                                    <td class='d-none'>${obj.consnetoprogramado}</td>
+                                    <td class='d-none'>${obj.consnetoreal}</td>
+                                    <td class='d-none'>${obj.mermatendprog} %</td>
+                                    <td class='d-none'>${obj.mermatendreal} %</td>
+                                    <td class='d-none'>${obj.consbrutprog}</td>
+                                    <td class='d-none'>${obj.consbrutoreal}</td>
+                                    <td class='d-none'>${obj.diferencia2}</td>
+                                    <td class='d-none'>${obj.eficprog} %</td>
+                                    <td class='d-none'>${obj.eficreal} %</td>
+                                    <td class='d-none'>${obj.diferencia3} %</td>
+                                    <td class='d-none'>${obj.collareta}</td>
+                                    <td class='d-none'>${obj.puntas}</td>
+                                    <td class='d-none'>${obj.retazos}</td>
+                                    <td class='d-none'>${obj.empalmes}</td>
+                                    <td class='d-none'>${obj.mermaprog} %</td>
+                                    <td class='d-none'>${obj.mermareal} %</td>
+                                    <td class='d-none'>${obj.entrecorte}</td>
+                                    <td class='d-none'>${obj.conos}</td>
+                                    <td class='d-none'>${obj.bolsas}</td>
+                                    <td class='d-none'>${obj.dev1ra}</td>
+                                    <td class='d-none'>${obj.dev2da}</td>
+                                    <td class='d-none'>${obj.deverp}</td>
+                                    <td class='d-none'>${obj.coderp}</td>
+                                    <td class='d-none'>${obj.anchprog}</td>
+                                    <td class='d-none'>${obj.anchreal}</td>
+                                    <td class='d-none'>${obj.direfencia4} %</td>
+                                    <td class='d-none'>${obj.anchotizadoutil}</td>
+                                    <td class='d-none'>${obj.diferenciametros}</td>
+                                    <td class='d-none'>${obj.diferenciametrosp}</td>
+                                    <td class='d-none'>${obj.densprog}</td>
+                                    <td class='d-none'>${obj.diferencia5} %</td>
+                                    <td class='d-none'>${obj.cuadretela}</td>
+                                    <td class='d-none'>${obj.diferencia6} %</td>
+                                </tr>
+                            `;
+
+
+                });
+
+
+            } else {
+                Advertir("Datos no encontrados");
+            }
+
+            let tabla = $("#tablaRegistros").DataTable();
+            tabla.destroy();
+
+            $("#tbodyRegistros").html(tr);
+
+
+            //ArmarDataTable("tablaRegistros", true);
+            var objeto = {};
+            objeto.language = { 'url': "/Libs/datatables/Spanish.json" };
+            objeto.ordering = false;
+            objeto.scrollX = true;
+
+            if (true) {
+                objeto.lengthMenu = [[5, 10, 20, -1], [5, 10, 20, 'Todos']];
+            }
+
+
+            objeto.dom = 'Bfrtip';
+
+            let buttons = {
+                extend: 'excel',
+                className: 'btn btn-success',
+            };
+
+
+            // VERIFICAMOS SI ES DETALLADO
+            if (!DETALLADO) {
+                buttons.exportOptions = {
+                    columns: "thead th:not(.detallado)"
+                }
+            }
+
+            objeto.buttons = [
+                buttons
+            ]
+
+            $("#tablaRegistros").DataTable(objeto);
+
+
+            Informar("Reporte generado");
+
+
+
+        }
+
+
+    </script>
+
+}
+
+
+

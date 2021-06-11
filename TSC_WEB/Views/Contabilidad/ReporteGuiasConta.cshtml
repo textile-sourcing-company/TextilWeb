@@ -1,0 +1,318 @@
+﻿
+@{
+    ViewBag.Title = "Reporte Guías - Facturas";
+    ViewBag.Modulo = "Contabilidad";
+    Layout = "~/Views/Plantillas/_Layout.cshtml";
+}
+
+<div class="rep-guias">
+
+    <div class="card">
+
+        <div class="card-header">
+
+
+            <div class="form-row">
+
+                <div class="form-group col-md-2">
+                    <input required="" type="text" class="form-control form-control-sm" id="FechaIni" placeholder="Fecha Inicio" onfocus="(this.type='date')" />
+                </div>
+
+                <div class="form-group col-md-2">
+                    <input required="" type="text" class="form-control form-control-sm" id="FechaFin" placeholder="Fecha Fin" onfocus="(this.type='date')" />
+                </div>
+
+                <div class="form-group col-md-2">
+                    <input required="" type="text" class="form-control form-control-sm" id="NumeroGuia" placeholder="Número Guía" onfocus="" />
+                </div>
+
+                <div class="form-group col-md-2">
+                    <input required="" type="text" class="form-control form-control-sm" id="SerieGuia" placeholder="Serie Guía" onfocus="" />
+                </div>
+
+                <div class="form-group col-md-2">
+                    <button type="button" class="btn btn-primary form-control-sm btn-sm" id="btnBuscar">Buscar<i class="fas fa-search" style="margin-left: 7px;"></i></button>
+                </div>
+
+            </div>
+
+        </div>
+
+        
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-sm table-bordered nowrap" id="tablaPrincipal" style="width:100%;">
+                    <thead class="thead-light">
+                        <tr>
+                            <th nowrap>Empresa</th>
+                            <th nowrap>Nro. Guía</th>
+                            <th nowrap>Serie Guía</th>
+                            <th nowrap>Fch. Emisión Guía</th>
+                            <th nowrap>Cnt. Guía</th>
+                            <th nowrap>Nro. Factura</th>
+                            <th nowrap>Serie Factura</th>
+                            <th nowrap>Fch. Emisión Factura</th>
+                            <th nowrap>Cnt. Factura</th>
+                            <th nowrap>Valor Facturado</th> 
+                            <th nowrap>Valor Igv Factura</th>
+                            <th nowrap>Valor Total Factura</th>
+                            <th nowrap>Cliente</th>
+                            <th nowrap>Concepto</th>
+                            <th nowrap>Estado</th>
+                            <th nowrap>Diferencia</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tablaCabeceraContenido"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<style>
+
+    /* Estilos Especiales */
+
+    .rep-cambio #btnExportarExcel {
+        min-width: 150px;
+    }
+
+    .rep-cambio #tablaPrincipal .table td, .table th {
+        /*padding: 0.45rem !important; */
+    }
+
+    .rep-cambio #tablaPrincipal .table .tam_colum {
+        max-width: 170px;
+        overflow: hidden;
+    }
+
+
+    /* Custom, iPhone Retina */
+    @@media only screen and (min-width : 320px) {
+        .card-header .seccion-1 {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: row;
+            flex-wrap: wrap;
+            width: 100%;
+        }
+
+            .card-header .seccion-1 .cont-btn-buscar {
+                margin-top: 3px;
+            }
+
+        .card-header .seccion-2 {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: row;
+            flex-wrap: wrap;
+            width: 100%;
+            border-top: 1px solid #EBEDEF;
+            margin-top: 15px;
+            padding-top: 8px;
+        }
+    }
+
+    /* Extra Small Devices, Phones */
+    @@media only screen and (min-width : 480px) {
+    }
+
+    /* Small Devices, Tablets */
+    @@media only screen and (min-width : 768px) {
+        .card-header .seccion-1 {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            flex-direction: row;
+            flex-wrap: wrap;
+            width: 50%;
+        }
+
+
+        .card-header .seccion-2 {
+            display: flex;
+            justify-content: flex-end;
+            flex-direction: row;
+            flex-wrap: wrap;
+            width: 50%;
+            border-top: none;
+            margin-top: 0px;
+            padding-top: 0px;
+        }
+    }
+
+    /* Medium Devices, Desktops */
+    @@media only screen and (min-width : 992px) {
+    }
+
+    /* Large Devices, Wide Screens */
+    @@media only screen and (min-width : 1100px) {
+    }
+</style>
+
+@section scripts {
+
+    <script>
+
+        var PEDIDOS = [];
+        var cod_estado = [];
+
+        $(document).ready(function () {
+
+            $("#btnBuscar").click(function () {
+
+                let fechaIni = $('#FechaIni').val();
+                let fechaFin = $('#FechaFin').val();
+                let numeroGuia = $('#NumeroGuia').val();
+                let serieGuia = $('#SerieGuia').val(); 
+
+
+                if (fechaIni == null ||
+                    fechaFin == null ||
+                    typeof (fechaIni) == "undefined" ||
+                    typeof (fechaFin) == "undefined" ||
+                    fechaIni == "Fecha Inicio" ||
+                    fechaFin == "Fecha Fin" ||
+                    fechaIni.trim() == "" ||
+                    fechaFin.trim() == "") {
+
+                    Swal.fire('Seleccione la fecha, por favor')
+                }
+                else {
+
+                    var datos =
+                    {
+                        'numeroGuia': numeroGuia,
+                        'serieGuia': serieGuia,
+                        'fechaIni': fechaIni,
+                        'fechaFin': fechaFin
+                    }
+                    //debugger
+                    Listar(datos);
+
+                }
+            });
+
+            function Listar(datos) {
+
+                MostrarCarga("Cargando...");
+
+                $.ajax({
+                    type: "GET",
+                    url: '/contabilidad/ListarReporteGuiasConta',
+                    dataType: "json",
+                    data: datos,
+                    success: function (data) {
+
+                        console.log(data);
+
+                        let tabla = $("#tablaPrincipal").DataTable();
+                        tabla.destroy();
+                        var tr = "";
+
+                        data.lista.forEach((obj) => {
+
+                            tr += "<tr> "
+                                + " <td>" + String(obj.EMPRESA) + "</td>"
+                                + " <td >" + obj.NRO_GUIA + "</td>"
+                                + " <td >" + obj.SERIE_GUIA + "</td>"
+                                + " <td >" + obj.FECHA_EMISION_GUIA + "</td>"
+                                + " <td >" + obj.CANTIDAD_GUIA + "</td>"
+                                + " <td >" + obj.NRO_FACTURA + "</td>"
+                                + " <td >" + obj.SERIE_FACTURA + "</td>"
+                                + " <td >" + obj.FECHA_EMISION_FACTURA + "</td>"
+                                + " <td >" + obj.CANTIDAD_FACTURA + "</td>"
+                                + " <td >" + obj.VALOR_FACTURADO + "</td>" 
+                                + " <td >" + obj.VALOR_IGV_FAC + "</td>"
+                                + " <td >" + obj.VALOR_TOTAL_FAC + "</td>"
+                                + " <td >" + obj.CLIENTE + "</td>"
+                                + " <td >" + obj.CONCEPTO + "</td>"
+                                + " <td >" + obj.ESTADO + "</td>"
+                                + " <td >" + obj.DIFERENCIA + "</td>"
+                            +"</tr >"; 
+
+                        });
+
+                        console.log(tr);
+
+                        $("#tablaCabeceraContenido").html(tr);
+
+                        $("#tablaPrincipal").DataTable(
+                            {
+                                "language": { 'url': '/libs/datatables/spanish.json' },
+                                "initComplete": function (settings, json) {
+
+                                },
+                                "footerCallback": function (row, data, start, end, display) {
+
+                                    return;
+                                },
+                                "scrollX": true,
+                                "bSort": true,
+                                dom: 'Bfrtip',
+                                buttons: [
+                                    'excel', 'pdf', 'print'
+                                ],
+                                scrollY: '50vh',
+                                scrollCollapse: true,
+                                paging: true,
+                                lengthMenu: [[10, 15, 20, -1], [10, 15, 20, 'Todos']]
+                            });
+
+                        Informar("Datos correctos");
+
+                    },
+                    failure: function () {
+                        console.error('Error al cargar la información');
+                    }
+                });
+
+            }
+
+            $("#btnExportarExcel").click(function () {
+
+                let fechaIni = $('#FechaIni').val();
+                let fechaFin = $('#FechaFin').val();
+                let numeroGuia = $('#NumeroGuia').val();
+                let serieGuia = $('#SerieGuia').val(); 
+
+                if (fechaIni == null ||
+                    fechaFin == null ||
+                    typeof (fechaIni) == "undefined" ||
+                    typeof (fechaFin) == "undefined" ||
+                    fechaIni == "Fecha Inicio" ||
+                    fechaFin == "Fecha Fin" ||
+                    fechaIni.trim() == "" ||
+                    fechaFin.trim() == "") {
+
+                    Swal.fire('Seleccione la fecha, por favor')
+                }
+                else {
+                     
+                    var datos =
+                    {
+                        'numeroGuia': numeroGuia,
+                        'serieGuia': serieGuia,
+                        'fechaIni': fechaIni,
+                        'fechaFin': fechaFin
+                    }
+
+                    //exportarExcel(datos);
+
+                }
+            });
+
+            function formatoNumero(x) {
+                x = x.toFixed(2);
+                return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            }
+
+        });
+
+
+    </script>
+}

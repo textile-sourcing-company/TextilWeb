@@ -1,0 +1,300 @@
+﻿@{
+    ViewBag.Title = "Ordenes de Compra pendientes de Cierre";
+    ViewBag.Modulo = "Logística";
+    Layout = "~/Views/Plantillas/_Layout.cshtml";
+
+}
+
+<div class="oc-pend-fir">
+
+    <div class="card">
+
+        <div class="card-header">
+
+            <div class="form-row">
+
+                <div class="form-group col-md-2">
+                    <input required="" type="text" class="form-control form-control-sm" id="FechaIni" placeholder="Fecha Inicio" onfocus="(this.type='date')" />
+                </div>
+                <div class="form-group col-md-2">
+                    <input required="" type="text" class="form-control form-control-sm" id="FechaFin" placeholder="Fecha Fin" onfocus="(this.type='date')" />
+                </div>
+                <div class="form-group col-md-4">
+                    <select class="form-control selectNiveles form-control-sm" multiple="multiple" id="cboNiveles" placeholder="Nivel Item"></select>
+                </div>
+
+                <div class="form-group col-md-2">
+                    <button id="btnBuscar" class="btn btn-primary form-control-sm btn-sm">Buscar</button>
+                </div>
+
+                <div class="form-group col-md-2">
+                    <button id="btnExportarExcel" class="btn btn-success form-control-sm btn-sm">Exportar Excel <i class="fas fa-file-excel" style="margin-left: 7px;"></i></button>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="card-body">
+            <table class="table table-sm table-bordered table-hover dt-responsive nowrap" id="tablaPrincipal" style="width:100%;">
+                <thead>
+                    <tr>
+                        <th class="all">Pedido</th>
+                        <th>Fecha</th>
+                        <th>Días OC abierta</th>
+                        <th>Transaccion</th>
+                        <th>Descripcion Pago</th>
+                        @*<th>Proveedor</th>*@
+                        <th>Comprador</th>
+                        <th class="all">Valor OC</th>
+                        <th>Cant. OC</th>
+                        <th>Cant. Ingreso</th>
+                        <th class="all">Diferencia</th>
+                    </tr>
+                </thead>
+                <tbody id="tablaCabeceraContenido"></tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+
+<style>
+
+    /* Estilos Especiales */
+  /*  #tablaPrincipal .table td, .table th {
+        padding: 0.45rem !important;
+    }*/
+
+    .occierre-ok {
+        background-color: #ABEBC6;
+    }
+
+    .occierre-error {
+        background-color: #FADBD8;
+    }
+
+
+
+    /* Custom, iPhone Retina */
+    @@media only screen and (min-width : 320px) {
+    }
+
+    /* Extra Small Devices, Phones */
+    @@media only screen and (min-width : 480px) {
+    }
+
+    /* Small Devices, Tablets */
+    @@media only screen and (min-width : 768px) {
+    }
+
+    /* Medium Devices, Desktops */
+    @@media only screen and (min-width : 992px) {
+    }
+
+    /* Large Devices, Wide Screens */
+    @@media only screen and (min-width : 1100px) {
+    }
+</style>
+
+@section scripts {
+
+    <script>
+        var cod_niveles = [];
+
+        $(document).ready(function () {
+
+            ListarNivelItems();
+            //Listar();
+
+            $("#btnBuscar").click(function () {
+                let fechaIni = $('#FechaIni').val();
+                let fechaFin = $('#FechaFin').val();
+                let niveles = "";
+
+                if (cod_niveles.length == 0) {
+                    Swal.fire('Seleccione al menos un nivel de item para la busqueda.')
+                }
+                else if (fechaIni == null ||
+                    fechaFin == null ||
+                    typeof (fechaIni) == "undefined" ||
+                    typeof (fechaFin) == "undefined" ||
+                    fechaIni.trim() == "" ||
+                    fechaFin.trim() == "") {
+
+                    Swal.fire('Seleccione la fecha, por favor')
+                }
+                else {
+
+                    for (var i = 0; i < cod_niveles.length; i++) {
+                        niveles = niveles + cod_niveles[i] + ","
+                    }
+                    niveles = niveles.slice(0, niveles.length - 1);
+
+                    var datos =
+                    {
+                        'niveles': niveles,
+                        'fechaIni': fechaIni,
+                        'fechaFin': fechaFin
+                    }
+
+                    Listar(datos);
+                }
+            });
+
+
+            function ListarNivelItems() {
+                $.ajax({
+                    type: "GET",
+                    url: '/logistica/ListarNivelItems',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (data) {
+                        $.each(data, function () {
+                            $("#cboNiveles").append($("<option/>").val(this.COD_NIVEL).text(this.NIVEL));
+                        });
+                        $('#cboNiveles').multipleSelect("refresh");
+                    },
+                    failure: function () {
+                        console.error('error al cargar los periodos');
+                    }
+                });
+            }
+
+
+            function Listar(datos) {
+
+                $.ajax({
+                    type: "GET",
+                    url: '/logistica/ListarPendienteCierre',
+                    dataType: "json",
+                    data: datos,
+                    success: function (data) {
+                        let tabla = $("#tablaPrincipal").DataTable();
+                        tabla.destroy();
+                        var tr = "";
+                        var colores = "";
+
+                        data.forEach((obj) => {
+
+                            colores = "";
+
+                            tr += "<tr> "
+                                + " <td> " + obj.PEDIDO + "</td>"
+                                + " <td> " + obj.FECHA + "</td>"
+                                + " <td> " + obj.DIAS_ABIERTO + "</td>"
+                                + " <td> " + obj.TRANSACCION + "</td>"
+                                + " <td style='max-width: 140px;'> " + obj.DESCRIPCIONPAGO + "</td>"
+                                //+ " <td style='max-width: 170px;'>" + obj.PROVEEDOR + "</td>"
+                                + " <td> " + obj.COMPRADOR + "</td>"
+                                + " <td> " + obj.SIMBOLO_MOEDA + " " + formatoNumero(obj.TOTAL_PEDIDO) + "</td>"
+
+                            if (obj.DIFERENCIA == 0) {
+
+                                colores = colores + " <td class='occierre-ok'> " + formatoNumero(obj.CANTIDAD_OC) + "</td>"
+                                    + " <td class='occierre-ok'> " + formatoNumero(obj.CANT_INGRESA) + "</td>"
+                                    + " <td class='occierre-ok'> " + formatoNumero(obj.DIFERENCIA) + "</td></tr>";
+                            }
+                            else {
+                                colores = colores + " <td class='occierre-error'> " + formatoNumero(obj.CANTIDAD_OC) + "</td>"
+                                    + " <td class='occierre-error'> " + formatoNumero(obj.CANT_INGRESA) + "</td>"
+                                   + " <td class='occierre-error'> " + formatoNumero(obj.DIFERENCIA) + "</td></tr>"
+                            }
+
+                            tr = tr + colores;
+                        });
+
+                        $("#tablaCabeceraContenido").html(tr);
+
+                        $("#tablaPrincipal").DataTable({
+                            'language': { 'url': '/libs/datatables/spanish.json' },
+                            lengthMenu: [[10, 20, 30, -1], [10, 20, 30, 'Todos']]
+                        });
+                    },
+                    failure: function () {
+                        console.error('error al cargar los periodos');
+                    }
+                });
+            }
+
+            function formatoNumero(x) {
+                x = x.toFixed(2);
+                return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            }
+
+            $("select.selectNiveles").change(function () {
+                cod_niveles = $("#cboNiveles").val();
+            });
+
+
+             $("#btnExportarExcel").click(function () {
+
+                 let fechaIni = $('#FechaIni').val();
+                 let fechaFin = $('#FechaFin').val();
+                 let niveles = "";
+
+                 if (cod_niveles.length == 0) {
+                     Swal.fire('Seleccione al menos un nivel de item para la busqueda.')
+                 }
+                 else if (fechaIni == null ||
+                     fechaFin == null ||
+                     typeof (fechaIni) == "undefined" ||
+                     typeof (fechaFin) == "undefined" ||
+                     fechaIni.trim() == "" ||
+                     fechaFin.trim() == "") {
+
+                     Swal.fire('Seleccione la fecha, por favor')
+                 }
+                 else {
+
+                     for (var i = 0; i < cod_niveles.length; i++) {
+                         niveles = niveles + cod_niveles[i] + ","
+                     }
+                     niveles = niveles.slice(0, niveles.length - 1);
+
+                     var datos =
+                     {
+                         'niveles': niveles,
+                         'fechaIni': fechaIni,
+                         'fechaFin': fechaFin
+                     }
+
+                     exportarExcel(datos);
+                 }
+             });
+
+            function exportarExcel(datos) {
+
+                let datos2 = datos;
+
+                $.ajax({
+                    url: '@Url.Action("ReporteExcelPendCierre", "Logistica")',
+                    contentType: 'application/json; charset=utf-8',
+                    datatype: 'json',
+                    data: datos,
+                    type: "GET",
+                    success: function () {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Reporte Generado con Éxito',
+                            text: 'Textile Sourcing Company',
+                            showConfirmButton: false,
+                            timer: 2500,
+                            onClose: () => {
+
+                                window.location = "/Logistica/ReporteExcelPendCierre?niveles=" + datos2.niveles + "&fechaIni=" + datos2.fechaIni + "&fechaFin=" + datos2.fechaFin;
+                            }
+                        });
+                    }
+                });
+
+            }
+
+
+
+        });
+
+
+    </script>
+}

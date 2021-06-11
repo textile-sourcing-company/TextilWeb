@@ -1,0 +1,295 @@
+﻿
+@{
+    ViewBag.Title = "Aperturar Fichas";
+    ViewBag.Modulo = "Corte";
+    Layout = "~/Views/Plantillas/_Layout.cshtml";
+}
+
+<div class="card card-outline card-primary">
+
+    <div class="card-header"></div>
+
+    <div class="card-body">
+
+        @*FORMULARIO DE BUSQUEDA*@
+        <form class="row" autocomplete="off" id="frmbusqueda">
+
+            <div class="col-md-1">
+                <label for="">Semana</label>
+                <input type="number" class="form-control form-control-sm" id="txtsemana" />
+            </div>
+            <div class="col-md-1">
+                <label for="">Año</label>
+                <input type="number" class="form-control form-control-sm" id="txtanio" />
+            </div>
+
+            <div class="col-md-2">
+                <label for="">Fecha</label>
+                <input type="date" class="form-control form-control-sm" id="txtfecha" />
+            </div>
+
+            <div class="col-md-2">
+                <label for="">Partida</label>
+                <input type="text" class="form-control form-control-sm" id="txtpartida" />
+            </div>
+
+            <div class="col-md-1">
+                <label for="">Ficha</label>
+                <input type="text" class="form-control form-control-sm" id="txtficha" />
+            </div>
+
+            <div class="col-md-2">
+                <label>Estado Tendido</label>
+                <select name="" id="cboestadotendido" class="custom-select custom-select-sm">
+                    <option value="">[TODOS LOS ESTADOS]</option>
+                    <option value="0">Pendiente</option>
+                    <option value="1">Aprobado</option>
+                    <option value="2">Aperturado</option>
+                </select>
+            </div>
+
+            <div class="col-md-2">
+                <label>Estado Corte</label>
+                <select name="" id="cboestadocorte" class="custom-select custom-select-sm">
+                    <option value="">[TODOS LOS ESTADOS]</option>
+                    <option value="0">Pendiente</option>
+                    <option value="1">Aprobado</option>
+                    <option value="2">Aperturado</option>
+                </select>
+            </div>
+
+            <div class="col-md-1">
+                <label for="">&nbsp;</label>
+                <button class="btn btn-sm btn-block btn-primary" type="submit">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+
+        </form>
+
+        <table class="table table-sm table-bordered mt-3 text-center" id="tablereporte">
+
+            <thead class="thead-light text-center" id="theadreporte">
+                <tr>
+                    <th>Partida</th>
+                    <th>Combo</th>
+                    <th>Versión</th>
+                    <th>Fichas</th>
+                    <th>Fichas Despachadas</th>
+                    <th>Situación Tendido</th>
+                    <th>Situación Corte</th>
+                    <th>OP</th>
+                </tr>
+            </thead>
+            <tbody id="tbodyreporte">
+                
+            </tbody>
+
+        </table>
+
+
+    </div>
+
+</div>
+
+
+@section scripts{
+
+    <script>
+
+        const frmbusqueda = document.getElementById("frmbusqueda");
+
+
+        // BUSQUEDA 
+        frmbusqueda.addEventListener('submit', (e) => {
+            e.preventDefault();
+            getBusqueda();
+        });
+
+
+        // FUNCION
+        function getBusqueda() {
+
+            let datos = {
+                semana: $("#txtsemana").val(),
+                aniosemana: $("#txtanio").val(),
+                fecha: $("#txtfecha").val(),
+                partida: $("#txtpartida").val(),
+                ficha: $("#txtficha").val(),
+                estadotendido: $("#cboestadotendido").val(),
+                estadocorte: $("#cboestadocorte").val()
+            }
+
+            MostrarCarga("Cargando");
+
+            // BUSQUEDAS
+            get("Corte", "getFichasAperturar", datos, true)
+                .then((response) => {
+
+                    
+
+                    let tr = "";
+                    for (let obj of response) {
+
+                        let estadotendido = "";
+                        let bgtendido = "";
+
+                        let estadocorte = "";
+                        let bgcorte = "";
+
+
+                        // ESTADO TENDIDO
+                        if (obj.estadotendido == null || obj.estadotendido == "0" || obj.estadotendido == "") {
+                            estadotendido = "PENDIENTE";
+                            bgtendido = "bg-danger";
+                        }
+
+                        // ESTADO TENDIDO
+                        if (obj.estadotendido == "1") {
+                            estadotendido = "APROBADO";
+                            bgtendido = "bg-success";
+                        }
+
+                        // ESTADO TENDIDO
+                        if (obj.estadotendido == "2") {
+                            estadotendido = "APERTURADO";
+                            bgtendido = "bg-warning";
+                        }
+
+                        // ESTADO CORTE
+                        if (obj.estadocorte == null || obj.estadocorte == "0" || obj.estadocorte == "") {
+                            estadocorte = "PENDIENTE";
+                            bgcorte = "bg-danger";
+                        }
+
+                        // ESTADO CORTE
+                        if (obj.estadocorte == "1") {
+                            estadocorte = "APROBADO";
+                            bgcorte = "bg-success";
+                        }
+
+                        // ESTADO CORTE
+                        if (obj.estadocorte == "2") {
+                            estadocorte = "APERTURADO";
+                            bgcorte = "bg-warning";
+                        }
+
+
+                        tr += "<tr>";
+                        tr += "<td>" + obj.partida +"</td>";
+                        tr += "<td>" + obj.combo +"</td>";
+                        tr += "<td>" + obj.version +"</td>";
+                        tr += "<td>" + obj.fichaspartida +"</td>";
+                        tr += "<td>" + obj.fichasdespachada +"</td>";
+                        tr += `<td> 
+                                    <span
+                                        data-partida='${obj.partida}' 
+                                        data-combo='${obj.combo}' 
+                                        data-version='${obj.version}' 
+                                        data-tela='${obj.tipotela}' 
+                                        class='badge ${bgtendido} cursor-pointer estadotendido'   
+                                        title='Estado tendido'>
+                                        ${estadotendido} 
+                                    </span> 
+                                </td>`;
+
+                        tr += `<td> 
+                                    <span
+                                        data-partida='${obj.partida}' 
+                                        data-combo='${obj.combo}' 
+                                        data-version='${obj.version}' 
+                                        data-tela='${obj.tipotela}' 
+                                        class='badge ${bgcorte} cursor-pointer estadocorte'   
+                                        title='Estado corte'>
+                                        ${estadocorte} 
+                                    </span> 
+                                </td>`;
+
+                        tr += "<td>";
+                        tr += `<a href='/Corte/LiquidacionPorFichas/?partida=${obj.partida}&combo=${obj.combo}&version=${obj.version}&tipotela=${obj.tipotela}' target='_blank'> <i class='fas fa-eye'></i> </a>`;
+                        tr += "</td>";
+
+
+                        tr += "</tr>";
+
+                    }
+
+                    InformarMini("Correcto");
+                    $("#tbodyreporte").html(tr);
+
+
+                })
+                .catch((error) => {
+                    console.log(error);
+                    Advertir("Ocurrio un error");
+                });
+
+
+        }
+
+        // APERTURAR TENDIDO
+        $("#tbodyreporte").on('click', '.estadotendido', function () {
+
+            Preguntar("Confirme para aperturar ficha en tendido")
+                .then(response => {
+                    if (response.value) {
+                        setAperturar(this, "T");
+                    }
+                })
+                .catch(error => {
+                    Advertir("Ocurrio un error :(");
+                    console.log(error);
+                });
+
+        });
+
+        // APERTURAR CORTE
+        $("#tbodyreporte").on('click', '.estadocorte', function () {
+
+            Preguntar("Confirme para aperturar ficha en corte")
+                .then(response => {
+                    if (response.value) {
+                        setAperturar(this, "C");
+                    }
+                })
+                .catch(error => {
+                    Advertir("Ocurrio un error :(");
+                    console.log(error);
+                });
+
+        });
+
+        // APERTURAMOS
+        function setAperturar(input, opcion) {
+
+            MostrarCarga("Cargando");
+
+            let partida = $(input).data("partida");
+            let combo = $(input).data("combo");
+            let version = $(input).data("version");
+            let tipotela = $(input).data("tela");
+            let estado = "2";
+
+            get("Corte", "setAperturaFicha", {
+                partida, combo, version, tipotela, estado,opcion
+            },true)
+                .then(response => {
+                    //console.log(response);
+                    if (response.success) {
+                        getBusqueda();
+                        //InformarMini(response.mensaje);
+                    } else {
+                        Advertir(response.mensaje);
+                    }
+                })
+                .catch(error => {
+                    Advertir("Ocurrio un problema");
+                    console.log(error);
+                });
+            //let opcion = "T";
+        }
+
+
+    </script>
+
+}

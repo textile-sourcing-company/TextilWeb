@@ -1,0 +1,205 @@
+﻿@{
+    ViewBag.Title = "Cierre Rendición de Gastos";
+    ViewBag.Modulo = "Finanzas";
+    Layout = "~/Views/Plantillas/_Layout.cshtml";
+}
+
+
+<div class="card">
+    <div class="container-fluid">
+
+        <div class="card mb-3">
+
+            <div class="row m-2">
+
+                <div class="form-group col-3 p-1">
+                    <label for="example">Periodo</label>
+                    <select class="form-control form-control-sm">
+                        <option active>2021 - Mayo 05</option>
+                        <option>2021 - Abril 04</option>
+                        <option>2021 - Marzo 03</option>
+                        <option>2021 - Febrero 02</option>
+                        <option>2021 - Febrero 01</option>
+                    </select>
+                </div>
+
+                <div class="col-3 p-1">
+                    <label for="idceco">Centro de Costo</label>
+                    <select class="form-control form-control-sm" id="idceco">
+                        <option active>GOP - Manufactura - Costura</option>
+                        <option>GOP - Manufactura - Acabados</option>
+                        <option>GOP - Manufactura - Corte</option>
+                    </select>
+                </div>
+
+
+                <div class="col-3 p-1">
+                    <label for="idtdoc">Tipo de documento</label>
+                    <select class="form-control form-control-sm" id="idtdoc">
+                        <option active>FACTURA</option>
+                        <option>BOLETA</option>
+                        <option>PLANILLA</option>
+                        <option>DECLARACION JURADA</option>
+                    </select>
+                </div>
+
+                <div class="col-3 p-1">
+                    <label for="idestado">Estado de Solicitud</label>
+                    <select class="form-control form-control-sm" id="idestado">
+                        <option active>PENDIENTES</option>
+                        <option>APROBADAS</option>
+                        <option>RECHAZADAS</option>
+                        <option>TODAS</option>
+                    </select>
+                </div>
+
+                <div class="form-group col-4 p-1">
+                    <button type="button" class="btn btn-primary btn-sm" id="btnb">Cerrar Periodo</button>
+                    <button type="button" class="btn btn-success btn-sm" id="btne">Exportar Excel</button>
+                </div>
+
+            </div>
+
+            <hr />
+
+            <div class="card">
+
+                <table class="table">
+                    <thead class="thead-light">
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Codigo</th>
+                            <th scope="col">Tipo</th>
+                            <th scope="col">Motivo</th>
+                            <th scope="col">Nivel Aprobación</th>
+                            <th scope="col">Precio</th>
+                            <th scope="col">Accion</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th scope="row">1</th>
+                            <td>D001</td>
+                            <td>Factura</td>
+                            <td>Reparacion</td>
+                            <td>Usuario Solicitante</td>
+                            <td>150.00</td>
+                            <td>
+                                <button type="button" class="btn btn-danger btn-sm">Desaprobador</button>
+                                <button type="button" class="btn btn-success btn-sm" data-target="#exampleModal">Aprobar</button>
+
+                            </td>
+                        </tr>
+                        <tr style="background-color: #82E0AA">
+                            <th scope="row">2</th>
+                            <td>D002</td>
+                            <td>Boleta</td>
+                            <td>Viáticos</td>
+                            <td>Jefatura</td>
+                            <td>50.00</td>
+                            <td>
+                                <button type="button" class="btn btn-danger btn-sm">Desaprobador</button>
+                                <button type="button" class="btn btn-success btn-sm" data-target="#exampleModal">Aprobar</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">3</th>
+                            <td>D003</td>
+                            <td>Declaracion Jurada</td>
+                            <td>Cena</td>
+                            <td>Usuario Solicitante</td>
+                            <td>20.00</td>
+                            <td>
+                                <button type="button" class="btn btn-danger btn-sm">Desaprobador</button>
+                                <button type="button" class="btn btn-success btn-sm" data-target="#exampleModal">Aprobar</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+</div>
+
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Detalle de Aprobacion</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="message-text" class="col-form-label">Observacion Adcional:</label>
+                        <textarea class="form-control" id="message-text"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary">Confirmar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<style>
+
+    @@media (min-width: 320px) and (max-width: 479.98px) {
+    }
+
+    @@media (min-width: 480px) and (max-width: 767.98px) {
+    }
+
+    @@media (min-width: 768px) and (max-width: 991.98px) {
+    }
+
+    @@media (min-width: 992px) and (max-width: 1199.98px) {
+    }
+
+    @@media (min-width: 1200px) {
+    }
+</style>
+
+
+@section scripts {
+    <script>
+
+        var tipoPeriodo = 0;
+        var periodoInicio = 0;
+        var periodoFin = 0;
+
+        var lstTituloPeriodo = [];
+        var lstTitulo = []
+
+        $(document).ready(function () {
+
+            Inicializar();
+
+
+            function Inicializar() {
+
+            }
+
+
+
+        });
+
+
+
+    </script>
+
+}
+

@@ -1,0 +1,396 @@
+﻿@{
+    ViewBag.Title = "Reporte de Ventas";
+    ViewBag.Modulo = "Facturacion";
+    Layout = "~/Views/Plantillas/_Layout.cshtml";
+
+}
+
+<div class="rep-ventas">
+    <div class="card">
+        <div class="card-header">
+
+            <div class="form-row">
+                <div class="form-group col-md-3">
+                    <input required="" type="text" class="form-control form-control-sm" id="FechaIni" placeholder="Fecha Inicio" onfocus="(this.type='date')" />
+                </div>
+
+                <div class="form-group col-md-3">
+                    <input required="" type="text" class="form-control form-control-sm" id="FechaFin" placeholder="Fecha Fin" onfocus="(this.type='date')" />
+                </div>
+
+                <div class="form-group col-md-2">
+                    <select class="form-control form-control-sm selectSeries" multiple="multiple" id="cboSeries" placeholder="Series"></select>
+                </div>
+
+                <div class="form-group col-md-2">
+                    <button type="button" class="btn btn-primary form-control-sm btn-sm" id="btnBuscar">Buscar</button>
+                </div>
+
+                <div class="form-group col-md-2">
+                    <button id="btnExportarExcel" class="btn btn-success form-control-sm btn-sm">Excel <i class="fas fa-file-excel" style="margin-left: 7px;"></i></button>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-body">
+            <table class="table table-sm table-bordered nowrap" id="tablaPrincipal" style="width:100%;">
+                <thead class="thead-light">
+                    <tr>
+                        <th class="all">Fecha</th>
+                        <th>Periodo</th>
+                        <th>Cliente Factura</th>
+                        <th>Cliente Guia</th>
+                        <th>Tipo Prenda</th>
+                        <th>Observacion</th>
+                        <th class="all">Factura</th>
+                        <th>Guía</th>
+                        <th>Precio Real</th>
+                        <th class="all">Cantidad</th>
+                        <th>IGV</th>
+                        <th class="all">Precio Total</th>
+                        <th>Cod. Cond.Pago</th>
+                        <th>Condición Pago</th>
+                    </tr>
+                </thead>
+                <tbody id="tablaCabeceraContenido"></tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+
+<style>
+
+    /* Estilos Especiales */
+
+    .rep-ventas #btnExportarExcel {
+        min-width: 150px;
+    }
+
+    .rep-ventas #tablaPrincipal .table td, .table th {
+        /*padding: 0.45rem !important; */
+    }
+
+    .rep-ventas #tablaPrincipal .table .tam_colum {
+        max-width: 170px;
+        overflow: hidden;
+    }
+
+
+    /* Custom, iPhone Retina */
+    @@media only screen and (min-width : 320px) {
+        .card-header .seccion-1 {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: row;
+            flex-wrap: wrap;
+            width: 100%;
+        }
+
+            .card-header .seccion-1 .cont-btn-buscar {
+                margin-top: 3px;
+            }
+
+        .card-header .seccion-2 {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: row;
+            flex-wrap: wrap;
+            width: 100%;
+            border-top: 1px solid #EBEDEF;
+            margin-top: 15px;
+            padding-top: 8px;
+        }
+    }
+
+    /* Extra Small Devices, Phones */
+    @@media only screen and (min-width : 480px) {
+    }
+
+    /* Small Devices, Tablets */
+    @@media only screen and (min-width : 768px) {
+        .card-header .seccion-1 {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            flex-direction: row;
+            flex-wrap: wrap;
+            width: 50%;
+        }
+
+
+        .card-header .seccion-2 {
+            display: flex;
+            justify-content: flex-end;
+            flex-direction: row;
+            flex-wrap: wrap;
+            width: 50%;
+            border-top: none;
+            margin-top: 0px;
+            padding-top: 0px;
+        }
+    }
+
+    /* Medium Devices, Desktops */
+    @@media only screen and (min-width : 992px) {
+    }
+
+    /* Large Devices, Wide Screens */
+    @@media only screen and (min-width : 1100px) {
+    }
+</style>
+
+@section scripts {
+
+    <script>
+
+        var PEDIDOS = [];
+        var cod_series = [];
+
+        $(document).ready(function () {
+
+            $("#cboSeries").multipleSelect();
+
+            LlenarCBO_series();
+
+            function LlenarCBO_series() {
+                $.ajax({
+                    type: "GET",
+                    url: '/facturacion/ListarSeries',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (data) {
+                        $.each(data.lista, function () {
+                            $("#cboSeries").append($("<option/>").val(this.CODSERIE).text(this.SERIE));
+                        });
+                        $('#cboSeries').multipleSelect("refresh");
+                    },
+                    failure: function () {
+                        console.error('error al cargar los periodos');
+                    }
+                });
+            }
+
+            $("select.selectSeries").change(function () {
+                cod_series = $("#cboSeries").val();
+            });
+
+            $("#btnBuscar").click(function () {
+
+                let fechaIni = $('#FechaIni').val();
+                let fechaFin = $('#FechaFin').val();
+
+
+                if (cod_series.length == 0) {
+                    Swal.fire('Seleccione los tipos de firma')
+                }
+                else if (fechaIni == null ||
+                    fechaFin == null ||
+                    typeof (fechaIni) == "undefined" ||
+                    typeof (fechaFin) == "undefined" ||
+                    fechaIni == "Fecha Inicio" ||
+                    fechaFin == "Fecha Fin" ||
+                    fechaIni.trim() == "" ||
+                    fechaFin.trim() == "") {
+
+                    Swal.fire('Seleccione la fecha, por favor')
+                }
+                else {
+
+                    var vSeries = "";
+
+                    for (var i = 0; i < cod_series.length; i++) {
+                        vSeries =  vSeries + "'" + cod_series[i] + "',"
+                    }
+                    vSeries = vSeries.slice(0, vSeries.length - 1);
+
+                    var datos =
+                    {
+                        'series': vSeries,
+                        'fechaIni': fechaIni,
+                        'fechaFin': fechaFin
+                    }
+
+                    Listar(datos);
+                }
+            });
+
+            function Listar(datos) {
+
+                MostrarCarga("Cargando...");
+
+                $.ajax({
+                    type: "GET",
+                    url: '/facturacion/ListarVentas',
+                    dataType: "json",
+                    data: datos,
+                    success: function (data) {
+
+                        let tabla = $("#tablaPrincipal").DataTable();
+                        tabla.destroy();
+                        var tr = "";
+                        var series = "";
+                        var guias = "";
+                        var cadena1 = "";
+                        var cadena2 = "";
+
+                        data.lista.forEach((obj) => {
+
+                            series = "";
+                            guias = "";
+
+                            obj.FECHA
+
+                            tr += "<tr> "
+                                + " <td> " + String(obj.FECHA) + "</td>"
+                                + " <td> " + obj.ANO + "-" + obj.MES + "</td>"
+                                + " <td class='tam_colum'> " + obj.CLIENTE_FACTURA + "</td>"
+                                + " <td class='tam_colum'>" + obj.CLIENTE_GUIA + "</td>"
+                                + " <td class='tam_colum'>" + obj.TIPO_PRENDA + "</td>"
+                                + " <td class='tam_colum'>" + obj.OBSERVACION + "</td>";
+
+                            if (obj.SERIE_FACTURA == "X" || obj.SERIE_FACTURA == " " || obj.SERIE_FACTURA == null || obj.SERIE_FACTURA == "0") {
+                               series = "<td> - </td>";
+                            }
+                            else {
+                                series = "<td> " + obj.SERIE_FACTURA + "-" + obj.NRO_FACTURA + "</td>"
+                            }
+
+                            if (obj.SERIE_GUIA == "X" || obj.SERIE_GUIA == " " || obj.SERIE_GUIA == null || obj.SERIE_GUIA == "0") {
+                                guias = " <td> - </td>"
+                            }
+                            else {
+                                guias =  " <td> " + obj.SERIE_GUIA + "-" + obj.NUM_GUIA + "</td>"
+
+                            }
+
+                            cadena1 = series + guias;
+
+                            //tr = tr + series + guias;
+
+                            cadena2 = " <td> " + obj.SIMBOLO + " " + formatoNumero(obj.PRECIO_REAL) + "</td>"
+                                + " <td> " + obj.CANTIDAD_REAL + "</td>"
+                                + " <td> " + obj.SIMBOLO + " " + formatoNumero(obj.IGV) + "</td>"
+                                + " <td> " + obj.SIMBOLO + " " + formatoNumero(obj.VALOR_REAL) + "</td>"
+                                + " <td> " + obj.CONDPAGO + "</td>"
+                                + " <td> " + obj.DESCCONDPAGO + "</td>";
+
+
+                            tr = tr + cadena1 + cadena2 + "</tr>";
+
+                        });
+
+                        $("#tablaCabeceraContenido").html(tr);
+
+
+                        $("#tablaPrincipal").DataTable(
+                            {
+                                'language': { 'url': '/libs/datatables/spanish.json' },
+                                "scrollX": true,
+                                lengthMenu: [[10, 15, 20, -1], [10, 15, 20, 'Todos']]
+                            });
+                        Swal.fire({
+                            icon: 'success',
+                            title: "Mostrando Datos",
+                            text: "Textile Sourcing Company",
+                            allowEscapeKey: false,
+                            showConfirmButton: false,
+                            timer: 1500,
+                        });
+
+                    },
+                    failure: function () {
+                        console.error('error al cargar los periodos');
+
+                        Swal.fire({
+                            icon: 'error',
+                            title: "Error al mostrar datos",
+                            text: "Textile Sourcing Company",
+                            allowEscapeKey: false,
+                            showConfirmButton: false,
+                            timer: 1500,
+                        });
+
+                    }
+                });
+
+            }
+
+            $("#btnExportarExcel").click(function () {
+
+                let fechaIni = $('#FechaIni').val();
+                let fechaFin = $('#FechaFin').val();
+
+                if (cod_series.length == 0) {
+                    Swal.fire('Seleccione los tipos de firma')
+                }
+                else if (fechaIni == null ||
+                    fechaFin == null ||
+                    typeof (fechaIni) == "undefined" ||
+                    typeof (fechaFin) == "undefined" ||
+                    fechaIni == "Fecha Inicio" ||
+                    fechaFin == "Fecha Fin" ||
+                    fechaIni.trim() == "" ||
+                    fechaFin.trim() == "") {
+
+                    Swal.fire('Seleccione la fecha, por favor')
+                }
+                else {
+
+                    var vSeries = "";
+
+                    for (var i = 0; i < cod_series.length; i++) {
+                        vSeries = vSeries + "'" + cod_series[i] + "',"
+                    }
+                    vSeries = vSeries.slice(0, vSeries.length - 1);
+
+                    var datos =
+                    {
+                        'series': vSeries,
+                        'fechaIni': fechaIni,
+                        'fechaFin': fechaFin
+                    }
+
+                    exportarExcel(datos);
+                }
+            });
+
+            function exportarExcel(datos) {
+
+                MostrarCarga("Exportando....");
+
+                $.ajax({
+                    url: '@Url.Action("RepExcelVentas", "Facturacion")',
+                    contentType: 'application/json; charset=utf-8',
+                    datatype: 'json',
+                    type: "GET",
+                    data: datos,
+                    success: function () {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Reporte Generado con Éxito',
+                            text: 'Textile Sourcing Company',
+                            showConfirmButton: false,
+                            timer: 1500,
+                            onClose: () => {
+                                window.location = "/Facturacion/RepExcelVentas?series=" + datos.series + "&fechaIni=" + datos.fechaIni + "&fechaFin=" + datos.fechaFin;
+                            }
+                        });
+                    }
+                });
+            }
+
+
+            function formatoNumero(x) {
+                x = x.toFixed(2);
+                return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            }
+
+        });
+
+
+    </script>
+}

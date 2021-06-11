@@ -1,0 +1,135 @@
+﻿
+@{
+    ViewBag.Title = "Actualizar Sede de Bolsa de Lona";
+    ViewBag.Modulo = "Operaciones proceso";
+    Layout = "~/Views/Plantillas/_Layout.cshtml";
+}
+
+<div class="card">
+
+    <div class="card-body">
+        <div class="row justify-content">
+            <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12 form-group">
+                <h6>Sede:</h6>
+                <select class="select2" style="width:100%" id="cboSede"></select>
+            </div>
+            
+        @* Lista de Texto *@
+        </div>
+              <h6>N° Bolsa de Lona:</h6>
+              <textarea class="form-control" id="txtLona" rows="5" placeholder="Ingresar los Números de Bolsa de Lona separados por coma (,)"></textarea>
+        </div>
+
+        @* Botones *@
+        <div class="card-action">
+            <button class="btn btn-success" id="btnActualizar">
+                <span class="btn-label">
+                    <i class="fa fa-check"></i>
+                </span>
+                Actualizar
+            </button>
+            <button class="btn btn-danger" id="btnCancelar">
+                <span class="btn-label">
+                    <i class="fas fa-times"></i>
+                </span>
+                Cancelar
+            </button>
+        </div>
+
+</div>
+
+@section scripts {
+    <script>
+        $(document).ready(function () {
+          //CARGANDO DATOS 
+            CargarSedeBLona();
+        });
+
+         //ACTUALIZAR BOLSA DE LONA
+            $("#btnActualizar").click(function(){
+                ActualizarSedeBolsaLona();
+            });
+
+        //CANCELAR ACTUALIZACION DE BOLSA DE LONA
+            $("#btnCancelar").click(function(){
+                CancelarSedeBolsaLona();
+            });
+
+        //LLENAR SEDE
+        function CargarSedeBLona(){
+            $.ajax({
+                url: '/operaciones/ListarSedeLona/',
+                type: 'get',
+                contenType: 'json',
+                success: function (e) {
+                    let op = '';
+                    e.forEach(function(obj){
+                        op += `<option value='${obj.Codigo_Sede}'>${obj.Nombre_Sede}</option>`;
+                    });
+                    $("#cboSede").html(op);
+                }
+            });
+        }
+
+
+        //FUNCION PARA ACTUALIZAR
+        function ActualizarSedeBolsaLona(){
+            if ($("#txtLona").val() == '')
+            {
+                Advertir('No ingreso el N° Bolsa de Lona');
+                return;
+            }
+
+            if ($("#cboSede").val() == 0)
+            {
+                Advertir('Se debe seleccionar la Sede para la Bolsa de Lona');
+                return;
+            }
+
+            //campturamos el value del combo 
+            var vrSede = $("#cboSede").val();
+
+            // Pasamos las variables al controlador  
+            var objFile = {
+                Codigo_Lona: $("#txtLona").val(),
+                Codigo_Sede: vrSede,
+            };
+
+            $.ajax({
+                url: '/Operaciones/SetActualizarBLona', // Nombre de tu controlador / Nombre del metodo que estas usando
+                type: 'POST',
+                data: objFile,
+                dataType: 'json',
+                success: function (V_lona) {
+                    if (V_lona == 2) {
+                        Advertir('La Bolsa de Lona no existe, ingrese una correcta');
+                        $("#txtLona").val("");
+                        CargarSedeBLona();
+                    }
+                    else {
+                        if (V_lona == false) {
+                            Advertir('No se realizó el cambio de Sede');
+                        }
+                        else {
+                            Informar('Se realizo la actualización de Sede de la Bolsa de Lona');
+                            $("#txtLona").val("");
+                            CargarSedeBLona();
+                        }
+                    }
+                    ////CARGANDO REGISTROS
+                    //CargarGrilla();
+                },
+                error: function (err) {
+                    Advertir('Error:' + err.responseText);
+                }
+            });
+        }
+
+        //
+        function CancelarSedeBolsaLona(){
+        $("#txtLona").val("");
+        CargarSedeBLona(); 
+    }
+    
+    </script>
+}

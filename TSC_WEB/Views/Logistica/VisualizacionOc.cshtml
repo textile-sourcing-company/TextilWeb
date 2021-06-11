@@ -1,0 +1,69 @@
+﻿
+@{
+    ViewBag.Title = "Visualización de Orden de Compra";
+    Layout = "~/Views/Plantillas/_Layout.cshtml";
+}
+
+<div class="card card-primary card-outline">
+
+    <div class="card-header">
+
+    </div>
+
+    <div class="card-body">
+
+        <div class="row">
+            <div class="col-md-4">
+                <label>Orden Compra</label>
+                <input type="text" id="ordencompra" class="form-control form-control-sm">
+            </div>
+            <div class="col-md-4">
+                <label>Porcentaje</label>
+                <input type="number" id="PorceTela" class="form-control form-control-sm" pattern="\d*" width="180" maxlength="4" placeholder="50 / 100 / 150 / 200">
+            </div>
+            <div class="col-md-2">
+                <label>&nbsp;</label>
+                <button id="btnbuscar" class="btn btn-primary btn-block btn-sm">Imprimir</button>
+            </div>
+
+        </div> 
+
+    </div>
+
+</div>
+
+
+
+@section scripts {
+
+    <script>
+
+        $("#btnbuscar").click(function () {
+            //alert("hola")
+            get("logistica", "VisualizarOcCabezera", {
+                ordencompra: $("#ordencompra").val(),
+                porcetela: $("#PorceTela").val().trim() == "" ? null : parseFloat($("#PorceTela").val().trim())
+            }, true)
+                .then((response) => {
+                    //console.log(response)
+                    //location.href("/Logistica/impresionOC", "_target");
+                    window.open("/Logistica/impresionOC", "_blank");
+                })
+                .catch((error) => {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Se ha producido un error',
+                            text: 'Detalle error: ' + error.statusText,
+                            showConfirmButton: true,
+                        });
+                })
+
+
+
+
+        });
+
+
+    </script>
+
+}

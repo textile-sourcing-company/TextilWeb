@@ -1,0 +1,616 @@
+﻿@model TSC_WEB.Models.Entidades.Corte.LiquidacionTela.reporteliquidacion.IndicadorPcpLiquidacionEntidad
+
+@{
+
+    ViewBag.Title = "Control de Liquidación de Tela";
+    ViewBag.Modulo = "Corte";
+    Layout = "~/Views/Plantillas/_Layout.cshtml";
+    double totalprendasprogramado = 0;
+    double totalconsumoprogramado = 0;
+    double totalkilosprogramado = 0;
+    double totalporcentajeprogramado = 0;
+    double totalprendastizado = 0;
+    double totalconsumotizado = 0;
+    double totalkilostizado = 0;
+    double densidadpromedio = 0;
+    double totalprendasneto = 0;
+    double totalconsumoneto = 0;
+    double totalkilosneto = 0;
+    //double totalmetrosbruto = 0;
+    //double totalkilosbruto = 0;
+    double porcentajecaidasmejoras = 0;
+
+    int cantfichas = Model.DataFichas.Count;
+    int cantetapas = Model.DataTendido.Count;
+
+    int mayor = cantfichas >= cantetapas ? cantfichas : cantetapas;
+    double diferenciadensidad = 0;
+    double kiloscaida = 0;
+    double caidadensidad = 0;
+    double caidaancho = 0;
+    double caidamerma = 0;
+    double caidatela = 0;
+
+
+
+}
+
+
+<div class="row">
+
+    @* ANCHO DE TELA *@
+    <div class="col-md-3">
+        <div class="card card-outline card-primary">
+            <table class="table table-sm table-bordered table-hover text-center">
+                <thead class="thead-light">
+                    <tr>
+                        <th colspan="3">Ancho Tela</th>
+                    </tr>
+                    <tr>
+                        <th>Programado</th>
+                        <th>Real</th>
+                        <th>Diferencia</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>@Model.DataGeneral.anchotelaprogramado</td>
+                        <td>@Model.DataGeneral.anchotelareal</td>
+                        <td>@Math.Round(Model.DataGeneral.anchoteladiferencia * 100, 1)%</td>
+                    </tr>
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+
+    @* DENSIDAD *@
+    <div class="col-md-3">
+        <div class="card card-outline card-primary">
+            <table class="table table-sm table-bordered table-hover text-center">
+                <thead class="thead-light">
+                    <tr>
+                        <th colspan="4">Densidad</th>
+                    </tr>
+                    <tr>
+                        <th>Programado</th>
+                        <th>Real</th>
+                        <th>Diferencia</th>
+                        <th>Tizados</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>@(Model.DataGeneral.densidadprogramado / 10)</td>
+                        <td id="densidadreal">@Math.Round(densidadpromedio, 3)</td>
+                        <td id="diferenciadensidad"></td>
+                        <td></td>
+                    </tr>
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+
+    @* TELAS *@
+    <div class="col-md-3">
+        <div class="card card-outline card-primary">
+            <table class="table table-sm table-bordered table-hover text-center">
+                <thead class="thead-light">
+                    <tr>
+                        <th colspan="4">Telas</th>
+                    </tr>
+                    <tr>
+                        <th>Programado</th>
+                        <th>Real</th>
+                        <th>Diferencia</th>
+                        <th>Diferencia %</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>@Model.DataGeneral.telaprogramado</td>
+                        <td>@Model.DataGeneral.telareal</td>
+                        <td>@Math.Round(Model.DataGeneral.teladiferencia, 2)</td>
+                        <td>@Math.Round((Model.DataGeneral.teladiferencia / Model.DataGeneral.telaprogramado * 100), 2)%</td>
+                    </tr>
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+
+    @* EFICIENCIA DE TIZADOS *@
+    <div class="col-md-3">
+        <div class="card card-outline card-primary">
+            <table class="table table-sm table-bordered table-hover text-center">
+                <thead class="thead-light">
+                    <tr>
+                        <th colspan="4">Eficiencia de Tizados</th>
+                    </tr>
+                    <tr>
+                        <th>Programado</th>
+                        <th>Real</th>
+                        <th>Diferencia</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>@Model.DataGeneral.eficienciatizadosprogramado</td>
+                        <td>@Math.Round(Model.DataGeneral.eficienciatizadosreal * 100, 2)</td>
+                        <td>@Math.Round(Model.DataGeneral.eficienciatizadosdiferencia * 100, 2)%</td>
+                    </tr>
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+
+    @* DEVOLUCIONES *@
+    <div class="col-md-3">
+        <div class="card card-outline card-primary">
+            <table class="table table-sm table-bordered table-hover text-center">
+                <thead class="thead-light">
+                    <tr>
+                        <th colspan="3">Devoluciones</th>
+                    </tr>
+                    <tr>
+                        <th>1ras</th>
+                        <th>2das</th>
+                        <th>%</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>@Model.DataGeneral.devolucionesprimera</td>
+                        <td>@Model.DataGeneral.devolucionessegunda</td>
+                        <td>@Math.Round((Model.DataGeneral.devolucionesporcentaje * 100), 2) %</td>
+                    </tr>
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+
+    @* MERMAS *@
+    <div class="col-md-3">
+        <div class="card card-outline card-primary">
+            <table class="table table-sm table-bordered table-hover text-center">
+                <thead class="thead-light">
+                    <tr>
+                        <th colspan="2">Mermas</th>
+                    </tr>
+                    <tr>
+                        <th>Tendido</th>
+                        <th>Entrecorte</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>@Math.Round(Model.DataGeneral.mermastendido * 100, 2)% </td>
+                        <td>@Model.DataGeneral.mermasentrecorte </td>
+                    </tr>
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+
+    @* ADICIONAL - COLLARETAS *@
+    <div class="col-md-3">
+        <div class="card card-outline card-primary">
+            <table class="table table-sm table-bordered table-hover text-center">
+                <thead class="thead-light">
+                    <tr>
+                        <th>Adicional</th>
+                        <th>Collaretas</th>
+                    </tr>
+                    <tr>
+                        <th>Tela</th>
+                        <th>Tela</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>@Model.DataGeneral.adicional</td>
+                        <td>@Model.DataGeneral.collaretas</td>
+                    </tr>
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+
+    @* TABLAS GENERALES *@
+    <div class="col-md-12">
+
+        <div class="card">
+
+            <div class="table-responsive">
+
+                <table class="table table-bordered table-hover table-sm text-center">
+
+                    @*CABECERA*@
+                    <thead class="thead-light">
+                        <tr>
+                            <th colspan="6" class="border-right border-left border-top border-bottom">CONSUMO PONDERADO (PROGRAMADO)</th>
+                            <th colspan="3" class="border-right border-top border-bottom">CONSUMO TIZADOS</th>
+                            <th colspan="6" class="border-right border-top border-bottom">DENSIDAD REAL (CORTE)</th>
+                            <th colspan="3" class="border-right border-top border-bottom">CONSUMO REAL NETO</th>
+                            <th colspan="4" class="border-right border-top border-bottom">CONSUMO BRUTO</th>
+                        </tr>
+                        <tr>
+                            <th nowrap class="border-right border-left border-bottom">Fichas</th>
+                            <th nowrap class="border-right border-bottom">Estilos</th>
+                            <th nowrap class="border-right border-bottom">Prendas</th>
+                            <th nowrap class="border-right border-bottom">Consumo</th>
+                            <th nowrap class="border-right border-bottom">Kilos</th>
+                            <th nowrap class="border-right border-bottom">% Kilos</th>
+
+                            <th nowrap class="border-right border-bottom">Prendas</th>
+                            <th nowrap class="border-right border-bottom">Consumo</th>
+                            <th nowrap class="border-right border-bottom">Kilos</th>
+
+                            <th nowrap class="border-right border-bottom">Etapas</th>
+                            <th nowrap class="border-right border-bottom">N° Paños</th>
+                            <th nowrap class="border-right border-bottom">Tallas</th>
+                            <th nowrap class="border-right border-bottom">Largo Paño</th>
+                            <th nowrap class="border-right border-bottom">Peso Paño</th>
+                            <th nowrap class="border-right border-bottom">Densidad</th>
+
+                            <th nowrap class="border-right border-bottom">Prendas</th>
+                            <th nowrap class="border-right border-bottom">Consumo</th>
+                            <th nowrap class="border-right border-bottom">Kilos</th>
+
+                            <th nowrap class="border-right border-bottom">Cons. Lineal</th>
+                            <th nowrap class="border-right border-bottom">Metros</th>
+                            <th nowrap class="border-right border-bottom">Cons. Peso</th>
+                            <th nowrap class="border-right border-bottom">Kilos</th>
+                        </tr>
+                    </thead>
+                    @*CUERPO*@
+                    <tbody>
+                        @*@foreach (var item in Model.DataFichas)*@
+                        @for (int x = 0; x < mayor; x++)
+                        {
+                            <tr>
+                                <td class="border-left"> @(x < cantfichas ? Model.DataFichas[x].ficha : null) </td>
+                                <td> @(x < cantfichas ? Model.DataFichas[x].estilo : "") </td>
+                                <td> @(x < cantfichas ? Model.DataFichas[x].prendasprogramado : 0)</td>
+                                <td> @(x < cantfichas ? Math.Round(Model.DataFichas[x].consumoprogramado,4) : 0) </td>
+                                <td> @(x < cantfichas ? Math.Round(Model.DataFichas[x].kilosprogramado, 2) : 0) </td>
+                                <td class="border-right"> @(x < cantfichas ? Math.Round(Model.DataFichas[x].porcentajekilosprogramado, 2) : 0) </td>
+
+                                <td> @(x < cantfichas ? Model.DataFichas[x].prendastizado : 0) </td>
+                                <td> @(x < cantfichas ? Math.Round(Model.DataFichas[x].consumotizado,4) : 0) </td>
+                                <td class="border-right"> @(x < cantfichas ? Math.Round(Model.DataFichas[x].kilostizado, 2) : 0)</td>
+
+                                <td> @( x < cantetapas ? Model.DataTendido[x].etapa  : "" ) </td>
+                                <td> @( x < cantetapas ? Model.DataTendido[x].panos  : 0 )</td>
+                                <td> @( x < cantetapas ? Model.DataTendido[x].tallas  : 0 )</td>
+                                <td> @( x < cantetapas ? Model.DataTendido[x].largopano  : 0 )</td>
+                                <td> @( x < cantetapas ? Model.DataTendido[x].pesopano  : 0 )</td>
+                                <td class="border-right"> @( x < cantetapas ? Math.Round(Model.DataTendido[x].densidad,4)  : 0 )</td>
+
+                                <td> @(x < cantfichas ? Model.DataFichas[x].prendasneto : 0)</td>
+                                <td> @(x < cantfichas ? Math.Round(Model.DataFichas[x].consumoneto,4) : 0) </td>
+                                <td class="border-right"> @(x < cantfichas ? Math.Round(Model.DataFichas[x].kilosneto,3) : 0)</td>
+
+                                <td> @(x < cantfichas ? Math.Round(Model.DataFichas[x].consumolinealbruto,4) : 0) </td>
+                                <td> @(x < cantfichas ? Math.Round(Model.DataFichas[x].metrosbruto, 2) : 0)  </td>
+                                <td> @(x < cantfichas ? Math.Round(Model.DataFichas[x].consumopesobruto,4) : 0)  </td>
+                                <td class="border-right"> @(x < cantfichas ? Math.Round(Model.DataFichas[x].kilosbruto, 2) : 0) </td>
+
+                            </tr>
+
+                            //CALCULO DE DATOS (SUMA)
+                            if (x < cantfichas)
+                            {
+                                totalprendasprogramado += Model.DataFichas[x].prendasprogramado;
+                                totalkilosprogramado += Model.DataFichas[x].kilosprogramado;
+                                totalporcentajeprogramado += Model.DataFichas[x].porcentajekilosprogramado;
+                                totalprendastizado += Model.DataFichas[x].prendastizado;
+                            }
+
+
+                            //DENSIDAD PROMEDIO
+                            if (x < cantetapas)
+                            {
+                                densidadpromedio += Model.DataTendido[x].densidad;
+                            }
+
+                            //TOTAL PRENDAS REAL NETO
+                            if (x < cantetapas)
+                            {
+                                totalprendasneto += (Model.DataTendido[x].panos * Model.DataTendido[x].tallas);
+                                totalkilosneto += (Model.DataTendido[x].panos * Model.DataTendido[x].pesopano);
+                            }
+
+                        }
+                    </tbody>
+                    @*PIE DE TABLA*@
+                    <tfoot>
+
+                        @*CALCULO TOTAL DE DATOS*@
+                        @{
+                            totalconsumoprogramado = totalkilosprogramado / totalprendasprogramado;
+                            densidadpromedio = densidadpromedio / cantetapas;
+                            diferenciadensidad = (densidadpromedio - (Model.DataGeneral.densidadprogramado / 10)) / densidadpromedio;
+
+                        }
+
+                        <tr>
+                            <th class="border-left border-right border-bottom border-top" colspan="2">TOTAL</th>
+                            <th class="border-right border-bottom border-top">@totalprendasprogramado</th>
+                            <th class="border-right border-bottom border-top">@Math.Round(totalconsumoprogramado, 6)</th>
+                            <th class="border-right border-bottom border-top">@Math.Round(totalkilosprogramado, 2) </th>
+                            <th class="border-right border-bottom border-top">@(totalporcentajeprogramado * 100)%</th>
+
+                            <th class="border-right border-bottom border-top">@totalprendastizado</th>
+                            <th class="border-right border-bottom border-top">@Model.DataGeneral.consumotizadosgeneral</th>
+                            <th class="border-right border-bottom border-top">@Math.Round(totalprendastizado * Model.DataGeneral.consumotizadosgeneral, 2) </th>
+
+                            <th colspan="5" class="border-right border-bottom border-top">Densidad Promedio</th>
+                            <th class="border-right border-bottom border-top">@Math.Round(densidadpromedio, 3)</th>
+
+                            <th class="border-right border-bottom border-top">@totalprendasneto</th>
+                            <th class="border-right border-bottom border-top">@Math.Round(totalkilosneto / totalprendasneto, 4) </th>
+                            <th class="border-right border-bottom border-top">@totalkilosneto</th>
+
+                            <th colspan="2" class="border-right border-bottom border-top">@Model.DataGeneral.totalmetrosbruto </th>
+                            <th colspan="2" class="border-right border-bottom border-top">@Model.DataGeneral.totalkilosbruto</th>
+                        </tr>
+                    </tfoot>
+
+
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    @{
+        // CALCULOS
+        porcentajecaidasmejoras = (totalconsumoprogramado * (totalprendasprogramado - totalprendasneto)) / Model.DataGeneral.totalmerma;
+        porcentajecaidasmejoras = Math.Round((porcentajecaidasmejoras * 100), 2);
+
+        kiloscaida = totalconsumoprogramado * (totalprendasprogramado - totalprendasneto);
+
+        caidadensidad = Model.DataGeneral.totalmerma * diferenciadensidad;
+        caidaancho = Model.DataGeneral.totalmerma * -Model.DataGeneral.anchoteladiferencia;
+        caidatela = kiloscaida - (caidadensidad + caidaancho);
+
+    }
+
+    @* CAIDAS / MEJORAS *@
+    <div class="col-md-3">
+        <div class="card card-outline card-primary">
+
+            <table class="table table-sm table-bordered table-hover text-center">
+                <thead class="thead-light">
+                    <tr>
+                        <th colspan="3">CAIDAS / MEJORAS</th>
+                    </tr>
+                    <tr>
+                        <th>Prendas</th>
+                        <th>Kilos</th>
+                        <th>%</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>@(totalprendasprogramado - totalprendasneto ) </td>
+                        <td>@Math.Round(kiloscaida, 2)</td>
+                        <td>@porcentajecaidasmejoras %</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">POR DENSIDAD</td>
+                        <td>@Math.Round(caidadensidad, 2) </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">POR ANCHO</td>
+                        <td>@Math.Round(caidaancho, 2)</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">EXCESO DE MERMA</td>
+                        <td>@Math.Round(caidamerma, 2)</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">DEFECTOS DE TELA</td>
+                        <td>@Math.Round(caidatela, 2)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    @* MERMAS *@
+    <div class="col-md-3">
+        <div class="card card-primary card-outline">
+
+            <table class="table table-bordered table-hover table-sm text-center">
+                <thead class="thead-light">
+                    <tr>
+                        <th colspan="2">MERMAS</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Puntas</td>
+                        <td>@Model.DataGeneral.puntasmermas</td>
+                    </tr>
+                    <tr>
+                        <td>Retazos +30</td>
+                        <td>@Model.DataGeneral.retazosmas</td>
+                    </tr>
+                    <tr>
+                        <td>Retazos -30</td>
+                        <td>@Model.DataGeneral.retazosmen</td>
+                    </tr>
+                    <tr>
+                        <td>Empalmes</td>
+                        <td>@Model.DataGeneral.empalmes</td>
+                    </tr>
+                    <tr>
+                        <td>Conos</td>
+                        <td>@Model.DataGeneral.conos</td>
+                    </tr>
+                    <tr>
+                        <td>Bolsas</td>
+                        <td>@Model.DataGeneral.bolsas</td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th>TOTAL</th>
+                        <th>@Model.DataGeneral.totalmerma</th>
+                    </tr>
+                </tfoot>
+            </table>
+
+        </div>
+    </div>
+
+    <div class="col-md-3">
+
+        <div class="card card-outline card-primary">
+            <div class="card-header text-center">
+                <h1 class="card-title">Operaciones</h1>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        @if (Model.DataGeneral.estadotendido == "1")
+                        {
+                            <button class="btn btn-sm btn-success btn-block" id="btnaprobartendido" disabled>Aprobar Tendido</button>
+                        }
+                        else
+                        {
+                            <button class="btn btn-sm btn-success btn-block" id="btnaprobartendido">Aprobar Tendido</button>
+                        }
+                    </div>
+                    <div class="col-md-6">
+                        @*SI ESTA APROBADO EL TENDIDO*@
+                        @if (Model.DataGeneral.estadotendido == "1" && Model.DataGeneral.estadocorte != "1")
+                        {
+                            <button class="btn btn-sm btn-primary btn-block" id="btnaprobarcorte">Aprobar Corte</button>
+                        }
+
+                        @if (Model.DataGeneral.estadocorte == "1")
+                        {
+                            <button class="btn btn-sm btn-primary btn-block" id="btnaprobarcorte" disabled>Aprobar Corte</button>
+                        }
+
+                    </div>
+                </div>
+
+                @*<h6>TENDIDO: @Model.DataGeneral.estadotendido </h6>
+                <h6>CORTE: @Model.DataGeneral.estadocorte </h6>*@
+
+
+            </div>
+        </div>
+
+    </div>
+
+    @*<div class="col-md-2">
+        <button class="btn btn-sm btn-block btn-primary">Aprobar Corte</button>
+    </div>*@
+
+</div>
+
+
+@section scripts {
+
+    <script>
+        //ACTULIZAMOS VARIABLES
+        $("#densidadreal").text(@Math.Round(densidadpromedio, 3));
+        $("#diferenciadensidad").text( @Math.Round(diferenciadensidad * 100, 1) + "%") ;
+
+        let partida     = "@Model.DataGeneral.partida";
+        let combo       = "@Model.DataGeneral.combo";
+        let version     = "@Model.DataGeneral.version";
+        let tipotela    = "@Model.DataGeneral.tipotela";
+        let opcion      = "";
+        let estado      = "1";
+
+
+
+
+
+        // APROBAMOS TENDIDO
+        $("#btnaprobartendido").click(function () {
+
+            opcion = "T";
+
+            Preguntar("Confirme para aprobar tendido")
+                .then(response => {
+
+                    if (response.value) {
+
+                        get("Corte", "setAperturaFicha", {
+                            partida, combo, version, tipotela, estado, opcion
+                        }, true)
+                            .then(response => {
+                                if (response.success) {
+                                    location.reload();
+                                } else {
+                                    Advertir(response.mensaje);
+                                }
+                            })
+                            .catch(error => {
+                                Advertir("Ocurrio un problema");
+                                console.log(error);
+                            });
+
+                    }
+
+                })
+                .catch(error => {
+                    console.log(error);
+                    Advertir("Ocurrio un problema");
+                });
+
+        });
+
+        // APROBAMOS CORTE
+        $("#btnaprobarcorte").click(function () {
+
+            opcion = "C";
+
+
+            Preguntar("Confirme para aprobar Corte")
+                .then(response => {
+
+                    if (response.value) {
+
+                        get("Corte", "setAperturaFicha", {
+                            partida, combo, version, tipotela, estado, opcion
+                        }, true)
+                            .then(response => {
+                                if (response.success) {
+                                    location.reload();
+                                } else {
+                                    Advertir(response.mensaje);
+                                }
+                            })
+                            .catch(error => {
+                                Advertir("Ocurrio un problema");
+                                console.log(error);
+                            });
+
+                    }
+
+                })
+                .catch(error => {
+                    console.log(error);
+                    Advertir("Ocurrio un problema");
+                });
+        });
+
+    </script>
+
+}

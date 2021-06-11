@@ -1,0 +1,1592 @@
+﻿@{
+    ViewBag.Title = "Solicitud de Gastos";
+    ViewBag.Modulo = "Finanzas";
+    Layout = "~/Views/Plantillas/_Layout.cshtml";
+}
+
+
+<div id="solgas" class="container-fluid">
+
+    <ul class="nav nav-tabs nav-justified md-tabs indigo" id="myTabJust" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" id="firma-tab-just" data-toggle="tab" href="#sg-registro" role="tab" aria-controls="firma-just"
+               aria-selected="true">Registro</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="aprobados-tab-just" data-toggle="tab" href="#sg-historial" role="tab" aria-controls="aprobadas-just"
+               aria-selected="false">Historial</a>
+        </li>
+    </ul>
+
+
+
+    <div class="tab-content card pt-1" id="myTabContentJust">
+        <div class="tab-pane fade show active" id="sg-registro" role="tabpanel" aria-labelledby="firma-tab-just">   
+
+            <div class="container-fluid">
+
+                <div class="row d-flex flex-row-reverse m-1 mr-3">
+                    <div class="estado-solicitud  d-flex flex-row-reverse">
+                        <div id="estado-icon"></div>
+                        <h5 id="estado-desc"></h5>
+                    </div>
+                </div>
+
+                <div class="row m-2">
+
+                    <div class="col-4 p-1">
+                        <label for="idtxtcodigo">Codigo de Solicitud</label>
+                        <input class="form-control form-control-sm" type="text" id="idtxtcodigo" placeholder="Busca un código <Enter>" maxlength="10">
+                    </div>
+
+                    <div class="col-2 p-1">
+                        <label for="iddttFechaHora">Fecha</label>
+                        <input class="form-control form-control-sm" type="text" id="iddttFechaHora" disabled>
+                    </div>
+
+                    <div class="col-2 p-1">
+                        <label for="idCbxTipo">Tipo</label>
+                        <select class="form-control form-control-sm" id="idCbxTipo"></select>
+                    </div>
+
+
+                    <div class="col-4 p-1">
+                        <label for="idusuario">Usuario</label>
+                        <input class="form-control form-control-sm" type="text" id="idusuario" disabled>
+                    </div>
+
+
+
+                    <div class="col-3 p-1">
+                        <label for="idCbxTipoMod">Tipo de Moneda</label>
+                        <select class="form-control form-control-sm" id="idCbxTipoMod"></select>
+                    </div>
+
+                    <div class="col-9 p-1">
+                        <label for="idtxtaobs">Motivo Glosa / Descripción Solicitud</label>
+                        <input type="text" class="form-control form-control-sm" placeholder="Ingrese una nota (opcional)" id="idtxtaobs" maxlength="300" />
+                    </div>
+
+
+                    <div class="col-12 p-2 d-flex justify-content-between">
+                        <div class="col-8 d-flex justify-content-between cbtn-acciones">
+                            <div>
+                                <button id="btnNuevo" type="button" class="btn btn-primary btn-sm"><i class="fas fa-file"></i> Nuevo</button>
+                                <button id="btnGuardarCabecera" type="button" class="btn btn-primary btn-sm ml-1 mr-1"><i class="fas fa-save"></i> Guardar</button>
+                                <button id="btnBuscarCodigo" type="button" class="btn btn-primary btn-sm"><i class="fas fa-search"></i> Buscar</button>
+                            </div>
+
+                            <div>
+                                <button id="btnAgregarDetalle" type="button" data-toggle="modal" data-target="#modalSolicitudDet" class="btn btn-warning btn-sm"><i class="fas fa-plus"></i> Agregar Detalle</button>
+                            </div>
+                        </div>
+
+
+                        <div class="col-3 ckpi-total d-flex justify-content-between">
+
+                            <div class="ckpi-item">
+                                <h5 id="kpi-cantidad">0</h5>
+                                <span>Cantidad</span>
+                            </div>
+
+                            <div class="ckpi-item">
+                                <h5 id="kpi-total">0</h5>
+                                <span>Total</span>
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+
+                <div class="mt-1 mb-1">
+                    <hr />
+                </div>
+
+
+                <div class="card card-body">
+
+                    <table class="table table-sm table-bordered table-hover display nowrap" id="tblDetalle">
+                        <thead class="thead-light">
+                            <tr>
+                                <th class="ocultar-columna">idSolicitud</th>
+                                @*<th>Secuencia</th>*@
+                                <th>Codigo</th>
+                                <th class="">Fecha</th>
+                                <th class="">Estados</th>
+                                <th>Centro de Costo</th>
+                                <th>Concepto</th>
+                                @*<th>Concepto Detalle</th>*@
+                                <th class="">Moneda</th>
+                                <th>Valor</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tblDetalleContent"></tbody>
+                    </table>
+
+
+                </div>
+
+            </div>
+        </div>
+
+
+        <div class="tab-pane fade seccion-ap-rech" id="sg-historial" role="tabpanel" aria-labelledby="aprobadas-tab-just">
+
+            <div class="container-fluid m-2">
+
+                <div class="row m-2">
+                    <div class="col-3 p-1">
+                        <label for="idfechaInicio">Fecha Desde: </label>
+                        <input class="form-control form-control-sm" type="date" id="idfechaInicio">
+                    </div>
+
+                    <div class="col-3 p-1">
+                        <label for="idfechaFin">Fecha Hasta: </label>
+                        <input class="form-control form-control-sm" type="date" id="idfechaFin">
+                    </div>
+                    <div class="col-4 p-1 form-group">
+                        <div> &nbsp; &nbsp;</div>
+                        <button id="btnBuscar" type="button" class="btn btn-primary btn-sm pt-2">Buscar</button>
+                    </div>
+                </div>
+
+
+                <div class="card m-2">
+                    <table class="table table-sm table-bordered table-hover display nowrap" id="tblHistorial">
+                        <thead class="thead-light">
+                            <tr>
+                                <th class="ocultar-columna">idSolicitud</th>
+                                <th>Fecha</th>
+                                <th>Codigo</th>
+                                <th>Glosa / Desc. Solicitud</th>
+                                <th class="">Estado</th>
+                                <th class="">Tipo</th>
+                                <th>Nivel Aprobacion</th>
+                                <th class="">Moneda</th>
+                                <th>Valor</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tblHistorialContent"></tbody>
+                    </table>
+                </div>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+</div>
+
+
+<div class="modal fade" id="modalSolicitudDet" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Detalle de Solicitud</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <form>
+
+                    <div class="row">
+                        <div class="col-2">
+                            <label for="idmcodigo">Codigo:</label>
+                            <input type="text" class="form-control form-control-sm" id="idmcodigo" readonly>
+                        </div>
+                        <div class="col-2">
+                            <label for="idmCbxConcepCab">Concepto:</label>
+                            <select class="form-control form-control-sm" id="idmCbxConcepCab"></select>
+                        </div>
+
+                        <div class="col-8">
+                            <label for="idmCbxCeCo">Centro de Costo:</label>
+                            <select class="form-control form-control-sm" id="idmCbxCeCo"></select>
+                        </div>
+                    </div>
+
+                    
+                    <div class="row mt-4">
+                        <div class="col-4">
+                            <div class="list-group" id="list-tab" role="tablist">
+                                <a class="list-group-item list-group-item-action active" id="list-home-list" data-toggle="list" href="#list-home" role="tab" aria-controls="home">Home</a>
+                                <a class="list-group-item list-group-item-action" id="list-profile-list" data-toggle="list" href="#list-profile" role="tab" aria-controls="profile">Profile</a>
+                                <a class="list-group-item list-group-item-action" id="list-messages-list" data-toggle="list" href="#list-messages" role="tab" aria-controls="messages">Messages</a>
+                                <a class="list-group-item list-group-item-action" id="list-settings-list" data-toggle="list" href="#list-settings" role="tab" aria-controls="settings">Settings</a>
+                            </div>
+                        </div>
+                        <div class="col-8">
+                            <div class="tab-content" id="nav-tabContent">
+                                <div class="tab-pane fade show active" id="list-home" role="tabpanel" aria-labelledby="list-home-list">.aaaaa..</div>
+                                <div class="tab-pane fade" id="list-profile" role="tabpanel" aria-labelledby="list-profile-list">..bbbbb.</div>
+                                <div class="tab-pane fade" id="list-messages" role="tabpanel" aria-labelledby="list-messages-list">.ccccccc..</div>
+                                <div class="tab-pane fade" id="list-settings" role="tabpanel" aria-labelledby="list-settings-list">..dddddd.</div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    @*<div class="row mt-2">
+                            <div class="col">
+                                <label for="idmCbxConcepDet">Concepto Detalle:</label>
+                                <select class="form-control form-control-sm" id="idmCbxConcepDet"></select>
+                            </div>
+                        </div>*@
+
+                    <div class="row mt-4">
+                        <div class="col">
+                            <label for="idmConcepDetConsid">Consideraciones:</label>
+                            <span class="form-control form-control-sm" id="idmConcepDetConsid"></span>
+                        </div>
+                    </div>
+
+
+
+                    <div class="row mt-2">
+                        <div class="col">
+                            <label for="idmvalor">Valor</label>
+                            <input class="form-control form-control-sm" type="number" id="idmvalor">
+                        </div>
+                        <div class="col">
+                            <label for="idmnota">Observación: (Opcional)</label>
+                            <textarea class="form-control form-control-sm" id="idmnota" maxlength="300"></textarea>
+                        </div>
+                    </div>
+
+                </form>
+
+            </div>
+            <div class="modal-footer">
+                <button id="btnCancelar" type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button id="btnGuardarDetalle" type="button" class="btn btn-primary">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="modalDetalleSol" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Detalle de Solicitud</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+
+                    <div class="row">
+                        <div class="col">
+                            <label for="idmdcodigo">Codigo:</label>
+                            <span type="text" class="form-control form-control-sm" id="idmdcodigo"></span>
+                        </div>
+                        <div class="col">
+                            <label for="idmdfecha">Fecha:</label>
+                            <span type="text" class="form-control form-control-sm" id="idmdfecha"></span>
+                        </div>
+                        <div class="col">
+                            <label for="idmdestado">Estado:</label>
+                            <span type="text" class="form-control form-control-sm" id="idmdestado"></span>
+                        </div>
+                    </div>
+
+                    <div class="row mt-2 mb-2">
+                        <div class="col">
+                            <label for="idmdobs">Glosa:</label>
+                            <span class="form-control form-control-sm" id="idmdobs"></span>
+                        </div>
+                    </div>
+
+                    <div class="row mt-2 mb-2">
+                        <div class="col">
+                            <label for="idmdmoneda">Moneda:</label>
+                            <span class="form-control form-control-sm" id="idmdmoneda"></span>
+                        </div>
+                    </div>
+
+                    <div class="row mt-2 mb-2">
+                        <div class="col">
+                            <label for="idmdceco">Centro de Costo</label>
+                            <span class="form-control form-control-sm" id="idmdceco"></span>
+                        </div>
+
+                    </div>
+
+                    <div class="row mt-2 mb-2">
+                        <div class="col">
+                            <label for="idmdconcepCab">Concepto:</label>
+                            <span class="form-control form-control-sm" id="idmdconcepCab"></span>
+                        </div>
+                        <div class="col">
+                            <label for="idmdconcepDet">Detalle Concepto:</label>
+                            <span class="form-control form-control-sm" id="idmdconcepDet"></span>
+                        </div>
+                    </div>
+
+
+                    <div class="row mt-2 mb-2">
+                        <div class="col">
+                            <label for="idmdnota">Glosa</label>
+                            <span class="form-control form-control-sm" id="idmdnota"></span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col">
+                            <label for="idmdvalor">Valor:</label>
+                            <span class="form-control form-control-sm" id="idmdvalor"></span>
+                        </div>
+                    </div>
+
+                </form>
+
+            </div>
+            <div class="modal-footer">
+                <button id="btnCancelar" type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button id="btnGuardarDetalle" type="button" class="btn btn-primary">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<style>
+
+    #solgas label {
+        font-family: 'Roboto', sans-serif;
+    }
+
+    #modalSolicitudDet input, select, span, label {
+        font-family: 'Roboto', sans-serif;
+    }
+
+    #solgas .idtxtcodigo-ok {
+        background-color: #82E0AA !important;
+    }
+
+
+    #solgas table .ocultar-columna {
+        display: none;
+    }
+
+
+    #solgas .cbtn-acciones {
+        border: 1px solid #D5D8DC;
+        padding: 10px;
+        border-radius: 5px;
+    }
+
+    #solgas .ckpi-total {
+        border: 1px solid #D5D8DC;
+        padding: 10px;
+        border-radius: 5px;
+    }
+
+    #solgas .ckpi-item {
+        background-color: #EBEDEF;
+        width: 45%;
+        margin: auto;
+        padding: 4px;
+        border-radius: 3px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+    }
+
+
+    #solgas .kpi-cantidad {
+    }
+
+
+
+
+    #solgas #tblHistorial th {
+        font-family: 'Roboto', sans-serif !important;
+    }
+
+    #solgas #tblHistorial td {
+        font-family: 'Roboto', sans-serif !important;
+        font-weight: 600;
+    }
+
+    #solgas #tblDetalle th {
+        font-family: 'Roboto', sans-serif !important;
+    }
+
+    #solgas #tblDetalle td {
+        font-family: 'Roboto', sans-serif !important;
+    }
+
+    #solgas .estado-solicitud {
+        padding: 10px;
+        border: 1px solid #000000;
+        border-radius: 5px;
+    }
+
+    #solgas #estado-desc {
+        margin-right: 8px;
+    }
+
+    #modalSolicitudDet #idmConcepDetConsid {
+        height: 100px !important;
+    }
+
+
+    #solgas .icon-pendiente::after {
+        content: url(../../Public/icon-pend.png);
+    }
+
+    #solgas .icon-liberado::after {
+        content: url(../../Public/icon-libe.png);
+    }
+
+    #solgas .icon-aprobado::after {
+        content: url(../../Public/icon-apro.png);
+    }
+
+    #solgas .icon-rechazado::after {
+        content: url(../../Public/icon-rech.png);
+    }
+
+
+
+    #solgas .desc-est-pendiente {
+        color: #616A6B;
+    }
+
+    #solgas .desc-est-liberado {
+        color: #F1C40F;
+    }
+
+    #solgas .desc-est-aprobado {
+        color: #28B463;
+    }
+
+    #solgas .desc-est-rechazado {
+        color: #C0392B;
+    }
+
+
+
+    @@media (min-width: 320px) and (max-width: 479.98px) {
+    }
+
+    @@media (min-width: 480px) and (max-width: 767.98px) {
+    }
+
+    @@media (min-width: 768px) and (max-width: 991.98px) {
+    }
+
+    @@media (min-width: 992px) and (max-width: 1199.98px) {
+    }
+
+    @@media (min-width: 1200px) {
+    }
+</style>
+
+
+@section scripts {
+    <script>
+
+        const NIVEL_INTERFAZ = 10;
+        const USUARIO = "@Request.RequestContext.HttpContext.Session["usuario"]";
+        const USUARIO_COMPLETO = "@Request.RequestContext.HttpContext.Session["usuario"]" + " - " + "@Request.RequestContext.HttpContext.Session["nombre"]";
+
+        var vIdSolicitud = 0;
+        var vIdTipoMod = 0;
+        var vCodCeCo = 0;
+        var vIdConcepCab = 0;
+        var vIdConcepDet = 0;
+
+        var vIdTipo = 0;
+
+        $(document).ready(function () {
+
+            Inicializar();
+
+
+            function Inicializar() {
+
+                let parametros = { nivelInterfaz: NIVEL_INTERFAZ };
+                getPermisosXCeCo(parametros);
+
+                getConceptoCab();
+                getTipoDeMoneda();
+                getTipos();
+
+                limpiarCabecera();
+
+                document.getElementById("idtxtcodigo").focus();
+
+                document.getElementById("btnAgregarDetalle").disabled = true;
+                $("#btnAgregarDetalle").removeClass("btn-warning");
+                $("#btnAgregarDetalle").addClass("btn-secondary");
+
+                document.getElementById("btnGuardarCabecera").disabled = true;
+                $("#btnGuardarCabecera").removeClass("btn-primary");
+                $("#btnGuardarCabecera").addClass("btn-secondary");
+
+                document.getElementById("btnBuscarCodigo").disabled = true;
+                $("#btnBuscarCodigo").removeClass("btn-primary");
+                $("#btnBuscarCodigo").addClass("btn-secondary");
+
+
+                document.getElementById("idCbxTipo").disabled = true;
+                document.getElementById("idCbxTipoMod").disabled = true;
+                document.getElementById("idtxtaobs").disabled = true;
+
+
+            }
+
+            // Funcionalidades.
+            function limpiarCabecera() {
+                let now = new Date();
+
+                //$("#iddttFechaHora").val(new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString().substring(0, 19).toString());
+
+                $("#iddttFechaHora").val("");
+                $("#idtxtcodigo").val("");
+                $("#idtxtcodigo").removeClass("idtxtcodigo-ok");
+                $("#idCbxTipo").val(0);
+                $("#idCbxTipoMod").val(0);
+                $("#idtxtaobs").val("");
+                $("#idusuario").val("");
+
+            }
+
+            function limpiarDetalle() {
+
+                $("#idmcodigo").val("");
+                $("#idmCbxConcepCab").val("0");
+
+                $("#idmCbxConcepDet").val(0);
+                $("#idmConcepDetConsid").text("");
+
+                $("#idmCbxCeCo").val(0);
+                $("#idmvalor").val("");
+                $("#idmnota").val("");
+            }
+
+            function mensajePrincipal(estado, mensaje) {
+                if (estado == true) {
+
+                    const Toast = Swal.mixin({
+                        toast: true,
+                        position: 'top-end',
+                        showConfirmButton: false,
+                        timer: 2500,
+                        timerProgressBar: true,
+                        didOpen: (toast) => {
+                            toast.addEventListener('mouseenter', Swal.stopTimer)
+                            toast.addEventListener('mouseleave', Swal.resumeTimer)
+                        }
+                    })
+
+                    Toast.fire({
+                        icon: 'success',
+                        title: mensaje
+                    });
+
+                }
+                else if (estado == false) {
+
+                    const Toast = Swal.mixin({
+                        toast: true,
+                        position: 'top-end',
+                        showConfirmButton: false,
+                        timer: 2500,
+                        timerProgressBar: true,
+                        didOpen: (toast) => {
+                            toast.addEventListener('mouseenter', Swal.stopTimer)
+                            toast.addEventListener('mouseleave', Swal.resumeTimer)
+                        }
+                    })
+
+                    Toast.fire({
+                        icon: 'error',
+                        title: mensaje
+                    });
+
+                }
+            }
+
+            function validacionCabecera() {
+                var respuesta = false;
+
+
+                if ($("#idtxtcodigo").val().trim() != "0") {
+                    respuesta = false;
+
+                    Swal.fire({
+                        title: 'No puede generar una solicitud nueva',
+                        text: "Textile Sourcing Company",
+                        icon: 'warning',
+                        showConfirmButton: true,
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'Ok'
+                    });
+
+                }
+                else if (vIdTipoMod == 0) {
+                    respuesta = false;
+
+                    Swal.fire({
+                        title: 'Seleccione un Tipo de Moneda',
+                        text: "Textile Sourcing Company",
+                        icon: 'warning',
+                        showConfirmButton: true,
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'Ok'
+                    });
+                }
+                else if ($("#idtxtaobs").val().trim() == "") {
+                    respuesta = false;
+
+                    Swal.fire({
+                        title: 'Ingrese una descripción de la solicitud por favor',
+                        text: "Textile Sourcing Company",
+                        icon: 'warning',
+                        showConfirmButton: true,
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'Ok'
+                    });
+                }
+                else if (vIdTipo == 0) {
+                    respuesta = false;
+
+                    Swal.fire({
+                        title: 'Seleccione el tipo de Solicitud, por favor',
+                        text: "Textile Sourcing Company",
+                        icon: 'warning',
+                        showConfirmButton: true,
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'Ok'
+                    });
+                }
+                else {
+                    respuesta = true;
+                }
+
+                return respuesta;
+            }
+
+
+            function validacionDetalle() {
+                var respuesta = false;
+
+                if (vIdSolicitud == 0) {
+                    respuesta = false;
+
+                    Swal.fire({
+                        title: 'Debe generar el codigo de solicitud para continuar',
+                        text: "Textile Sourcing Company",
+                        icon: 'warning',
+                        showConfirmButton: true,
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'Ok'
+
+                    });
+                }
+                else if (vIdConcepDet == 0) {
+                    respuesta = false;
+
+                    Swal.fire({
+                        title: 'Seleccione un concepto, por favor',
+                        text: "Textile Sourcing Company",
+                        icon: 'warning',
+                        showConfirmButton: true,
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'Ok'
+                    });
+                }
+                else {
+                    respuesta = true;
+                }
+
+                return respuesta;
+            }
+
+
+
+
+            // Listados.
+
+            function getPermisosXCeCo(parametros) {
+                $.ajax({
+                    type: "GET",
+                    url: '/Finanzas/RG_PermisosXCeCo',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    data: parametros,
+                    success: function (data) {
+                        $("#idmCbxCeCo").empty();
+                        $.each(data.lista, function () {
+                            $("#idmCbxCeCo").append($("<option/>").val(this.codCeCo).text(this.descripcion));
+                        });
+                        $("#idmCbxCeCo").val(0);
+                    },
+                    failure: function () {
+                        console.error('error al cargar tipos periodos');
+                    }
+                });
+            }
+
+            function getConceptoCab() {
+                $.ajax({
+                    type: "GET",
+                    url: '/Finanzas/RG_ConceptoCab',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (data) {
+                        $("#idmCbxConcepCab").empty();
+                        $.each(data.lista, function () {
+                            $("#idmCbxConcepCab").append($("<option/>").val(this.idConceptoCab).text(this.conceptoCab));
+                        });
+                        $("#idmCbxConcepCab").val("0");
+                    },
+                    failure: function () {
+                        console.error('error al cargar tipos periodos');
+                    }
+                });
+            }
+
+
+            function getConceptoDet(idConceptoCab) {
+                $.ajax({
+                    type: "GET",
+                    url: '/Finanzas/RG_ConceptoDet',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    data: { idConceptoCab: idConceptoCab },
+                    success: function (data) {
+                        console.log(data);
+                        $("#idmCbxConcepDet").empty();
+
+                        let $select = $('#idmCbxConcepDet');
+
+                        $.each(data.lista, function () {
+                            $select.append(`<option data-consideracion="${this.consideracion}" value="${this.idConceptoDet}">${this.conceptoDet}</option>`);
+                        });
+
+                        $("#idmCbxConcepDet").val("0");
+                    },
+                    failure: function () {
+                        console.error('error al cargar tipos periodos');
+                    }
+                });
+            }
+
+
+            function getTipoDeMoneda() {
+                $.ajax({
+                    type: "GET",
+                    url: '/Finanzas/RG_TiposDeMoneda',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (data) {
+                        $("#idCbxTipoMod").empty();
+                        $.each(data.lista, function () {
+                            $("#idCbxTipoMod").append($("<option/>").val(this.idTipoMod).text(this.descripcion));
+                        });
+                        $("#idCbxTipoMod").val(0);
+                    },
+                    failure: function () {
+                        console.error('error al cargar tipos periodos');
+                    }
+                });
+            }
+
+            function getTipos() {
+                $.ajax({
+                    type: "GET",
+                    url: '/Finanzas/RG_Tipos',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (data) {
+                        $("#idCbxTipo").empty();
+                        $.each(data.lista, function () {
+                            $("#idCbxTipo").append($("<option/>").val(this.idTipo).text(this.tipo));
+                        });
+                        $("#idCbxTipo").val(0);
+                    },
+                    failure: function () {
+                        console.error('error al cargar tipos periodos');
+                    }
+                });
+            }
+
+
+
+
+            function getListaDetalle(pidSolicitud) {
+
+                $.ajax({
+                    type: "GET",
+                    url: '/finanzas/RG_SolicitudDet',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    data: { idSolicitud: pidSolicitud },
+                    success: function (data) {
+
+                        if (data.isRedirect) {
+                            window.location.href = data.redirectUrl;
+                        }
+                        else {
+                            generarTablaDetalle(data.lista);
+                        }
+                    },
+                    failure: function () {
+                        console.error('error al cargar los periodos');
+
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error al mostrar datos',
+                            text: 'Textile Sourcing Company',
+                            showConfirmButton: false,
+                            timer: 2500,
+                        });
+
+                    }
+                });
+            }
+
+            function generarTablaDetalle(lista) {
+
+                let vTotal = 0;
+                let tabla = $("#tblDetalle").DataTable();
+                tabla.destroy();
+                var tr = "";
+
+                lista.forEach((obj) => {
+
+                    vTotal = vTotal + obj.valor;
+
+                    tr += "<tr> "
+                        + " <td class='ocultar-columna'> " + obj.idSolicitud + "</td> "
+                        //+ " <td> " + obj.secuencia + "</td> "
+                        + " <td> " + obj.codigo + "</td> "
+                        + " <td> " + obj.fecha + "</td>"
+                        + " <td> " + obj.estados + "</td>"
+                        + " <td> " + obj.ceco + "</td> "
+                        + " <td> " + obj.conceptoCab + "</td>"
+                        //+ " <td> " + obj.conceptoDet + "</td>"
+                        + " <td> " + obj.tipoMoneda + "</td> "
+                        + " <td> " + formatoNumero(obj.valor) + "</td> "
+                        + " <td class='text-center'>"
+                        + "     <button data-idsolicitud='" + obj.idSolicitud + "' data-secuencia='" + obj.secuencia + "' data-toggle='collapse' data-target='#modalDetalleSol' class='btn btn-sm btn-primary' id='idIdSolicitudDet'> <i class='fas fa-eye'></i></button>"
+                        + "     <button data-idsolicitud='" + obj.idSolicitud + "' data-secuencia='" + obj.secuencia + "' data-toggle='collapse' class='btn btn-sm btn-danger ml-1' id='btnEliminarIdSol'><i class='fas fa-trash'></i></button>"
+                        + " </td>"
+                        + "</tr>";
+                });
+
+
+                $("#kpi-cantidad").text(lista.length.toString());
+                $("#kpi-total").text(formatoNumero(vTotal).toString());
+
+                $("#tblDetalleContent").html(tr);
+
+                $("#tblDetalle").DataTable(
+                    {
+                        'language': { 'url': '/libs/datatables/spanish.json' },
+                        lengthMenu: [[5, 10, 20, -1], [5, 10, 20, 'Todos']]
+                    }
+                );
+            }
+
+
+            function formatoNumero(x) {
+                x = x.toFixed(2);
+                return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            }
+
+
+
+
+            // Eventos Click
+            $("#btnCancelar").click(function () {
+                document.getElementById("idmCbxCeCo").focus();
+            });
+
+
+            $("#btnGuardarCabecera").click(function () {
+
+                if (validacionCabecera()) {
+
+                    let parametro = {
+                        'opcion': 1,
+                        'idSolicitud': 0,
+                        'codigo': 0,
+                        'idEmpresa': 1,
+                        'idEstado': 1,
+                        'idAnulado': 0,
+                        'idTipoMod': vIdTipoMod,
+                        'observacion': $("#idtxtaobs").val().trim(),
+
+                        'codCeCo': vCodCeCo,
+                        'idConceptoDet': vIdConcepDet,
+                        'valor': 0,
+                        'nota': '',
+                        'secuencia': 0,
+                        'usuario': USUARIO,
+                        'usuarioCompleto': USUARIO_COMPLETO,
+                        'nivelInterfaz': 0,
+                        'idTipo': vIdTipo
+                    }
+
+                    $.ajax({
+                        url: "/finanzas/RG_SetRendicionGastos",
+                        type: "post",
+                        data: parametro,
+                        dataType: "json",
+                        success: function (resultado) {
+                            console.log(resultado);
+
+                            if (resultado.isRedirect) {
+                                window.location.href = resultado.redirectUrl;
+                            }
+                            else {
+                                if (resultado.status.idResponse > 0) {
+                                    vIdSolicitud = resultado.status.idResponse;
+
+                                    $("#iddttFechaHora").val(resultado.responseEntity.fechaEmision);
+                                    $("#idtxtcodigo").val(resultado.responseEntity.codigo);
+                                    $("#idtxtcodigo").addClass("idtxtcodigo-ok");
+
+                                    mensajePrincipal(true, "Solicitud Generada Correctamente");
+                                    $("#btnGuardarCabecera").removeClass("btn-primary");
+                                    $("#btnGuardarCabecera").addClass("btn-secondary");
+                                    document.getElementById("btnGuardarCabecera").disabled = true;
+
+                                    $("#btnAgregarDetalle").removeClass("btn-secondary");
+                                    $("#btnAgregarDetalle").addClass("btn-warning");
+                                    document.getElementById("btnAgregarDetalle").disabled = false;
+                                    document.getElementById("btnAgregarDetalle").focus();
+                                }
+                                else {
+                                    mensajePrincipal(false, "Ocurrio un problema");
+
+                                    console.log(status.resultado.statusResponse);
+                                }
+                            }
+                        },
+                        error: function (xhr, ajaxOptions, thrownError) {
+
+                        }
+                    });
+                }
+            });
+
+
+            $("#btnAgregarDetalle").click(function () {
+                let codigoGenerado = $("#idtxtcodigo").val();
+                $("#idmcodigo").val(codigoGenerado);
+                $('#modalSolicitudDet').modal('show');
+            });
+
+
+            $("#btnGuardarDetalle").click(function () {
+                if (validacionDetalle()) {
+
+                    let parametro = {
+                        'opcion': 2,
+                        'idSolicitud': vIdSolicitud,
+                        'codigo': 0,
+                        'idEmpresa': 1,
+                        'idEstado': 1,
+                        'idAnulado': 0,
+                        'idTipoMod': 0,
+                        'observacion': '',
+
+                        'codCeCo': vCodCeCo,
+                        'idConceptoDet': vIdConcepDet,
+                        'valor': $("#idmvalor").val(),
+                        'nota': $("#idmnota").val(),
+                        'secuencia': 0,
+                        'usuario': USUARIO,
+                        'usuarioCompleto': USUARIO_COMPLETO,
+                        'nivelInterfaz': 0,
+                        'idTipo': 0
+                    }
+
+                    $.ajax({
+                        url: "/finanzas/RG_SetRendicionGastos",
+                        type: "post",
+                        data: parametro,
+                        dataType: "json",
+                        success: function (resultado) {
+                            console.log(resultado);
+
+                            if (resultado.isRedirect) {
+                                window.location.href = resultado.redirectUrl;
+                            }
+                            else {
+                                $('#modalSolicitudDet').modal('hide');
+
+                                if (resultado.status.idResponse > 0) {
+                                    mensajePrincipal(true, "Motivo Agregado");
+                                }
+                                else {
+                                    mensajePrincipal(false, "Ocurrio un problema al agregar el motivo");
+                                    console.log(status.resultado.statusResponse);
+                                }
+
+                                getListaDetalle(vIdSolicitud);
+                            }
+                        },
+                        error: function (xhr, ajaxOptions, thrownError) {
+
+                        }
+                    });
+                }
+            });
+
+            $("#btnNuevo").click(function () {
+                limpiarCabecera();
+                limpiarDetalle();
+
+
+                document.getElementById("btnBuscarCodigo").disabled = false;
+                $("#btnBuscarCodigo").removeClass("btn-secondary");
+                $("#btnBuscarCodigo").addClass("btn-primary");
+
+                document.getElementById("idCbxTipo").disabled = false;
+                document.getElementById("idCbxTipoMod").disabled = false;
+                document.getElementById("idtxtaobs").disabled = false;
+
+                $("#idusuario").val(USUARIO_COMPLETO);
+
+                let now = new Date();
+                $("#iddttFechaHora").val(new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString().substring(0, 19).toString());
+
+                $("#idtxtcodigo").val("0");
+                document.getElementById("idtxtcodigo").disabled = true;
+
+                document.getElementById("btnGuardarCabecera").disabled = false;
+                $("#btnGuardarCabecera").removeClass("btn-secondary");
+                $("#btnGuardarCabecera").addClass("btn-primary");
+
+                document.getElementById("btnAgregarDetalle").disabled = true;
+                $("#btnAgregarDetalle").removeClass("btn-warning");
+                $("#btnAgregarDetalle").addClass("btn-secondary");
+
+                $("#kpi-cantidad").text("0");
+                $("#kpi-total").text("0");
+
+                let tabla = $("#tblDetalle").DataTable();
+                tabla.destroy();
+                var tr = "";
+                $("#tblDetalleContent").html(tr);
+                $("#tblDetalle").DataTable(
+                    {
+                        'language': { 'url': '/libs/datatables/spanish.json' },
+                        lengthMenu: [[5, 10, 20, -1], [5, 10, 20, 'Todos']]
+                    }
+                );
+
+                $("#estado-desc").text("");
+
+                $("#estado-icon").removeClass("icon-liberado");
+                $("#estado-icon").removeClass("icon-aprobado");
+                $("#estado-icon").removeClass("icon-rechazado");
+                $("#estado-icon").removeClass("icon-pendiente");
+
+                $("#estado-desc").removeClass("desc-est-liberado");
+                $("#estado-desc").removeClass("desc-est-aprobado");
+                $("#estado-desc").removeClass("desc-est-rechazado");
+                $("#estado-desc").removeClass("desc-est-pendiente");
+
+                document.getElementById("idCbxTipo").focus();
+            });
+
+
+            $("#tblDetalle").on('click', '#idIdSolicitudDet', function () {
+
+                let idsolcitud = $(this).attr("data-idsolicitud");
+                let secuencia = $(this).attr("data-secuencia");
+
+                $.ajax({
+                    type: "GET",
+                    url: '/finanzas/RG_IdSolicitudDet',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    data: { idSolicitud: idsolcitud, secuencia : secuencia },
+                    success: function (data) {
+
+                        if (data.isRedirect) {
+                            window.location.href = data.redirectUrl;
+                        }
+                        else {
+
+                            $("#idmdcodigo").text(data.entidad.codigo);
+                            $("#idmdfecha").text(data.entidad.fecha);
+                            $("#idmdestado").text(data.entidad.estados);
+                            $("#idmdmoneda").text(data.entidad.tipoMoneda);
+                            $("#idmdceco").text(data.entidad.ceco);
+
+                            $("#idmdconcepCab").text(data.entidad.conceptoCab);
+                            $("#idmdvalor").text(data.entidad.valor);
+                            $("#idmdobs").text(data.entidad.observacion);
+                            $("#idmdnota").text(data.entidad.nota);
+
+                            $('#modalDetalleSol').modal('show');
+                        }
+                    },
+                    failure: function () {
+                        console.error('error al cargar los periodos');
+
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error al mostrar datos',
+                            text: 'Textile Sourcing Company',
+                            showConfirmButton: false,
+                            timer: 2500,
+                        });
+
+                    }
+                });
+
+            });
+
+
+            $("#tblDetalle").on('click', '#btnEliminarIdSol', function () {
+
+                let idsolcitud = $(this).attr("data-idsolicitud");
+                let secuencia = $(this).attr("data-secuencia");
+
+
+                Swal.fire({
+                    title: '¿Esta seguro de eliminar el registro?',
+                    text: "Textile Sourcing Company",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Si',
+                    cancelButtonText: 'No'
+                }).then((result) => {
+
+                    if (result.value) {
+
+                        let parametro = {
+                            'opcion': 3,
+                            'idSolicitud': idsolcitud,
+                            'codigo': 0,
+                            'idEmpresa': 1,
+                            'idEstado': 1,
+                            'idAnulado': 0,
+                            'idTipoMod': vIdTipoMod,
+                            'observacion': '',
+
+                            'codCeCo': vCodCeCo,
+                            'idConceptoDet': vIdConcepDet,
+                            'valor': 0,
+                            'nota': '',
+                            'secuencia': secuencia,
+                            'usuario': USUARIO,
+                            'usuarioCompleto': USUARIO_COMPLETO,
+                            'nivelInterfaz': 0,
+                            'idTipo': vIdTipo
+
+                        }
+
+                        $.ajax({
+                            url: "/finanzas/RG_EliminarSolicitud",
+                            type: "post",
+                            data: parametro,
+                            dataType: "json",
+                            success: function (resultado) {
+                                console.log(resultado);
+
+                                if (resultado.isRedirect) {
+                                    window.location.href = resultado.redirectUrl;
+                                }
+                                else {
+                                    if (resultado.status.idResponse > 0) {
+                                        mensajePrincipal(true, "Item Eliminado Correctamente");
+                                    }
+                                    else {
+                                        mensajePrincipal(false, "Ocurrio un problema");
+                                    }
+                                }
+                            },
+                            error: function (xhr, ajaxOptions, thrownError) {
+
+                            }
+                        });
+
+                        getListaDetalle(vIdSolicitud);
+                    }
+                })
+
+            });
+
+
+            $("#btnBuscar").click(function () {
+
+                let fechaIni = $('#idfechaInicio').val();
+                let fechaFin = $('#idfechaFin').val();
+
+                if (fechaIni == null ||
+                    fechaFin == null ||
+                    typeof (fechaIni) == "undefined" ||
+                    typeof (fechaFin) == "undefined" ||
+                    fechaIni.trim() == "" ||
+                    fechaFin.trim() == "") {
+
+                    Swal.fire('Seleccione la fecha, por favor')
+                }
+                else {
+
+                    var datos =
+                    {
+                        'fechaInicio': fechaIni,
+                        'fechaFin': fechaFin
+                    }
+
+                    $.ajax({
+                        type: "GET",
+                        url: '/finanzas/RG_BuscarHistorial',
+                        contentType: "application/json; charset=utf-8",
+                        data: datos,
+                        dataType: "json",
+                        success: function (data) {
+
+                            console.log(data);
+
+                            let tabla = $("#tblHistorial").DataTable();
+
+                            tabla.destroy();
+                            var tr = "";
+
+                            data.lista.forEach((obj) => {
+
+                                tr += "<tr> "
+                                    + " <td class='ocultar-columna'>" + obj.idSolicitud + "</td>"
+                                    + " <td> " + obj.fecha + "</td>"
+                                    + " <td> " + obj.codigo + "</td>"
+                                    + " <td> " + obj.observacion + "</td>"
+                                    + " <td> " + obj.estado + "</td>"
+                                    + " <td> " + obj.tipo + "</td>"
+                                    + " <td> " + obj.nivelAprob + "</td>"
+                                    + " <td> " + obj.moneda + "</td>"
+                                    + " <td> " + formatoNumero(obj.valor) + "</td>"
+                                    + "</tr>";
+                            });
+
+                            $("#tblHistorialContent").html(tr);
+
+
+                            $("#tblHistorial").DataTable(
+                                {
+                                    dom: 'Bfrtip',
+                                    buttons: [
+                                        'copy', 'excel', 'pdf', 'print'
+                                    ],
+                                    'language': { 'url': '/libs/datatables/spanish.json' },
+                                    lengthMenu: [[5, 10, 20, -1], [5, 10, 20, 'Todos']]
+                                });
+
+                        },
+                        failure: function () {
+                            console.error('error al cargar los periodos');
+                        }
+                    });
+
+                }
+
+            });
+
+            $("#btnBuscarCodigo").click(function () {
+                limpiarCabecera();
+                limpiarDetalle();
+
+                document.getElementById("btnBuscarCodigo").disabled = true;
+                $("#btnBuscarCodigo").removeClass("btn-primary");
+                $("#btnBuscarCodigo").addClass("btn-secondary");
+
+                document.getElementById("idCbxTipo").disabled = true;
+                document.getElementById("idCbxTipoMod").disabled = true;
+                document.getElementById("idtxtaobs").disabled = true;
+
+                vIdSolicitud = 0;
+                $("#idtxtcodigo").val("");
+
+                $("#btnAgregarDetalle").removeClass("btn-warning");
+                $("#btnAgregarDetalle").addClass("btn-secondary");
+                document.getElementById("btnAgregarDetalle").disabled = true;
+
+                let tabla = $("#tblDetalle").DataTable();
+                tabla.destroy();
+                var tr = "";
+                $("#tblDetalleContent").html(tr);
+                $("#tblDetalle").DataTable(
+                    {
+                        'language': { 'url': '/libs/datatables/spanish.json' },
+                        lengthMenu: [[5, 10, 20, -1], [5, 10, 20, 'Todos']]
+                    }
+                );
+
+                $("#estado-desc").text("");
+
+                $("#estado-icon").removeClass("icon-liberado");
+                $("#estado-icon").removeClass("icon-aprobado");
+                $("#estado-icon").removeClass("icon-rechazado");
+                $("#estado-icon").removeClass("icon-pendiente");
+
+                $("#estado-desc").removeClass("desc-est-liberado");
+                $("#estado-desc").removeClass("desc-est-aprobado");
+                $("#estado-desc").removeClass("desc-est-rechazado");
+                $("#estado-desc").removeClass("desc-est-pendiente");
+
+                document.getElementById("idtxtcodigo").disabled = false;
+                document.getElementById("idtxtcodigo").focus();
+            });
+
+
+
+
+
+
+            // Eventos Change
+            $('#idCbxTipoMod').change(function () {
+                var $option = $(this).find('option:selected');
+                vIdTipoMod = parseInt($option.val());
+                console.log(vIdTipoMod);
+            });
+
+            $('#idmCbxCeCo').change(function () {
+                var $option = $(this).find('option:selected');
+                vCodCeCo = parseInt($option.val());
+                console.log(vCodCeCo);
+            });
+
+            $('#idmCbxConcepCab').change(function () {
+                var $option = $(this).find('option:selected');
+                vIdConcepCab = $option.val().toString();
+
+                if (vIdConcepCab != 0 && vIdConcepCab != null && typeof (vIdConcepCab) == "undefined") {
+
+
+
+                    getConceptoDet(vIdConcepCab);
+
+
+                }
+
+            });
+
+            $('#idmCbxConcepDet').change(function () {
+                let $option = $(this).find('option:selected');
+                let consideracion = $option.attr("data-consideracion");
+
+                vIdConcepDet = $option.val().toString();
+
+                $("#idmConcepDetConsid").text(consideracion);
+            });
+
+
+
+            $('#idCbxTipo').change(function () {
+                var $option = $(this).find('option:selected');
+                vIdTipo = parseInt($option.val());
+                console.log(vIdTipo);
+            });
+
+
+
+
+            $('#modalSolicitudDet').on('hidden.bs.modal', function (e) {
+                limpiarDetalle();
+            });
+
+            $('#idtxtcodigo').keypress(function (event) {
+                var keycode = (event.keyCode ? event.keyCode : event.which);
+
+                if (keycode == '13') {
+
+                    let codigo = $("#idtxtcodigo").val().trim();
+
+                    if (codigo == "") {
+                        Swal.fire({
+                            title: 'Ingrese un código',
+                            text: "Textile Sourcing Company",
+                            icon: 'warning',
+                            showConfirmButton: true,
+                            showCancelButton: false,
+                            confirmButtonText: 'Ok',
+                            cancelButtonText: 'Cancel',
+                            focusConfirm: true
+                        }).then(result => {
+                            if (result.value) {
+                                document.getElementById("idtxtcodigo").focus();
+                            }
+                        });
+                    }
+                    else if (codigo.length < 10 || codigo.length > 10) {
+                        Swal.fire({
+                            title: 'Ingrese un código',
+                            title: 'Ingrese un código valido por favor',
+                            icon: 'warning',
+                            showConfirmButton: true,
+                            showCancelButton: false,
+                            confirmButtonText: 'Ok',
+                            cancelButtonText: 'Cancel',
+                            focusConfirm: true
+                        }).then(result => {
+                            if (result.value) {
+                                document.getElementById("idtxtcodigo").focus();
+                            }
+                        });
+                    }
+                    else {
+
+                        MostrarCarga("Buscando...");
+
+
+                        $.ajax({
+                            url: "/finanzas/RG_SolicitudXCodigo",
+                            type: "GET",
+                            data: { 'codigo': codigo },
+                            dataType: "json",
+                            success: function (resultado) {
+
+                                console.log(resultado);
+
+                                if (resultado.isRedirect) {
+                                    window.location.href = resultado.redirectUrl;
+                                }
+                                else {
+                                    if (resultado.entidad.idSolicitud > 0) {
+
+                                        vIdSolicitud = resultado.entidad.idSolicitud;
+
+                                        $("#idtxtcodigo").val(resultado.entidad.codigo);
+                                        $("#idtxtcodigo").addClass("idtxtcodigo-ok");
+                                        $("#iddttFechaHora").val(resultado.entidad.fecha);
+                                        $("#idusuario").val(resultado.entidad.usuSolicitante);
+                                        $("#idCbxTipo").val(resultado.entidad.idTipo);
+                                        $("#idCbxTipoMod").val(resultado.entidad.idTipoMod);
+                                        $("#idtxtaobs").val(resultado.entidad.observacion);
+                                        $("#estado-desc").text(resultado.entidad.estado);
+
+                                        if (resultado.entidad.idEstado == 1) {
+                                            // Pendiente
+                                            $("#estado-icon").removeClass("icon-liberado");
+                                            $("#estado-icon").removeClass("icon-aprobado");
+                                            $("#estado-icon").removeClass("icon-rechazado");
+                                            $("#estado-icon").addClass("icon-pendiente");
+
+                                            $("#estado-desc").removeClass("desc-est-liberado");
+                                            $("#estado-desc").removeClass("desc-est-aprobado");
+                                            $("#estado-desc").removeClass("desc-est-rechazado");
+                                            $("#estado-desc").addClass("desc-est-pendiente");
+
+                                        }
+                                        else if (resultado.entidad.idEstado == 2) {
+                                            // Liberado
+                                            $("#estado-icon").removeClass("icon-pendiente");
+                                            $("#estado-icon").removeClass("icon-aprobado");
+                                            $("#estado-icon").removeClass("icon-rechazado");
+                                            $("#estado-icon").addClass("icon-liberado");
+
+                                            $("#estado-desc").removeClass("desc-est-pendiente");
+                                            $("#estado-desc").removeClass("desc-est-aprobado");
+                                            $("#estado-desc").removeClass("desc-est-rechazado");
+                                            $("#estado-desc").addClass("desc-est-liberado");
+
+                                        }
+                                        else if (resultado.entidad.idEstado == 3) {
+                                            // Aprobado Total
+                                            $("#estado-icon").removeClass("icon-pendiente");
+                                            $("#estado-icon").removeClass("icon-liberado");
+                                            $("#estado-icon").removeClass("icon-rechazado");
+                                            $("#estado-icon").addClass("icon-aprobado");
+
+                                            $("#estado-desc").removeClass("desc-est-pendiente");
+                                            $("#estado-desc").removeClass("desc-est-liberado");
+                                            $("#estado-desc").removeClass("desc-est-rechazado");
+                                            $("#estado-desc").addClass("desc-est-aprobado");
+
+                                        }
+                                        else if (resultado.entidad.idEstado == 4) {
+                                            // Aprobado Parcial
+                                            $("#estado-icon").removeClass("icon-pendiente");
+                                            $("#estado-icon").removeClass("icon-liberado");
+                                            $("#estado-icon").removeClass("icon-rechazado");
+                                            $("#estado-icon").addClass("icon-aprobado");
+
+                                            $("#estado-desc").removeClass("desc-est-pendiente");
+                                            $("#estado-desc").removeClass("desc-est-liberado");
+                                            $("#estado-desc").removeClass("desc-est-rechazado");
+                                            $("#estado-desc").addClass("desc-est-aprobado");
+
+                                        }
+                                        else if (resultado.entidad.idEstado == 5) {
+                                            // Rechazado
+                                            $("#estado-icon").removeClass("icon-pendiente");
+                                            $("#estado-icon").removeClass("icon-liberado");
+                                            $("#estado-icon").removeClass("icon-aprobado");
+                                            $("#estado-icon").addClass("icon-rechazado");
+
+                                            $("#estado-desc").removeClass("desc-est-pendiente");
+                                            $("#estado-desc").removeClass("desc-est-liberado");
+                                            $("#estado-desc").removeClass("desc-est-aprobado");
+                                            $("#estado-desc").addClass("desc-est-rechazado");
+                                        }
+
+
+                                        $("#btnGuardarCabecera").removeClass("btn-primary");
+                                        $("#btnGuardarCabecera").addClass("btn-secondary");
+                                        document.getElementById("btnGuardarCabecera").disabled = true;
+
+                                        $("#btnAgregarDetalle").removeClass("btn-secondary");
+                                        $("#btnAgregarDetalle").addClass("btn-warning");
+                                        document.getElementById("btnAgregarDetalle").disabled = false;
+                                        document.getElementById("btnAgregarDetalle").focus();
+
+                                        if (resultado.entidad.listaDetalle.length > 0) {
+                                            generarTablaDetalle(resultado.entidad.listaDetalle);
+                                        }
+
+                                        mensajePrincipal(true, "Mostrando Solicitud");
+                                    }
+                                    else {
+                                        mensajePrincipal(false, "Solicitud no encontrada");
+                                    }
+                                }
+                            },
+                            error: function (xhr, ajaxOptions, thrownError) {
+
+                            }
+                        });
+
+                    }
+
+                }
+            });
+
+
+
+
+
+        });
+
+
+
+    </script>
+
+}
+

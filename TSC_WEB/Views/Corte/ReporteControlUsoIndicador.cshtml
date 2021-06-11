@@ -1,0 +1,844 @@
+﻿@{
+    ViewBag.Title = "Indicador Liquidación";
+    ViewBag.Modulo = "Corte";
+    Layout = "~/Views/Plantillas/_Layout.cshtml";
+
+    var fecha = DateTime.Now;
+    int anio = Convert.ToInt32(fecha.ToString("yyyy"));
+    //int anio = 2098;
+}
+
+
+<div class="card">
+
+    <div class="card-body">
+
+        @*FILTROS *@
+        <form class="row" id="frmbusqueda">
+
+            @*FILTRO POR AÑO*@
+            <div class="col-md-3">
+                <label for="">Año </label>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text">
+                            <input type="radio" name="rdbfiltros" id="rdbanio" class="radios">
+                            @*<select name="" id="rdbanio" class="custom-select custom-select-sm">
+                                    @for (int inicio = 2000; inicio <= anio; inicio++)
+                                    {
+                                        <option value="@inicio">@inicio</option>
+                                    }
+                                </select>*@
+                        </div>
+                    </div>
+                    @*<input type="text" class="form-control form-control-sm busquedas" id="txtanio" disabled>*@
+                    <select name="" id="txtanio" class="custom-select custom-select-sm busquedas" disabled>
+                        <option value="">[SELECCIONE]</option>
+                        @for (int inicio = 2019; inicio <= anio; inicio++)
+                        {
+                            <option value="@inicio">@inicio</option>
+                        }
+                    </select>
+                </div>
+            </div>
+
+            @*FILTRO POR MES*@
+            <div class="col-md-3">
+                <label for="">Mes</label>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text">
+                            <input type="radio" name="rdbfiltros" id="rdbmes" class="radios">
+                        </div>
+                    </div>
+                    <input type="month" class="form-control form-control-sm busquedas" id="cbomes" disabled>
+
+                    @*<select name="" id="cbomes" class="custom-select custom-select-sm busquedas" disabled>
+                            <option value="">[SELECCIONE]</option>
+                            <option value="1">Enero</option>
+                            <option value="2">Febrero</option>
+                            <option value="3">Marzo</option>
+                            <option value="4">Abril</option>
+                            <option value="5">Mayo</option>
+                            <option value="6">Junio</option>
+                            <option value="7">Julio</option>
+                            <option value="8">Agosto</option>
+                            <option value="9">Septiembre</option>
+                            <option value="10">Octubre</option>
+                            <option value="11">Noviembre</option>
+                            <option value="12">Diciembre</option>
+                        </select>*@
+                </div>
+            </div>
+
+            @*SEMANA*@
+            <div class="col-md-3">
+                <label for="">Semana</label>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text">
+                            <input type="radio" name="rdbfiltros" id="rdbsemana" class="radios">
+                        </div>
+                    </div>
+                    <input type="week" class="form-control form-control-sm busquedas" id="txtsemana" disabled>
+                </div>
+            </div>
+
+            @*DIA FINAL*@
+            <div class="col-md-2">
+                <label for="">Fecha</label>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text">
+                            <input type="radio" name="rdbfiltros" id="rdbfecha" class="radios">
+                        </div>
+                    </div>
+                    <input type="date" class="form-control form-control-sm busquedas" id="txtfecha" disabled>
+                </div>
+            </div>
+
+            @*BUSCAR*@
+            <div class="col-md-1">
+                <label for="">&nbsp;</label>
+                <button class="btn btn-sm btn-block btn-primary" type="submit">
+                    <i class="fas fa-search"></i>
+                    @*Buscar*@
+                </button>
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+
+<!-- CARD INDICADOR -->
+<div class="card card-outline card-primary">
+
+    <div class="card-header">
+
+        <h3 class="card-title">Reporte</h3>
+
+        <div class="card-tools">
+            @*    <button type="button" class="btn btn-tool d-none" id="btnmodal"><i class="fas fa-chart-line" style="color:#007bff"></i></button>*@
+            @*<a id="download"
+                   download="ChartImage.jpg"
+                   href=""
+                   class="btn btn-primary btn-sm float-right bg-flat-color-1"
+                   title="Descargar Gráfico">
+
+                    <i class="fas fa-download"></i>
+                </a>*@
+            <a id="btnpdf"
+               href="#"
+               class="btn btn-danger btn-sm float-right bg-flat-color-1 mr-md-1"
+               title="Descargar Gráfico">
+                <i class="fas fa-file-pdf"></i>
+            </a>
+        </div>
+    </div>
+
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-sm table-bordered table-hover text-center" id="tableindicador">
+                <thead id="theadindicador" class="thead-light">
+
+                </thead>
+                <tbody id="tbodyindicador"></tbody>
+                <tfoot class="thead-light" id="tfootindicadorn">
+                    <tr id="tfootindicador">
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+
+    </div>
+
+</div>
+
+@*CHART GENERAL*@
+<div class="card card-outline card-primary" style="display:none" id="card-general">
+    <div class="card-header">
+        <h3 class="card-title">Indicador Gráfico General</h3>
+    </div>
+    <div class="card-body" id="cuerpomodal_general" style="height:500px">
+        <canvas id="chartgeneral"></canvas>
+    </div>
+</div>
+
+@*CHART AÑOS - MES, SEMANAS (SEPARADO)*@
+<div class="card card-outline card-primary" style="display:none" id="card-compuesto">
+    <div class="card-header">
+        <h3 class="card-title">Indicador Gráfico Compuesto</h3>
+    </div>
+    <div class="card-body" id="cuerpomodal_compuesto">
+        <div class="row" style="height:500px">
+            <div class="col-md-4" id="container-anios-compuesto" style="height:500px">
+                <canvas id="chartanios"></canvas>
+            </div>
+            <div class="col-md-8" id="container-extras-compuesto" style="height:500px">
+                <canvas id="chartextras"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section scripts{
+
+    <script src="~/Libs/jspdf/html2canvas.min.js"></script>
+    <script src="~/Libs/jspdf/jspdf.debug.js"></script>
+    <script src="~/Admin/js/Corte/IndicadorControldeUso.js"></script>
+
+    @* CONVERTIR A PDF *@
+    <script>
+        let TIPOPDF = "G";
+        let doc;
+        let nombrepdf;
+
+
+        // GENERAR PDF
+        $("#btnpdf").click(function () {
+
+            // CARGA
+            MostrarCarga("Generando PDF");
+
+            // DATOS DEL CHART GENERAL
+            let chartgeneral    = ConvertImageToBase64("chartgeneral");
+            let chartcompuesto1 = "";
+            let chartcompuesto2 = "";
+
+            if (TIPOPDF == "C") {
+                chartcompuesto1 = ConvertImageToBase64("chartanios");
+                chartcompuesto2 = ConvertImageToBase64("chartextras");
+
+            }
+
+
+            // ARRAY CON LOS DATOS
+            let image = [];
+
+
+            if (TIPOPDF == "G") {
+                image.push(chartgeneral);
+            } else {
+                image.push(chartcompuesto1);
+                image.push(chartcompuesto2);
+            }
+
+            // GENERAMOS DATOS DE LA TABLA
+            let datostabla =  getDatosTabla("theadindicador", "tbodyindicador", "tfootindicadorn");
+
+            // ENVIANDO
+            post("corte", "SaveImagenIndicador",
+                {
+                    image,
+                    thead:  datostabla.thead,
+                    tbody1: datostabla.tbody1,
+                    tbody2: datostabla.tbody2,
+                    tbody3: datostabla.tbody3,
+                    tbody4: datostabla.tbody4,
+                    tfoot: datostabla.tfoot,
+                    tipo: TIPOPDF
+                },
+                true).then(response => {
+
+                if (response.response) {
+                    window.open("/Corte/PDFIndicadoruso/", "_blank");
+                    Informar("Reporte generado");
+                }
+
+            }).catch(error => {
+                console.log(error);
+                Advertir("Error")
+            });
+
+
+        });
+
+        // FUNCION CREA
+        function AgregarTablaPDF(op, imgtabla, chartgeneral, chartanio, chartmes) {
+
+            // AGREGA TABLA
+            if (op) {
+                doc.addImage(imgtabla, 'PNG', 30, 25, 237, 50);
+            } else {
+                doc.addImage(imgtabla, 'PNG', 10, 25, 257, 50);
+            }
+
+            // GRAFIC GENERAL
+            if (op) {
+                html2canvas(chartgeneral, {
+                    onrendered: function (canvas) {
+                        var img = canvas.toDataURL("image/png");
+                        doc.addImage(img, 'PNG', 30, 80, 237, 120);
+                        InformarMini("Pdf Generado");
+                        // GUARDAMOS PDF
+                        doc.save(nombrepdf);
+                    }
+                });
+            } else {
+                // GRAFICO DE AÑOS
+                html2canvas(chartanio, {
+                    onrendered: function (canvas) {
+                        var img = canvas.toDataURL("image/png");
+                        doc.addImage(img, 'PNG', 10, 80, 80, 100);
+                        // CHART MESES
+                        html2canvas(chartmes, {
+                            onrendered: function (canvas) {
+                                var img = canvas.toDataURL("image/png");
+                                doc.addImage(img, 'PNG', 100, 70, 170, 130);
+                                // PDF
+                                InformarMini("Pdf Generado");
+                                // GUARDAMOS PDF
+                                doc.save(nombrepdf);
+                            }
+                        });
+                    }
+                });
+            }
+        }
+
+    </script>
+
+    <script>
+        //VARIABLES GLOBALES
+        let VALORESPROGRAMADO = [];
+        let VALORESTIZADO = [];
+        let VALORESTENDIDO = [];
+        let VALORESCORTADO = [];
+        let VALORPORCENTAJE = [];
+        let VALORLABELS = [];
+
+        let DATOSANIO = [];
+        let VALORESPROGRAMADOANIO = [];
+        let VALORESTIZADOANIO = [];
+        let VALORESTENDIDOANIO = [];
+        let VALORESCORTADOANIO = [];
+        let VALORPORCENTAJEANIO = [];
+        let VALORLABELSANIO = [];
+
+        let DATOSMES = [];
+        let VALORESPROGRAMADOMES = [];
+        let VALORESTIZADOMES = [];
+        let VALORESTENDIDOMES = [];
+        let VALORESCORTADOMES = [];
+        let VALORPORCENTAJEMES = [];
+        let VALORLABELSMES = [];
+
+
+
+        const frmbusqueda = document.getElementById("frmbusqueda");
+
+        // BUSQUEDA
+        frmbusqueda.addEventListener('submit', (e) => {
+            e.preventDefault();
+            getReporte();
+        });
+
+        // GET REPORTE
+        function getReporte() {
+
+            let anio = $("#txtanio").val().trim() == "" ? null : $("#txtanio").val().trim();
+            let mes = $("#cbomes").val().trim() == "" ? null : $("#cbomes").val().trim();
+            let semana = $("#txtsemana").val().trim() == "" ? null : $("#txtsemana").val().trim();
+            let fecha = $("#txtfecha").val().trim() == "" ? null : $("#txtfecha").val().trim();
+
+            // FORMATEAMOS MES
+            if (mes != null) {
+                let mesarray = mes.split("-");
+                anio = mesarray[0];
+                mes = mesarray[1];
+            }
+
+            // FORMATEMOS SEMANA
+            if (semana != null) {
+                let semanarray = semana.split("-");
+                anio = semanarray[0];
+                let semanaw = semanarray[1];
+                semana = semanaw.split("W")[1];
+            }
+
+            console.log(anio, mes, semana, fecha);
+
+            MostrarCarga("Cargando...");
+
+            get("corte", "getIndicadorUso", {
+                anio, mes, semana, fecha
+            }, true).then(response => {
+                //console.log(response);
+                if (response.success) {
+                    let data = JSON.parse(response.registros);
+                    DATOSANIO = data.Table1;
+                    DATOSMES = data.Table2;
+                    // ARMAMOS TABLA
+                    setTable(data.Table, fecha);
+
+                    // HABILITAMOS MODAL
+                    //$("#btnmodal").removeClass("d-none");
+
+                    // OCULTAMOS CARGA
+                    InformarMini("Generado correctamente");
+                }
+
+
+            }).catch(error => {
+                Advertir("Ocurrio un error");
+                console.log(error);
+            });
+        }
+
+        // ASIGNAMOS DATOS DE AÑO
+        function setDataAnio(data) {
+
+            VALORESPROGRAMADOANIO = [];
+            VALORESTIZADOANIO = [];
+            VALORESTENDIDOANIO = [];
+            VALORESCORTADOANIO = [];
+            VALORPORCENTAJEANIO = [];
+            VALORLABELSANIO = [];
+
+            let cont = 0;
+
+            // RECORREMOS
+            for (let key in data) {
+                cont++;
+
+                // ARMAMOS CABECERA
+                for (let key2 in data[key]) {
+
+                    // VALORES
+                    titulo = key2.replace(/'/g, "");
+                    valor = data[key][key2];
+                    valor = valor == null ? 0 : valor;
+
+
+                    // VALOR PROGRAMADO
+                    if (cont == 1) {
+                        //th += `<th>${titulo}</th>`;
+
+                        // AGREGAMOS TITULOS
+                        if (titulo != "IDTIPO" && titulo != "TIPO") {
+                            VALORLABELSANIO.push(titulo);
+                        }
+
+                        // AGREGAMOS VALORES PROGRAMADO
+                        if (titulo != "IDTIPO" && titulo != "TIPO") {
+                            VALORESPROGRAMADOANIO.push(valor);
+                        }
+                    }
+
+                    // VALOR TIZADO
+                    if (cont == 2) {
+                        // AGREGAMOS VALORES PROGRAMADO
+                        if (titulo != "IDTIPO" && titulo != "TIPO") {
+                            VALORESTIZADOANIO.push(valor);
+                        }
+                    }
+
+                    // VALOR TENDIDO
+                    if (cont == 3) {
+                        // AGREGAMOS VALORES PROGRAMADO
+                        if (titulo != "IDTIPO" && titulo != "TIPO") {
+                            VALORESTENDIDOANIO.push(valor);
+                        }
+                    }
+
+                    // VALOR CORTADO
+                    if (cont == 4) {
+                        // AGREGAMOS VALORES PROGRAMADO
+                        if (titulo != "IDTIPO" && titulo != "TIPO") {
+                            VALORESCORTADOANIO.push(valor);
+                        }
+                    }
+
+                    //tr += `<td>${valor}</td>`;
+                }
+
+                //tr += "</tr>";
+
+
+            }
+
+        }
+
+        // ASIGNAMOS DATOS DE MES
+        function setDataMes(data) {
+
+            VALORESPROGRAMADOMES = [];
+            VALORESTIZADOMES = [];
+            VALORESTENDIDOMES = [];
+            VALORESCORTADOMES = [];
+            VALORPORCENTAJEMES = [];
+            VALORLABELSMES = [];
+
+            let cont = 0;
+
+            // RECORREMOS
+            for (let key in data) {
+                cont++;
+
+                // ARMAMOS CABECERA
+                for (let key2 in data[key]) {
+
+                    // VALORES
+                    titulo = key2.replace(/'/g, "");
+                    valor = data[key][key2];
+                    valor = valor == null ? 0 : valor;
+
+
+                    // VALOR PROGRAMADO
+                    if (cont == 1) {
+                        //th += `<th>${titulo}</th>`;
+
+                        // AGREGAMOS TITULOS
+                        if (titulo != "IDTIPO" && titulo != "TIPO") {
+                            VALORLABELSMES.push(titulo);
+                        }
+
+                        // AGREGAMOS VALORES PROGRAMADO
+                        if (titulo != "IDTIPO" && titulo != "TIPO") {
+                            VALORESPROGRAMADOMES.push(valor);
+                        }
+                    }
+
+                    // VALOR TIZADO
+                    if (cont == 2) {
+                        // AGREGAMOS VALORES PROGRAMADO
+                        if (titulo != "IDTIPO" && titulo != "TIPO") {
+                            VALORESTIZADOMES.push(valor);
+                        }
+                    }
+
+                    // VALOR TENDIDO
+                    if (cont == 3) {
+                        // AGREGAMOS VALORES PROGRAMADO
+                        if (titulo != "IDTIPO" && titulo != "TIPO") {
+                            VALORESTENDIDOMES.push(valor);
+                        }
+                    }
+
+                    // VALOR CORTADO
+                    if (cont == 4) {
+                        // AGREGAMOS VALORES PROGRAMADO
+                        if (titulo != "IDTIPO" && titulo != "TIPO") {
+                            VALORESCORTADOMES.push(valor);
+                        }
+                    }
+
+                    //tr += `<td>${valor}</td>`;
+                }
+
+                //tr += "</tr>";
+
+
+            }
+
+        }
+
+        // ARMAMOS TABLA GENERAL
+        function setTable(data,fecha = null) {
+
+            // LIMPIAMOS VALORES
+            VALORESPROGRAMADO = [];
+            VALORESTIZADO = [];
+            VALORESTENDIDO = [];
+            VALORESCORTADO = [];
+            VALORPORCENTAJE = [];
+            VALORLABELS = [];
+
+            let cont = 0;
+            let th = "<tr>";
+            let tr = "";
+            let tf = "";
+            let titulo = "";
+            let valor = "";
+            let total = 0;
+            let totalprogramado = 0;
+            let totalcortado    = 0;
+
+            // RECORREMOS
+            for (let key in data) {
+                cont++;
+                total = 0;
+                tr += "<tr>";
+                // ARMAMOS CABECERA
+                for (let key2 in data[key]) {
+
+                    // VALORES
+                    titulo = key2.replace(/'/g, "");
+                    valor = data[key][key2];
+                    valor = valor == null ? 0 : valor;
+
+                    if (!isNaN(valor)) {
+                        let suma = parseFloat(valor);
+                        total += suma;
+                    }
+
+                    // VALOR PROGRAMADO
+                    if (cont == 1) {
+
+                        if (titulo != "IDTIPO") {
+                            th += `<th nowrap>${titulo}</th>`;
+                        }
+
+                        // AGREGAMOS TITULOS
+                        if (titulo != "IDTIPO" && titulo != "TIPO") {
+                            VALORLABELS.push(titulo);
+                        }
+
+                        // AGREGAMOS VALORES PROGRAMADO
+                        if (titulo != "IDTIPO" && titulo != "TIPO") {
+                            VALORESPROGRAMADO.push(valor);
+                        }
+                    }
+
+                    // VALOR TIZADO
+                    if (cont == 2) {
+                        // AGREGAMOS VALORES PROGRAMADO
+                        if (titulo != "IDTIPO" && titulo != "TIPO") {
+                            VALORESTIZADO.push(valor);
+                        }
+                    }
+
+                    // VALOR TENDIDO
+                    if (cont == 3) {
+                        // AGREGAMOS VALORES PROGRAMADO
+                        if (titulo != "IDTIPO" && titulo != "TIPO") {
+                            VALORESTENDIDO.push(valor);
+                        }
+                    }
+
+                    // VALOR CORTADO
+                    if (cont == 4) {
+                        // AGREGAMOS VALORES PROGRAMADO
+                        if (titulo != "IDTIPO" && titulo != "TIPO") {
+                            VALORESCORTADO.push(valor);
+                        }
+                    }
+
+                    if (titulo != "IDTIPO") {
+                        //th += `<th nowrap>${titulo}</th>`;
+                        tr += `<td nowrap>${valor}</td>`;
+
+                    }
+                }
+
+                // TOTAL POR FILA
+                if (fecha == null) {
+                    tr += `<td nowrap>${total}</td>`;
+
+                    // TOTAL PROGRAMADO 
+                    if (cont == 1) {
+                        totalprogramado = total;
+                    }
+
+                    // TOTAL CORTADO 
+                    if (cont == 4) {
+                        totalcortado = total;
+                    }
+                }
+
+                tr += "</tr>";
+
+
+            }
+
+            // CABECERA DEL TOTAL 
+            if (fecha == null) {
+                th += "<th>TOTAL</th>";
+            }
+
+            th += "</tr>";
+
+            tf = "<th nowrap>% Cumplimiento de Liquidación - Corte </th>";
+            // OBTENEMOS VALOR DE PORCENTAJE
+            for (let i = 0; i < VALORESPROGRAMADO.length; i++) {
+                let valor = Math.round(((VALORESCORTADO[i] / VALORESPROGRAMADO[i]) * 100));
+                tf += `<th>${valor}%</th>`;
+            }
+
+            // PIE DE TABLA DEL TOTAL PORCENTAJE
+            if (fecha == null) {
+
+                let totalporcentaje = Math.round(((totalcortado / totalprogramado) * 100));
+                tf += "<th>" + totalporcentaje + "%</th>";
+            }
+
+
+            $("#theadindicador").html(th);
+            $("#tbodyindicador").html(tr);
+            $("#tfootindicador").html(tf);
+
+            // CALCULAMOS DATA DE AÑO
+            setDataAnio(DATOSANIO);
+
+            // CALCULAMOS DATA DE MES
+            setDataMes(DATOSMES);
+
+
+            // MOSTRAMOS GRAFICOS
+            setDivGrafico();
+
+            //setGrafico(chartname, contenedorchart, valorprogramado, valortizado, valortendido, valorcortado, valorlabels)
+
+        }
+
+        // ASIGNAMOS GRAFICOS A LOS DIVS
+        function setDivGrafico() {
+
+            // OCULTAMOS
+            $("#card-compuesto").hide("fade");
+            $("#card-general").hide("fade");
+
+
+            // OBTENEMOS DATOS
+            let fecha = $("#txtfecha").val().trim() == "" ? null : $("#txtfecha").val().trim();
+
+            // COMPUESTO
+            if (fecha != null) {
+                TIPOPDF  = "C";
+                //
+                console.log(DATOSANIO, DATOSMES);
+
+                // ARMAMOS GRAFICO AÑOS
+                setGrafico("chartanios", "container-anios-compuesto", VALORESPROGRAMADOANIO, VALORESTIZADOANIO, VALORESTENDIDOANIO, VALORESCORTADOANIO, VALORLABELSANIO, "Indicador de utilización", false);
+
+                // ARMAMOS GRAFICOS EXTRAS
+                setGrafico("chartextras", "container-extras-compuesto", VALORESPROGRAMADOMES, VALORESTIZADOMES, VALORESTENDIDOMES, VALORESCORTADOMES, VALORLABELSMES, "", true);
+
+                //$("#modalgrafico_compuesto").modal("show");
+                $("#card-compuesto").show("fade");
+
+            } else {
+                TIPOPDF  = "G";
+                // ARMAMOS GRAFICO
+                setGrafico("chartgeneral", "cuerpomodal_general", VALORESPROGRAMADO, VALORESTIZADO, VALORESTENDIDO, VALORESCORTADO, VALORLABELS, "Indicador de utilización", true);
+
+                // ABRIMOS MODAL
+                //$("#modalgrafico_general").modal("show");
+                $("#card-general").show("fade");
+
+            }
+        }
+
+
+        // SELECCION
+        $(".radios").change(function () {
+            //console.log("raa");
+
+            // ASIGNAMOS VALORES
+            $(".busquedas").attr("disabled", "true");
+
+            // AÑO SELECCIONADO
+            if ($("#rdbanio").prop("checked")) {
+                $("#txtanio").removeAttr("disabled");
+            }
+
+            // MES SELECCIONADO
+            if ($("#rdbmes").prop("checked")) {
+                //$("#txtanio").removeAttr("disabled");
+                $("#cbomes").removeAttr("disabled");
+            }
+
+            // SEMANA SELECCIONADO
+            if ($("#rdbsemana").prop("checked")) {
+                //$("#txtanio").removeAttr("disabled");
+                $("#txtsemana").removeAttr("disabled");
+            }
+
+            // FECHA SELECCIONADO
+            if ($("#rdbfecha").prop("checked")) {
+                $("#txtfecha").removeAttr("disabled");
+            }
+
+            frmbusqueda.reset();
+
+            $(this).prop("checked", "true");
+
+
+        });
+
+    </script>
+
+    @*FUNCION QUE CONVIERTE LOS DATOS DE LA TABLA EN OBJETO*@
+    <script>
+
+
+        function getDatosTabla(idthead,idtbody,idtfoot) {
+
+            // HEAD
+            let thead = document.getElementById(idthead);
+            let trthead = thead.children[0];
+            let THEADDATOS = [];
+
+            for (let i = 0; i < trthead.children.length; i++) {
+                THEADDATOS.push(trthead.children[i].innerText);
+            }
+
+            // TBODY 1
+            let tbody   = document.getElementById(idtbody);
+            let trbody1 = tbody.children[0];
+            let TBODY1 = [];
+
+            for (let i = 0; i < trbody1.children.length; i++) {
+                TBODY1.push(trbody1.children[i].innerText);
+            }
+
+            // TBODY 2
+            //let tbody = document.getElementById(idtbody);
+            let trbody2 = tbody.children[1];
+            let TBODY2 = [];
+
+            for (let i = 0; i < trbody2.children.length; i++) {
+                TBODY2.push(trbody2.children[i].innerText);
+            }
+
+            // TBODY 3
+            //let tbody = document.getElementById(idtbody);
+            let trbody3 = tbody.children[2];
+            let TBODY3 = [];
+
+            for (let i = 0; i < trbody3.children.length; i++) {
+                TBODY3.push(trbody3.children[i].innerText);
+            }
+
+            // TBODY 4
+            //let tbody = document.getElementById(idtbody);
+            let trbody4 = tbody.children[3];
+            let TBODY4 = [];
+
+            for (let i = 0; i < trbody4.children.length; i++) {
+                TBODY4.push(trbody4.children[i].innerText);
+            }
+
+
+            // TFOOT
+            let tfoot = document.getElementById(idtfoot);
+            let trtfoot = tfoot.children[0];
+            let TFOOT = [];
+
+            for (let i = 0; i < trtfoot.children.length; i++) {
+                TFOOT.push(trtfoot.children[i].innerText);
+            }
+
+
+            // DEVOLVEMOS DATOS
+            return {
+                thead: THEADDATOS,
+                tbody1: TBODY1,
+                tbody2: TBODY2,
+                tbody3: TBODY3,
+                tbody4: TBODY4,
+                tfoot: TFOOT
+            }
+
+
+
+        }
+
+    </script>
+}

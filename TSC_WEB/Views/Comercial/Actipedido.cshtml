@@ -1,0 +1,254 @@
+﻿
+@{
+    ViewBag.Title = "Activacion / Anulacion Pedido de Venta";
+    ViewBag.NombrePagina = "Activacion de Pedidos";
+    Layout = "~/Views/Plantillas/_Layout.cshtml";
+}
+<div class="row">
+    <div class="col-md-8">
+        <div class="card p-2">
+            <div class="card-header">
+                @*<div class="card-title">Formulario</div>*@
+
+
+            </div>
+            <div class="form-group">
+                @*<label for="comment">Ingresar Pedidos</label>*@
+                <div class="form-check p-3">
+                    <ul class="nav nav-pills nav-secondary  nav-pills-no-bd nav-pills-icons justify-content" id="pills-tab-with-icon" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="pills-home-tab-icon" data-toggle="pill" href="#pills-home-icon" role="tab" aria-controls="pills-home-icon" aria-selected="true" style="text-align: center;">
+                                @*<i class="flaticon-multimedia-2"></i>*@
+                                <div>
+                                    <div><i class="fas fa-toggle-on" style="font-size: 24px;"></i></div>
+                                    <div>Activar</div>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="pills-profile-tab-icon" data-toggle="pill" href="#pills-profile-icon" role="tab" aria-controls="pills-profile-icon" aria-selected="false" style="text-align: center;">
+                                @*<i class="flaticon-multimedia-1"></i>*@
+
+                                <div>
+                                    <div><i class="fas fa-toggle-off" style="font-size: 24px;"></i></div>
+                                    <div>Desactivar</div>
+                                </div>
+                            </a>
+                        </li>
+                    </ul>
+                    @*<label class="form-radio-label">
+                            <input class="form-radio-input" type="radio" name="opcionpedido" value="" id="activar" checked="">
+                            <span class="form-radio-sign">Activar</span>
+                        </label>
+                        <label class="form-radio-label ml-3">
+                            <input class="form-radio-input" type="radio" name="opcionpedido" value="" id="desactivar">
+                            <span class="form-radio-sign">Desactivar</span>
+                        </label>*@
+                </div>
+                <textarea class="form-control" id="txtpedidos" rows="5" placeholder="Ingresar Pedidos"></textarea>
+            </div>
+            <div class="card-action">
+                <button class="btn btn-success" id="btn">
+                    <span class="btn-label">
+                        <i class="fa fa-check"></i>
+                    </span>
+                    Ejecutar
+                </button>
+                <button class="btn btn-danger" id="btncancel">
+                    <span class="btn-label">
+                        <i class="fas fa-times"></i>
+                    </span>
+                    Cancel
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+
+    @*<input type="text"  value=" " id="txtpedidos" placeholder="Ingresar Pedidos"/>*@
+
+</div>
+
+
+@section scripts{
+    <script>
+
+        $("#btn").click(function () {
+            var op = "";
+            var pedido = "";
+            //debugger;
+            //console.log($("#pills-profile-tab-icon").prop("selected"));
+
+            pedido = $("#txtpedidos").val();
+
+            if (pedido.trim() != "") {
+                if ($("#pills-home-tab-icon").hasClass("active")) {
+                    Act_Pedidos();
+                }
+
+                if ($("#pills-profile-tab-icon").hasClass("active")) {
+                    Anu_Pedidos();
+                }
+
+                $("#txtpedidos").val('');
+            }
+            else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Es necesario ingresar al menos un pedido',
+                    text: 'Textil Sourcing Company',
+                    allowEscapeKey: false,
+                    allowOutsideClick: false
+                });
+            }
+        });
+
+
+
+
+        $("#btncancel").click(function () {
+
+            $("#txtpedidos").val('');
+
+        });
+        //FUNCOONES{
+        function Act_Pedidos() {
+	    let pedidos = $("#txtpedidos").val();
+	    pedidos = pedidos.split("\n").join("");
+
+            var datos = {
+                'ppedidos': pedidos
+            }
+
+            $.ajax({
+                url: '/Comercial/ActiAnulpedido',
+                type: 'GET',
+                data: datos,
+                datatype: 'json',
+                success: function (e) {
+
+                    if (e.isRedirect) {
+                        window.location.href = e.redirectUrl;
+                    }
+                    else {
+                        if (e.rpt) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Activación concluido con éxito',
+                                text: 'Textil Sourcing Company',
+                                allowEscapeKey: false,
+                                allowOutsideClick: false
+                            });
+                        }
+                        else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Problema para realizar la Activación',
+                                text: 'Textil Sourcing Company',
+                                allowEscapeKey: false,
+                                allowOutsideClick: false
+                            });
+                        }
+                    }
+
+                    //$('input[type="text"]').val('');
+                    //if (style == "withicon") {
+                    //    content.icon = 'fa fa-bell';
+                    //} else {
+                    //    content.icon = 'none';
+                    //}
+                    //content.url = 'index.html';
+                    //content.target = '_blank';
+                    //$.notify(content, {
+                    //    type: state,
+                    //    placement: {
+                    //        from: placementFrom,
+                    //        align: placementAlign
+                    //    },
+                    //    time: 100,
+                    //    delay: 0,
+                    //});
+
+                }
+            });
+        }
+        function Anu_Pedidos() {
+
+	    let pedidos = $("#txtpedidos").val();
+	    pedidos = pedidos.split("\n").join("");
+
+            var datos = {
+                'ppedidos': pedidos
+            }
+
+            $.ajax({
+                url: '/Comercial/Anulpedido',
+                type: 'GET',
+                data: datos,
+                datatype: 'json',
+                success: function (e) {
+
+                    if (e.isRedirect) {
+                        window.location.href = e.redirectUrl;
+                    }
+                    else {
+                        if (e.rpt) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Anulación concluido con éxito',
+                                text: 'Textil Sourcing Company',
+                                allowEscapeKey: false,
+                                allowOutsideClick: false
+                            });
+                        }
+                        else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Problema para realizar la Anulación',
+                                text: 'Textil Sourcing Company',
+                                allowEscapeKey: false,
+                                allowOutsideClick: false
+                            });
+
+                        }
+                    }
+
+
+
+                    //console.log(e);
+                    //var placementFrom = $('#notify_placement_from option:selected').val();
+                    //var placementAlign = $('#notify_placement_align option:selected').val();
+                    //var state = $('#notify_state option:selected').val();
+                    //var style = $('#notify_style option:selected').val();
+                    //var content = {};
+                    //content.title = 'TSC - Alerta';
+                    //if (e) {
+                    //    content.message = "Proceso Concluido con Exito";
+                    //}
+                    //else {
+                    //    content.message = "Problemas al realizar el proceso";
+                    //}
+
+                    //if (style == "withicon") {
+                    //    content.icon = 'fa fa-bell';
+                    //} else {
+                    //    content.icon = 'none';
+                    //}
+                    ////content.url = 'index.html';
+                    ////content.target = '_blank';
+                    //$.notify(content, {
+                    //    type: state,
+                    //    placement: {
+                    //        from: placementFrom,
+                    //        align: placementAlign
+                    //    },
+                    //    time: 100,
+                    //    delay: 0,
+                    //});
+
+                }
+            });
+        }
+    </script>
+}

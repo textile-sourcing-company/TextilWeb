@@ -1,0 +1,490 @@
+﻿@{
+    ViewBag.Title = "Rendición de Gastos";
+    ViewBag.Modulo = "Finanzas";
+    Layout = "~/Views/Plantillas/_Layout.cshtml";
+}
+
+
+
+
+<div class="rendgas container-fluid">
+
+    <ul class="nav nav-tabs nav-justified md-tabs indigo" id="myTabJust" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" id="firma-tab-just" data-toggle="tab" href="#sg-registro" role="tab" aria-controls="firma-just"
+               aria-selected="true">Registro</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="aprobados-tab-just" data-toggle="tab" href="#sg-historial" role="tab" aria-controls="aprobadas-just"
+               aria-selected="false">Historial</a>
+        </li>
+    </ul>
+
+    <div class="tab-content card pt-1" id="myTabContentJust">
+        <div class="tab-pane fade show active" id="sg-registro" role="tabpanel" aria-labelledby="firma-tab-just">
+
+            <div class="container-fluid">
+
+                <div class="row m-2">
+                    <div class="col-2 p-1">
+                        <input id="txtCodigo" class="form-control form-control-sm" type="text" placeholder="Codigo Solicitud <Presione Enter>" aria-label=".form-control-sm example">
+                    </div>
+                    <div class="col-4 p-1 ml-2">
+                        <div class="row d-flex flex-row m-1 mr-3">
+                            <div id="estado-icon"></div>
+                            <h5 id="estado-desc"></h5>
+                        </div>
+                    </div>
+                </div>
+
+
+                <hr />
+
+                <div class="row m-2">
+
+                    <div class="col-4 p-1">
+                        <label for="txtFecha">Fecha</label>
+                        <input class="form-control form-control-sm" type="text" id="txtFecha" disabled>
+                    </div>
+                    @*<div class="col-3 p-1">
+                            <label for="txtCeCo">Centro de Costo:</label>
+                            <input class="form-control form-control-sm" id="txtCeCo" disabled>
+                        </div>*@
+                    <div class="col-4 p-1">
+                        <label for="txtUsuario">Tipo:</label>
+                        <input class="form-control form-control-sm" id="txtUsuario" disabled>
+                    </div>
+                    <div class="col-4 p-1">
+                        <label for="txtTipo">Usuario:</label>
+                        <input class="form-control form-control-sm" id="txtTipo" disabled>
+                    </div>
+
+
+                    <div class="col-3 p-1">
+                        <label for="txtMoneda">Moneda</label>
+                        <input class="form-control form-control-sm" type="text" id="txtMoneda" disabled>
+                    </div>
+                    <div class="col-6 p-1">
+                        <label for="txtGlosa">Glosa Solicitud</label>
+                        <input class="form-control form-control-sm" type="text" id="txtGlosa" disabled>
+                    </div>
+                    <div class="col-3 p-1">
+                        <label for="txtTotalSol">Total Solicitud</label>
+                        <input class="form-control form-control-sm" type="text" id="txtTotalSol" disabled>
+                    </div>
+
+
+                    <div class="card container-fluid mt-2">
+
+                        <div class="row m-2">
+
+                            <div class="col-2 p-1">
+                                <label for="cbxTipoComprobante">Tipo Comprobante:</label>
+                                <select class="form-control form-control-sm" id="cbxTipoComprobante"></select>
+                            </div>
+                            <div class="col-3 p-1">
+                                <label for="txtTipoComprobante">N° Comprobante:</label>
+                                <input id="txtTipoComprobante" class="form-control form-control-sm" type="text" placeholder="N° Comprobante">
+                            </div>
+                            <div class="col-2 p-1">
+                                <label for="txtRUC">Número RUC:</label>
+                                <input id="txtRUC" class="form-control form-control-sm" type="text" placeholder="Ingrese RUC">
+                            </div>
+                            <div class="col-5 p-1">
+                                <label for="txtRS">Razon Social:</label>
+                                <input id="txtRS" class="form-control form-control-sm" type="text" placeholder="Razon Social" disabled>
+                            </div>
+
+
+                            <div class="col-3 p-1">
+                                <label for="txtMonto">Razon Social:</label>
+                                <input id="txtMonto" class="form-control form-control-sm" type="text" placeholder="Monto">
+                            </div>
+
+                            <div class="col-9 p-1">
+                                <label for="txtObs">Razon Social:</label>
+                                <input id="txtObs" class="form-control form-control-sm" type="text" placeholder="Ingresau">
+                            </div>
+
+                        </div>
+
+                    </div>
+                    <div class="col-12 p-1">
+                        <button type="button" class="btn btn-secondary btn-sm">Cancelar</button>
+                        <button type="button" class="btn btn-primary btn-sm">Guardar</button>
+                    </div>
+
+                </div>
+            </div>
+
+
+        </div>
+
+        <div class="tab-pane fade seccion-ap-rech" id="sg-historial" role="tabpanel" aria-labelledby="aprobadas-tab-just">
+
+
+            <div class="cont-seccion1-ap-rec">
+                <div>
+                    <input required="" type="text" class="form-control form-control-sm input-fecha" id="RechFechaIni" placeholder="Fecha Inicio" onfocus="(this.type='date')" />
+                </div>
+
+                <div>
+                    <input required="" type="text" class="form-control form-control-sm input-fecha-fin" id="RechFechaFin" placeholder="Fecha Fin" onfocus="(this.type='date')" />
+                </div>
+
+                <div>
+                    <button type="button" class="btn btn-primary btn-buscar btn-sm btn-buscar-his" id="btnBuscarRech">Buscar</button>
+                    <button id="btnExpExcelRech" class="btn btn-success btn-sm btn-excel-hist"><i class="fas fa-file-excel"></i></button>
+                </div>
+            </div>
+
+            <div class="cont-seccion2-rech">
+                <div class="cont-item12-ap-re">
+                    <button type="button" class="btn btn-outline-danger kpi-cant btn-sm" id="kpiCantidad3" style="cursor: default">Cantidad: 0</button>
+                </div>
+            </div>
+
+        </div>
+
+
+    </div>
+
+</div>
+
+
+<style>
+
+
+    #rendgas label {
+        font-family: 'Roboto', sans-serif;
+    }
+
+    #rendgas input, select, span, label {
+        font-family: 'Roboto', sans-serif;
+    }
+
+
+
+    #rendgas #estado-desc {
+        margin-right: 8px;
+    }
+
+
+
+    #rendgas .icon-pendiente::after {
+        content: url(../../../../Public/icon-pend.png);
+    }
+
+    #rendgas .icon-liberado::after {
+        content: url(../../../../Public/icon-libe.png);
+    }
+
+    #rendgas .icon-aprobado::after {
+        content: url(../../../../Public/icon-apro.png);
+    }
+
+    #rendgas .icon-rechazado::after {
+        content: url(../../../../Public/icon-rech.png);
+    }
+
+
+
+    #rendgas .desc-est-pendiente {
+        color: #616A6B;
+    }
+
+    #rendgas .desc-est-liberado {
+        color: #F1C40F;
+    }
+
+    #rendgas .desc-est-aprobado {
+        color: #28B463;
+    }
+
+    #rendgas .desc-est-rechazado {
+        color: #C0392B;
+    }
+
+
+    @@media (min-width: 320px) and (max-width: 479.98px) {
+    }
+
+    @@media (min-width: 480px) and (max-width: 767.98px) {
+    }
+
+    @@media (min-width: 768px) and (max-width: 991.98px) {
+    }
+
+    @@media (min-width: 992px) and (max-width: 1199.98px) {
+    }
+
+    @@media (min-width: 1200px) {
+    }
+</style>
+
+
+@section scripts {
+    <script>
+
+        const USUARIO = "@Request.RequestContext.HttpContext.Session["usuario"]";
+        const USUARIO_COMPLETO = "@Request.RequestContext.HttpContext.Session["usuario"]" + " - " + "@Request.RequestContext.HttpContext.Session["nombre"]";
+
+        var vIdSolicitud = 0;
+
+        $(document).ready(function () {
+
+            Inicializar();
+
+
+            function Inicializar() {
+                getTipoComprobantes();
+
+                document.getElementById("txtCodigo").focus();
+                
+            }
+
+
+            function mensajePrincipal(estado, mensaje) {
+                if (estado == true) {
+
+                    const Toast = Swal.mixin({
+                        toast: true,
+                        position: 'top-end',
+                        showConfirmButton: false,
+                        timer: 2500,
+                        timerProgressBar: true,
+                        didOpen: (toast) => {
+                            toast.addEventListener('mouseenter', Swal.stopTimer)
+                            toast.addEventListener('mouseleave', Swal.resumeTimer)
+                        }
+                    })
+
+                    Toast.fire({
+                        icon: 'success',
+                        title: mensaje
+                    });
+
+                }
+                else if (estado == false) {
+
+                    const Toast = Swal.mixin({
+                        toast: true,
+                        position: 'top-end',
+                        showConfirmButton: false,
+                        timer: 2500,
+                        timerProgressBar: true,
+                        didOpen: (toast) => {
+                            toast.addEventListener('mouseenter', Swal.stopTimer)
+                            toast.addEventListener('mouseleave', Swal.resumeTimer)
+                        }
+                    })
+
+                    Toast.fire({
+                        icon: 'error',
+                        title: mensaje
+                    });
+
+                }
+            }
+
+
+            function getTipoComprobantes() {
+                $.ajax({
+                    type: "GET",
+                    url: '/Finanzas/RG_TipoComprobantes',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (data) {
+                        $("#cbxTipoComprobante").empty();
+                        $.each(data.lista, function () {
+                            $("#cbxTipoComprobante").append($("<option/>").val(this.idTipoComp).text(this.tipoComprobante));
+                        });
+                        $("#cbxTipoComprobante").val(0);
+                    },
+                    failure: function () {
+                        console.error('error al cargar tipos periodos');
+                    }
+                });
+            }
+
+
+            $('#txtCodigo').keypress(function (event) {
+
+                var keycode = (event.keyCode ? event.keyCode : event.which);
+
+                if (keycode == '13') {
+
+                    let codigo = $("#txtCodigo").val().trim();
+
+                    if (codigo == "") {
+                        Swal.fire({
+                            title: 'Ingrese un código',
+                            text: "Textile Sourcing Company",
+                            icon: 'warning',
+                            showConfirmButton: true,
+                            showCancelButton: false,
+                            confirmButtonText: 'Ok',
+                            cancelButtonText: 'Cancel',
+                            focusConfirm: true
+                        }).then(result => {
+                            if (result.value) {
+                                document.getElementById("idtxtcodigo").focus();
+                            }
+                        });
+                    }
+                    else if (codigo.length < 10 || codigo.length > 10) {
+                        Swal.fire({
+                            title: 'Ingrese un código',
+                            title: 'Ingrese un código valido por favor',
+                            icon: 'warning',
+                            showConfirmButton: true,
+                            showCancelButton: false,
+                            confirmButtonText: 'Ok',
+                            cancelButtonText: 'Cancel',
+                            focusConfirm: true
+                        }).then(result => {
+                            if (result.value) {
+                                document.getElementById("idtxtcodigo").focus();
+                            }
+                        });
+                    }
+                    else {
+
+
+                        $.ajax({
+                            url: "/finanzas/RG_SolBusquedaXCod",
+                            type: "GET",
+                            data: { 'codigo': codigo },
+                            dataType: "json",
+                            success: function (resultado) {
+
+                                console.log(resultado);
+
+                                if (resultado.isRedirect) {
+                                    window.location.href = resultado.redirectUrl;
+                                }
+                                else {
+                                    if (resultado.entidad.idSolicitud > 0) {
+
+                                        vIdSolicitud = resultado.entidad.idSolicitud;
+
+                                        $("#txtFecha").val(resultado.entidad.fecha);
+                                        $("#txtUsuario").val(USUARIO_COMPLETO);
+                                        $("#txtTipo").val(resultado.entidad.tipo);
+                                        $("#txtMoneda").val(resultado.entidad.moneda);
+                                        $("#txtGlosa").val(resultado.entidad.observacion);
+                                        $("#txtTotalSol").val(resultado.entidad.total);
+                                        $("#estado-desc").text(resultado.entidad.estado);
+
+                                        if (resultado.entidad.idEstado == 1) {
+                                            // Pendiente
+                                            $("#estado-icon").removeClass("icon-liberado");
+                                            $("#estado-icon").removeClass("icon-aprobado");
+                                            $("#estado-icon").removeClass("icon-rechazado");
+                                            $("#estado-icon").addClass("icon-pendiente");
+
+                                            $("#estado-desc").removeClass("desc-est-liberado");
+                                            $("#estado-desc").removeClass("desc-est-aprobado");
+                                            $("#estado-desc").removeClass("desc-est-rechazado");
+                                            $("#estado-desc").addClass("desc-est-pendiente");
+
+                                        }
+                                        else if (resultado.entidad.idEstado == 2) {
+                                            // Liberado
+                                            $("#estado-icon").removeClass("icon-pendiente");
+                                            $("#estado-icon").removeClass("icon-aprobado");
+                                            $("#estado-icon").removeClass("icon-rechazado");
+                                            $("#estado-icon").addClass("icon-liberado");
+
+                                            $("#estado-desc").removeClass("desc-est-pendiente");
+                                            $("#estado-desc").removeClass("desc-est-aprobado");
+                                            $("#estado-desc").removeClass("desc-est-rechazado");
+                                            $("#estado-desc").addClass("desc-est-liberado");
+
+                                        }
+                                        else if (resultado.entidad.idEstado == 3) {
+                                            // Aprobado
+                                            $("#estado-icon").removeClass("icon-pendiente");
+                                            $("#estado-icon").removeClass("icon-liberado");
+                                            $("#estado-icon").removeClass("icon-rechazado");
+                                            $("#estado-icon").addClass("icon-aprobado");
+
+                                            $("#estado-desc").removeClass("desc-est-pendiente");
+                                            $("#estado-desc").removeClass("desc-est-liberado");
+                                            $("#estado-desc").removeClass("desc-est-rechazado");
+                                            $("#estado-desc").addClass("desc-est-aprobado");
+
+                                        }
+                                        else if (resultado.entidad.idEstado == 4) {
+                                            // Aprobado
+                                            $("#estado-icon").removeClass("icon-pendiente");
+                                            $("#estado-icon").removeClass("icon-liberado");
+                                            $("#estado-icon").removeClass("icon-rechazado");
+                                            $("#estado-icon").addClass("icon-aprobado");
+
+                                            $("#estado-desc").removeClass("desc-est-pendiente");
+                                            $("#estado-desc").removeClass("desc-est-liberado");
+                                            $("#estado-desc").removeClass("desc-est-rechazado");
+                                            $("#estado-desc").addClass("desc-est-aprobado");
+
+                                        }
+                                        else if (resultado.entidad.idEstado == 5) {
+                                            // Rechazado
+                                            $("#estado-icon").removeClass("icon-pendiente");
+                                            $("#estado-icon").removeClass("icon-liberado");
+                                            $("#estado-icon").removeClass("icon-aprobado");
+                                            $("#estado-icon").addClass("icon-rechazado");
+
+                                            $("#estado-desc").removeClass("desc-est-pendiente");
+                                            $("#estado-desc").removeClass("desc-est-liberado");
+                                            $("#estado-desc").removeClass("desc-est-aprobado");
+                                            $("#estado-desc").addClass("desc-est-rechazado");
+                                        }
+
+
+                                        //$("#btnGuardarCabecera").removeClass("btn-primary");
+                                        //$("#btnGuardarCabecera").addClass("btn-secondary");
+                                        //document.getElementById("btnGuardarCabecera").disabled = true;
+
+                                        //$("#btnAgregarDetalle").removeClass("btn-secondary");
+                                        //$("#btnAgregarDetalle").addClass("btn-warning");
+                                        //document.getElementById("btnAgregarDetalle").disabled = false;
+                                        //document.getElementById("btnAgregarDetalle").focus();
+
+                                        //if (resultado.entidad.listaDetalle.length > 0) {
+                                        //    generarTablaDetalle(resultado.entidad.listaDetalle);
+                                        //}
+
+                                        mensajePrincipal(true, "Mostrando Solicitud");
+                                    }
+                                    else {
+                                        mensajePrincipal(false, "Solicitud no encontrada");
+                                    }
+                                }
+                            },
+                            error: function (xhr, ajaxOptions, thrownError) {
+
+                            }
+                        });
+
+                    }
+
+                }
+            });
+
+
+
+
+
+
+
+
+
+        });
+
+
+
+    </script>
+
+}
+

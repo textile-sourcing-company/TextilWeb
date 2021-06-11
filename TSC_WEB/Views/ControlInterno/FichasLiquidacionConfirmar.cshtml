@@ -1,0 +1,178 @@
+﻿@*@model List<TSC_WEB.Models.Entidades.ControlInterno.Liquidacion.FichasPendientesEntidad>*@
+
+@{
+    ViewBag.Title = "Fichas de Liquidación por Confirmar";
+    ViewBag.Modulo = "Control Interno";
+    Layout = "~/Views/Plantillas/_Layout.cshtml";
+}
+
+<div class="card card-outline card-primary">
+
+    <div class="card-header">
+        <button class="btn btn-primary btn-sm" id="btnmarcar">Marcar Todos</button>
+        <button class="btn btn-success btn-sm" id="btnconfirmar">Confirmar</button>
+    </div>
+    <div class="card-body">
+
+        <table class="table table-sm table-bordered tablainput" style="width:100%" id="tablefichas"> 
+            <thead class="thead-light">
+                <tr>
+                    <th nowrap>Pedido</th>
+                    <th nowrap>Ficha</th>
+                    <th nowrap>Kilo despachado</th>
+                    <th nowrap>Fecha despacho</th>
+                    <th nowrap>Confirmado</th>
+                    <th nowrap>Cliente</th>
+                    <th nowrap></th>
+                </tr>
+            </thead>
+            <tbody id="tbodyfichas">
+                @*@foreach (var obj in Model)
+                {
+                <tr>
+                    <td nowrap>@obj.pedido</td>
+                    <td nowrap>@obj.ficha</td>
+                    <td nowrap> @obj.kilo </td>
+                    <td nowrap>@obj.fechadespacho</td>
+                    <td nowrap>
+                        @if (obj.confirmado == "0")
+                        {
+                            <label for="">Por confirmar </label>
+                        }
+                        else
+                        {
+                            <label for="">Confirmado</label>
+                        }
+                    </td>
+                    <td nowrap>@obj.cliente</td>
+                    <td nowrap class="text-center">
+                        <input class="inputtabla chkfichas" type="checkbox" value="@obj.ficha">
+                    </td>
+                </tr>
+                }*@
+            </tbody>
+        </table>
+
+    </div>
+</div>
+
+
+@section scripts{
+
+    <script>
+        let CHECK = false;
+        let datatable;
+        $(document).ready(async function(){
+            //setDataTableSimple("fichas");
+            await getFichas();
+        });
+
+
+        // MARCAR PARA APROBAR
+        $("#btnmarcar").click(function () {
+
+            $(".chkfichas").prop("checked", CHECK);
+            CHECK = !CHECK;
+            //setDataTableSimple("fichas");
+            $(this).text(CHECK ? "Marcar todos" : "Desmarcar todos");
+
+        });
+
+        // APROBAR
+        $("#btnconfirmar").click(async function () {
+
+            let fichasObjeto = $(".chkfichas");
+            let fichas = [];
+            for (let i = 0; i < fichasObjeto.length; i++) {
+
+                if (fichasObjeto[i].checked) {
+                    fichas.push(fichasObjeto[i].value);
+                }
+            }
+
+            if (fichas.length > 0) {
+
+                let respuesta = await Preguntar("Confirme para aprobar fichas");
+                //console.log(respuesta);
+                if (respuesta.value) {
+                    //console.log(fichas);
+                    MostrarCarga("Cargando...");
+                    post("ControlInterno", "setTmpFichas", { fichas }, true)
+                        .then(async(response) => {
+
+                            if (response.success) {
+                                await getFichas();
+                                //InformarMini("Realizado correctamente", 1500);
+                                //setTimeout(() => {
+                                //    location.reload();
+                                //}, 2100);
+
+                            } else {
+                                AdvertirMini("Ocurrio un error")
+                            }
+                            //console.log(response);
+
+                        })
+                        .catch(error => {
+                            AdvertirMini("Ocurrio un error");
+                            console.log(error);
+                        })
+
+                }
+
+            } else {
+                AdvertirMini("Seleccione fichas primero");
+            }
+
+
+        });
+
+        // SET TABLA
+        async function getFichas() {
+
+            MostrarCarga("Cargando...");
+
+            try {
+
+                let response = await get("ControlInterno", "getFichasPorConfirmar", {}, true);
+                let tr = "";
+
+                response.forEach((obj) => {
+
+                    tr += `
+                    <tr>
+                        <td nowrap>${obj.pedido}</td>
+                        <td nowrap>${obj.ficha}</td>
+                        <td nowrap>${obj.kilo}</td>
+                        <td nowrap>${obj.fechadespacho}</td>
+                        <td nowrap>
+                           Por Confirmar
+                        </td>
+                        <td nowrap>${obj.cliente}</td>
+                        <td nowrap class="text-center">
+                            <input class="inputtabla chkfichas" type="checkbox" value="${obj.ficha}">
+                        </td>
+                    </tr>
+                `;
+
+                });
+                //$("#tbodyfichas").html(tr);
+
+                setDataTableSimple("fichas", false, tr);
+
+                InformarMini("Fichas cargadas");
+
+
+            } catch (error) {
+                console.log(error);
+                AdvertirMini("Ocurrio un error :(");
+            }
+           
+
+        }
+
+
+
+    </script>
+
+}

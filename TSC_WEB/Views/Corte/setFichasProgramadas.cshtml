@@ -1,0 +1,349 @@
+﻿
+@{
+    ViewBag.Title = "Registro de Fichas Programadas PCP";
+    ViewBag.Modulo = "Corte";
+    Layout = "~/Views/Plantillas/_Layout.cshtml";
+}
+
+<div class="card card-outline card-primary">
+    <div class="card-head"></div>
+    <div class="card-body">
+        <form class="row" id="frmregistro">
+
+            @* FECHA *@
+            <div class="col-md-2 form-group">
+                <label for="">Fecha</label>
+                <input type="date" class="form-control form-control-sm" id="txtfecha" value="@DateTime.Now.ToString("yyyy-MM-dd")" required />
+            </div>
+            @* FICHA *@
+            <div class="col-md-2 form-group">
+                <label for="">Ficha</label>
+                <input type="text" class="form-control form-control-sm" id="txtficha" required />
+            </div>
+
+            @*REGISTRO*@
+            <div class="col-md-2 form-group">
+                <label for="">&nbsp;</label>
+                <button class="btn btn-sm btn-block btn-primary" type="submit">Registrar</button>
+            </div>
+
+            @*ABRIR MODAL*@
+            <div class="col-md-2 form-group">
+                <label for="">&nbsp;</label>
+                <button class="btn btn-sm btn-block btn-success" id="btnabrilmodal" type="button">Importar Fichas</button>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+@*<h1>@DateTime.Now.ToString("yyyy-MM-dd") </h1>*@
+
+<div class="card card-primary card-outline">
+    <div class="card-header"></div>
+    <div class="card-body">
+        <table class="table table-bordered table-sm table-hover">
+            <thead class="thead-light">
+                <tr>
+                    <th>Fecha Programada</th>
+                    <th>Ficha</th>
+                </tr>
+            </thead>
+            <tbody id="tbodyfichas">
+            </tbody>
+
+        </table>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="modalimportar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Importación de fichas programadas</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <form action="" id="frmimportar">
+
+                    @*<div class="form-group">
+                        <label for="">Fecha registro</label>
+                        <input type="date" required class="form-control form-control-sm" id="txtfechaimportacion">
+                    </div>*@
+
+                    <div class="form-group">
+                        <label for="">Seleccione CSV</label>
+                        <input type="file" required class="form-control form-control-sm" id="inputfile">
+                    </div>
+
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary btn-sm btn-block">Importar</button>
+                    </div>
+
+
+                    <div class="form-group" style="max-height:300px; overflow:auto;">
+                        <label for="">Fichas importadas</label>
+                        <table class="table table-bordered table-hover table-sm">
+                            <thead class="thead-light">
+                                <tr>
+                                    @*<th>Fecha</th>*@
+                                    <th>Fichas</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbodyfichasimportacion"></tbody>
+                        </table>
+                    </div>
+
+
+                </form>
+
+                
+
+
+            </div>
+            @*<div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Importar</button>
+            </div>*@
+        </div>
+    </div>
+</div>
+
+
+
+@section scripts {
+
+    <script>
+
+        $("#document").ready(function () {
+            GetSetFichasProgramadas("2");
+        });
+
+
+        const   frmregistro     = document.getElementById("frmregistro");
+        const   inputfile       = document.getElementById("inputfile");
+        const   frmimportar     = document.getElementById("frmimportar");
+        let fichas = [];
+        let fechas = [];
+
+
+        // EVENTO
+        frmregistro.addEventListener('submit', (e) => {
+            e.preventDefault();
+            GetSetFichasProgramadas("1");
+        });
+
+
+        // FUNCIONES
+        function GetSetFichasProgramadas(opcion) {
+
+            let ficha = $("#txtficha").val();
+            let fecha = $("#txtfecha").val();
+            let tr = "";
+
+            MostrarCarga("Cargando");
+            get("Corte", "GSFichasPcp", {
+                ficha, fecha, opcion
+            }, true).then((response) => {
+
+                //console.log(response);
+
+                // ARMAMOS TABLA
+                if (opcion == "2") {
+                    let data = JSON.parse(response.data);
+
+                    for (let item of data) {
+                        tr += "<tr>";
+                        tr += "<td>" + item.FECHA + "</td>";
+                        tr += "<td>" + item.FICHA + "</td>";
+                        tr += "</tr>";
+
+                    }
+
+                    // ASIGNAMOS DATOS
+                    $("#tbodyfichas").html(tr);
+                    //
+                    InformarMini("Correcto");
+                    $("#txtficha").focus();
+
+
+                } else {
+
+                    if (response.rpt == "") {
+                        $("#txtficha").val("");
+                        GetSetFichasProgramadas("2");
+                    } else {
+                        Advertir(response.rpt);
+                    }
+
+                }
+
+
+            }).catch((error) => {
+                Advertir("Ocurrio un error");
+                console.log(error);
+            });
+
+        }
+
+
+        // BUSCAMOS SEGUN FECHA
+        $("#txtfecha").change(function () {
+            GetSetFichasProgramadas("2");
+        });
+
+        // LEER CSV EVENTO
+        inputfile.addEventListener('change', readFile, false);
+
+        //PARA ABRIR MODAL
+        $("#btnabrilmodal").click(function () {
+            $("#modalimportar").modal({
+                backdrop: 'static',
+                keyboard: false,
+                show: true
+            });
+        });
+
+
+        // FUNCIONES PARA LEER CSV
+        function parseCSV(text) {
+            // Obtenemos las lineas del texto
+            let lines = text.replace(/\r/g, '').split('\n');
+            return lines.map(line => {
+                // Por cada linea obtenemos los valores
+                let values = line.split(',');
+                return values;
+            });
+        }
+
+        function reverseMatrix(matrix) {
+            let output = [];
+            // Por cada fila
+            matrix.forEach((values, row) => {
+                // Vemos los valores y su posicion
+                values.forEach((value, col) => {
+                    // Si la posición aún no fue creada
+                    if (output[col] === undefined) output[col] = [];
+                    output[col][row] = value;
+                });
+            });
+            return output;
+        }
+
+        function readFile(evt) {
+            let file = evt.target.files[0];
+            let reader = new FileReader();
+            reader.onload = (e) => {
+                // Cuando el archivo se terminó de cargar
+                let lines = parseCSV(e.target.result);
+                let output = reverseMatrix(lines);
+                //console.log(output[1]);
+                // FORMATEAMOS
+                //fechas = output[0];
+                fichas = output[0];
+                console.log(fichas);
+                // ELIMINAMOS VACIOS O QUE NO SON NUMEROS
+                fichas = fichas.filter(Boolean);
+                //fechas = fechas.filter(Boolean);
+
+                // MOSTRAMOS DATOS EN TABLA
+                let tr = "";
+
+                for (let ficha of fichas) {
+                    tr += "<tr>";
+                    tr += "<td>"+ficha+"</td>";
+                    tr += "</tr>";
+                }
+
+                //for (let i = 0; i < fichas.length; i++  ) {
+                //    tr += "<tr>";
+                //    tr += "<td>" + fechas[i] + "</td>";
+                //    tr += "<td>" + fichas[i] + "</td>";
+                //    tr += "</tr>";
+                //}
+
+                $("#tbodyfichasimportacion").html(tr);
+
+            };
+            // Leemos el contenido del archivo seleccionado
+            reader.readAsBinaryString(file);
+        }
+
+        // REGISTRAR FICHA IMPORTADA
+        async function registrarfichaindividual(ficha) {
+
+            let fecha = $("#txtfecha").val();
+
+            if (fecha != "") {
+
+                let opcion = "1";
+                try {
+
+                    let response = await get("Corte", "GSFichasPcp", { ficha, fecha, opcion }, true);
+                    return response.rpt != "" ? false : true;
+
+                } catch (error) {
+                    Advertir("Ocurrio un error :(");
+                    return false;
+                }
+
+            } else {
+                Advertir("Ingrese una fecha de registro primero");
+            }
+
+        }
+
+        // EVENTO DE REGISTRO MASIVO DE FICHAS
+        frmimportar.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            MostrarCarga("Importando datos");
+
+            let error = false;
+            let fichaerror = "";
+            let fichaserror = [];
+            if (fichas.length > 0) {
+
+                //for (let i = 0; i < fichas.length;i++) {
+                //    let response = await registrarfichaindividual(fechas[i], fichas[i]);
+                //    if (!response) {
+                //        fichaserror.push(fichas[i]);
+                //    }
+                //}
+
+                for (ficha of fichas) {
+                    let response = await registrarfichaindividual(ficha);
+                    //if (!response) {
+                    //    fichaerror = ficha;
+                    //    error = true;
+                    //    break;
+                    //}
+                }
+
+                //if (error) {
+                //    Advertir("Error al registrar ficha: " + fichaerror + " las fichas posteriores no se registrarán");
+                //} else {
+                //    Informar("Fichas Registradas correctamente");
+                //    frmimportar.reset();
+                //    fichas = [];
+                //    $("#tbodyfichasimportacion").html("");
+                //    $("#modalimportar").modal("hide");
+                //}
+
+                InformarMini("Importado correctamente");
+
+            } else {
+                Advertir("Por favor Adjunte fichas para poder registrarlas");
+            }
+
+        });
+
+    </script>
+
+
+}
+

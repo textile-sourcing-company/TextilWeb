@@ -1,0 +1,129 @@
+﻿@model TSC_WEB.Models.Entidades.Corte.LiquidacionTela.indicadorliquidacion.IndicadorPdfEntidad
+@{
+    Layout = null;
+    string codigousuario = Session["cod_funcionario"].ToString();
+    string nombreimg1 = "/Public/tmpliquidacion/imgtmpindicador1"+ codigousuario + ".jpg";
+    string nombreimg2 = "/Public/tmpliquidacion/imgtmpindicador2" + codigousuario + ".jpg";
+
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Indicador de Uso - Liquidación </title>
+    <style>
+        table, td, th {
+            border: 1px solid black;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        body{
+            font-family:Arial;
+        }
+
+        thead {
+            background: #597fcb !important;
+            color:#fff;
+        }
+
+        .container1{
+            width:25% !important;
+            float:left !important;
+        }
+
+        .container2 {
+            width: 75% !important;
+            float: left !important;
+        }
+        .imagen{
+            width:100% !important;
+            height: 500px !important;
+        }
+
+        .text-center{
+            text-align:center !important;
+        }
+
+    </style>
+
+</head>
+<body>
+
+    <h1 class="text-center">Indicador de Utilización - Liquidación Corte</h1>
+
+    @if (Model.tipo == "G")
+    {
+        <img src="@nombreimg1" class="imagen" alt="">
+    }
+    else
+    {
+        <div class="container1">
+
+            <img src="@nombreimg1" class="imagen" alt="">
+        </div>
+        <div class="container2">
+            <img src="@nombreimg2" class="imagen" alt="">
+        </div>
+
+
+    }
+
+    @*<img src="~/Public/tmpliquidacion/imagenprueba.jpg" alt="">*@
+
+    <table style="text-align:center !important">
+        @* CABECERA *@
+        <thead>
+            <tr>
+                @foreach (var item in Model.thead)
+                {
+                    <th>@item</th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                @foreach (var item in Model.tbody1)
+                {
+                    <td>@item</td>
+                }
+            </tr>
+            <tr>
+                @foreach (var item in Model.tbody2)
+                {
+                    <td>@item</td>
+                }
+            </tr>
+            <tr>
+                @foreach (var item in Model.tbody3)
+                {
+                    <td>@item</td>
+                }
+            </tr>
+            <tr>
+                @foreach (var item in Model.tbody4)
+                {
+                    <td>@item</td>
+                }
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr>
+                @foreach (var item in Model.tfoot)
+                {
+                    <th>@item</th>
+                }
+            </tr>
+        </tfoot>
+    </table>
+
+    <p>
+        Nota: El cumplimiento de liquidación – Corte, esta calculado del total de fichas liquidadas (online) – Corte sobre el cumplimiento de fichas programadas.
+    </p>
+
+</body>
+</html>

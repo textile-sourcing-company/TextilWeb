@@ -1,0 +1,1538 @@
+﻿@{
+    ViewBag.Title = "Liquidación de Tela";
+    ViewBag.Modulo = "Corte";
+    Layout = "~/Views/Plantillas/_Layout.cshtml";
+    string ficha = string.Empty;
+
+
+    try
+    {
+        //ficha = string.IsNullOrEmpty(PageContext.Page.Request.Params["ficha"].ToString()) ? "" : PageContext.Page.Request.Params["ficha"].ToString();
+        ficha = !string.IsNullOrEmpty(Request.Params["ficha"]) ? PageContext.Page.Request.Params["ficha"].ToString() : "";
+    }
+    catch
+    {
+        ficha = "";
+    }
+
+
+
+}
+<!-- FILTROS - APERTURA -->
+<div class="row">
+
+    <div class="col-md-3">
+
+        <div class="card card-outline card-primary">
+            <div class="card-header">
+                <h3 class="card-title">Registrar Tendido</h3>
+                <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-widget="collapse"><i class="fas fa-minus"></i></button>
+                </div>
+            </div>
+
+            <div class="card-body">
+                <form class="row" id="frmbusqueda">
+
+                    <div class="col-md-9 form-group">
+                        <h6>Ficha:</h6>
+                        <input type="number" step="any" class="form-control form-control-sm numeros" id="txtficha" required autofocus />
+                    </div>
+
+                    <div class="col-md-3 form-group">
+                        <h6>&nbsp;</h6>
+                        <button class="btn btn-primary btn-sm btn-block" id="btnBuscar" type="submit">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+
+                    @if (Session["usuario"].ToString() == "TENDEDOR_2" || Session["usuario"].ToString() == "JAMORETTIA")
+                    {
+                        <div class="col-md-12 form-group">
+                            <label for="">Fecha Liquidación</label>
+                            <input type="date" class="form-control form-control-sm" id="txtfecha">
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="col-md-12 form-group">
+                            <label for="">Fecha Liquidación</label>
+                            <input type="date" class="form-control form-control-sm" value="@DateTime.Now.ToString("yyyy-MM-dd")" id="txtfecha" readonly>
+                        </div>
+                    }
+
+
+                </form>
+            </div>
+
+        </div>
+
+
+    </div>
+
+    <div class="col-md-9">
+        <div class="card card-outline card-primary">
+            <div class="card-header">
+                <h3 class="card-title">Versiones</h3>
+                <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-widget="collapse"><i class="fas fa-minus"></i></button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table-sm table table-hover table-bordered dt-responsive nowrap" style="width:100%;text-align:center" id="tablaver">
+                        <thead class="thead-light">
+                            <tr>
+                                <th>Ver</th>
+                                <th>Combo</th>
+                                <th>Versión</th>
+                                <th>Registro</th>
+                                <th>Usuario</th>
+                                <th>Tipo de Tela</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tablaversiones"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="col-md-12">
+
+
+        <div class="card card-outline card-primary">
+            <div class="card-header">
+                <h3 class="card-title">Comparación de Tela (kg)</h3>
+            </div>
+            <div class="card-body">
+
+                <div class="table-responsive">
+
+                    <table class="table tabls-sm table-hover table-bordered table-sm">
+                        <thead class="thead-light">
+                            <tr>
+                                <th nowrap>Tela Asignada por tizados (kg)</th>
+                                <th nowrap>Tela Despachada (kg)</th>
+                                <th nowrap>Tela Adicional (kg)</th>
+                                <th nowrap>Tela Liquidada (kg)</th>
+                                <th nowrap>% Liquidación</th>
+                            </tr>
+                        </thead>
+                        <tbody id="cuerpocomparacion">
+                            <tr>
+                                <td id="tdkgtizados"></td>
+                                <td id="tdkgdespachadoalmacen"></td>
+                                <td id="tdkgadicional"></td>
+                                <td id="tdkgliquidados"></td>
+                                <td id="tdporcentajeliquidacion"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+
+
+<!-- REGISTROS -->
+<div class="card card-outline card-primary">
+
+    <div class="card-header">
+        <h3 class="card-title">Ingresar Información</h3>
+        <div class="card-tools">
+            <button type="button" class="btn btn-tool" data-widget="collapse"><i class="fas fa-minus"></i></button>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <form class="row" id="frmregistroetapas">
+
+            <!-- ETAPAS -->
+            <div class="col-md-3 col-sm-6 col-6 form-group">
+                <h6>Etapas:</h6>
+                <select class="custom-select custom-select-sm" id="cboetapas" required>
+                    <option value="A">Etapa A</option>
+                    <option value="B">Etapa B</option>
+                    <option value="C">Etapa C</option>
+                    <option value="D">Etapa D</option>
+                    <option value="E">Etapa E</option>
+                    <option value="F">Etapa F</option>
+                    <option value="G">Etapa G</option>
+                    <option value="H">Etapa H</option>
+                    <option value="I">Etapa I</option>
+                    <option value="J">Etapa J</option>
+                    <option value="K">Etapa K</option>
+                    <option value="L">Etapa L</option>
+                    <option value="M">Etapa M</option>
+                    <option value="N">Etapa N</option>
+                    <option value="O">Etapa O</option>
+                    <option value="P">Etapa P</option>
+                    <option value="Q">Etapa Q</option>
+
+                </select>
+            </div>
+
+            <!-- TURNOS -->
+            <div class="col-md-3 col-sm-6 col-6 form-group">
+                <h6>Turno:</h6>
+                <select class="custom-select custom-select-sm" id="cboturnos" required>
+                    <option value="1">Turno 1</option>
+                    <option value="2">Turno 2</option>
+                    <option value="3">Turno 3</option>
+                </select>
+            </div>
+
+            <!-- TONOS -->
+            <div class="col-md-3 col-sm-6 col-6 form-group">
+                <h6>Tono:</h6>
+                <select class="custom-select custom-select-sm" id="cbotonos">
+                    <option value="">[SELECCIONE TONO]</option>
+                    <option value="A">A</option>
+                    <option value="B">B</option>
+                    <option value="C">C</option>
+                    <option value="D">D</option>
+                    <option value="E">E</option>
+                    <option value="F">F</option>
+                    <option value="G">G</option>
+                </select>
+            </div>
+
+            <!-- CELULAS -->
+            <div class="col-md-3 col-sm-6 col-6 form-group">
+                <h6>Célula:</h6>
+                <select class="custom-select custom-select-sm" id="cbocelulas" required>
+                    <option value="Celula 1">Celula 1</option>
+                    <option value="Celula 2">Celula 2</option>
+                    <option value="Celula 3">Celula 3</option>
+                    <option value="Celula 4">Celula 4</option>
+                    <option value="Celula 5">Celula 5</option>
+                    <option value="Celula 6">Celula 6</option>
+                    <option value="Celula 7">Celula 7</option>
+                    <option value="Celula 8">Celula 8</option>
+                    <option value="Celula 9">Celula 9</option>
+                    <option value="Celula 10">Celula 10</option>
+
+
+                </select>
+            </div>
+
+            <!-- PAÑOS -->
+            <div class="col-md-2 form-group">
+                <h6>N° de Paños:</h6>
+                <input type="number" step="any" class="form-control form-control-sm numeros calcular" id="txtnum2" value="0" required />
+            </div>
+
+            <!-- LARGO DE PAÑO -->
+            <div class="col-md-2 form-group">
+                <h6>Largo de Paño (m):</h6>
+                <input type="number" step="any" class="form-control form-control-sm" id="txtnum3" value="0" required />
+            </div>
+
+            <!-- PESO DE PAÑOS-->
+            <div class="col-md-2 form-group">
+                <h6>Peso Paño (kg):</h6>
+                <input type="number" step="any" class="form-control form-control-sm calcular" id="txtnum4" required value="0" />
+            </div>
+
+            <!-- ANCHO DE TELA REAL -->
+            <div class="col-md-2 form-group">
+                <h6>Ancho Tela Real (m):</h6>
+                <input type="number" step="any" class="form-control form-control-sm" id="txtnum5" required value="0" />
+            </div>
+
+            <!-- KILOS POR ETAPA-->
+            <div class="col-md-2 form-group">
+                <h6>Kilos por Etapa (kg):</h6>
+                <input type="text" class="form-control form-control-sm" id="txtnum6" value="0" readonly />
+            </div>
+
+            <!-- BOTON -->
+            <div class="col-md-2 form-group">
+                <h6>&nbsp;</h6>
+                <button class="btn btn-primary btn-sm btn-block d-none" type="submit" id="BtnAgregar">Agregar</button>
+            </div>
+
+
+        </form>
+
+        <div class="row">
+
+            <div class="col-12">
+
+                <hr />
+
+                <div class="table-responsive">
+                    <table class="table table-bordered nowrap" style="width:100%" id="tablaGrabar">
+                        <thead class="thead-light">
+                            <tr>
+                                <th nowrap>Etapas</th>
+                                <th nowrap>N° de Paños</th>
+                                <th nowrap>Tono</th>
+                                <th nowrap>Célula</th>
+                                <th nowrap>Largo de Paños (m) </th>
+                                <th nowrap>Peso Paños (kg)</th>
+                                <th nowrap>Ancho Tela Real (m)</th>
+                                <th nowrap>Kilos por Etapa (kg)</th>
+                                <th nowrap>Turno</th>
+                                <th nowrap>Usuario</th>
+                                <th nowrap>Operación</th>
+
+                            </tr>
+                        </thead>
+                        <tbody id="tablaCuerpoGrabar"></tbody>
+                    </table>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-xl-5 col-lg-6 col-md-12 col-sm-12 col-12">
+
+        <!-- LISTA DE FICHAS -->
+        <div class="card card-outline card-primary">
+            <div class="card-header">
+                <h3 class="card-title">Ficha(s) Asociadas</h3>
+            </div>
+            <div class="card-body">
+                <table class="table table-sm table-bordered dt-responsive nowrap" style="width:100%" id="tablafichas">
+                    <thead class="thead-light">
+                        <tr>
+                            <th>Ficha</th>
+                            <th>Cantidad</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tablaCuerpofichas"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- KILOS DE TELA ADICIONAL -->
+        <div class="card card-outline card-primary">
+            <div class="card-header">
+                <h3 class="card-title">Kilos Adicionales</h3>
+            </div>
+            <div class="card-body">
+
+                <form class="row" id="frmkilosadicionales">
+
+                    <div class="col-xl-10 form-group">
+                        <label for="txtKilosAdicionales">Motivo:</label>
+                        <select class="select2" id="cboMotivoAdicional" multiple="multiple" data-placeholder="Seleccione motivo" style="width:100%"></select>
+                    </div>
+
+                    <div class="col-xl-2 form-group">
+                        <label for="txtKilosAdicionales">Cantidad:</label>
+                        <input type="number" step="any" id="txtKilosAdicionales" class="form-control form-control-sm calculokilos" value="0" />
+                    </div>
+
+
+
+                </form>
+
+            </div>
+        </div>
+
+        <!-- KILOS PULL -->
+        <div class="card card-outline card-primary">
+            <div class="card-header">
+                <h3 class="card-title">Tela(kg) enviado a pull de complementos</h3>
+            </div>
+
+            <div class="card-body row">
+                <div class="col-8">
+                    <label>Kg entregados</label>
+                </div>
+
+                <div class="col-4">
+                    <input class="form-control form-control-sm calculokilos" type="number" step="any" id="txtkgentregados" value="0" />
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!--Mermas Tendido-->
+    <div class="col-xl-7">
+
+        <div class="card card-outline card-primary">
+            <div class="card-header">
+                <h3 class="card-title">Mermas de Tendido</h3>
+                <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-widget="collapse"><i class="fas fa-minus"></i></button>
+                </div>
+            </div>
+
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 col-6 form-group">
+                        <h6>Puntas (kg):</h6>
+                        <input type="number" step="any" class="form-control form-control-sm calculokilos" id="txtpuntas" value="0" />
+                    </div>
+
+                    <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6  col-6  form-group">
+                        <h6>Retazos + 30 (kg):</h6>
+                        <input type="number" step="any" class="form-control form-control-sm calculokilos" id="txtretazosmas" value="0" />
+                    </div>
+
+                    <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 col-6  form-group">
+                        <h6>Retazos - 30 (kg):</h6>
+                        <input type="number" step="any" class="form-control form-control-sm calculokilos" id="txtretazosmenos" value="0" />
+                    </div>
+                    <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6  col-6  form-group">
+                        <h6>Empalme (kg):</h6>
+                        <input type="number" step="any" class="form-control form-control-sm calculokilos" id="txtempalme" value="0" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--Devolucion de Tela-->
+        <div class="card card-outline card-primary">
+            <div class="card-header">
+                <h3 class="card-title">Devolución de Tela</h3>
+                <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-widget="collapse"><i class="fas fa-minus"></i></button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row">
+
+                    <div class="col-xl-4 col-lg-6 col-md-6 col-sm-6 form-group">
+                        <h6>Almacen Devolución:</h6>
+                    </div>
+                    <div class="col-xl-8 col-lg-6 col-md-6 col-sm-6 form-group">
+                        <input type="number" step="any" class="form-control form-control-sm" id="txtalmacen" value="21" disabled />
+                    </div>
+
+
+                    <div class="col-xl-4 col-lg-6 col-md-6 col-sm-6 col-4 form-group">
+                        <h6>Primera (kg):</h6>
+                        <input type="number" step="any" class="form-control form-control-sm calculokilos" id="txtprimera" value="0" />
+                    </div>
+
+                    <div class="col-xl-8 col-lg-6 col-md-6 col-sm-6 col-8 form-group">
+                        <h6>Motivos Primera:</h6>
+                        <select class="custom-select custom-select-sm combosmotivosdevo" id="cbodevoprimera"></select>
+                    </div>
+
+                    <div class="col-xl-4 col-lg-6 col-md-6 col-sm-6 col-4 form-group">
+                        <h6>Segunda (kg):</h6>
+                        <input type="number" step="any" class="form-control form-control-sm calculokilos" id="txtsegunda" value="0" />
+                    </div>
+                    <div class="col-xl-8 col-lg-6 col-md-6 col-sm-6 col-8 form-group">
+                        <h6>Motivos Segunda:</h6>
+                        <select class="custom-select custom-select-sm combosmotivosdevo" id="cbodevosegunda"></select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--Mermas Adicional-->
+        <div class="card card-outline card-primary">
+            <div class="card-header">
+                <h3 class="card-title">Mermas Adicional</h3>
+                <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-widget="collapse"><i class="fas fa-minus"></i></button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6  col-6 form-group">
+                        <h6>Conos (kg):</h6>
+                        <input type="number" step="any" class="form-control form-control-sm " id="txtconos" value="0" />
+                    </div>
+
+                    <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-6 form-group">
+                        <h6>Plástico (kg):</h6>
+                        <input type="number" step="any" class="form-control form-control-sm " id="txtplastico" value="0" />
+                    </div>
+                    <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 form-group">
+                        <h6>&nbsp;</h6>
+                        <button class="btn btn-primary btn-sm btn-block d-none" id="BtnGrabar">Grabar Tendido</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+
+<!--MODAL PARA EDITAR-->
+<div class="modal fade" tabindex="-1" role="dialog" id="ModalModificar">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Modificar Registro  Etapas</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form class="row" id="frmModificar">
+                    <div class="col-xl-6 form-group">
+                        <label>N° Paños</label>
+                        <input type="text" id="txtnumeropanosmodificar" class="form-control form-control-sm calcular2" />
+                    </div>
+                    <div class="col-xl-6 form-group">
+                        <label>Largo Paños</label>
+                        <input type="text" id="txtlargopanosmodificar" class="form-control form-control-sm" />
+                    </div>
+                    <div class="col-xl-6 form-group">
+                        <label>Peso Paños</label>
+                        <input type="text" id="txtpesopanosmodificar" class="form-control form-control-sm calcular2" />
+                    </div>
+                    <div class="col-xl-6 form-group">
+                        <label>Ancho tela real</label>
+                        <input type="text" id="txtanchotelarealmodificar" class="form-control form-control-sm" />
+                    </div>
+                    <div class="col-xl-6 form-group">
+                        <label>Kilos por etapa</label>
+                        <input type="text" id="txtkxetapamodificar" class="form-control form-control-sm" readonly />
+                    </div>
+
+                    <div class="col-xl-6 form-group">
+                        <label>Tono</label>
+                        <select class="custom-select custom-select-sm" id="cbotonomodificar">
+                            <option value="A">Etapa A</option>
+                            <option value="B">Etapa B</option>
+                            <option value="C">Etapa C</option>
+                            <option value="D">Etapa D</option>
+                            <option value="E">Etapa E</option>
+                            <option value="F">Etapa F</option>
+                            <option value="G">Etapa G</option>
+                            <option value="H">Etapa H</option>
+                            <option value="I">Etapa I</option>
+                            <option value="J">Etapa J</option>
+                            <option value="K">Etapa K</option>
+                            <option value="L">Etapa L</option>
+                            <option value="M">Etapa M</option>
+                            <option value="N">Etapa N</option>
+                            <option value="O">Etapa O</option>
+                            <option value="P">Etapa P</option>
+                            <option value="Q">Etapa Q</option>
+                        </select>
+                    </div>
+
+                    <div class="col-xl-6 form-group">
+                        <label>Celula</label>
+                        <select class="custom-select custom-select-sm" id="cbocelulamodificar">
+                            <option value="Celula 1">Celula 1</option>
+                            <option value="Celula 2">Celula 2</option>
+                            <option value="Celula 3">Celula 3</option>
+                        </select>
+                    </div>
+
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="btnModificar">Modificar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section scripts{
+    <script>
+            let FECHAREGISTRO = "@DateTime.Now.ToString("yyyy-MM-dd")";
+            var version ="";
+            var tela = "";
+            var COMBOGLOBAL = "";
+
+            var FICHA = '@ficha';
+            var ID = "";
+            var OCULTAR = false;
+            let TURNO = null;
+            var frmbusqueda = document.getElementById("frmbusqueda");
+            var frmregistroetapas = document.getElementById("frmregistroetapas");
+            let KILOSLIQUI = 0;
+
+            let KGENTREGADOS =  0;
+            let DEVOPRIMERA = 0;
+            let DEVOSEGUNDA = 0;
+            let PUNTAS = 0;
+        let RETAZOSMAS = 0;
+            let RETAZOSMENOS = 0;
+            let EMPALMES = 0;
+            let CONOS = null;
+            let PLASTICOS = null;
+
+
+            // #################
+            // ### VARIABLES ###
+            // #################
+
+
+            let KGTELAASIGNADA          = null; // TELA ASIGNADA
+            let KGTELADESPACHADA        = null; // TELA DESPACHADA
+            let KGTELAADICIONAL         = null; // TELA ADICIONAL
+            let KGTELALIQUIDADA         = null; // TELA LIQUIDAD
+            let PORCENTAJELIQUIDACION   = null; // PORCENTAJE DE LIQUIDACION
+            let TOTALETAPAS             = null; // TOTAL POR ETAPAS
+
+
+            // READY
+            $(document).ready(function () {
+                $("#txtficha").val(FICHA);
+                if (FICHA != "") {
+                    BuscarFicha(FICHA);
+                }
+
+                ListarMotivosKilosAdicionales();
+                getMotivosDevolucionesPrimera();
+                getMotivosDevolucionesSegunda();
+
+            });
+
+            // BUSQUEDA
+            frmbusqueda.addEventListener('submit', (e) => {
+                e.preventDefault();
+                var vrDocumento = $("#txtficha").val().trim();
+                BuscarFicha(vrDocumento);
+            });
+
+            // REGISTRO DE ETAPAS
+            frmregistroetapas.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                if (!OCULTAR) {
+
+                    // VALIDAMOS QUE LOS VALORES SEAN DIFERENCES DE 0
+                    let valor2 = parseFloat($("#txtnum2").val());
+                    let valor3 = parseFloat($("#txtnum3").val());
+                    let valor4 = parseFloat($("#txtnum4").val());
+                    let valor5 = parseFloat($("#txtnum5").val());
+                    let valor6 = parseFloat($("#txtnum6").val());
+
+                    if (valor2 > 0 && valor3 > 0 && valor4 > 0 && valor5 > 0 && valor6 > 0) {
+
+                        let cantidad = parseFloat($("#txtnum6").val().trim());
+                        let pretotal = KGTELALIQUIDADA + cantidad;
+
+                        console.log(cantidad, pretotal, KGTELALIQUIDADA, KGTELADESPACHADA);
+
+                        //if (pretotal <= (KGTELADESPACHADA + KGTELAADICIONAL)) {
+                            await RegistrarEtapas();
+                        //} else {
+                        //    Advertir("La cantidad liquidada no puede ser mayor a la despachada");
+                        //}
+                    } else {
+                        Advertir("La valores deben ser mayores que 0");
+                    }
+
+
+
+
+                }
+            });
+
+            // LISTA MOTIVOS DE KILOS ADICIONALES
+            function ListarMotivosKilosAdicionales(){
+                $.ajax({
+                    url: '/sistema/ListarTareas/',
+                    type: 'GET',
+                    data: {'idtarea': 1},
+                    //dataType: 'json',
+                    success: function (response) {
+                        let op = "";
+                        let op2 = "<option value='0'>[SELECCIONE]</option>";
+
+                        response.forEach((obj)=>{
+                            op += `<option value='${obj.iddescripciontarea}' >${obj.descripcion}  </option>`;
+                        });
+
+                        $("#cboMotivoAdicional").html(op);
+
+
+                        op2 += op;
+                        $(".combosmotivos").html(op2);
+
+
+                    }
+                });
+            }
+
+            // LISTA MOTIVOS DE DEVOLUCION PRIMERA
+            function getMotivosDevolucionesPrimera(){
+                $.ajax({
+                    url: '/sistema/ListarTareas/',
+                    type: 'GET',
+                    data: {'idtarea': 3},
+                    //dataType: 'json',
+                    success: function (response) {
+                        //let op = "";
+                        let op = "<option value='0'>[SELECCIONE]</option>";
+
+                        response.forEach((obj)=>{
+                            op += `<option value='${obj.iddescripciontarea}' >${obj.descripcion}  </option>`;
+                        });
+
+                        $("#cbodevoprimera").html(op);
+                    }
+                });
+            }
+
+            // LISTA MOTIVOS DE DEVOLUCION SEGUNDA
+            function getMotivosDevolucionesSegunda(){
+                $.ajax({
+                    url: '/sistema/ListarTareas/',
+                    type: 'GET',
+                    data: {'idtarea': 4},
+                    //dataType: 'json',
+                    success: function (response) {
+                        //let op = "";
+                        let op = "<option value='0'>[SELECCIONE]</option>";
+
+                        response.forEach((obj)=>{
+                            op += `<option value='${obj.iddescripciontarea}' >${obj.descripcion}  </option>`;
+                        });
+
+                        $("#cbodevosegunda").html(op);
+                    }
+                });
+            }
+
+            // BUSCAR
+            function BuscarFicha(ficha) {
+
+                MostrarCarga("Cargando..");
+
+                get("Corte", "BuscarExiste", { ficha }, true)
+                    .then(async (response) => {
+                        if (response.EXISTE > 0) {
+                            await VerVersionRegitradas();
+                        } else {
+                            AdvertirMini('La Partida No Tiene Liquidacion');
+                        }
+                    })
+                    .catch(error => {
+                        console.log(error);
+                        AdvertirMini("Ocurrio un error");
+                    });
+
+            }
+
+             //LISTA DE VERSIONES
+            function VerVersionRegitradas() {
+                var ficha = $("#txtficha").val().trim();
+
+                get("Corte", "ListarVersiones", { ficha }, true)
+                    .then((response) => {
+                        let rows = "";
+                        if (response.length > 0) {
+
+                            response.forEach(function (obj) {
+
+                                if (obj.contenido > 0) {
+                                    rows += `
+                                             <tr style='background-color:#6c757d;color:white'>
+                                                <td class='text-center'><a href='#' data-combo='${obj.combo}' data-idversiones='${obj.VERSIONES}' data-idtela='${obj.TIPO_TELA}' class ="BtfTela" ><i style='color:#138d75 ' class='fas fa-check-double'></i></a></td>
+                                                <td>${obj.combo}</td>
+                                                <td>${obj.VERSIONES}</td>
+                                                <td>${obj.F_REGISTRO}</td>
+                                                <td>${obj.U_REGISTRO}</td>
+                                               <td>${obj.TIPO_TELA}</td>
+                                             </tr>
+                                            `;
+                                } else {
+                                    rows += `
+                                             <tr>
+                                                <td class='text-center'><a href='#' data-combo='${obj.combo}' data-idversiones='${obj.VERSIONES}' data-idtela='${obj.TIPO_TELA}' class ="BtfTela" ><i style='color:#138d75 ' class='fas fa-check-double'></i></a></td>
+                                                <td>${obj.combo}</td>
+                                                <td>${obj.VERSIONES}</td>
+                                                <td>${obj.F_REGISTRO}</td>
+                                                <td>${obj.U_REGISTRO}</td>
+                                               <td>${obj.TIPO_TELA}</td>
+                                             </tr>
+                                            `;
+                                }
+
+                            });
+
+                        }
+
+                        InformarMini(`${response.length} registros encontradas`);
+                        $('#tablaversiones').html(rows);
+
+                    })
+                    .catch(error => {
+                        console.log(error);
+                        AdvertirMini("Ocurrio un error");
+                    });
+
+            }
+
+            //FICHAS ASOCIADAS A LA VERSION REGISTRADA
+            async function VerFichas(version,tela,combo)
+            {
+
+                var ficha = $("#txtficha").val().trim();
+
+                let response = await get("Corte", "BuscarFicha", { ficha, version, tela, combo }, true);
+
+                if (response.length > 0) {
+
+                    rows = "";
+
+                    response.forEach(function (obj) {
+                        rows += `
+                            <tr>
+                            <td>${obj.FICHA}</td>
+                            <td>${obj.CANTIDAD}</td>
+                            </tr>
+                        `;
+                    });
+
+                    $('#tablaCuerpofichas').html(rows);
+
+
+                } else {
+                    AdvertirMini("No se ha encontrado la ficha")
+                }
+
+
+            }
+
+            //LLENA GRILLA DE ETAPAS
+            async function VerDatosEtapas(version, tela, combo) {
+
+                var ficha = $("#txtficha").val().trim();
+
+                let response = await get("Corte", "ListarCorte007", { ficha, version, tela, combo }, true);
+                let rows = "";
+                TOTALETAPAS = 0;
+
+                if (response.length > 0) {
+
+                    response.forEach(function (obj) {
+
+                        // SUMA TOTAL DE ETAPAS
+                        TOTALETAPAS += obj.KXETAPAS;
+
+                        rows += `
+                            <tr>
+                            <td>${obj.ETAPAS}</td>
+                            <td>${obj.NUM_PANOS}</td>
+                            <td>${obj.tono}</td>
+                            <td>${obj.celula}</td>
+                            <td>${obj.LARGO_PANOS}</td>
+                            <td>${obj.PESO_PANOS}</td>
+                            <td>${obj.ANCHO_TELA_REAL}</td>
+                            <td>${obj.KXETAPAS}</td>
+                            <td>${obj.turno}</td>
+                            <td>${obj.u_registro}</td>`;
+
+                            if(obj.u_registro == '@Session["usuario"]'){
+                                rows += `
+                                <td class='text-center'>
+                                    <a href='#' class='editar' data-id='${obj.id}' data-tono='${obj.tono}' data-celula='${obj.celula}' data-etapas='${obj.ETAPAS}'  data-numpanos='${obj.NUM_PANOS}'  data-largopanos='${obj.LARGO_PANOS}'  data-pesopanos='${obj.PESO_PANOS}'  data-anchotelareal='${obj.ANCHO_TELA_REAL}'  data-kxetapas='${obj.KXETAPAS}' >
+                                        <i class='fas fa-edit'></i>
+                                    </a>
+                                    <a href='#' class='eliminar' data-id='${obj.id}'>
+                                        <i class='fas fa-trash' style='color:red'></i>
+                                    </a>
+                                    <a href='#' class='dividir' data-id='${obj.id}'>
+                                        <i class='fas fa-cut'></i>
+                                    </a>
+                                </td>`;
+                            }else{
+                                rows += `<td class='text-center'>
+
+                                </td>`;
+                            }
+
+
+                        rows+=`</tr>`;
+                    });
+
+
+                }
+
+                $('#tablaCuerpoGrabar').html(rows);
+
+                //OCULTAMOS
+                if (OCULTAR) {
+                    $(".editar").addClass("d-none");
+                    $(".eliminar").addClass("d-none");
+                    $(".dividir").addClass("d-none");
+                }
+
+                // RECALCULAMOS
+                setComparacion();
+
+
+            }
+
+            //LLENAR DATOS CABECERA
+            async function VerDatosCabecera(version, tela, combo) {
+
+                var ficha =  $("#txtficha").val().trim();
+
+                let response = await get("Corte", "BuscarCabecera", { ficha, version, tela, combo }, true);
+
+                // DEVOLUCIONES
+                DEVOPRIMERA = parseFloat(response.DEVO_PRIMERA);
+                DEVOSEGUNDA = parseFloat(response.DEVO_SEGUNDA);
+
+                // MERMAS
+                PUNTAS = parseFloat(response.MER_PUNTAS);
+                RETAZOSMAS = parseFloat(response.MER_RETAZOSMAS);
+                RETAZOSMENOS = parseFloat(response.MER_RETAZOSMEN);
+                EMPALMES = parseFloat(response.EMPALMES);
+
+                // KILOS ENTREGADOS (PULL)
+                KGENTREGADOS = parseFloat(response.KGENTREGADOS);
+
+                // MERMAS ADICIONAL
+                CONOS = parseFloat(response.CONOS);
+                PLASTICOS = parseFloat(response.PLASTICO);
+
+                // ADICIONAL
+                KGTELAADICIONAL = parseFloat(response.KG_ADICIONALES);
+
+                $("#txtpuntas").val(PUNTAS);
+                $("#txtretazosmas").val(RETAZOSMAS);
+                $("#txtretazosmenos").val(RETAZOSMENOS);
+                $("#txtempalme").val(EMPALMES);
+                $("#txtprimera").val(DEVOPRIMERA);
+                $("#txtsegunda").val(DEVOSEGUNDA);
+                $("#txtconos").val(CONOS);
+                $("#txtplastico").val(PLASTICOS);
+                $("#txtKilosAdicionales").val(KGTELAADICIONAL ? KGTELAADICIONAL : 0);
+                $("#txtkgentregados").val(KGENTREGADOS);
+                $("#cbodevoprimera").val(response.DEVO_PRIMERA_MOT);
+                $("#cbodevosegunda").val(response.DEVO_SEGUNDA_MOT);
+
+                // FECHA DE REGISTRO
+                if (response.fecha != "" && response.fecha != null) {
+                    $("#txtfecha").val(response.fecha);
+                } else {
+
+                    if ('@Session["usuario"].ToString()' != "TENDEDOR_2" || '@Session["usuario"].ToString()' != "JAMORETTIA") {
+		                $("#txtfecha").val('@DateTime.Now.ToString("yyyy-MM-dd")');
+                    }else{
+		                $("#txtfecha").val("");
+                    }
+
+
+                }
+
+
+            }
+
+            // BUSCAR MOTIVOS
+            async function BuscarMotivos(version, tela,combo) {
+
+                var ficha = $("#txtficha").val().trim();
+                let response = await get("Corte", "BuscarMotivos", { ficha, version, tela, combo}, true);
+                $("#cboMotivoAdicional").val(response.motivos).trigger("change");
+            }
+
+            // COMPARACION
+            async function verComparacion(version,tela,combo,mensaje = true){
+
+                let ficha = $("#txtficha").val().trim();
+
+                let response = await get("corte", "getComparacionKilos", { ficha, version, tela, combo }, true);
+
+                KGTELAASIGNADA = response.kgtizados;
+                KGTELADESPACHADA = response.kgdespachadoalmacen;
+                //KGTELAADICIONAL = response.kgadicional;
+                //KGTELALIQUIDADA = response.kgliquidados;
+
+                // RECALCULAMOS
+                setComparacion();
+
+        }
+
+            // COMPARACION DE KILOS
+            function setComparacion() {
+
+                // CALCULAMOS TELA LIQUIDADA
+                let devoluciones = DEVOPRIMERA + DEVOSEGUNDA;
+                let mermas = PUNTAS + RETAZOSMAS + RETAZOSMENOS + EMPALMES + CONOS + PLASTICOS;
+
+                KGTELALIQUIDADA = (TOTALETAPAS + devoluciones + mermas + KGENTREGADOS);
+                let kgliquidacion = KGTELALIQUIDADA.toFixed(2);
+                $("#tdkgliquidados").text(kgliquidacion);
+
+                // ASIGNAMOS KILOS ASIGNADOS POR TIZADOS
+                $("#tdkgtizados").text(KGTELAASIGNADA);
+
+                // ASIGANMOS KILOS DESPACHADOS POR EL ALMACEN
+                $("#tdkgdespachadoalmacen").text(KGTELADESPACHADA);
+
+                // ASIGNAMOS ADICIONAL
+                $("#tdkgadicional").text(KGTELAADICIONAL ? KGTELAADICIONAL : 0);
+
+
+                // CALCULAMOS PORCENTAJE DE LIQUIDACION
+                PORCENTAJELIQUIDACION = KGTELALIQUIDADA / (KGTELADESPACHADA + KGTELAADICIONAL);
+                //console.log(KGTELALIQUIDADA, KGTELADESPACHADA, KGTELAADICIONAL);
+                // ASIGANAMOS PORCENTAJE DE LIQUIDACION
+                let porcentaje = (PORCENTAJELIQUIDACION * 100).toFixed(2);
+                $("#tdporcentajeliquidacion").text(porcentaje + "%");
+
+            }
+
+            // ESTADO DE LA LIQUIDACION
+            async function getEstadoLiquidacion(version, tela, combo) {
+
+                let ficha = $("#txtficha").val().trim();
+                let response = await get("Corte", "GetEstadosLiquidacion", { ficha, combo, version, tela }, true);
+                //console.log(response);
+
+                if (response.estadotendido == 2) {
+                    OCULTAR = false;
+                    $("#BtnGrabar").removeClass("d-none");
+                    $("#BtnAgregar").removeClass("d-none");
+                } else {
+                    $("#BtnGrabar").addClass("d-none");
+                    $("#BtnAgregar").addClass("d-none");
+
+                    OCULTAR = true;
+                }
+
+            }
+
+            // BUSCAR REGISTROS
+            $("#tablaversiones").on('click', '.BtfTela', async function () {
+
+                version = $(this).data("idversiones");
+                tela = $(this).data("idtela");
+                COMBOGLOBAL = $(this).data("combo");
+
+                $("#txttela").text(version);
+                $("#txtversion").text(tela);
+
+                MostrarCarga("Cargando");
+
+                await getEstadoLiquidacion(version, tela, COMBOGLOBAL);
+                await VerFichas(version, tela, COMBOGLOBAL);
+                await VerDatosCabecera(version, tela, COMBOGLOBAL);
+                await BuscarMotivos(version, tela, COMBOGLOBAL);
+                await VerDatosEtapas(version, tela, COMBOGLOBAL);
+                await verComparacion(version, tela, COMBOGLOBAL);
+                //await getdatosliqui();
+                InformarMini("Datos cargados");
+
+
+            });
+
+
+            // FUNCION REGISTRAR ETAPAS
+            async function RegistrarEtapas() {
+
+                $("#btnAgregar").attr("disabled",true);
+
+                var partida = $("#txtficha").val();
+                var vrnum1 = $("#cboetapas").val();
+                var vrnum2 = $("#txtnum2").val();
+                var vrnum3 = $("#txtnum3").val();
+                var vrnum4 = $("#txtnum4").val();
+                var vrnum5 = $("#txtnum5").val();
+                var vrnum6 = $("#txtnum6").val();
+                var turno = $("#cboturnos").val();
+                var tono    = $("#cbotonos").val();
+                var celula  = $("#cbocelulas").val();
+
+
+                let vrVersion = version;
+                let vrTela = tela;
+
+
+                let datos = {
+                    'PARTIDA': partida,
+                    'ETAPAS': vrnum1,
+                    'NUM_PANOS': vrnum2,
+                    'LARGO_PANOS': vrnum3,
+                    'PESO_PANOS': vrnum4,
+                    'ANCHO_TELA_REAL': vrnum5,
+                    'KXETAPAS': vrnum6,
+                    'VERSION': vrVersion,
+                    'TELA': vrTela,
+                    'TURNO': turno,
+                    'TONO': tono,
+                    'CELULA': celula,
+                    'combo': COMBOGLOBAL
+                }
+
+
+                let response = await post("Corte", "RegistrarEtapas", datos, true);
+
+                if (response) {
+
+                        await VerDatosEtapas(version, tela, COMBOGLOBAL);
+                        await verComparacion(version, tela, COMBOGLOBAL,false);
+                        frmregistroetapas.reset();
+                    InformarMini('Etapa agregada', 2000);
+
+                } else {
+                    AdvertirMini("Ocurrio un error");
+                }
+
+                $("#btnAgregar").removeAttr("disabled");
+
+            }
+
+            // EVENTO DE REGISTRAR
+            $("#BtnGrabar").click(async function (e) {
+
+                console.log("Liquidado", KGTELALIQUIDADA, "Despachado", KGTELADESPACHADA, "Adicional", KGTELAADICIONAL);
+
+                if (!OCULTAR) {
+
+                    //if (KGTELALIQUIDADA <= (KGTELADESPACHADA + KGTELAADICIONAL)) {
+
+                        //console.log("Registrado correctamente");
+
+                        var rpt = await Preguntar("Confirme para realizar grabado de tendido");
+                        if (rpt.value) {
+
+                            let response = await seleccionarturno();
+
+                            if (response.value) {
+                                TURNO = response.value;
+                                // REGISTRAMOS MOTIVOS
+                                await registrarmotivos();
+
+                            } else {
+                                AdvertirMini("Seleccione un turno para poder registrar");
+                            }
+
+                        }
+
+
+                    //} else {
+                    //    Advertir("La cantidad liquidada no puede ser mayor que la cantidad despachada");
+                    //}
+                }
+
+
+
+
+
+            });
+
+            // REGISTRAR
+            function RegistrarCompleto() {
+
+                MostrarCarga("Grabando tendido...");
+
+                var ficha = $("#txtficha").val().trim();
+                var combo = COMBOGLOBAL;
+                var versiones = version;
+                var tipo_tela = tela;
+                var turno = TURNO;
+                var mer_puntas = $("#txtpuntas").val();
+                var mer_retazosmas = $("#txtretazosmas").val();
+                var mer_retazosmen = $("#txtretazosmenos").val();
+                var empalmes = $("#txtempalme").val();
+                var devo_primera = $("#txtprimera").val();
+                var devo_segunda = $("#txtsegunda").val();
+                var conos = $("#txtconos").val();
+                var plastico = $("#txtplastico").val();
+                var u_registro = null;
+                var kg_adicionales = $("#txtKilosAdicionales").val().trim() == "" ? 0 : $("#txtKilosAdicionales").val().trim();
+                var mot_kgadicional = $("#cboMotivoAdicional").val();
+                var kgentregados = $("#txtkgentregados").val();
+                var devo_primera_mot = $("#cbodevoprimera").val();
+                var devo_segunda_mot = $("#cbodevosegunda").val();
+                var almacen = $("#txtalmacen").val();
+                var estadotendido = null;
+                var estadocorte = null;
+                var f_registro = $("#txtfecha").val();
+
+
+                if (kg_adicionales > 0 && mot_kgadicional.length < 0) {
+                    Advertir("Favor de seleccionar un motivo para registrar Kilos adicionales");
+                } else {
+
+                    if (f_registro != "") {
+
+                        let datos = {
+                             ficha,         combo,              versiones,          tipo_tela,
+                             turno,         mer_puntas,         mer_retazosmas,     mer_retazosmen,
+                             empalmes ,     devo_primera,       devo_segunda,       conos,
+                             plastico,      u_registro,         kg_adicionales,     mot_kgadicional,
+                             kgentregados,  devo_primera_mot,   devo_segunda_mot,   almacen,
+                             estadotendido, estadocorte,        f_registro
+                        }
+
+                        post("Corte", "RegistrarCabecera", datos, true)
+                            .then((response) => {
+                                InformarMini("Correcto");
+                                console.log(response);
+                            })
+                            .catch(error => {
+                                Advertir("Ocurrio un error");
+                                console.log(error);
+                            });
+
+                        //$.ajax({
+                        //    url: '/Corte/RegistrarCabecera',
+                        //    type: 'POST',
+                        //    data: datos,
+                        //    dataType: 'json',
+                        //    success: function (response) {
+
+                        //        if (response.success) {
+                        //            InformarMini(response.mensaje);
+                        //            $("#txtficha").val("");
+                        //            $("#txtpuntas").val("0");
+                        //            $("#txtretazosmas").val("0");
+                        //            $("#txtretazosmenos").val("0");
+                        //            $("#txtempalme").val("0");
+                        //            $("#txtprimera").val("0");
+                        //            $("#txtsegunda").val("0");
+                        //            $("#txtconos").val("0");
+                        //            $("#txtplastico").val("0");
+                        //            $("#txtkgentregados").val("");
+
+                        //            var tabla = $("#tablaGrabar").DataTable();
+                        //            tabla.destroy();
+
+                        //            $("#tablaCuerpoGrabar").html("");
+                        //            $("#tablaCuerpofichas").html("");
+                        //            $("#tablaversiones").html("");
+                        //            $("#cuerpocomparacion").html("");
+                        //            $("#txtfecha").val("");
+                        //            $("#txtKilosAdicionales").val("0");
+                        //            $("#cboMotivoAdicional").val("").trigger("change");
+                        //        }
+                        //        else {
+                        //            AdvertirMini(response.mensaje);
+                        //        }
+
+                        //        TURNO = null;
+
+                        //    },
+                        //    error: function (err) {
+                        //        alert('Error:' + err.responseText);
+                        //    }
+                        //});
+
+
+
+
+                    } else {
+                        AdvertirMini("La fecha es obligatoria");
+                    }
+
+
+                }
+
+            }
+
+            // MOSTRAMOS DATOS PARA EDITAR
+            $("#tablaCuerpoGrabar").on('click','.editar',function(){
+                ID = $(this).data("id");
+                var numeropanos = $(this).data("numpanos");
+                var largopanos = $(this).data("largopanos");
+                var pesopanos = $(this).data("pesopanos");
+                var anchotelareal = $(this).data("anchotelareal");
+                var kxetapas = $(this).data("kxetapas");
+
+                var tono    = $(this).data("tono");
+                var celula  = $(this).data("celula");
+
+
+                //ASIGNANDO VALORES
+                $("#txtnumeropanosmodificar").val(numeropanos);
+                $("#txtlargopanosmodificar").val(largopanos);
+                $("#txtpesopanosmodificar").val(pesopanos);
+                $("#txtanchotelarealmodificar").val(anchotelareal);
+                $("#txtkxetapamodificar").val(kxetapas);
+                $("#cbotonomodificar").val(tono);
+                $("#cbocelulamodificar").val(celula);
+
+                $("#ModalModificar").modal("show");
+            });
+
+            // DIVIDIR ETAPAS
+            $("#tablaCuerpoGrabar").on('click', '.dividir', async function () {
+
+                ID = $(this).data("id");
+                let valor = await getDatosPreguntar("Ingresa la cantidad que quiera dividir");
+
+
+                if(valor){
+                    //console.log("Con valor",valor);
+                    valor = parseFloat(valor);
+                    if(valor > 0){
+
+                        MostrarCarga("Cargando...");
+
+                        get("Corte","DividirEtapasTendido",{
+                            id:ID,cantidad:valor
+                        },true)
+                        .then(async (response) => {
+
+                            if (response.success) {
+                                await VerDatosEtapas(version, tela, COMBOGLOBAL);
+                                await verComparacion(version, tela, COMBOGLOBAL, false);
+                                InformarMini(response.mensaje);
+                                //InformarMini('Se Agrego correctamente', 2000);
+                            }else{
+                                AdvertirMini(response.mensaje);
+                            }
+                        })
+                        .catch(error => {
+                            console.log(error);
+                            AdvertirMini("Ocurrio un error contacte a sistemas");
+                        });
+
+                    }else{
+                        AdvertirMini("Seleccione un cantidad mayor a cero");
+                    }
+                }else{
+                    console.log("Sin valor",valor);
+                }
+
+                //console.log(valor);
+
+            });
+
+            // MOSTRAMOS DATOS PARA ELIMINAR
+            $("#tablaCuerpoGrabar").on('click', '.eliminar', async function () {
+
+                let rpt = await Preguntar("Confirme para eliminar registro");
+
+                if (rpt.value) {
+
+                    let idetapa = $(this).data("id");
+                    //console.log();
+                    await get("Corte", "EliminarEtapas", {
+                        idetapa
+                    }, true).then(async (response) => {
+
+                        if (response.success) {
+                            InformarMini("Eliminado correctamente");
+                        } else {
+                            AdvertirMini("Ocurrio un error");
+                        }
+
+                        await VerDatosEtapas(version, tela, COMBOGLOBAL);
+                        //console.log(response);
+
+
+                    }).catch(error => {
+                        AdvertirMini("Ocurrio un erro contacte a sistemas");
+                        console.log(error);
+                    });
+                }
+
+
+            });
+
+
+            //MODIFICAR
+            $("#btnModificar").click(async function () {
+
+                var datos = {
+                    'id'        : ID,
+                    'num_panos' : $("#txtnumeropanosmodificar").val(),
+                    'largo_panos' : $("#txtlargopanosmodificar").val(),
+                    'peso_panos' : $("#txtpesopanosmodificar").val(),
+                    'ancho_tela_real' : $("#txtanchotelarealmodificar").val(),
+                    'kxetapas': $("#txtkxetapamodificar").val(),
+                    'tono': $("#cbotonomodificar").val(),
+                    'celula': $("#cbocelulamodificar").val(),
+
+                }
+
+
+                if(datos.num_panos != "" && datos.peso_panos != "" && datos.peso_panos != "" && datos.ancho_tela_real != "" && datos.kxetapas != ""){
+
+                    let response = await post("corte", "Modificar_cort007", datos, true);
+
+                    if (response) {
+
+                        await VerDatosEtapas(version, tela, COMBOGLOBAL);
+                        Informar("Modificado correctamente");
+                        $("#ModalModificar").modal("hide");
+                        $("#frmModificar")[0].reset();
+                    } else {
+                        Advertir("Ocurrio un error");
+                    }
+
+
+                    //$.ajax({
+                    //    url:'/corte/Modificar_cort007/',
+                    //    type:'POST',
+                    //    data:datos,
+                    //    success:function(e){
+                    //        console.log(e);
+                    //        if (e) {
+
+                    //            await VerDatosEtapas(version, tela, COMBOGLOBAL);
+                    //            Informar("Modificado correctamente");
+                    //            $("#ModalModificar").modal("hide");
+                    //            $("#frmModificar")[0].reset();
+                    //        }else{
+                    //            Advertir("Ocurrio un error");
+                    //        }
+                    //    }
+                    //});
+
+                }else{
+                    Advertir("Todos los datos son necesarios");
+                }
+
+            });
+
+            //FUNCION QUE CALCULA LOS KILOS POR ETAPA
+            function kilosporetapa(){
+                //console.log("holis")
+                var npanio = $("#txtnum2").val() == "" ? 1 : $("#txtnum2").val();
+                var pesopanio = $("#txtnum4").val() == "" ? 1 : $("#txtnum4").val();
+                var resultado = 0;
+                try {
+                    resultado = parseFloat(npanio) * parseFloat(pesopanio);
+                }catch(ex){
+                    //console.log(ex);
+                    resultado = 0;
+                }
+                //console.log(resultado);
+                $("#txtnum6").val(resultado);
+
+            }
+
+            function kilosporetapa2() {
+                //console.log("holis")
+                var npanio = $("#txtnumeropanosmodificar").val() == "" ? 1 : $("#txtnumeropanosmodificar").val();
+                var pesopanio = $("#txtpesopanosmodificar").val() == "" ? 1 : $("#txtpesopanosmodificar").val();
+                var resultado = 0;
+                try {
+                    //resultado = npanio * pesopanio;
+                    resultado = parseFloat(npanio) * parseFloat(pesopanio);
+
+                } catch (ex) {
+                    //console.log(ex);
+                    resultado = 0;
+                }
+                //console.log(resultado);
+                $("#txtkxetapamodificar").val(resultado);
+
+            }
+
+            async function registrarmotivos() {
+
+                let motivos = $("#cboMotivoAdicional").val();
+                let partida = $("#txtficha").val().trim();
+
+
+                motivos = motivos ? motivos : [];
+
+                let datos = {
+                    partida:partida,
+                    versiones:version,
+                    tipotela: tela,
+                    combo: COMBOGLOBAL,
+                    motivos : motivos
+                }
+
+                await post("Corte", "registrar_cort11", datos, true)
+                    .then(response => {
+
+                        // REGISTRAMOS COMPLETO (CORT 006)
+                        RegistrarCompleto();
+
+                    }).catch(error => {
+                        AdvertirMini("Ocurrio un error al registrar los motivos adicionales");
+                        console.log(error);
+                    })
+
+            }
+
+            $(".calcular").keyup(function(){
+                kilosporetapa();
+            });
+
+            $(".calcular2").keyup(function () {
+                kilosporetapa2();
+            });
+
+
+            // SELECCIONAR TURNO
+            async function seleccionarturno() {
+
+                return await Swal.fire({
+                    title: 'Selección de turno',
+                    input: 'select',
+                    inputOptions: {
+                        '1': 'Turno 1',
+                        '2': 'Turno 2',
+                        '3': 'Turno 3',
+                    },
+                    inputPlaceholder: 'Selecione un turno',
+                    showCancelButton: true
+                })
+            }
+
+            // EVENTO DE CALCULOS
+            $(".calculokilos").keyup(function () {
+                try {
+                    calculakilosliqui();
+                } catch (error) {
+                    console.log(error);
+                    AdvertirMini("Ocurrio un error al calcular");
+                }
+            });
+
+
+            // OBTENEMOS TODOS LOS DATOS PARA HACER CALCULOS
+            function calculakilosliqui() {
+
+                PUNTAS          = !isNaN($("#txtpuntas").val().trim()) ? $("#txtpuntas").val().trim() : 0;
+                RETAZOSMAS      = !isNaN($("#txtretazosmas").val().trim()) ? $("#txtretazosmas").val().trim() : 0;
+                RETAZOSMENOS    = !isNaN($("#txtretazosmenos").val().trim()) ? $("#txtretazosmenos").val().trim() : 0;
+                EMPALMES        = !isNaN($("#txtempalme").val().trim()) ? $("#txtempalme").val().trim() : 0;
+
+                DEVOPRIMERA     = !isNaN($("#txtprimera").val().trim()) ? $("#txtprimera").val().trim() : 0;
+                DEVOSEGUNDA     = !isNaN($("#txtsegunda").val().trim()) ? $("#txtsegunda").val().trim() : 0;
+
+                CONOS           = !isNaN($("#txtconos").val().trim()) ? $("#txtconos").val().trim() : 0;
+                PLASTICOS       = !isNaN($("#txtplastico").val().trim()) ? $("#txtplastico").val().trim() : 0;
+
+                // ADICIONAL
+                KGTELAADICIONAL = !isNaN($("#txtKilosAdicionales").val().trim()) ? $("#txtKilosAdicionales").val().trim() : 0;
+
+                // KILOS ENTREGADOS
+                KGENTREGADOS = !isNaN($("#txtkgentregados").val().trim()) ? $("#txtkgentregados").val().trim() : 0;
+
+                // CONVERTIMOS A NUMEROS
+                PUNTAS = parseFloat(PUNTAS);
+                RETAZOSMAS = parseFloat(RETAZOSMAS);
+                RETAZOSMENOS = parseFloat(RETAZOSMENOS);
+                EMPALMES = parseFloat(EMPALMES);
+                DEVOPRIMERA = parseFloat(DEVOPRIMERA);
+                DEVOSEGUNDA = parseFloat(DEVOSEGUNDA);
+                CONOS = parseFloat(CONOS);
+                PLASTICOS = parseFloat(PLASTICOS);
+                KGTELAADICIONAL = parseFloat(KGTELAADICIONAL);
+                KGENTREGADOS = parseFloat(KGENTREGADOS);
+
+                // COMPARACION CALCULAMOS
+                setComparacion();
+            }
+
+    </script>
+}

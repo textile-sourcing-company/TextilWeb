@@ -1,0 +1,668 @@
+﻿@{
+    ViewBag.Title = "Facturas de Proveedores";
+    ViewBag.Modulo = "Facturacion";
+    Layout = "~/Views/Plantillas/_Layout.cshtml";
+}
+
+<div class="cont-fprov">
+
+
+    <div class="card">
+        <div class="card-body">
+
+            <div class="tab-content card pt-1" id="myTabContentJust">
+                <div class="tab-pane fade show active" id="firma-just" role="tabpanel" aria-labelledby="firma-tab-just">
+                    <div class="p-3">
+
+                        <div class="card cont-header">
+                            <div class="cont-seccion1 form-group row">
+                                <input required="" type="text" class="form-control form-control-sm input-fecha" id="FechaIni" placeholder="Fecha Inicio" onfocus="(this.type='date')" />
+                                <input required="" type="text" class="form-control form-control-sm input-fecha-fin" id="FechaFin" placeholder="Fecha Fin" onfocus="(this.type='date')" />
+
+                                <button id="btn_Buscar" type="button" class="btn btn-sm btn-primary form-control-sm"><i class="fas fa-search"></i></button>
+
+                                <button id="btn_ExportarExcel" class="btn btn-sm btn-success form-control-sm"> Excel <i class="fas fa-file-excel" style="margin-left: 7px;"></i></button>
+                            </div>
+
+                            <div class="cont-seccion2 form-group row">
+                                <button id="kpiTotals" type="button" class="btn btn-sm btn-dark form-control-sm">Total: S/. 0</button>
+                                <button id="kpiTotald" type="button" class="btn btn-sm btn-warning form-control-sm">Total: U$ 0</button>
+                            </div>
+                        </div>
+
+                        <div class="mt-1">
+
+                            <table class="table table-sm table-bordered dt-responsive nowrap" style="width:100%" id="tablaPrincipal">
+                                <thead>
+                                    <tr>
+                                        <th id="cRuc">RUC</th>
+                                        <th id="cNumSer">Numero Serie</th>
+                                        <th id="cRS">Razon Social</th>
+                                        <th>Fecha Emisión</th>
+                                        <th>Fecha de Vcto</th>
+                                        <th>Cond. de Pago</th>
+                                        <th>OC</th>
+                                        <th>Guía de Remisión</th>
+                                        <th id="cMoneda">Moneda</th>
+                                        <th id="cVenta">V. Venta</th>
+                                        <th id="cIGV">IGV</th>
+                                        <th id="cTotal">Total</th>
+                                        <th id="cTotalS">S/. Total</th>
+                                        <th id="cTotalD">U$ Total</th>
+                                        <th class="col-ocultar sums">S/. Total</th>
+                                        <th class="col-ocultar sumd">U$ Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tablaCabeceraContenido"></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="card">
+
+                <div class="cont-fp-foot">
+
+                    <div class="cont-fp-foot-1">
+                        <button id="btn_ActualizarLista" type="button" class="btn btn-sm btn-primary form-control-sm">Actualizar <i class="fas fa-sync"></i></button>
+                    </div>
+
+                    <div class="cont-fp-foot-2">
+                        <p id="ultimaAct">Ultima Actualización: - </p>
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<style>
+
+    #FechaIni {
+    }
+
+    #FechaFin {
+        margin-left: 3px;
+    }
+
+    #btn_Buscar {
+        margin-left: 4px;
+    }
+
+    #btn_ActualizarLista {
+        min-width: 120px;
+        margin-left: 3px;
+    }
+
+    #btn_ExportarExcel {
+        min-width: 120px;
+        margin-left: 3px;
+    }
+
+    #kpiTotals {
+        font-weight: bold;
+        cursor: default;
+    }
+
+    #kpiTotald {
+        font-weight: bold;
+        cursor: default;
+        margin-left: 3px;
+    }
+
+    .cont-fprov .cont-header {
+        width: 100%;
+        padding: 15px 15px 0px 15px;
+        display: flex;
+        justify-content: space-between;
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+
+    .cont-fp-foot {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px;
+    }
+
+    #ultimaAct {
+        font-weight: bold;
+    }
+
+    .col-ocultar {
+        display: none;
+    }
+
+    #tablaCabeceraContenido .dtr-details li[data-dt-column="14"] {
+        display: none;
+    }
+
+    #tablaCabeceraContenido .dtr-details li[data-dt-column="15"] {
+        display: none;
+    }
+
+    #tablaPrincipal td {
+        text-align: right !important;
+    }
+
+
+    @@media (min-width: 320px) and (max-width: 479.98px) {
+        #FechaIni {
+            width: 48%;
+        }
+
+        #FechaFin {
+            width: 48%;
+            margin-left: 12px;
+        }
+
+        #btn_Buscar {
+            width: 100%;
+            margin-left: 0px;
+            margin-top: 4px;
+        }
+
+        #btn_ActualizarLista {
+            margin-left: 0px;
+            margin-top: 3px;
+            width: 49%;
+        }
+
+        #btn_ExportarExcel {
+            width: 49%;
+            margin-left: 6px;
+            margin-top: 3px;
+        }
+
+
+        .cont-fprov .cont-header .cont-seccion2 {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        #kpiTotals {
+            width: 100%;
+            margin-left: 13px;
+        }
+
+        #kpiTotald {
+            width: 100%;
+            margin-top: 3px;
+            margin-left: 13px;
+        }
+    }
+
+    @@media (min-width: 480px) and (max-width: 767.98px) {
+
+        #FechaFin {
+            margin-left: 2px;
+        }
+
+        #btn_Buscar {
+            margin-left: 3px;
+        }
+
+        #btn_ActualizarLista {
+            margin-left: 0px;
+            margin-top: 5px;
+        }
+
+        #btn_ExportarExcel {
+            margin-left: 3px;
+            margin-top: 5px;
+        }
+
+        #kpiTotals {
+            margin-left: 2px;
+        }
+
+        #kpiTotald {
+            margin-left: 3px;
+        }
+    }
+
+    @@media (min-width: 768px) and (max-width: 991.98px) {
+    }
+
+    @@media (min-width: 992px) and (max-width: 1199.98px) {
+    }
+
+    @@media (min-width: 1200px) {
+    }
+</style>
+
+
+@section scripts {
+    <script>
+        //ARRAY GENERAL
+        var PEDIDOS = [];
+
+        $(document).ready(function () {
+
+            UltimaActualizacion();
+
+            function formatoNumero(x) {
+                x = x.toFixed(2);
+                return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            }
+
+            function CalculoSuma(table) {
+                try {
+
+                    var intVal = function (i) {
+                        return typeof i === 'string' ?
+                            i.replace(/[\$,]/g, '') * 1 :
+                            typeof i === 'number' ?
+                                i : 0;
+                    };
+
+                    var api = table.api();
+
+
+                    api.columns(".sums").eq(0).each(function (index) {
+                        var column = api.column(index, { page: 'current' });
+
+                        var sum = column
+                            .data()
+                            .reduce(function (a, b) {
+                                //return parseInt(a, 10) + parseInt(b, 10);
+                                return intVal(a) + intVal(b);
+                            }, 0);
+
+                        $('#kpiTotals').text("Total: S/. " + formatoNumero(sum));
+
+                        if ($(column.footer()).hasClass("Int")) {
+                            $(column.footer()).html('' + sum.toFixed(0));
+                        } else {
+                            $(column.footer()).html('' + sum.toFixed(2));
+                        }
+                    });
+
+
+                    api.columns(".sumd").eq(0).each(function (index) {
+                        var column = api.column(index, { page: 'current' });
+
+                        var sum = column
+                            .data()
+                            .reduce(function (a, b) {
+                                //return parseInt(a, 10) + parseInt(b, 10);
+                                return intVal(a) + intVal(b);
+                            }, 0);
+
+                        $('#kpiTotald').text("Total: U$ " + formatoNumero(sum));
+
+                        if ($(column.footer()).hasClass("Int")) {
+                            $(column.footer()).html('' + sum.toFixed(0));
+                        } else {
+                            $(column.footer()).html('' + sum.toFixed(2));
+                        }
+                    });
+
+                } catch (e) {
+                    console.log('Error in CalculateTableSummary');
+                    console.log(e)
+                }
+            }
+
+            $("#btn_Buscar").click(function () {
+                let fechaIni = $('#FechaIni').val();
+                let fechaFin = $('#FechaFin').val();
+
+                if (fechaIni == null ||
+                    fechaFin == null ||
+                    typeof (fechaIni) == "undefined" ||
+                    typeof (fechaFin) == "undefined" ||
+                    fechaIni == "Fecha Inicio" ||
+                    fechaFin == "Fecha Fin" ||
+                    fechaIni.trim() == "" ||
+                    fechaFin.trim() == "") {
+
+                    Swal.fire('Seleccione la fecha, por favor')
+                }
+                else {
+
+                    ListarFacturas();
+                }
+            });
+
+            $("#btn_ExportarExcel").click(function () {
+
+                let fechaIni = $('#FechaIni').val();
+                let fechaFin = $('#FechaFin').val();
+
+                if (fechaIni == null ||
+                    fechaFin == null ||
+                    typeof (fechaIni) == "undefined" ||
+                    typeof (fechaFin) == "undefined" ||
+                    fechaIni == "Fecha Inicio" ||
+                    fechaFin == "Fecha Fin" ||
+                    fechaIni.trim() == "" ||
+                    fechaFin.trim() == "") {
+
+                    Swal.fire('Seleccione la fecha, por favor')
+                }
+                else {
+                    var datos =
+                    {
+                        'fechaIni': fechaIni,
+                        'fechaFin': fechaFin
+                    }
+
+                    exportarExcel(datos);
+                }
+            });
+
+            function exportarExcel(datos) {
+
+                $.ajax({
+                    url: '@Url.Action("ReporteExcelFact", "Facturacion")',
+                    contentType: 'application/json; charset=utf-8',
+                    datatype: 'json',
+                    type: "GET",
+                    data: datos,
+                    success: function () {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Reporte Generado con Éxito',
+                            text: 'Textile Sourcing Company',
+                            showConfirmButton: false,
+                            timer: 1500,
+                            onClose: () => {
+                                window.location = "/Facturacion/ReporteExcelFact?fechaIni=" + datos.fechaIni + "&fechaFin=" + datos.fechaFin;
+                            }
+                        });
+                    }
+                });
+            }
+
+            function ListarFacturas() {
+
+                MostrarCarga("Cargando...");
+
+
+                let fechaIni = $('#FechaIni').val();
+                let fechaFin = $('#FechaFin').val();
+
+                var datos =
+                {
+                    'fechaIni': fechaIni,
+                    'fechaFin': fechaFin
+                }
+
+                $.ajax({
+                    url: '/Facturacion/ListarFacturas',
+                    type: 'GET',
+                    contenType: 'json',
+                    data: datos,
+                    success: function (e) {
+
+                        if (e.isRedirect) {
+                            window.location.href = e.redirectUrl;
+                        }
+                        else {
+
+                            let tabla = $("#tablaPrincipal").DataTable();
+
+                            tabla.destroy();
+                            let tr = "";
+                            e.lista.forEach(function (obj) {
+
+                                tr += "<tr>"
+                                    + " <td> " + IsNull(obj.RUC) + "</td>"
+                                    + " <td> " + IsNull(obj.SERIE_NUM) + "</td>"
+                                    + " <td> " + IsNull(obj.RS) + "</td>"
+                                    + " <td> " + IsNull(obj.FECHA_EMI) + "</td>"
+                                    + " <td> " + IsNull(obj.FECHA_VEN) + "</td>"
+                                    + " <td> " + IsNull(obj.COND_PAGO) + "</td>"
+                                    + " <td> " + IsNull(obj.OC) + "</td>"
+                                    + " <td> " + IsNull(obj.GR) + "</td>"
+                                    + " <td> " + IsNull(obj.MONEDA) + "</td>"
+                                    + " <td> " + IsNull(obj.V_VENTA) + "</td>"
+                                    + " <td> " + IsNull(obj.V_IGV) + "</td>"
+                                    + " <td> " + IsNullWithFormat(obj.TOTAL) + "</td>"
+                                    + " <td> " + IsNullWithFormat(obj.TOTAL_S) + "</td>"
+                                    + " <td> " + IsNullWithFormat(obj.TOTAL_D) + "</td>"
+                                    + " <td class='col-ocultar'> " + IsNull(obj.TOTAL_S) + "</td>"
+                                    + " <td class='col-ocultar'> " + IsNull(obj.TOTAL_D) + "</td>"
+
+                                   + "</tr>";
+                            });
+
+                            $("#tablaCabeceraContenido").html(tr);
+
+                            $("#tablaPrincipal").DataTable(
+                                {
+                                    'language': { 'url': '/libs/datatables/spanish.json' },
+                                    "initComplete": function (settings, json) {
+                                        var api = this.api();
+                                        CalculoSuma(this);
+                                    },
+                                    "footerCallback": function (row, data, start, end, display) {
+                                        var api = this.api(), data;
+                                        CalculoSuma(this);
+                                        return;
+                                    },
+                                    lengthMenu: [[5, 10, 20, -1], [5, 10, 20, 'Todos']]
+                                });
+
+                            Swal.fire({
+                                icon: 'success',
+                                title: "Mostrando Datos",
+                                text: "Textile Sourcing Company",
+                                allowEscapeKey: false,
+                                showConfirmButton: false,
+                                timer: 1500,
+                            });
+
+                        }
+
+                        UltimaActualizacion();
+                    }
+                });
+            }
+
+            function IsNull(valor) {
+                if (valor == null) {
+                    return "";
+                } else {
+                    return valor;
+                }
+            }
+
+            function IsNullWithFormat(valor) {
+                if (valor == null) {
+                    return "";
+                } else {
+                    return formatoNumero(valor);
+                }
+            }
+
+            function UltimaActualizacion() {
+                $.ajax({
+                    url: '/Facturacion/UltimaActualizacion',
+                    type: 'GET',
+                    contenType: 'json',
+                    success: function (e) {
+
+                        if (e.isRedirect) {
+                            window.location.href = e.redirectUrl;
+                        }
+                        else {
+                            $('#ultimaAct').text("Ultima Actualización: " + e.ultAct);
+                        }
+                    }
+                });
+            };
+
+            $("#btn_ActualizarLista").click(function () {
+
+                Swal.fire({
+                    title: '¿Desea Actualizar la lista de Facturas?',
+                    text: "Se buscará desde la última actualización las facturas del repositorio que no se encuentre en la lista",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Ok',
+                    cancelButtonText: 'Cancelar'
+                }).then((result) => {
+
+                    if (result.value) {
+
+
+                        MostrarCarga("Actualizando...");
+
+                        $.ajax({
+                            type: "GET",
+                            url: '/Facturacion/ActualizacionFactura',
+                            contentType: "application/json; charset=utf-8",
+                            dataType: "json",
+                            success: function (data) {
+
+                                if (data.isRedirect) {
+                                    window.location.href = data.redirectUrl;
+                                }
+                                else {
+
+                                    if (data.resultado) {
+                                        Swal.fire({
+                                            icon: 'success',
+                                            title: "Datos Actualizados",
+                                            text: "Textile Sourcing Company",
+                                            allowEscapeKey: false,
+                                            showConfirmButton: false,
+                                            timer: 1500,
+                                        });
+
+                                        UltimaActualizacion();
+
+                                        if (fechaIni != null &&
+                                            fechaFin != null &&
+                                            typeof (fechaIni) != "undefined" &&
+                                            typeof (fechaFin) != "undefined" &&
+                                            fechaIni != "Fecha Inicio" &&
+                                            fechaFin != "Fecha Fin" &&
+                                            fechaIni.trim() != "" &&
+                                            fechaFin.trim() != "") {
+
+                                            ListarFacturas();
+                                        }
+                                    }
+                                    else {
+
+                                        Swal.fire({
+                                            icon: 'error',
+                                            title: resultado.mensaje,
+                                            text: 'Textile Sourcing Company',
+                                            showConfirmButton: false,
+                                            timer: 2500,
+                                        });
+
+                                    }
+                                }
+
+                            },
+                            failure: function () {
+
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Error al cargar datos',
+                                    text: 'Textile Sourcing Company',
+                                    showConfirmButton: false,
+                                    timer: 2500,
+                                });
+                            }
+                        });
+
+                    }
+                })
+            });
+
+        });
+
+        var $window = $(window);
+
+        $window.resize(function resize() {
+
+            if ($window.width() > 300 & $window.width() < 479.98) {
+
+                $("#cRuc").removeClass('all');
+                $("#cRS").removeClass('all');
+                $("#cNumSer").addClass('all');
+                $("#cMoneda").addClass('all');
+                $("#cVenta").removeClass('all');
+                $("#cIGV").removeClass('all');
+                $("#cTotal").addClass('all');
+                $("#cTotalS").removeClass('all');
+                $("#cTotalD").removeClass('all');
+
+            }
+            else if ($window.width() > 480 & $window.width() < 767.98) {
+
+                $("#cRuc").addClass('all');
+                $("#cRS").removeClass('all');
+                $("#cNumSer").removeClass('all');
+                $("#cMoneda").addClass('all');
+                $("#cVenta").removeClass('all');
+                $("#cIGV").removeClass('all');
+                $("#cTotal").addClass('all');
+                $("#cTotalS").removeClass('all');
+                $("#cTotalD").removeClass('all');
+
+
+            }
+            else if ($window.width() > 768 & $window.width() < 991.98) {
+
+                $("#cRuc").addClass('all');
+                $("#cRS").addClass('all');
+                $("#cNumSer").removeClass('all');
+                $("#cMoneda").addClass('all');
+                $("#cVenta").removeClass('all');
+                $("#cIGV").removeClass('all');
+                $("#cTotal").addClass('all');
+                $("#cTotalS").removeClass('all');
+                $("#cTotalD").removeClass('all');
+
+            }
+            else if ($window.width() > 992 & $window.width() < 1199.98) {
+
+                $("#cRuc").addClass('all');
+                $("#cRS").addClass('all');
+                $("#cNumSer").addClass('all');
+                $("#cMoneda").addClass('all');
+                $("#cVenta").addClass('all');
+                $("#cIGV").addClass('all');
+                $("#cTotal").addClass('all');
+                $("#cTotalS").addClass('all');
+                $("#cTotalD").addClass('all');
+
+            }
+            else if ($window.width() > 1200) {
+
+                $("#cRuc").addClass('all');
+                $("#cRS").addClass('all');
+                $("#cNumSer").addClass('all');
+                $("#cMoneda").addClass('all');
+                $("#cVenta").addClass('all');
+                $("#cIGV").addClass('all');
+                $("#cTotal").addClass('all');
+                $("#cTotalS").addClass('all');
+                $("#cTotalD").addClass('all');
+            }
+
+        }).trigger('resize');
+
+
+    </script>
+
+}

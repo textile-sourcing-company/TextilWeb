@@ -1,0 +1,486 @@
+﻿@{
+
+    ViewBag.Title = "Registro Mermas Corte";
+    ViewBag.Modulo = "Corte";
+    Layout = "~/Views/Plantillas/_Layout.cshtml";
+}
+
+
+<div class="row">
+    <!-- FILTROS - APERTURA -->
+    <div class="col-xl-3 col-lg-6 col-md-12 col-sm-12 col-12">
+
+        <div class="card card-outline card-primary" style="height:250px !important; max-height:250px !important" >
+
+            <div class="card-header">
+                <h3 class="card-title">Buscar por Ficha</h3>
+                <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-widget="collapse"><i class="fas fa-minus"></i></button>
+                </div>
+            </div>
+
+            <div class="card-body">
+                <form class="row" id="frmbusqueda">
+
+                    <div class="col-xl-9  col-lg-5 col-md-6 col-sm-6 form-group">
+                        <h6>Ficha:</h6>
+                        <input type="text" class="form-control form-control-sm" id="txtpartida" required />
+                    </div>
+                    <div class="col-xl-3 col-lg-5 col-md-6 col-sm-6 form-group">
+                        <h6>&nbsp;</h6>
+                        <button class="btn btn-primary btn-sm btn-block" id="btnBuscar" type="submit">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="col-xl-9">
+        <div class="card card-outline card-primary" style="height:250px !important; max-height:250px !important">
+            <div class="card-header">
+                <h3 class="card-title">Versiones</h3>
+                <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-widget="collapse"><i class="fas fa-minus"></i></button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover table-sm table-bordered dt-responsive nowrap" style="width:100%;text-align:center" id="tableversiones">
+                        <thead class="thead-light">
+                            <tr>
+                                <th>Ver</th>
+                                <th>Combo</th>
+                                <th>Version</th>
+                                <th>Registro</th>
+                                <th>Usuario</th>
+                                <th>Tipo Tela</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbodyversiones"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- LISTA DE FICHAS -->
+<div class="row">
+    <!--Mermas Tendido-->
+    <div class="col-xl-12">
+        <div class="card card-outline card-primary" >
+            <div class="card-header">
+                <h3 class="card-title">Mermas de Corte</h3>
+                <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-widget="collapse"><i class="fas fa-minus"></i></button>
+                </div>
+            </div>
+
+            <div class="card-body">
+
+
+                <!-- REGISTRAR -->
+                <form class="row justify-content-end d-none" id="frmregistro">
+
+                    <div class="col-md-3 form-group">
+                        <label>Turno</label>
+                        <select class="custom-select custom-select-sm" id="cboturno">
+                            <option value="1">Turno 1</option>
+                            <option value="2">Turno 2</option>
+                            <option value="3">Turno 3</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-1 form-group">
+                        <label>&nbsp;</label>
+                        <button class="btn btn-sm btn-block btn-primary" type="submit">Registrar</button>
+                    </div>
+
+                    <div class="col-md-2 form-group">
+                        <label>&nbsp;</label>
+                        <button class="btn btn-sm btn-block btn-danger" type="button" id="btncerrarregistro">Cerrar Registro</button>
+                    </div>
+
+                </form>
+
+                <div class="row">
+
+                    <!-- TABLA -->
+                    <div class="col-12">
+
+                        <table class="table table-bordered tablainput" id="tableregistros">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th>Etapa</th>
+                                    <th>N° Paño</th>
+                                    <th>Orillos</th>
+                                    <th>Extremos</th>
+                                    <th>Entre Corte</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbodyregistros">
+                            </tbody>
+                        </table>
+
+                    </div>
+
+                </div>
+
+
+
+            </div>
+
+
+
+        </div>
+    </div>
+</div>
+
+
+
+@section scripts{
+    <script>
+        let ficha = "";
+        let version = "";
+        let tela = "";
+        let combo = "";
+        let frmbusqueda = document.getElementById("frmbusqueda");
+        let frmregistro = document.getElementById("frmregistro");
+
+        // EVENTO DE BUSQUEDA
+        frmbusqueda.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            await Buscar();
+        });
+
+        // REGISTRO
+        frmregistro.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            await Registrar();
+        });
+
+        // FUNCION PARA REGISTRAR COMPLETO
+        async function Registrar() {
+
+            // PREGUNTAMOS
+            var rpt = await Preguntar("Confirme para realizar registro de merma");
+
+            if (rpt.value) {
+
+                // REGISTRAR
+                MostrarCarga("Registrando merma...");
+
+                // TURNO
+                let turno = $("#cboturno").val();
+
+                // RECORREMOS REGISTROS
+                $(`#tbodyregistros .datos `).each(function (obj) {
+                    let input = $(this);
+
+                    let etapa = input.find(".etapa").text();
+                    let orillos = input.find(".orillos").val();
+                    let extremos = input.find(".extremos").val();
+                    let entrecorte = input.find(".entrecorte").val();
+
+                    //
+                    console.log(etapa, orillos, extremos, entrecorte, turno);
+
+                    // REGISTRAMOS INDIVIDUAL
+                    RegistrarIndividual(orillos, extremos, entrecorte, turno, etapa)
+                        .then(response => {
+                            console.log("Registrado",response);
+                        })
+                        .catch(error => {
+                            console.log(error);
+                        });
+
+                });
+
+                InformarMini("Registrado correctamente");
+
+
+            }
+
+            
+        }
+
+        // FUNCION PARA REGISTRAR INDIVIDUAL
+        async function RegistrarIndividual(orillos,extremos,entrecorte,turno,etapa) {
+
+            await get("corte", "RegistrarCorte008", {
+                ficha, orillos, extremos,
+                entrecorte, version, tipotela:tela,
+                combo, turno, etapa
+            }, true)
+                .then(response => {
+
+                    if (response.respuestabool) {
+                        //InformarMini('Se agrego correctamente',2500);
+                        //await VerDatos(version, tela);
+                        //frmregistro.reset();
+                    } else {
+                        Advertir(response.mensajesistema);
+                    }
+
+                })
+                .catch(error => {
+                    console.log(error);
+                    AdvertirMini("Ocurrio un error, contacte a sistemas");
+                });
+            
+                
+        }
+
+
+        // BUSCAR VERSIONES
+        async function Buscar() {
+
+            MostrarCarga("Cargando");
+
+            ficha = $("#txtpartida").val().trim();
+
+            // TRAEMOS DATOS
+            let response = await get("corte", "BuscarExisteCort007", {
+                    ficha,version,tela,combo
+            },true);
+
+            // VERIFICAMOS SI EXISTE
+            if (response.EXISTE > 0) {
+                await VerVersionesRegistradas();
+
+            } else {
+                AdvertirMini('No tiene Registro de Tendedor');
+                $("#btngrabar").addClass("d-none");
+            }
+        }
+
+        // LISTA VERSIONES
+        async function VerVersionesRegistradas() {
+
+            get("corte", "ListarVersiones", { ficha }, true)
+                .then(response => {
+
+                    let tr = "";
+
+                    /*
+                    response.forEach(function (obj) {
+                        tr += `
+                            <tr>
+                            <td class='text-center'><a href='#' data-combo='${obj.combo}' data-idversiones='${obj.VERSIONES}' data-idtela='${obj.TIPO_TELA}' class ="BtfTela" ><i style='color:#138d75 ' class='fas fa-check-double'></i></a></td>
+                                <td>${obj.combo}</td>
+                                <td>${obj.VERSIONES}</td>
+                                <td>${obj.F_REGISTRO}</td>
+                                <td>${obj.U_REGISTRO}</td>
+                                <td>${obj.TIPO_TELA}</td>
+                            </tr>
+                        `;
+                    });*/
+                    response.forEach(function (obj) {
+
+                        if (obj.contenido > 0) {
+                            tr += `
+                                <tr style='background-color:#6c757d;color:white'>
+                                    <td class='text-center'><a href='#' data-combo='${obj.combo}' data-idversiones='${obj.VERSIONES}' data-idtela='${obj.TIPO_TELA}' class ="BtfTela" ><i style='color:#138d75 ' class='fas fa-check-double'></i></a></td>
+                                    <td>${obj.combo}</td>
+                                    <td>${obj.VERSIONES}</td>
+                                    <td>${obj.F_REGISTRO}</td>
+                                    <td>${obj.U_REGISTRO}</td>
+                                    <td>${obj.TIPO_TELA}</td>
+                                </tr>
+                            `;
+                        } else {
+                            tr += `
+                                <tr>
+                                    <td class='text-center'><a href='#' data-combo='${obj.combo}' data-idversiones='${obj.VERSIONES}' data-idtela='${obj.TIPO_TELA}' class ="BtfTela" ><i style='color:#138d75 ' class='fas fa-check-double'></i></a></td>
+                                    <td>${obj.combo}</td>
+                                    <td>${obj.VERSIONES}</td>
+                                    <td>${obj.F_REGISTRO}</td>
+                                    <td>${obj.U_REGISTRO}</td>
+                                    <td>${obj.TIPO_TELA}</td>
+                                </tr>
+                            `;
+                        }
+
+                    });
+
+                    $("#tbodyversiones").html(tr);
+                    InformarMini(`${response.length} registros encontrados`,2000);
+                })
+                .catch(error => {
+                    AdvertirMini("Ocurrio un error contacte a sistemas");
+                    console.log(error);
+                });
+            
+        }
+
+        // LLENAR DATOS
+        async function VerDatos() {
+
+            MostrarCarga("Cargando...");
+
+            await get("corte", "BuscarRegistro008", { ficha, version, tela, combo }, true)
+                .then(response => {
+
+                    let orillos = 0;
+                    let extremos = 0;
+                    let entrecorte = 0;
+                    let tr = "";
+
+                    response.forEach((obj) => {
+
+                        tr += `
+                            <tr class='datos'>
+                                <td class='calculos etapa'>${obj.ETAPA}</td>
+                                <td>${obj.PANOS}</td>
+                                <td> <input value='${obj.ORILLOS}'      class='inputtabla  orillos' /> </td>
+                                <td> <input value='${obj.EXTREMOS}'     class='inputtabla  extremos' />  </td>
+                                <td> <input value='${obj.ENTRECORTE}'   class='inputtabla  entrecorte' />  </td>
+                            </tr>
+                        `;
+
+                        // CALCULAMOS
+                        orillos += obj.ORILLOS ? obj.ORILLOS : 0;
+                        extremos += obj.EXTREMOS ? obj.EXTREMOS : 0;
+                        entrecorte += obj.ENTRECORTE ? obj.ENTRECORTE : 0;
+
+                    });
+
+                    tr += `
+                            
+                        <tr>
+                            <td></td>
+                            <td style='background-color: #e9ecef; border-color: #dee2e6;color: #495057'>Total</td>
+                            <td id='totalorillos'>${orillos}</td>
+                            <td id='totalextremos'>${extremos}</td>
+                            <td id='totalentrecorte'>${entrecorte}</td>
+                        </tr>   
+                        
+                    `;
+
+                    InformarMini("Datos encontrados",1500);
+                    $("#tbodyregistros").html(tr);
+                        
+
+                })
+                .catch(error => {
+                    AdvertirMini("Ocurrio un error, contacte a sistemas");
+                    console.log(error);
+                });
+
+            
+
+        }
+
+        // BUSCAMOS DATOS
+        $("#tbodyversiones").on('click', '.BtfTela', async function () {
+            version = $(this).data("idversiones");
+            tela    = $(this).data("idtela");
+            combo = $(this).data("combo");
+
+            // BUSCAMOS ESTADO
+            await getEstadoCorte();
+            await VerDatos();
+
+        });
+
+        // FUNCION QUE DETECTA EL CAMBIO DE CANTIDADES
+        $("#tbodyregistros").on("keyup", '.inputtabla', function () {
+
+            
+            let orillos = calculatotales("orillos");
+            let extremos = calculatotales("extremos");
+            let entrecorte = calculatotales("entrecorte");
+
+            $("#totalorillos").text(orillos);
+            $("#totalextremos").text(extremos);
+            $("#totalentrecorte").text(entrecorte);
+
+        });
+
+        // CALCULA TOTALES
+        function calculatotales(tipo) {
+            let total = 0;
+            $(`#tbodyregistros .${tipo}`).each(function (obj) {
+                let valor = $(this).val().trim() == "" ? 0 : $(this).val().trim();
+                valor = parseFloat(valor);
+                total += valor;
+            })
+
+            return total;
+        };
+
+
+        // GET ESTADO CORTE
+        async function getEstadoCorte() {
+
+            //let ficha = $("#txtficha").val().trim();
+            let response = await get("Corte", "GetEstadosLiquidacion", { ficha, combo, version, tela }, true);
+            //console.log(response);
+
+            if (response.estadocorte == 2) {
+                $("#frmregistro").removeClass("d-none");
+            } else {
+                $("#frmregistro").addClass("d-none");
+            }
+
+
+        }
+
+        // CERRAR REGISTRO DE MERMA
+        $("#btncerrarregistro").click(async function () {
+
+            let estadotendido = await getestadotendido();
+            console.log(estadotendido);
+            if(estadotendido.PARTIDA != null){
+
+
+                let rpt = await Preguntar("Confirme para cerrar registro de merma");
+
+                if (rpt.value) {
+
+                    await get("Corte", "CerrarRegistroMerma", {
+                        ficha, combo, version, tipotela: tela, turno: 1, estadotendido: 0, estadocorte:0
+                    },true).then(async (response) => {
+                        //console.log(response);
+                        if (response.success) {
+                            await getEstadoCorte();
+                            await VerDatos();
+                            InformarMini("Realizado correctamente");
+                        } else {
+                            AdvertirMini(response.mensaje);
+                        }
+
+                    }).catch(error => {
+                        AdvertirMini("Ocurrio un error,contacte a sistemas");
+                        console.log(error);
+                    });
+                }
+
+            }else{
+                AdvertirMini("Aun no se ha cerrado el tendido, no se puede registrar la merma");
+            }
+
+
+
+        });
+
+        // ESTADO DEL TENDIDO
+        async function getestadotendido(){
+            
+            return await get("Corte", "BuscarCabecera", {
+                ficha, combo, version,tela
+            },true).then(response => {
+
+                return response;
+
+            }).catch(error => {
+                AdvertirMini("Ocurrio un error,contacte a sistemas");
+                console.log(error);
+            })
+        }
+
+    </script>
+}

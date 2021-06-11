@@ -1,0 +1,209 @@
+﻿@model TSC_WEB.Models.Entidades.Logistica.VisualizacionOC.ImpresionOC
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>ImpresionOC</title>
+    <style>
+
+        #Cabecera {
+            font-size: 80%;
+
+        }
+
+        .single-line {
+            font-size: 14px;
+        }
+        .css-fecha {
+            font-size: 14px;
+            text-align: right;
+        }
+        .css-cabecera {
+            font-size: 25px;
+        }
+        .css-hora {
+            text-align: right;
+        }
+        .line-detalle {
+            text-align: left;
+            font-size: 12px;
+            border-color: #aaaaaa;
+            border-width: 1px;
+            border-style: ;
+        }
+
+        .line-detalle-Cantidades {
+            text-align: right;
+            font-size: 12px;
+            border-color: #aaaaaa;
+            border-width: 1px;
+            border-style:;
+        }
+        .css-CabezeraDetalle {
+            text-align: left;
+            font-size: 12px;
+        }
+        body
+        {
+            font-size:14px !important;
+        }
+     
+
+      
+    </style>
+</head>
+<body background="@Model.Cab.CH_RUTA_BORRADOR" style="background-repeat: no-repeat; background-position: 90% -22%;;">
+
+
+
+
+
+    <div style="height: auto;" back>
+
+
+        <CENTER class="css-cabecera">  <b>ORDEN DE COMPRA  </b></CENTER><br>
+
+        <CENTER class="css-cabecera">N°@Model.Cab.I_ORDEM_COMPRA</CENTER>
+
+
+
+        <div class="css-fecha">
+            <b>FECHA EMISIÓN  </b>   :  @Model.Cab.DT_FECHA_EMISION
+        </div>
+        <div class="css-fecha">
+            <b>FECHA ENTREGA  </b>   :  @Model.Cab.DT_FECHA_ENTREGA_PREV
+        </div>
+
+        <div>
+            <table>
+                <tr>
+                    <th align="left" class="css-CabezeraDetalle">PROVEEDOR</th>
+                    <th align="left" class="css-CabezeraDetalle">:  @Model.Cab.CH_PROVEEDOR</th>
+                </tr>
+                <tr>
+                    <th align="left" class="css-CabezeraDetalle">RUC</th>
+                    <th align="left" class="css-CabezeraDetalle">:  @Model.Cab.CH_RUC</th>
+                </tr>
+                <tr>
+                    <th align="left" class="css-CabezeraDetalle">DIRECCIÓN</th>
+                    <th align="left" class="css-CabezeraDetalle">:  @Model.Cab.CH_DIRECCION</th>
+                </tr>
+                <tr>
+                    <th align="left" class="css-CabezeraDetalle">CONTACTO</th>
+                    <th align="left" class="css-CabezeraDetalle">:  @Model.Cab.CH_CONTACTO</th>
+                </tr>
+                <tr>
+                    <th align="left" class="css-CabezeraDetalle">MONEDA</th>
+                    <th align="left" class="css-CabezeraDetalle">:  @Model.Cab.CH_MONEDA</th>
+                </tr>
+                <tr>
+                    <th align="left" class="css-CabezeraDetalle">FORMA DE PAGO   </th>
+                    <th align="left" class="css-CabezeraDetalle">:  @Model.Cab.CH_CONDICION_PAGO</th>
+                </tr>
+                <tr>
+                    <th align="left" class="css-CabezeraDetalle">ORDEN DE COMPRA DE REFERENCIA   </th>
+                    <th align="left" class="css-CabezeraDetalle">:  @Model.Cab.I_OC_REFERENCIA  </th>
+                </tr>
+
+
+            </table>
+
+        </div>
+        <br />
+
+        <table style="width:100%" border=1 cellspacing=0 cellpadding=2 bordercolor="FFFFFF">
+            <tr>
+                <th align="left" class="line-detalle">Item</th>
+                <th align="left" class="line-detalle">UM</th>
+                <th align="left" class="line-detalle">CODIGO TSC</th>
+                <th align="left" class="line-detalle">DESCRIPCION</th>
+                <th align="left" class="line-detalle">CODIGO PROVEEDOR</th>
+                <th align="left" class="line-detalle">ITEMS OC REFERENCIA</th>
+                <th align="left" class="line-detalle">CANTIDAD</th>
+                <th align="left" class="line-detalle">MAXIMA</th>
+                <th align="left" class="line-detalle">P.UNIT</th>
+                <th align="left" class="line-detalle">SUB TOTAL</th>
+
+            </tr>
+
+            @foreach (var item in Model.Det)
+            {
+        <tr>
+            <th align="left" class="line-detalle-Cantidades">@item.I_Item</th>
+            <th align="left" class="line-detalle-Cantidades">@item.CH_MEDIDA</th>
+            <th align="left" class="line-detalle-Cantidades">@item.CH_CODIGO_TSC</th>
+            <th align="left" class="line-detalle-Cantidades" style="text-align:left">@item.CH_DESCRIPCION</th>
+            <th align="left" class="line-detalle-Cantidades">@item.CH_CODIGO_PROVEEDOR</th>
+            <th align="left" class="line-detalle-Cantidades">@item.I_OC_REFERENCIA_SEQ</th>
+            <th align="left" class="line-detalle-Cantidades">@item.I_CANT</th>
+            <th align="left" class="line-detalle-Cantidades">@item.I_MAXIMO</th>
+            <th align="left" class="line-detalle-Cantidades">@item.I_P_UNIT</th>
+            <th align="left" class="line-detalle-Cantidades">@item.I_SUB_TOTAL</th>
+        </tr>
+            }
+           
+                        <tr>
+                            <th align="left"  style="border-collapse: collapse;" colspan="5" align="right"></th>
+                            <th align="left" class="line-detalle" colspan="2" align="lerightft" ">IMPORTE NETO</th>
+                            <th align="left" class="line-detalle" colspan="2" style="text-align:right">@Model.Cab.CH_SUB_TOTAL</th>
+                        </tr>
+                        <tr>
+                            <th align="left" style="border:0" colspan="5" align="lerightft"></th>
+                            <th align="left" class="line-detalle" colspan="2" align="right" ">IGV 18%</th>
+                            <th align="left" class="line-detalle"  colspan="2" style="text-align:right">@Model.Cab.CH_IGV</th>
+                        </tr>
+                        <tr>
+                            <th align="left" style="border:0" colspan="5" align="right"></th>
+                            <th align="left" class="line-detalle" colspan="2" align="right">TOTAL</th>
+                            <th align="left" class="line-detalle" colspan="2" style="text-align:right">@Model.Cab.CH_TOTAL</th>
+                        </tr>
+           
+
+        </table>
+        <br />
+        @Model.Cab.CH_MONTO_LETRAS
+        <table>
+            <tr>
+                <th> <img src="@Model.Cab.CH_FIRMANTE_01" width="120" height="120" /></th>
+                <th>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</th>
+                <th> <img src="@Model.Cab.CH_FIRMANTE_02" width="120" height="120" /></th>
+                <th>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</th>
+                <th> <img src="@Model.Cab.CH_FIRMANTE_03" width="120" height="120" /></th>
+            </tr>
+            <tr>
+                <th> @Model.Cab.CH_FIRMANTE_01_USU</th>
+                <th>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</th>
+                <th> @Model.Cab.CH_FIRMANTE_02_USU</th>
+                <th>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</th>
+                <th> @Model.Cab.CH_FIRMANTE_03_USU</th>
+            </tr>
+
+        </table>
+        <br />
+        <table>
+            <tr>
+                <td>
+                    <b>LUGAR DE ENTREGA :</b>&nbsp&nbsp AV.MANUEL F.VEGA BOGARDUS N°251(COSTADO DE LA EMPRESA IDEAS TEXTILES) ICA-CHINCHA-PERU<br />
+                    AV.MCAL ELOY URETA N°429 URB EL PINO-LIMA-LIMA-SAN LUIS<br />
+                    <br />
+                    <b>NOTA :</b>&nbsp&nbsp SIRVASE ADJUNTAR A LA FACTURA, LA GUIA DE REMISION Y ORDEN DE COMPRA PRESENTE<br />
+                    <b>OBSERVACION:</b>&nbsp&nbsp @Model.Cab.CH_OSERVACION <br />
+                    <b>REQUERIMIENTO :</b>&nbsp&nbsp @Model.Cab.CH_REQUERIMIENTOS  &nbsp&nbsp           <b>@Model.Cab.CH_CC_COSTO</b><br />
+                </td>
+            </tr>
+        </table>
+        <br />
+        <br />
+
+
+    </div>
+</body>
+</html>

@@ -1,0 +1,1014 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{59B76B89-E541-4F9B-BF0A-0785B170C2E3}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>TSC_WEB</RootNamespace>
+    <AssemblyName>TSC_WEB</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
+    <Use64BitIISExpress />
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Dapper, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Dapper.2.0.35\lib\net461\Dapper.dll</HintPath>
+    </Reference>
+    <Reference Include="Dapper.Oracle, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Dapper.Oracle.1.2.1\lib\net452\Dapper.Oracle.dll</HintPath>
+    </Reference>
+    <Reference Include="EPPlus, Version=4.5.2.1, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPPlus.4.5.2.1\lib\net40\EPPlus.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="KoenZomers.OneDrive.Api, Version=2.3.0.3, Culture=neutral, PublicKeyToken=c94340d84666bdcb, processorArchitecture=MSIL">
+      <HintPath>..\packages\KoenZomers.OneDrive.Api.2.3.0.3\lib\net452\KoenZomers.OneDrive.Api.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Oracle.ManagedDataAccess, Version=4.121.2.0, Culture=neutral, PublicKeyToken=89b483f429c47342, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Program Files (x86)\Oracle Developer Tools for VS2013\odp.net\managed\common\Oracle.ManagedDataAccess.dll</HintPath>
+    </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="Rotativa, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Rotativa.1.7.3\lib\net461\Rotativa.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.Helpers.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.3\lib\net45\System.Web.Mvc.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.3\lib\net45\System.Web.Razor.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="System.Xml.Linq" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Web.Infrastructure">
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Admin\css\404.css" />
+    <Content Include="Admin\css\500.css" />
+    <Content Include="Admin\css\DesarrolloProductoImprimir.css" />
+    <Content Include="Admin\css\sistema.css" />
+    <Content Include="Admin\js\404.js" />
+    <Content Include="Admin\js\500.js" />
+    <Content Include="Admin\js\Almacenes\JSReporteStockFecha.js" />
+    <Content Include="Admin\js\Comercial\JSReportePenalidades.js" />
+    <Content Include="Admin\js\Corte\IndicadorControldeUso.js" />
+    <Content Include="Admin\js\Corte\ReporteControlUsoIndicador.js" />
+    <Content Include="Admin\js\generales\ajax.js" />
+    <Content Include="Admin\js\generales\DataTables.admin.js" />
+    <Content Include="Admin\js\generales\GeneralImagenes.js" />
+    <Content Include="Admin\js\generales\Listar.admin.js" />
+    <Content Include="Admin\js\generales\Modulos.admin.js" />
+    <Content Include="Admin\js\generales\select2.admin.js" />
+    <Content Include="Admin\js\generales\sweetalert2.admin.js" />
+    <Content Include="Admin\js\JSMovPeriodo.js" />
+    <Content Include="Admin\js\Logistica\CuboInfoActualizado.js" />
+    <Content Include="Admin\js\Logistica\JSSegOcMes.js" />
+    <Content Include="Admin\js\Logistica\JSSeguimientoAvioProgr.js" />
+    <Content Include="Admin\js\OperacionesProceso\FichaTecnica\Registros.js" />
+    <Content Include="Admin\js\Planeamiento\JSMermaClientes.js" />
+    <Content Include="Admin\js\Seguridad\JSRequerimientos.js" />
+    <Content Include="Admin\js\Sistema\JSViewLisUsuario.js" />
+    <Content Include="Content\Chart.css" />
+    <Content Include="Content\Chart.min.css" />
+    <Content Include="Content\handsontable\handsontable.css" />
+    <Content Include="Content\handsontable\handsontable.full.css" />
+    <Content Include="Content\handsontable\handsontable.full.min.css" />
+    <Content Include="Content\handsontable\handsontable.min.css" />
+    <Content Include="favicon.ico" />
+    <Content Include="Global.asax" />
+    <Content Include="Libs\Bootstrap-select\css\bootstrap-select.min.css" />
+    <Content Include="Libs\Bootstrap-select\js\bootstrap-select.min.js" />
+    <Content Include="Libs\Bootstrap\js\bootstrap.bundle.min.js" />
+    <Content Include="Libs\Chartjs\Chart.bundle.js" />
+    <Content Include="Libs\Chartjs\Chart.bundle.min.js" />
+    <Content Include="Libs\Chartjs\Chart.css" />
+    <Content Include="Libs\Chartjs\Chart.js" />
+    <Content Include="Libs\Chartjs\Chart.min.css" />
+    <Content Include="Libs\Chartjs\Chart.min.js" />
+    <Content Include="Libs\Dashboard\css\adminlte.css" />
+    <Content Include="Libs\Dashboard\css\adminlte.min.css" />
+    <Content Include="Libs\Dashboard\js\adminlte.js" />
+    <Content Include="Libs\Dashboard\js\adminlte.min.js" />
+    <Content Include="Libs\Datatables\dataTables.bootstrap4.css" />
+    <Content Include="Libs\Datatables\dataTables.bootstrap4.js" />
+    <Content Include="Libs\Datatables\dataTables.bootstrap4.min.css" />
+    <Content Include="Libs\Datatables\dataTables.bootstrap4.min.js" />
+    <Content Include="Libs\Datatables\dataTables.responsive.min.js" />
+    <Content Include="Libs\Datatables\extensions\AutoFill\css\dataTables.autoFill.css" />
+    <Content Include="Libs\Datatables\extensions\AutoFill\css\dataTables.autoFill.min.css" />
+    <Content Include="Libs\Datatables\extensions\AutoFill\examples\columns.html" />
+    <Content Include="Libs\Datatables\extensions\AutoFill\examples\complete-callback.html" />
+    <Content Include="Libs\Datatables\extensions\AutoFill\examples\fill-both.html" />
+    <Content Include="Libs\Datatables\extensions\AutoFill\examples\fill-horizontal.html" />
+    <Content Include="Libs\Datatables\extensions\AutoFill\examples\index.html" />
+    <Content Include="Libs\Datatables\extensions\AutoFill\examples\scrolling.html" />
+    <Content Include="Libs\Datatables\extensions\AutoFill\examples\simple.html" />
+    <Content Include="Libs\Datatables\extensions\AutoFill\examples\step-callback.html" />
+    <Content Include="Libs\Datatables\extensions\AutoFill\images\filler.png" />
+    <Content Include="Libs\Datatables\extensions\AutoFill\js\dataTables.autoFill.js" />
+    <Content Include="Libs\Datatables\extensions\AutoFill\js\dataTables.autoFill.min.js" />
+    <Content Include="Libs\Datatables\extensions\AutoFill\Readme.txt" />
+    <Content Include="Libs\Datatables\extensions\ColReorder\css\dataTables.colReorder.css" />
+    <Content Include="Libs\Datatables\extensions\ColReorder\css\dataTables.colReorder.min.css" />
+    <Content Include="Libs\Datatables\extensions\ColReorder\examples\alt_insert.html" />
+    <Content Include="Libs\Datatables\extensions\ColReorder\examples\colvis.html" />
+    <Content Include="Libs\Datatables\extensions\ColReorder\examples\col_filter.html" />
+    <Content Include="Libs\Datatables\extensions\ColReorder\examples\fixedcolumns.html" />
+    <Content Include="Libs\Datatables\extensions\ColReorder\examples\fixedheader.html" />
+    <Content Include="Libs\Datatables\extensions\ColReorder\examples\index.html" />
+    <Content Include="Libs\Datatables\extensions\ColReorder\examples\jqueryui.html" />
+    <Content Include="Libs\Datatables\extensions\ColReorder\examples\new_init.html" />
+    <Content Include="Libs\Datatables\extensions\ColReorder\examples\predefined.html" />
+    <Content Include="Libs\Datatables\extensions\ColReorder\examples\realtime.html" />
+    <Content Include="Libs\Datatables\extensions\ColReorder\examples\reset.html" />
+    <Content Include="Libs\Datatables\extensions\ColReorder\examples\scrolling.html" />
+    <Content Include="Libs\Datatables\extensions\ColReorder\examples\server_side.html" />
+    <Content Include="Libs\Datatables\extensions\ColReorder\examples\simple.html" />
+    <Content Include="Libs\Datatables\extensions\ColReorder\examples\state_save.html" />
+    <Content Include="Libs\Datatables\extensions\ColReorder\images\insert.png" />
+    <Content Include="Libs\Datatables\extensions\ColReorder\js\dataTables.colReorder.js" />
+    <Content Include="Libs\Datatables\extensions\ColReorder\js\dataTables.colReorder.min.js" />
+    <Content Include="Libs\Datatables\extensions\ColReorder\License.txt" />
+    <Content Include="Libs\Datatables\extensions\ColVis\css\dataTables.colVis.css" />
+    <Content Include="Libs\Datatables\extensions\ColVis\css\dataTables.colvis.jqueryui.css" />
+    <Content Include="Libs\Datatables\extensions\ColVis\css\dataTables.colVis.min.css" />
+    <Content Include="Libs\Datatables\extensions\ColVis\examples\button_order.html" />
+    <Content Include="Libs\Datatables\extensions\ColVis\examples\exclude_columns.html" />
+    <Content Include="Libs\Datatables\extensions\ColVis\examples\group_columns.html" />
+    <Content Include="Libs\Datatables\extensions\ColVis\examples\index.html" />
+    <Content Include="Libs\Datatables\extensions\ColVis\examples\jqueryui.html" />
+    <Content Include="Libs\Datatables\extensions\ColVis\examples\mouseover.html" />
+    <Content Include="Libs\Datatables\extensions\ColVis\examples\new_init.html" />
+    <Content Include="Libs\Datatables\extensions\ColVis\examples\restore.html" />
+    <Content Include="Libs\Datatables\extensions\ColVis\examples\simple.html" />
+    <Content Include="Libs\Datatables\extensions\ColVis\examples\text.html" />
+    <Content Include="Libs\Datatables\extensions\ColVis\examples\title_callback.html" />
+    <Content Include="Libs\Datatables\extensions\ColVis\examples\two_tables.html" />
+    <Content Include="Libs\Datatables\extensions\ColVis\examples\two_tables_identical.html" />
+    <Content Include="Libs\Datatables\extensions\ColVis\js\dataTables.colVis.js" />
+    <Content Include="Libs\Datatables\extensions\ColVis\js\dataTables.colVis.min.js" />
+    <Content Include="Libs\Datatables\extensions\ColVis\License.txt" />
+    <Content Include="Libs\Datatables\extensions\Export\css\buttons.dataTables.min.css" />
+    <Content Include="Libs\Datatables\extensions\Export\js\buttons.flash.min.js" />
+    <Content Include="Libs\Datatables\extensions\Export\js\buttons.html5.min.js" />
+    <Content Include="Libs\Datatables\extensions\Export\js\buttons.print.min.js" />
+    <Content Include="Libs\Datatables\extensions\Export\js\dataTables.buttons.min.js" />
+    <Content Include="Libs\Datatables\extensions\Export\js\jszip.min.js" />
+    <Content Include="Libs\Datatables\extensions\Export\js\pdfmake.min.js" />
+    <Content Include="Libs\Datatables\extensions\Export\js\vfs_fonts.js" />
+    <Content Include="Libs\Datatables\extensions\FixedColumns\css\dataTables.fixedColumns.css" />
+    <Content Include="Libs\Datatables\extensions\FixedColumns\css\dataTables.fixedColumns.min.css" />
+    <Content Include="Libs\Datatables\extensions\FixedColumns\examples\bootstrap.html" />
+    <Content Include="Libs\Datatables\extensions\FixedColumns\examples\colvis.html" />
+    <Content Include="Libs\Datatables\extensions\FixedColumns\examples\col_filter.html" />
+    <Content Include="Libs\Datatables\extensions\FixedColumns\examples\css_size.html" />
+    <Content Include="Libs\Datatables\extensions\FixedColumns\examples\index.html" />
+    <Content Include="Libs\Datatables\extensions\FixedColumns\examples\index_column.html" />
+    <Content Include="Libs\Datatables\extensions\FixedColumns\examples\left_right_columns.html" />
+    <Content Include="Libs\Datatables\extensions\FixedColumns\examples\right_column.html" />
+    <Content Include="Libs\Datatables\extensions\FixedColumns\examples\rowspan.html" />
+    <Content Include="Libs\Datatables\extensions\FixedColumns\examples\server-side-processing.html" />
+    <Content Include="Libs\Datatables\extensions\FixedColumns\examples\simple.html" />
+    <Content Include="Libs\Datatables\extensions\FixedColumns\examples\size_fixed.html" />
+    <Content Include="Libs\Datatables\extensions\FixedColumns\examples\size_fluid.html" />
+    <Content Include="Libs\Datatables\extensions\FixedColumns\examples\two_columns.html" />
+    <Content Include="Libs\Datatables\extensions\FixedColumns\js\dataTables.fixedColumns.js" />
+    <Content Include="Libs\Datatables\extensions\FixedColumns\js\dataTables.fixedColumns.min.js" />
+    <Content Include="Libs\Datatables\extensions\FixedColumns\License.txt" />
+    <Content Include="Libs\Datatables\extensions\FixedHeader\css\dataTables.fixedHeader.css" />
+    <Content Include="Libs\Datatables\extensions\FixedHeader\css\dataTables.fixedHeader.min.css" />
+    <Content Include="Libs\Datatables\extensions\FixedHeader\examples\header_footer.html" />
+    <Content Include="Libs\Datatables\extensions\FixedHeader\examples\index.html" />
+    <Content Include="Libs\Datatables\extensions\FixedHeader\examples\simple.html" />
+    <Content Include="Libs\Datatables\extensions\FixedHeader\examples\top_left_right.html" />
+    <Content Include="Libs\Datatables\extensions\FixedHeader\examples\two_tables.html" />
+    <Content Include="Libs\Datatables\extensions\FixedHeader\examples\zIndexes.html" />
+    <Content Include="Libs\Datatables\extensions\FixedHeader\js\dataTables.fixedHeader.js" />
+    <Content Include="Libs\Datatables\extensions\FixedHeader\js\dataTables.fixedHeader.min.js" />
+    <Content Include="Libs\Datatables\extensions\FixedHeader\Readme.txt" />
+    <Content Include="Libs\Datatables\extensions\KeyTable\css\dataTables.keyTable.css" />
+    <Content Include="Libs\Datatables\extensions\KeyTable\css\dataTables.keyTable.min.css" />
+    <Content Include="Libs\Datatables\extensions\KeyTable\examples\events.html" />
+    <Content Include="Libs\Datatables\extensions\KeyTable\examples\html.html" />
+    <Content Include="Libs\Datatables\extensions\KeyTable\examples\index.html" />
+    <Content Include="Libs\Datatables\extensions\KeyTable\examples\scrolling.html" />
+    <Content Include="Libs\Datatables\extensions\KeyTable\examples\simple.html" />
+    <Content Include="Libs\Datatables\extensions\KeyTable\js\dataTables.keyTable.js" />
+    <Content Include="Libs\Datatables\extensions\KeyTable\js\dataTables.keyTable.min.js" />
+    <Content Include="Libs\Datatables\extensions\KeyTable\Readme.txt" />
+    <Content Include="Libs\Datatables\extensions\Responsive\css\dataTables.responsive.css" />
+    <Content Include="Libs\Datatables\extensions\Responsive\css\responsive.bootstrap4.min.css" />
+    <Content Include="Libs\Datatables\extensions\Responsive\examples\child-rows\column-control.html" />
+    <Content Include="Libs\Datatables\extensions\Responsive\examples\child-rows\custom-renderer.html" />
+    <Content Include="Libs\Datatables\extensions\Responsive\examples\child-rows\disable-child-rows.html" />
+    <Content Include="Libs\Datatables\extensions\Responsive\examples\child-rows\index.html" />
+    <Content Include="Libs\Datatables\extensions\Responsive\examples\child-rows\right-column.html" />
+    <Content Include="Libs\Datatables\extensions\Responsive\examples\child-rows\whole-row-control.html" />
+    <Content Include="Libs\Datatables\extensions\Responsive\examples\display-control\auto.html" />
+    <Content Include="Libs\Datatables\extensions\Responsive\examples\display-control\classes.html" />
+    <Content Include="Libs\Datatables\extensions\Responsive\examples\display-control\complexHeader.html" />
+    <Content Include="Libs\Datatables\extensions\Responsive\examples\display-control\fixedHeader.html" />
+    <Content Include="Libs\Datatables\extensions\Responsive\examples\display-control\index.html" />
+    <Content Include="Libs\Datatables\extensions\Responsive\examples\display-control\init-classes.html" />
+    <Content Include="Libs\Datatables\extensions\Responsive\examples\index.html" />
+    <Content Include="Libs\Datatables\extensions\Responsive\examples\initialisation\ajax.html" />
+    <Content Include="Libs\Datatables\extensions\Responsive\examples\initialisation\className.html" />
+    <Content Include="Libs\Datatables\extensions\Responsive\examples\initialisation\default.html" />
+    <Content Include="Libs\Datatables\extensions\Responsive\examples\initialisation\index.html" />
+    <Content Include="Libs\Datatables\extensions\Responsive\examples\initialisation\new.html" />
+    <Content Include="Libs\Datatables\extensions\Responsive\examples\initialisation\option.html" />
+    <Content Include="Libs\Datatables\extensions\Responsive\examples\styling\bootstrap.html" />
+    <Content Include="Libs\Datatables\extensions\Responsive\examples\styling\compact.html" />
+    <Content Include="Libs\Datatables\extensions\Responsive\examples\styling\foundation.html" />
+    <Content Include="Libs\Datatables\extensions\Responsive\examples\styling\index.html" />
+    <Content Include="Libs\Datatables\extensions\Responsive\examples\styling\scrolling.html" />
+    <Content Include="Libs\Datatables\extensions\Responsive\js\dataTables.responsive.js" />
+    <Content Include="Libs\Datatables\extensions\Responsive\js\dataTables.responsive.min.js" />
+    <Content Include="Libs\Datatables\extensions\Responsive\js\responsive.bootstrap4.min.js" />
+    <Content Include="Libs\Datatables\extensions\Responsive\License.txt" />
+    <Content Include="Libs\Datatables\extensions\Scroller\css\dataTables.scroller.css" />
+    <Content Include="Libs\Datatables\extensions\Scroller\css\dataTables.scroller.min.css" />
+    <Content Include="Libs\Datatables\extensions\Scroller\examples\api_scrolling.html" />
+    <Content Include="Libs\Datatables\extensions\Scroller\examples\data\2500.txt" />
+    <Content Include="Libs\Datatables\extensions\Scroller\examples\index.html" />
+    <Content Include="Libs\Datatables\extensions\Scroller\examples\large_js_source.html" />
+    <Content Include="Libs\Datatables\extensions\Scroller\examples\server-side_processing.html" />
+    <Content Include="Libs\Datatables\extensions\Scroller\examples\simple.html" />
+    <Content Include="Libs\Datatables\extensions\Scroller\examples\state_saving.html" />
+    <Content Include="Libs\Datatables\extensions\Scroller\images\loading-background.png" />
+    <Content Include="Libs\Datatables\extensions\Scroller\js\dataTables.scroller.js" />
+    <Content Include="Libs\Datatables\extensions\Scroller\js\dataTables.scroller.min.js" />
+    <Content Include="Libs\Datatables\extensions\Scroller\Readme.txt" />
+    <Content Include="Libs\Datatables\extensions\TableTools\css\dataTables.tableTools.css" />
+    <Content Include="Libs\Datatables\extensions\TableTools\css\dataTables.tableTools.min.css" />
+    <Content Include="Libs\Datatables\extensions\TableTools\examples\ajax.html" />
+    <Content Include="Libs\Datatables\extensions\TableTools\examples\alter_buttons.html" />
+    <Content Include="Libs\Datatables\extensions\TableTools\examples\bootstrap.html" />
+    <Content Include="Libs\Datatables\extensions\TableTools\examples\button_text.html" />
+    <Content Include="Libs\Datatables\extensions\TableTools\examples\collection.html" />
+    <Content Include="Libs\Datatables\extensions\TableTools\examples\defaults.html" />
+    <Content Include="Libs\Datatables\extensions\TableTools\examples\index.html" />
+    <Content Include="Libs\Datatables\extensions\TableTools\examples\jqueryui.html" />
+    <Content Include="Libs\Datatables\extensions\TableTools\examples\multiple_tables.html" />
+    <Content Include="Libs\Datatables\extensions\TableTools\examples\multi_instance.html" />
+    <Content Include="Libs\Datatables\extensions\TableTools\examples\new_init.html" />
+    <Content Include="Libs\Datatables\extensions\TableTools\examples\pdf_message.html" />
+    <Content Include="Libs\Datatables\extensions\TableTools\examples\plug-in.html" />
+    <Content Include="Libs\Datatables\extensions\TableTools\examples\select_column.html" />
+    <Content Include="Libs\Datatables\extensions\TableTools\examples\select_multi.html" />
+    <Content Include="Libs\Datatables\extensions\TableTools\examples\select_os.html" />
+    <Content Include="Libs\Datatables\extensions\TableTools\examples\select_single.html" />
+    <Content Include="Libs\Datatables\extensions\TableTools\examples\simple.html" />
+    <Content Include="Libs\Datatables\extensions\TableTools\examples\swf_path.html" />
+    <Content Include="Libs\Datatables\extensions\TableTools\images\collection.png" />
+    <Content Include="Libs\Datatables\extensions\TableTools\images\collection_hover.png" />
+    <Content Include="Libs\Datatables\extensions\TableTools\images\copy.png" />
+    <Content Include="Libs\Datatables\extensions\TableTools\images\copy_hover.png" />
+    <Content Include="Libs\Datatables\extensions\TableTools\images\csv.png" />
+    <Content Include="Libs\Datatables\extensions\TableTools\images\csv_hover.png" />
+    <Content Include="Libs\Datatables\extensions\TableTools\images\pdf.png" />
+    <Content Include="Libs\Datatables\extensions\TableTools\images\pdf_hover.png" />
+    <Content Include="Libs\Datatables\extensions\TableTools\images\print.png" />
+    <Content Include="Libs\Datatables\extensions\TableTools\images\print_hover.png" />
+    <Content Include="Libs\Datatables\extensions\TableTools\images\xls.png" />
+    <Content Include="Libs\Datatables\extensions\TableTools\images\xls_hover.png" />
+    <Content Include="Libs\Datatables\extensions\TableTools\js\dataTables.tableTools.js" />
+    <Content Include="Libs\Datatables\extensions\TableTools\js\dataTables.tableTools.min.js" />
+    <Content Include="Libs\Datatables\extensions\TableTools\swf\copy_csv_xls.swf" />
+    <Content Include="Libs\Datatables\extensions\TableTools\swf\copy_csv_xls_pdf.swf" />
+    <Content Include="Libs\Datatables\fixedHeader.dataTables.css" />
+    <Content Include="Libs\Datatables\images\sort_asc.png" />
+    <Content Include="Libs\Datatables\images\sort_asc_disabled.png" />
+    <Content Include="Libs\Datatables\images\sort_both.png" />
+    <Content Include="Libs\Datatables\images\sort_desc.png" />
+    <Content Include="Libs\Datatables\images\sort_desc_disabled.png" />
+    <Content Include="Libs\Datatables\jquery.dataTables.css" />
+    <Content Include="Libs\Datatables\jquery.dataTables.js" />
+    <Content Include="Libs\Datatables\jquery.dataTables.min.css" />
+    <Content Include="Libs\Datatables\jquery.dataTables.min.js" />
+    <Content Include="Libs\Datatables\jquery.dataTables_themeroller.css" />
+    <Content Include="Libs\Datatables\responsive.bootstrap4.min.js" />
+    <Content Include="Libs\Fontawesome-free\css\all.css" />
+    <Content Include="Libs\Fontawesome-free\css\all.min.css" />
+    <Content Include="Libs\Fontawesome-free\css\brands.css" />
+    <Content Include="Libs\Fontawesome-free\css\brands.min.css" />
+    <Content Include="Libs\Fontawesome-free\css\fontawesome.css" />
+    <Content Include="Libs\Fontawesome-free\css\fontawesome.min.css" />
+    <Content Include="Libs\Fontawesome-free\css\regular.css" />
+    <Content Include="Libs\Fontawesome-free\css\regular.min.css" />
+    <Content Include="Libs\Fontawesome-free\css\solid.css" />
+    <Content Include="Libs\Fontawesome-free\css\solid.min.css" />
+    <Content Include="Libs\Fontawesome-free\css\svg-with-js.css" />
+    <Content Include="Libs\Fontawesome-free\css\svg-with-js.min.css" />
+    <Content Include="Libs\Fontawesome-free\css\v4-shims.css" />
+    <Content Include="Libs\Fontawesome-free\css\v4-shims.min.css" />
+    <Content Include="Libs\Fontawesome-free\webfonts\fa-brands-400.svg" />
+    <Content Include="Libs\Fontawesome-free\webfonts\fa-regular-400.svg" />
+    <Content Include="Libs\Fontawesome-free\webfonts\fa-solid-900.svg" />
+    <Content Include="Libs\icheck-bootstrap\icheck-bootstrap.css" />
+    <Content Include="Libs\icheck-bootstrap\icheck-bootstrap.min.css" />
+    <Content Include="Libs\Jquery-mask\jquery.mask.js" />
+    <Content Include="Libs\Jquery-mask\jquery.mask.min.js" />
+    <Content Include="Libs\Jquery-UI\jquery-ui.min.js" />
+    <Content Include="Libs\Jquery\jquery-3.4.1.min.js" />
+    <Content Include="Libs\jspdf\html2canvas.min.js" />
+    <Content Include="Libs\jspdf\jspdf.debug.js" />
+    <Content Include="Libs\Multi-select\multiple-select.min.css" />
+    <Content Include="Libs\Multi-select\multiple-select.min.js" />
+    <Content Include="Libs\Select2\css\select2.css" />
+    <Content Include="Libs\Select2\css\select2.min.css" />
+    <Content Include="Libs\Select2\js\i18n\af.js" />
+    <Content Include="Libs\Select2\js\i18n\ar.js" />
+    <Content Include="Libs\Select2\js\i18n\az.js" />
+    <Content Include="Libs\Select2\js\i18n\bg.js" />
+    <Content Include="Libs\Select2\js\i18n\bn.js" />
+    <Content Include="Libs\Select2\js\i18n\bs.js" />
+    <Content Include="Libs\Select2\js\i18n\build.txt" />
+    <Content Include="Libs\Select2\js\i18n\ca.js" />
+    <Content Include="Libs\Select2\js\i18n\cs.js" />
+    <Content Include="Libs\Select2\js\i18n\da.js" />
+    <Content Include="Libs\Select2\js\i18n\de.js" />
+    <Content Include="Libs\Select2\js\i18n\dsb.js" />
+    <Content Include="Libs\Select2\js\i18n\el.js" />
+    <Content Include="Libs\Select2\js\i18n\en.js" />
+    <Content Include="Libs\Select2\js\i18n\es.js" />
+    <Content Include="Libs\Select2\js\i18n\et.js" />
+    <Content Include="Libs\Select2\js\i18n\eu.js" />
+    <Content Include="Libs\Select2\js\i18n\fa.js" />
+    <Content Include="Libs\Select2\js\i18n\fi.js" />
+    <Content Include="Libs\Select2\js\i18n\fr.js" />
+    <Content Include="Libs\Select2\js\i18n\gl.js" />
+    <Content Include="Libs\Select2\js\i18n\he.js" />
+    <Content Include="Libs\Select2\js\i18n\hi.js" />
+    <Content Include="Libs\Select2\js\i18n\hr.js" />
+    <Content Include="Libs\Select2\js\i18n\hsb.js" />
+    <Content Include="Libs\Select2\js\i18n\hu.js" />
+    <Content Include="Libs\Select2\js\i18n\hy.js" />
+    <Content Include="Libs\Select2\js\i18n\id.js" />
+    <Content Include="Libs\Select2\js\i18n\is.js" />
+    <Content Include="Libs\Select2\js\i18n\it.js" />
+    <Content Include="Libs\Select2\js\i18n\ja.js" />
+    <Content Include="Libs\Select2\js\i18n\ka.js" />
+    <Content Include="Libs\Select2\js\i18n\km.js" />
+    <Content Include="Libs\Select2\js\i18n\ko.js" />
+    <Content Include="Libs\Select2\js\i18n\lt.js" />
+    <Content Include="Libs\Select2\js\i18n\lv.js" />
+    <Content Include="Libs\Select2\js\i18n\mk.js" />
+    <Content Include="Libs\Select2\js\i18n\ms.js" />
+    <Content Include="Libs\Select2\js\i18n\nb.js" />
+    <Content Include="Libs\Select2\js\i18n\ne.js" />
+    <Content Include="Libs\Select2\js\i18n\nl.js" />
+    <Content Include="Libs\Select2\js\i18n\pl.js" />
+    <Content Include="Libs\Select2\js\i18n\ps.js" />
+    <Content Include="Libs\Select2\js\i18n\pt-BR.js" />
+    <Content Include="Libs\Select2\js\i18n\pt.js" />
+    <Content Include="Libs\Select2\js\i18n\ro.js" />
+    <Content Include="Libs\Select2\js\i18n\ru.js" />
+    <Content Include="Libs\Select2\js\i18n\sk.js" />
+    <Content Include="Libs\Select2\js\i18n\sl.js" />
+    <Content Include="Libs\Select2\js\i18n\sq.js" />
+    <Content Include="Libs\Select2\js\i18n\sr-Cyrl.js" />
+    <Content Include="Libs\Select2\js\i18n\sr.js" />
+    <Content Include="Libs\Select2\js\i18n\sv.js" />
+    <Content Include="Libs\Select2\js\i18n\th.js" />
+    <Content Include="Libs\Select2\js\i18n\tk.js" />
+    <Content Include="Libs\Select2\js\i18n\tr.js" />
+    <Content Include="Libs\Select2\js\i18n\uk.js" />
+    <Content Include="Libs\Select2\js\i18n\vi.js" />
+    <Content Include="Libs\Select2\js\i18n\zh-CN.js" />
+    <Content Include="Libs\Select2\js\i18n\zh-TW.js" />
+    <Content Include="Libs\Select2\js\select2.full.js" />
+    <Content Include="Libs\Select2\js\select2.full.min.js" />
+    <Content Include="Libs\Select2\js\select2.js" />
+    <Content Include="Libs\Select2\js\select2.min.js" />
+    <Content Include="Libs\SplitText\SplitText.min.js" />
+    <Content Include="Libs\sweetalert2\sweetalert2.all.js" />
+    <Content Include="Libs\sweetalert2\sweetalert2.all.min.js" />
+    <Content Include="Libs\sweetalert2\sweetalert2.css" />
+    <Content Include="Libs\sweetalert2\sweetalert2.js" />
+    <Content Include="Libs\sweetalert2\sweetalert2.min.css" />
+    <Content Include="Libs\sweetalert2\sweetalert2.min.js" />
+    <Content Include="Libs\TSC_css\StylePopup.css" />
+    <Content Include="Libs\TweenMax\TweenMax.min.js" />
+    <Content Include="Public\bgimg.png" />
+    <Content Include="Public\favicon.ico" />
+    <Content Include="Public\icon-apro.png" />
+    <Content Include="Public\icon-error.png" />
+    <Content Include="Public\icon-libe.png" />
+    <Content Include="Public\icon-ok.png" />
+    <Content Include="Public\icon-pend.png" />
+    <Content Include="Public\icon-rech.png" />
+    <Content Include="Public\ImprimirFichaTecnica\images.jpg" />
+    <Content Include="Public\ImprimirFichaTecnica\tsclogo.png" />
+    <Content Include="Public\logotsc.png" />
+    <Content Include="Public\progress.gif" />
+    <Content Include="Public\tecsito.png" />
+    <Content Include="Libs\Datatables\Spanish.json" />
+    <Content Include="Admin\js\OperacionesProceso\FichaTecnica\Filtros.js" />
+    <Content Include="Rotativa\help-wkhtmltoimage.txt" />
+    <Content Include="Rotativa\help-wkhtmltopdf.txt" />
+    <Content Include="Rotativa\wkhtmltoimage.exe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Rotativa\wkhtmltopdf.exe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <None Include="Scripts\jquery-3.0.0-vsdoc.js" />
+    <Content Include="Scripts\Chart.js" />
+    <Content Include="Scripts\Chart.min.js" />
+    <Content Include="Scripts\handsontable\handsontable.full.js" />
+    <Content Include="Scripts\handsontable\handsontable.full.min.js" />
+    <Content Include="Scripts\handsontable\handsontable.js" />
+    <Content Include="Scripts\handsontable\handsontable.min.js" />
+    <Content Include="Scripts\jquery-3.0.0.js" />
+    <Content Include="Scripts\jquery-3.0.0.min.js" />
+    <Content Include="Scripts\jquery-3.0.0.slim.js" />
+    <Content Include="Scripts\jquery-3.0.0.slim.min.js" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Views\Plantillas\modulos.cshtml" />
+    <Content Include="Views\Dashboard\Login.cshtml" />
+    <Content Include="Views\Dashboard\Index.cshtml" />
+    <Content Include="Views\Operaciones\SubirFichaTecnica.cshtml" />
+    <Content Include="Views\Operaciones\BuscarFichaTecnica.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Config\DBAccess.cs" />
+    <Compile Include="Controllers\AlmacenesController.cs" />
+    <Compile Include="Controllers\ComercialController.cs" />
+    <Compile Include="Controllers\ContabilidadController.cs" />
+    <Compile Include="Controllers\ControlInternoController.cs" />
+    <Compile Include="Controllers\CorteController.cs" />
+    <Compile Include="Controllers\DashboardController.cs" />
+    <Compile Include="Controllers\DesarrolloProductoController.cs" />
+    <Compile Include="Controllers\FacturacionController.cs" />
+    <Compile Include="Controllers\FinanzasController.cs" />
+    <Compile Include="Controllers\GerenciaController.cs" />
+    <Compile Include="Controllers\LoginController.cs" />
+    <Compile Include="Controllers\LogisticaController.cs" />
+    <Compile Include="Controllers\OperacionesController.cs" />
+    <Compile Include="Controllers\PlaneamientoController.cs" />
+    <Compile Include="Controllers\SeguridadController.cs" />
+    <Compile Include="Controllers\SistemaController.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Entidades\Almacenes\ReporteStockFecha\CentroCosto.cs" />
+    <Compile Include="Models\Entidades\Almacenes\ReporteStockFecha\ReporteStockFechaEntidad.cs" />
+    <Compile Include="Models\Entidades\Comercial\Come_002Entidad.cs" />
+    <Compile Include="Models\Entidades\Comercial\PedidoVenta\EBPedidoVenta.cs" />
+    <Compile Include="Models\Entidades\Comercial\ReportePenalidades\ReportePenalidadesEntidad.cs" />
+    <Compile Include="Models\Entidades\Contabilidad\ReporteGuiasContaEntidad.cs" />
+    <Compile Include="Models\Entidades\ControlInterno\Liquidacion\FichasPendientesEntidad.cs" />
+    <Compile Include="Models\Entidades\ControlInterno\ReporteStock\ReporteStock.cs" />
+    <Compile Include="Models\Entidades\Corte\LiquidacionTela\aperturaficha\AperturaFichaEntidad.cs" />
+    <Compile Include="Models\Entidades\Corte\LiquidacionTela\CaidasEntidad.cs" />
+    <Compile Include="Models\Entidades\Corte\LiquidacionTela\Corte_001Entidad.cs" />
+    <Compile Include="Models\Entidades\Corte\LiquidacionTela\Corte_004Entidad.cs" />
+    <Compile Include="Models\Entidades\Corte\LiquidacionTela\Corte_005Entidad.cs" />
+    <Compile Include="Models\Entidades\Corte\LiquidacionTela\Corte_006Entidad.cs" />
+    <Compile Include="Models\Entidades\Corte\LiquidacionTela\Corte_007Entidad.cs" />
+    <Compile Include="Models\Entidades\Corte\LiquidacionTela\Corte_008Entidad.cs" />
+    <Compile Include="Models\Entidades\Corte\LiquidacionTela\DatosTelaEntidad.cs" />
+    <Compile Include="Models\Entidades\Corte\LiquidacionTela\FichasEntidad.cs" />
+    <Compile Include="Models\Entidades\Corte\LiquidacionTela\indicadorliquidacion\IndicadorPdfEntidad.cs" />
+    <Compile Include="Models\Entidades\Corte\LiquidacionTela\registrotendido\comparacionkgEntidad.cs" />
+    <Compile Include="Models\Entidades\Corte\LiquidacionTela\ReporteControlUsoEntidad.cs" />
+    <Compile Include="Models\Entidades\Corte\LiquidacionTela\ReporteLiquidacionEntidad.cs" />
+    <Compile Include="Models\Entidades\Corte\LiquidacionTela\reporteliquidacion\datosfichaEntidad.cs" />
+    <Compile Include="Models\Entidades\Corte\LiquidacionTela\reporteliquidacion\datosgeneralesEntidad.cs" />
+    <Compile Include="Models\Entidades\Corte\LiquidacionTela\reporteliquidacion\datosReporteLiquidacionEntidad.cs" />
+    <Compile Include="Models\Entidades\Corte\LiquidacionTela\reporteliquidacion\datostendidoEntidad.cs" />
+    <Compile Include="Models\Entidades\Corte\LiquidacionTela\reporteliquidacion\IndicadorPcpLiquidacionEntidad.cs" />
+    <Compile Include="Models\Entidades\Corte\LiquidacionTela\ReportePivot.cs" />
+    <Compile Include="Models\Entidades\Corte\LiquidacionTela\ReporteTransaccionEntidad.cs" />
+    <Compile Include="Models\Entidades\Corte\LiquidacionTela\tablasgenerales\cort006Entidad.cs" />
+    <Compile Include="Models\Entidades\Corte\LiquidacionTela\tablasgenerales\cort008Entidad.cs" />
+    <Compile Include="Models\Entidades\DesarrolloProducto\FichaTecnica\AviosEntidad.cs" />
+    <Compile Include="Models\Entidades\DesarrolloProducto\FichaTecnica\CombinacionesEntidad.cs" />
+    <Compile Include="Models\Entidades\DesarrolloProducto\FichaTecnica\EtapasEntidad.cs" />
+    <Compile Include="Models\Entidades\DesarrolloProducto\FichaTecnica\FichaTecnicaEntidad.cs" />
+    <Compile Include="Models\Entidades\DesarrolloProducto\FichaTecnica\ObservacionesEntidad.cs" />
+    <Compile Include="Models\Entidades\DesarrolloProducto\FichaTecnica\ReporteEntidad.cs" />
+    <Compile Include="Models\Entidades\DesarrolloProducto\FichaTecnica\RutasEntidad.cs" />
+    <Compile Include="Models\Entidades\DesarrolloProducto\FichaTecnica\RutasTelaPrincipalEntidad.cs" />
+    <Compile Include="Models\Entidades\DesarrolloProducto\FichaTecnica\SecuenciaOperacionesEntidad.cs" />
+    <Compile Include="Models\Entidades\DesarrolloProducto\RegistroMoldes\RegistroMoldesEntidad.cs" />
+    <Compile Include="Models\Entidades\DesarrolloProducto\Spec\SpecClienteEntidad.cs" />
+    <Compile Include="Models\Entidades\DesarrolloProducto\Spec\SpecEntidad.cs" />
+    <Compile Include="Models\Entidades\Facturacion\FacturaProveedores\Factura.cs" />
+    <Compile Include="Models\Entidades\Facturacion\FacturaProveedores\ListaExcel.cs" />
+    <Compile Include="Models\Entidades\Facturacion\FacturaProveedores\ListaFacturas.cs" />
+    <Compile Include="Models\Entidades\Facturacion\FacturaProveedores\RespuestaOperacion.cs" />
+    <Compile Include="Models\Entidades\Facturacion\ReporteVentas\VentasReporte.cs" />
+    <Compile Include="Models\Entidades\Facturacion\ReporteVentas\Series.cs" />
+    <Compile Include="Models\Entidades\Facturacion\ReporteVentas\Ventas.cs" />
+    <Compile Include="Models\Entidades\Finanzas\FlujoCaja\EFC_ExcelDetalle.cs" />
+    <Compile Include="Models\Entidades\Finanzas\FlujoCaja\EFC_FlujoCajaLista.cs" />
+    <Compile Include="Models\Entidades\Finanzas\FlujoCaja\EFC_Periodo.cs" />
+    <Compile Include="Models\Entidades\Finanzas\FlujoCaja\EFC_TipoPeriodo.cs" />
+    <Compile Include="Models\Entidades\Finanzas\FlujoEfectivo\EFE_ExcelDetalle.cs" />
+    <Compile Include="Models\Entidades\Finanzas\FlujoEfectivo\EFE_FlujoEfectivoLista.cs" />
+    <Compile Include="Models\Entidades\Finanzas\FlujoEfectivo\EFE_Periodo.cs" />
+    <Compile Include="Models\Entidades\Finanzas\FlujoEfectivo\EFE_TipoPeriodo.cs" />
+    <Compile Include="Models\Entidades\Finanzas\RegistrarProyectado\ERP_ListarRegistrados.cs" />
+    <Compile Include="Models\Entidades\Finanzas\RegistrarProyectado\ERP_ParamReg.cs" />
+    <Compile Include="Models\Entidades\Finanzas\RegistrarProyectado\ERP_RespuestaOp.cs" />
+    <Compile Include="Models\Entidades\Finanzas\RegistrarProyectado\ERP_Concepto.cs" />
+    <Compile Include="Models\Entidades\Finanzas\RegistrarProyectado\ERP_EF.cs" />
+    <Compile Include="Models\Entidades\Finanzas\RegistrarProyectado\ERP_Periodos.cs" />
+    <Compile Include="Models\Entidades\Finanzas\RegistrarProyectado\ERP_TipoPeriodo.cs" />
+    <Compile Include="Models\Entidades\Finanzas\RegistrarProyectado\ERP_Ubicacion.cs" />
+    <Compile Include="Models\Entidades\Finanzas\RendicionGastos\F02_NivelAprobacion.cs" />
+    <Compile Include="Models\Entidades\Finanzas\RendicionGastos\F03_UsuarioNivelAprob.cs" />
+    <Compile Include="Models\Entidades\Finanzas\RendicionGastos\F04_PermisosCeCo.cs" />
+    <Compile Include="Models\Entidades\Finanzas\RendicionGastos\F05_SolicitudCab.cs" />
+    <Compile Include="Models\Entidades\Finanzas\RendicionGastos\F06_SolicitudDet.cs" />
+    <Compile Include="Models\Entidades\Finanzas\RendicionGastos\F07_Archivos.cs" />
+    <Compile Include="Models\Entidades\Finanzas\RendicionGastos\F08_Aprobaciones.cs" />
+    <Compile Include="Models\Entidades\Finanzas\RendicionGastos\F09_Estados.cs" />
+    <Compile Include="Models\Entidades\Finanzas\RendicionGastos\F10_TipoAnulacion.cs" />
+    <Compile Include="Models\Entidades\Finanzas\RendicionGastos\G01_TipoMoneda.cs" />
+    <Compile Include="Models\Entidades\Finanzas\RendicionGastos\SPA_ParamAprobFinanzas.cs" />
+    <Compile Include="Models\Entidades\Finanzas\RendicionGastos\SPA_Parametro.cs" />
+    <Compile Include="Models\Entidades\Finanzas\RendicionGastos\SPG10_SolicitudXCodigo.cs" />
+    <Compile Include="Models\Entidades\Finanzas\RendicionGastos\SPG11_ListaPendientes.cs" />
+    <Compile Include="Models\Entidades\Finanzas\RendicionGastos\SPG12_SolicitudCab.cs" />
+    <Compile Include="Models\Entidades\Finanzas\RendicionGastos\SPG13_SolicitudDet.cs" />
+    <Compile Include="Models\Entidades\Finanzas\RendicionGastos\SPG14_Historial20.cs" />
+    <Compile Include="Models\Entidades\Finanzas\RendicionGastos\SPG15_ListaPendientes30.cs" />
+    <Compile Include="Models\Entidades\Finanzas\RendicionGastos\SPG16_SolicitudCab.cs" />
+    <Compile Include="Models\Entidades\Finanzas\RendicionGastos\SPG17_SolicitudDet.cs" />
+    <Compile Include="Models\Entidades\Finanzas\RendicionGastos\SPG18_Historial30.cs" />
+    <Compile Include="Models\Entidades\Finanzas\RendicionGastos\SPG19_Tipos.cs" />
+    <Compile Include="Models\Entidades\Finanzas\RendicionGastos\SPG1_ConceptoCab.cs" />
+    <Compile Include="Models\Entidades\Finanzas\RendicionGastos\SPG20_ConceptoDet.cs" />
+    <Compile Include="Models\Entidades\Finanzas\RendicionGastos\SPG21_Estados.cs" />
+    <Compile Include="Models\Entidades\Finanzas\RendicionGastos\SPG22_TipoComprobante.cs" />
+    <Compile Include="Models\Entidades\Finanzas\RendicionGastos\SPG23_BusquedaXCod.cs" />
+    <Compile Include="Models\Entidades\Finanzas\RendicionGastos\SPG4_PermisoXCeCo.cs" />
+    <Compile Include="Models\Entidades\Finanzas\RendicionGastos\SPG6_SolicitudCab.cs" />
+    <Compile Include="Models\Entidades\Finanzas\RendicionGastos\SPG7_SolicitudDet.cs" />
+    <Compile Include="Models\Entidades\Finanzas\RendicionGastos\SPG8_IdSolicitudDet.cs" />
+    <Compile Include="Models\Entidades\Finanzas\RendicionGastos\SPG9_ListaHistorial.cs" />
+    <Compile Include="Models\Entidades\Finanzas\RendicionGastos\SPS_Parametro.cs" />
+    <Compile Include="Models\Entidades\Finanzas\RendicionGastos\StatusResponse.cs" />
+    <Compile Include="Models\Entidades\Finanzas\ReporteEjecutivo\REE_FlujoEfectivoLista2.cs" />
+    <Compile Include="Models\Entidades\Finanzas\ReporteEjecutivo\REE_FlujoEfectivoLista3.cs" />
+    <Compile Include="Models\Entidades\Finanzas\ReporteEjecutivo\REE_Periodo.cs" />
+    <Compile Include="Models\Entidades\Finanzas\ReporteEjecutivo\REE_TipoPeriodo.cs" />
+    <Compile Include="Models\Entidades\Gerencia\CambioPrecio\CambioPrecioEntidad.cs" />
+    <Compile Include="Models\Entidades\Gerencia\CambioPrecio\MotivoRechazosEntidad.cs" />
+    <Compile Include="Models\Entidades\Gerencia\CambioTaller\MotivoRechazoEntidad.cs" />
+    <Compile Include="Models\Entidades\Gerencia\ReporteCambio\Cambio.cs" />
+    <Compile Include="Models\Entidades\Gerencia\ReporteCambio\CambioReporte.cs" />
+    <Compile Include="Models\Entidades\Gerencia\ReporteCambio\Estado.cs" />
+    <Compile Include="Models\Entidades\Logistica\AcumGerCecoCuenta\ListaAcumCeCo.cs" />
+    <Compile Include="Models\Entidades\Logistica\AcumGerCecoCuenta\ListaAcumCuenta.cs" />
+    <Compile Include="Models\Entidades\Logistica\AcumGerCecoCuenta\ListaAcumFamilia.cs" />
+    <Compile Include="Models\Entidades\Logistica\AcumGerCecoCuenta\ListaAcumGerencia.cs" />
+    <Compile Include="Models\Entidades\Logistica\AcumGerCecoCuenta\ListaCbxCeCo.cs" />
+    <Compile Include="Models\Entidades\Logistica\AcumGerCecoCuenta\ListaCbxFamilia.cs" />
+    <Compile Include="Models\Entidades\Logistica\AcumGerCecoCuenta\ListaCbxGerencia.cs" />
+    <Compile Include="Models\Entidades\Logistica\AcumGerCecoCuenta\ListaCbxPeriodo.cs" />
+    <Compile Include="Models\Entidades\Logistica\AcumGerCecoCuenta\ListaCbxPlanCuenta.cs" />
+    <Compile Include="Models\Entidades\Logistica\AcumGerCecoCuenta\ListaRep2.cs" />
+    <Compile Include="Models\Entidades\Logistica\AcumuladoXCuenta\IndicadoresPresupuesto.cs" />
+    <Compile Include="Models\Entidades\Logistica\AcumuladoXCuenta\ListaAcumulado.cs" />
+    <Compile Include="Models\Entidades\Logistica\AcumuladoXCuenta\ListaCuenta.cs" />
+    <Compile Include="Models\Entidades\Logistica\AcumuladoXCuenta\ListaFamilia.cs" />
+    <Compile Include="Models\Entidades\Logistica\AcumuladoXCuenta\ListaSeccion.cs" />
+    <Compile Include="Models\Entidades\Logistica\AlterarSituacion\Lista10_Totales.cs" />
+    <Compile Include="Models\Entidades\Logistica\AlterarSituacion\Lista11_AprobExcel.cs" />
+    <Compile Include="Models\Entidades\Logistica\AlterarSituacion\Lista12_OCExcelPend.cs" />
+    <Compile Include="Models\Entidades\Logistica\AlterarSituacion\Lista9_Aprobados.cs" />
+    <Compile Include="Models\Entidades\Logistica\AlterarSituacion\ListaAlterarSituacionCab.cs" />
+    <Compile Include="Models\Entidades\Logistica\AlterarSituacion\ListaAlterarSituacionDet.cs" />
+    <Compile Include="Models\Entidades\Logistica\AlterarSituacion\ListaDispXCuenta.cs" />
+    <Compile Include="Models\Entidades\Logistica\AlterarSituacion\ListaOCPeriodos.cs" />
+    <Compile Include="Models\Entidades\Logistica\AlterarSituacion\ListarOCGerencias.cs" />
+    <Compile Include="Models\Entidades\Logistica\AlterarSituacion\ParamAlterSit.cs" />
+    <Compile Include="Models\Entidades\Logistica\AlterarSituacion\ResumenPresupuesto.cs" />
+    <Compile Include="Models\Entidades\Logistica\AprobacionExcedentes\Informacion.cs" />
+    <Compile Include="Models\Entidades\Logistica\AprobacionExcedentes\ListaAprobados.cs" />
+    <Compile Include="Models\Entidades\Logistica\AprobacionExcedentes\ListaPendiente.cs" />
+    <Compile Include="Models\Entidades\Logistica\AprobacionExcedentes\ListaRechazados.cs" />
+    <Compile Include="Models\Entidades\Logistica\AprobacionOC\Lista1_PendAprobacion.cs" />
+    <Compile Include="Models\Entidades\Logistica\AprobacionOC\Lista2_AprobTercFirma.cs" />
+    <Compile Include="Models\Entidades\Logistica\AprobacionOC\Lista3_RechTercFirma.cs" />
+    <Compile Include="Models\Entidades\Logistica\AprobacionOC\Lista4_ListExcelAprob.cs" />
+    <Compile Include="Models\Entidades\Logistica\AprobacionOC\Lista5_ListaExcelRech.cs" />
+    <Compile Include="Models\Entidades\Logistica\AprobacionOC\Lista6_DetalleOC.cs" />
+    <Compile Include="Models\Entidades\Logistica\AprobacionOC\OrdenCompraCabeceraEntidad.cs" />
+    <Compile Include="Models\Entidades\Logistica\AprobacionOC\OrdenCompraDetalleEntidad.cs" />
+    <Compile Include="Models\Entidades\Logistica\AprobacionOC\OrdenCompraEntidad.cs" />
+    <Compile Include="Models\Entidades\Logistica\AprobacionOC\Restriccion.cs" />
+    <Compile Include="Models\Entidades\Logistica\AsignacionPresupuesto\ListaVersiones.cs" />
+    <Compile Include="Models\Entidades\Logistica\AsignacionPresupuesto\Prueba.cs" />
+    <Compile Include="Models\Entidades\Logistica\Cubo\EBCuboInfoActualizado.cs" />
+    <Compile Include="Models\Entidades\Logistica\SeguimientoXPrograma\EBListarCentroCosto.cs" />
+    <Compile Include="Models\Entidades\Logistica\SeguimientoXPrograma\EBSegOCMes.cs" />
+    <Compile Include="Models\Entidades\Logistica\SeguimientoXPrograma\SegAvioProgEntidad.cs" />
+    <Compile Include="Models\Entidades\Logistica\Graficos\Ceco.cs" />
+    <Compile Include="Models\Entidades\Logistica\Graficos\Familias.cs" />
+    <Compile Include="Models\Entidades\Logistica\Graficos\Gerencias.cs" />
+    <Compile Include="Models\Entidades\Logistica\Graficos\Grafico1Lineas.cs" />
+    <Compile Include="Models\Entidades\Logistica\Graficos\Grafico2Torta.cs" />
+    <Compile Include="Models\Entidades\Logistica\Graficos\Grafico2TortaConsumido.cs" />
+    <Compile Include="Models\Entidades\Logistica\Graficos\Grafico2TortaPresupuesto.cs" />
+    <Compile Include="Models\Entidades\Logistica\Graficos\Grafico3Bar.cs" />
+    <Compile Include="Models\Entidades\Logistica\Graficos\Periodos.cs" />
+    <Compile Include="Models\Entidades\Logistica\MovimientoPorPeriodo\EBMovimientoPorPeriodo.cs" />
+    <Compile Include="Models\Entidades\Logistica\MovimientoPorPeriodo\EBObtenerAlmacen.cs" />
+    <Compile Include="Models\Entidades\Logistica\MovimientoPorPeriodo\EBObtenerTransaccion.cs" />
+    <Compile Include="Models\Entidades\Logistica\OCPendienteCierre\Lista1_OCPendCierre.cs" />
+    <Compile Include="Models\Entidades\Logistica\OCPendienteCierre\Lista2_ListaExcel.cs" />
+    <Compile Include="Models\Entidades\Logistica\OCPendienteCierre\Lista3_NivelItem.cs" />
+    <Compile Include="Models\Entidades\Logistica\OCPendienteFirma\Lista1_OCPendFirma.cs" />
+    <Compile Include="Models\Entidades\Logistica\OCPendienteFirma\Lista2_OCDetalle.cs" />
+    <Compile Include="Models\Entidades\Logistica\OCPendienteFirma\Lista3_OCFirmas.cs" />
+    <Compile Include="Models\Entidades\Logistica\OCPendienteFirma\Lista4_ListaExcel.cs" />
+    <Compile Include="Models\Entidades\Logistica\PlanContable\ListaPlanContable.cs" />
+    <Compile Include="Models\Entidades\Logistica\VisualizarOC\ImpresionOC.cs" />
+    <Compile Include="Models\Entidades\Logistica\VisualizarOC\VisualizacionOcCab.cs" />
+    <Compile Include="Models\Entidades\Logistica\VisualizarOC\VisualizacionOCDet.cs" />
+    <Compile Include="Models\Entidades\Logistica\VisualizarOS\ListaOSCentroCosto.cs" />
+    <Compile Include="Models\Entidades\Logistica\VisualizarOS\ListaReporte1.cs" />
+    <Compile Include="Models\Entidades\Logistica\VisualizarOS\ListaReporte2.cs" />
+    <Compile Include="Models\Entidades\Logistica\VisualizarOS\ListaReporte3.cs" />
+    <Compile Include="Models\Entidades\Logistica\VisualizarOS\ListaReporteExcel.cs" />
+    <Compile Include="Models\Entidades\Logistica\VisualizarOS\ListaReporteOS3_Detalle.cs" />
+    <Compile Include="Models\Entidades\Logistica\Visualizar\ListaOCCentroCosto.cs" />
+    <Compile Include="Models\Entidades\Logistica\Visualizar\ListaReporte1.cs" />
+    <Compile Include="Models\Entidades\Logistica\Visualizar\ListaReporte2.cs" />
+    <Compile Include="Models\Entidades\Logistica\Visualizar\ListaReporte3.cs" />
+    <Compile Include="Models\Entidades\Logistica\Visualizar\ListaReporte3_Detalle.cs" />
+    <Compile Include="Models\Entidades\Logistica\Visualizar\ListaReporte5.cs" />
+    <Compile Include="Models\Entidades\OperacionesProceso\BolsaLona\ActualizarSedeLonaEntidad.cs" />
+    <Compile Include="Models\Entidades\OperacionesProceso\BolsaLona\SedeBolsaLonaEntidad.cs" />
+    <Compile Include="Models\Entidades\OperacionesProceso\CambioTaller\CambioTallerEntidad.cs" />
+    <Compile Include="Models\Entidades\OperacionesProceso\CambioTaller\MotivoEntidad.cs" />
+    <Compile Include="Models\Entidades\OperacionesProceso\CambioTaller\TallerDestinoEntidad.cs" />
+    <Compile Include="Models\Entidades\OperacionesProceso\DesasociarFicha\DesasociarFichaEntidad.cs" />
+    <Compile Include="Models\Entidades\OperacionesProceso\DesbloquearOS\LogOrdenServicioEntidad.cs" />
+    <Compile Include="Models\Entidades\OperacionesProceso\DesbloquearOS\OrdenServicioEntidad.cs" />
+    <Compile Include="Models\Entidades\OperacionesProceso\GuiaEntrada\GuiaEntradaEntidad.cs" />
+    <Compile Include="Models\Entidades\OperacionesProceso\GuiaSalida\GuiaSalidaEntidad.cs" />
+    <Compile Include="Models\Entidades\OperacionesProceso\SubirFichaTecnica\FichaTecnicaEntidad.cs" />
+    <Compile Include="Models\Entidades\OperacionesProceso\SubirFichaTecnica\MotivoActualizacionEntidad.cs" />
+    <Compile Include="Models\Entidades\OperacionesProceso\SubirFichaTecnica\ProgramasClientesEntidad.cs" />
+    <Compile Include="Models\Entidades\Planeamiento\PedidosEntidad.cs" />
+    <Compile Include="Models\Entidades\Seguridad\CambioFechaEntidad.cs" />
+    <Compile Include="Models\Entidades\Seguridad\Requerimientos\AreasEntidad.cs" />
+    <Compile Include="Models\Entidades\Seguridad\Requerimientos\EstadosReqEntidad.cs" />
+    <Compile Include="Models\Entidades\Seguridad\Requerimientos\GerenciaEntidad.cs" />
+    <Compile Include="Models\Entidades\Seguridad\Requerimientos\RequerimientosEntidad.cs" />
+    <Compile Include="Models\Entidades\Seguridad\Requerimientos\ResponsablesEntidad.cs" />
+    <Compile Include="Models\Entidades\Sistema\ArchivosEntidad.cs" />
+    <Compile Include="Models\Entidades\Sistema\AreasEntidad.cs" />
+    <Compile Include="Models\Entidades\Sistema\ClientesEntidad.cs" />
+    <Compile Include="Models\Entidades\Sistema\CorreosEntidad.cs" />
+    <Compile Include="Models\Entidades\Sistema\EmpresasEntidad.cs" />
+    <Compile Include="Models\Entidades\Sistema\EntidadMaestra.cs" />
+    <Compile Include="Models\Entidades\Sistema\ModulosEntidad.cs" />
+    <Compile Include="Models\Entidades\Sistema\OneDriveApiEntidad.cs" />
+    <Compile Include="Models\Entidades\Sistema\OneDriveApiEntidadMaster.cs" />
+    <Compile Include="Models\Entidades\Sistema\RecursosModelo.cs" />
+    <Compile Include="Models\Entidades\Sistema\RespuestaOperacion.cs" />
+    <Compile Include="Models\Entidades\Sistema\SisTareasEntidad.cs" />
+    <Compile Include="Models\Entidades\Sistema\SistemaEntidad.cs" />
+    <Compile Include="Models\Entidades\Sistema\UsuariosEntidad.cs" />
+    <Compile Include="Models\Entidades\Sistema\Utilitarios.cs" />
+    <Compile Include="Models\Modelos\Almacenes\ReporteStockFecha\CentroCostoModelo.cs" />
+    <Compile Include="Models\Modelos\Almacenes\ReporteStockFecha\ReporteStockFechaModelo.cs" />
+    <Compile Include="Models\Modelos\Comercial\Come002Modelo.cs" />
+    <Compile Include="Models\Modelos\Comercial\EBMermasCliente.cs" />
+    <Compile Include="Models\Modelos\Comercial\PedidoVenta\BSPedidoVenta.cs" />
+    <Compile Include="Models\Modelos\Comercial\ReportePenalidades\ReportePenalidadesModelo.cs" />
+    <Compile Include="Models\Modelos\Contabilidad\ReporteGuiasContaModelo.cs" />
+    <Compile Include="Models\Modelos\ControlInterno\Liquidacion\LiquidacionModelo.cs" />
+    <Compile Include="Models\Modelos\ControlInterno\ReporteStock\ReporteStock.cs" />
+    <Compile Include="Models\Modelos\Corte\FichasModeloOld.cs" />
+    <Compile Include="Models\Modelos\Corte\LiquidacionTela\aperturaficha\AperturarFichaModelo.cs" />
+    <Compile Include="Models\Modelos\Corte\LiquidacionTela\AperturarFichasCorteModelo.cs" />
+    <Compile Include="Models\Modelos\Corte\LiquidacionTela\AperturarFichasTendidoModelo.cs" />
+    <Compile Include="Models\Modelos\Corte\LiquidacionTela\CaidasModelo.cs" />
+    <Compile Include="Models\Modelos\Corte\LiquidacionTela\FichasModelo.cs" />
+    <Compile Include="Models\Modelos\Corte\LiquidacionTela\registrofichaspcp\registroFichasPcpModelo.cs" />
+    <Compile Include="Models\Modelos\Corte\LiquidacionTela\ReporteContraCorrienteModelo.cs" />
+    <Compile Include="Models\Modelos\Corte\LiquidacionTela\ReporteControlUsoModelo.cs" />
+    <Compile Include="Models\Modelos\Corte\LiquidacionTela\ReporteLiquidacionModelo.cs" />
+    <Compile Include="Models\Modelos\Corte\LiquidacionTela\reporteliquidacion\EjecutaReporteModelo.cs" />
+    <Compile Include="Models\Modelos\Corte\LiquidacionTela\reporteliquidacion\IndicadorPcpLiquidacionModelo.cs" />
+    <Compile Include="Models\Modelos\DesarrolloProducto\FichaTecnica\EtapasModelo.cs" />
+    <Compile Include="Models\Modelos\DesarrolloProducto\FichaTecnica\ReporteImprimirModelo.cs" />
+    <Compile Include="Models\Modelos\DesarrolloProducto\RegistroMoldes\RegistroMoldesModelo.cs" />
+    <Compile Include="Models\Modelos\DesarrolloProducto\Spec\SpecModelo.cs" />
+    <Compile Include="Models\Modelos\Facturacion\FacturaProveedores\FacturaProvModel.cs" />
+    <Compile Include="Models\Modelos\Facturacion\ReporteVentas\ReporteVentasModelo.cs" />
+    <Compile Include="Models\Modelos\Finanzas\FlujoCaja\FlujoCajaModel.cs" />
+    <Compile Include="Models\Modelos\Finanzas\FlujoEfectivo\FlujoEfectivoModel.cs" />
+    <Compile Include="Models\Modelos\Finanzas\RegistrarProyectado\RegistrarProyModel.cs" />
+    <Compile Include="Models\Modelos\Finanzas\RendicionGastos\RendicionGastosModel.cs" />
+    <Compile Include="Models\Modelos\Finanzas\ReporteEjecutivo\ReporteEjecutivoModel.cs" />
+    <Compile Include="Models\Modelos\Gerencia\CambioPrecio\CambioPrecioModelo.cs" />
+    <Compile Include="Models\Modelos\Gerencia\CambioTaller\CambioTallerGerenciaModelo.cs" />
+    <Compile Include="Models\Modelos\Gerencia\ReporteCambio\ReporteCambioModelo.cs" />
+    <Compile Include="Models\Modelos\Logistica\AcumGerCecoCuenta\AcumGerCecoCuentaModelo.cs" />
+    <Compile Include="Models\Modelos\Logistica\AcumuladoXCuenta\AcumuladoXCuentaModelo.cs" />
+    <Compile Include="Models\Modelos\Logistica\AlterarSituacionOC\AlterarSituacionOcModelo.cs" />
+    <Compile Include="Models\Modelos\Logistica\AprobacionExcedentes\AprobExcOcModelo.cs" />
+    <Compile Include="Models\Modelos\Logistica\AprobacionOC\AprobacionOcModelo.cs" />
+    <Compile Include="Models\Modelos\Logistica\AsignacionPresupuesto\AsignacionPptoOCModelo.cs" />
+    <Compile Include="Models\Modelos\Logistica\AsignacionPresupuesto\PruebaModelo.cs" />
+    <Compile Include="Models\Modelos\Logistica\Cubo\CuboModel.cs" />
+    <Compile Include="Models\Modelos\Logistica\Graficos\GraficoModelo.cs" />
+    <Compile Include="Models\Modelos\Logistica\MovimientoPorPeriodo\BSMovimientoPorPeriodo.cs" />
+    <Compile Include="Models\Modelos\Logistica\OCPendienteCierre\OCPendCierreModel.cs" />
+    <Compile Include="Models\Modelos\Logistica\OCPendienteFirma\OCPendFirmaModel.cs" />
+    <Compile Include="Models\Modelos\Logistica\PlanContable\PlanContableModelo.cs" />
+    <Compile Include="Models\Modelos\Logistica\SeguimientoXPrograma\BSMovimientoPorPeriodo.cs" />
+    <Compile Include="Models\Modelos\Logistica\SeguimientoXPrograma\ExportarExcel_din.cs" />
+    <Compile Include="Models\Modelos\Logistica\SeguimientoXPrograma\SegAvioProgModelo.cs" />
+    <Compile Include="Models\Modelos\Logistica\VisualizarOS\VisualizarOSModelo.cs" />
+    <Compile Include="Models\Modelos\Logistica\Visualizar\VisualizarOcModelo.cs" />
+    <Compile Include="Models\Modelos\OperacionesProceso\BolsaLona\ActualizarSedeLonaModelo.cs" />
+    <Compile Include="Models\Modelos\OperacionesProceso\BolsaLona\SedeBolsaLonaModelo.cs" />
+    <Compile Include="Models\Modelos\OperacionesProceso\CambioTaller\CambioTallerModelo.cs" />
+    <Compile Include="Models\Modelos\OperacionesProceso\CambioTaller\MotivoModelo.cs" />
+    <Compile Include="Models\Modelos\OperacionesProceso\CambioTaller\TallerDestinoModelo.cs" />
+    <Compile Include="Models\Modelos\OperacionesProceso\DesasociarFicha\DesasociarFichaModelo.cs" />
+    <Compile Include="Models\Modelos\OperacionesProceso\DesbloquearOs\OrdenServicioModelo.cs" />
+    <Compile Include="Models\Modelos\OperacionesProceso\GuiaEntrada\GuiaEntradaModelo.cs" />
+    <Compile Include="Models\Modelos\OperacionesProceso\GuiaSalida\GuiaSalidaModelo.cs" />
+    <Compile Include="Models\Modelos\OperacionesProceso\SubirFichaTecnica\AreasModelo.cs" />
+    <Compile Include="Models\Modelos\OperacionesProceso\SubirFichaTecnica\ClientesModelo.cs" />
+    <Compile Include="Models\Modelos\OperacionesProceso\SubirFichaTecnica\FichaTecnicaModelo.cs" />
+    <Compile Include="Models\Modelos\OperacionesProceso\SubirFichaTecnica\MotivoActualizacionModelo.cs" />
+    <Compile Include="Models\Modelos\OperacionesProceso\SubirFichaTecnica\ProgramasClientesModelo.cs" />
+    <Compile Include="Models\Modelos\Planeamiento\BSRegistroMerma.cs" />
+    <Compile Include="Models\Modelos\Planeamiento\PedidosModelo.cs" />
+    <Compile Include="Models\Modelos\Seguridad\CambioFechaModelo.cs" />
+    <Compile Include="Models\Modelos\Seguridad\Requerimientos\AreasModelo.cs" />
+    <Compile Include="Models\Modelos\Seguridad\Requerimientos\EstadosReqModelo.cs" />
+    <Compile Include="Models\Modelos\Seguridad\Requerimientos\GerenciaModelo.cs" />
+    <Compile Include="Models\Modelos\Seguridad\Requerimientos\RequerimientosModelo.cs" />
+    <Compile Include="Models\Modelos\Seguridad\Requerimientos\ResponsblesModelo.cs" />
+    <Compile Include="Models\Modelos\Sistema\ArchivosModelo.cs" />
+    <Compile Include="Models\Modelos\Sistema\CorreosModelo.cs" />
+    <Compile Include="Models\Modelos\Sistema\EmpresasModelo.cs" />
+    <Compile Include="Models\Modelos\Sistema\ModulosModelo.cs" />
+    <Compile Include="Models\Modelos\Sistema\OneDriveApiModelo.cs" />
+    <Compile Include="Models\Modelos\Sistema\OneDriveApiModelo2.cs" />
+    <Compile Include="Models\Modelos\Sistema\SisTareasModelo.cs" />
+    <Compile Include="Models\Modelos\Sistema\UsuariosModelo.cs" />
+    <Compile Include="Models\Modelos\VisualizarOC\VisualizacionOC.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Util\Comercial\EBBaseMulti.cs" />
+    <Compile Include="Util\Comercial\EBMaestra.cs" />
+    <Compile Include="Util\Sistema\URL_EXTERNO.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="packages.config" />
+    <Content Include="Libs\Datatables\extensions\ColReorder\Readme.md" />
+    <Content Include="Libs\Datatables\extensions\ColVis\Readme.md" />
+    <Content Include="Libs\Datatables\extensions\FixedColumns\Readme.md" />
+    <Content Include="Libs\Datatables\extensions\Responsive\css\dataTables.responsive.scss" />
+    <Content Include="Libs\Datatables\extensions\Responsive\Readme.md" />
+    <Content Include="Libs\Datatables\extensions\Scroller\examples\data\ssp.php" />
+    <Content Include="Libs\Datatables\extensions\TableTools\images\psd\collection.psd" />
+    <Content Include="Libs\Datatables\extensions\TableTools\images\psd\copy document.psd" />
+    <Content Include="Libs\Datatables\extensions\TableTools\images\psd\file_types.psd" />
+    <Content Include="Libs\Datatables\extensions\TableTools\images\psd\printer.psd" />
+    <Content Include="Libs\Datatables\extensions\TableTools\Readme.md" />
+    <Content Include="Libs\Fontawesome-free\webfonts\fa-brands-400.eot" />
+    <Content Include="Libs\Fontawesome-free\webfonts\fa-brands-400.ttf" />
+    <Content Include="Libs\Fontawesome-free\webfonts\fa-brands-400.woff" />
+    <Content Include="Libs\Fontawesome-free\webfonts\fa-brands-400.woff2" />
+    <Content Include="Libs\Fontawesome-free\webfonts\fa-regular-400.eot" />
+    <Content Include="Libs\Fontawesome-free\webfonts\fa-regular-400.ttf" />
+    <Content Include="Libs\Fontawesome-free\webfonts\fa-regular-400.woff" />
+    <Content Include="Libs\Fontawesome-free\webfonts\fa-regular-400.woff2" />
+    <Content Include="Libs\Fontawesome-free\webfonts\fa-solid-900.eot" />
+    <Content Include="Libs\Fontawesome-free\webfonts\fa-solid-900.ttf" />
+    <Content Include="Libs\Fontawesome-free\webfonts\fa-solid-900.woff" />
+    <Content Include="Libs\Fontawesome-free\webfonts\fa-solid-900.woff2" />
+    <Content Include="Views\Plantillas\_Layout.cshtml" />
+    <Content Include="Views\Gerencia\AprobacionCambioTaller.cshtml" />
+    <Content Include="Views\Operaciones\CambioTaller.cshtml" />
+    <Content Include="Views\Operaciones\AperturarGuiaEntrada.cshtml" />
+    <Content Include="Views\Operaciones\AperturarGuiaSalida.cshtml" />
+    <Content Include="Views\Operaciones\DesbloquearOS.cshtml" />
+    <Content Include="App_Browsers\qt.browser" />
+    <Content Include="Libs\icheck-bootstrap\LICENSE" />
+    <Content Include="Libs\icheck-bootstrap\package.json" />
+    <Content Include="Libs\icheck-bootstrap\README.md" />
+    <None Include="Properties\PublishProfiles\Textil_Web.pubxml" />
+    <Content Include="Views\Login\Index.cshtml" />
+    <Content Include="Views\Gerencia\AprobacionCambioPrecio.cshtml" />
+    <Content Include="Views\DesarrolloProducto\ReporteFichaTecnica.cshtml" />
+    <Content Include="Views\DesarrolloProducto\VistaReporteFichaTecnica.cshtml" />
+    <Content Include="Views\DesarrolloProducto\HeaderDinamico.cshtml" />
+    <Content Include="Views\Planeamiento\PedidosAmbulancia.cshtml" />
+    <Content Include="Views\DesarrolloProducto\FooterDinamico.cshtml" />
+    <Content Include="Views\Corte\BuscarLiquidacion.cshtml" />
+    <Content Include="Views\Corte\LiquidacionCorte.cshtml" />
+    <Content Include="Views\Corte\MermasCorte.cshtml" />
+    <Content Include="Views\Logistica\AprobacionOCold.cshtml" />
+    <Content Include="Views\Logistica\AprobacionOC.cshtml" />
+    <Content Include="Views\Comercial\SubirPO.cshtml" />
+    <Content Include="Views\Logistica\AlterarSituacion.cshtml" />
+    <Content Include="Views\Logistica\AprobacionExcedente.cshtml" />
+    <Content Include="Views\Logistica\AsignacionPresupuesto.cshtml" />
+    <Content Include="Views\Logistica\RegistroConsumo.cshtml" />
+    <Content Include="Views\DesarrolloProducto\RegistroMoldes.cshtml" />
+    <Content Include="Views\DesarrolloProducto\VisualizacionMoldes.cshtml" />
+    <Content Include="Views\Sistema\Error404.cshtml" />
+    <Content Include="Views\Sistema\Error500.cshtml" />
+    <Content Include="Views\Logistica\AcumuladoXCuenta.cshtml" />
+    <Content Include="Views\Logistica\AcumGerCecoCuenta.cshtml" />
+    <Content Include="Views\Operaciones\DesasociarFicha.cshtml" />
+    <Content Include="Views\Corte\LiquidacionPorFichas.cshtml" />
+    <Content Include="Views\Seguridad\VerCambioFecha.cshtml" />
+    <Content Include="Views\Seguridad\RequerimientosProgramador.cshtml" />
+    <Content Include="Views\Corte\ReporteControlUso.cshtml" />
+    <Content Include="Views\Corte\ReporteControlUsoIndicador.cshtml" />
+    <Content Include="Views\Logistica\OcPendientesFirmaOld.cshtml" />
+    <Content Include="Views\Comercial\Actipedido.cshtml" />
+    <Content Include="Views\Operaciones\BolsaLona.cshtml" />
+    <Content Include="Views\Logistica\OcPendientesFirma.cshtml" />
+    <Content Include="Scripts\jquery-3.0.0.slim.min.map" />
+    <Content Include="Scripts\jquery-3.0.0.min.map" />
+    <Content Include="Views\Logistica\OcPendienteCierre.cshtml" />
+    <Content Include="Views\Planeamiento\AsignacionMermas.cshtml" />
+    <Content Include="Views\Facturacion\ReporteVentas.cshtml" />
+    <Content Include="Views\Corte\ReporteLiquidacionTela.cshtml" />
+    <Content Include="Views\Sistema\ViewLisUsuario.cshtml" />
+    <Content Include="Views\Facturacion\FacturaProveedores.cshtml" />
+    <Content Include="Views\Logistica\Graficos.cshtml" />
+    <Content Include="Views\Finanzas\FlujoCaja.cshtml" />
+    <Content Include="Views\Finanzas\RegistrarProyectado.cshtml" />
+    <Content Include="Views\Seguridad\ViewReporteRequerimientos.cshtml" />
+    <Content Include="Views\Finanzas\FlujoEfectivo.cshtml" />
+    <Content Include="Views\Almacenes\ReporteStockFecha.cshtml" />
+    <Content Include="Views\Gerencia\ReporteCambioPrecio.cshtml" />
+    <Content Include="Views\Finanzas\ReporteEjecutivo.cshtml" />
+    <Content Include="Views\Comercial\ReportePenalidades.cshtml" />
+    <Content Include="Views\Almacenes\MovimientoPorPeriodo.cshtml" />
+    <Content Include="Views\Logistica\SegAvioProgra.cshtml" />
+    <Content Include="Views\Logistica\Seg_OcMes.cshtml" />
+    <Content Include="Views\Logistica\Cubo.cshtml" />
+    <Content Include="Views\Corte\AperturaFichaCorte.cshtml" />
+    <Content Include="Views\Corte\AperturaFichaTendido.cshtml" />
+    <Content Include="Views\Corte\ReporteContraCorriente.cshtml" />
+    <Content Include="Views\Corte\ReporteContraCorriente_old.cshtml" />
+    <Content Include="Views\Corte\ReporteLiquidacionTela_old.cshtml" />
+    <Content Include="Views\Corte\ReporteTransaccionesConfirmar.cshtml" />
+    <Content Include="Views\Corte\CaidasPorFicha.cshtml" />
+    <Content Include="Views\ControlInterno\FichasLiquidacionConfirmar.cshtml" />
+    <Content Include="Views\ControlInterno\FichasStockConfirmadas.cshtml" />
+    <Content Include="Views\Logistica\FooterImpresionOC.cshtml" />
+    <Content Include="Views\Logistica\HeaderImpresionOC.cshtml" />
+    <Content Include="Views\Logistica\ImpresionOC.cshtml" />
+    <Content Include="Views\Logistica\VisualizacionOc.cshtml" />
+    <Content Include="Views\Contabilidad\ReporteGuiasConta.cshtml" />
+    <Content Include="Views\Corte\AperturaFichas.cshtml" />
+    <Content Include="Views\Corte\PDFIndicadoruso.cshtml" />
+    <Content Include="Views\Corte\ReporteControlUsoIndicador_old.cshtml" />
+    <Content Include="Views\Corte\ReporteLiquidacionTela_old_old.cshtml" />
+    <Content Include="Views\Corte\setFichasProgramadas.cshtml" />
+    <Content Include="Views\Finanzas\SolicitudGastos.cshtml" />
+    <Content Include="Views\Finanzas\AprobacionGastos.cshtml" />
+    <Content Include="Views\Finanzas\AprobacionGastosFinanzas.cshtml" />
+    <Content Include="Views\Finanzas\RendicionGastos.cshtml" />
+    <Content Include="Views\Finanzas\CierreRendicion.cshtml" />
+    <Content Include="Views\ControlInterno\ReporteStock.cshtml" />
+    <None Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+    <None Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+    <Folder Include="Libs\Bootstrap\css\" />
+    <Folder Include="Public\ArchivosFichaTecnica\" />
+    <Folder Include="Public\ImprimirFichaTecnica\estilos\" />
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <PropertyGroup />
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>11633</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:11633/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
