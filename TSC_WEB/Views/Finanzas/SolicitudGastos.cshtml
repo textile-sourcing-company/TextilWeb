@@ -21,7 +21,7 @@
 
 
     <div class="tab-content card pt-1" id="myTabContentJust">
-        <div class="tab-pane fade show active" id="sg-registro" role="tabpanel" aria-labelledby="firma-tab-just">   
+        <div class="tab-pane fade show active" id="sg-registro" role="tabpanel" aria-labelledby="firma-tab-just">
 
             <div class="container-fluid">
 
@@ -55,8 +55,6 @@
                         <input class="form-control form-control-sm" type="text" id="idusuario" disabled>
                     </div>
 
-
-
                     <div class="col-3 p-1">
                         <label for="idCbxTipoMod">Tipo de Moneda</label>
                         <select class="form-control form-control-sm" id="idCbxTipoMod"></select>
@@ -70,15 +68,16 @@
 
                     <div class="col-12 p-2 d-flex justify-content-between">
                         <div class="col-8 d-flex justify-content-between cbtn-acciones">
+
                             <div>
                                 <button id="btnNuevo" type="button" class="btn btn-primary btn-sm"><i class="fas fa-file"></i> Nuevo</button>
                                 <button id="btnGuardarCabecera" type="button" class="btn btn-primary btn-sm ml-1 mr-1"><i class="fas fa-save"></i> Guardar</button>
                                 <button id="btnBuscarCodigo" type="button" class="btn btn-primary btn-sm"><i class="fas fa-search"></i> Buscar</button>
                             </div>
-
                             <div>
-                                <button id="btnAgregarDetalle" type="button" data-toggle="modal" data-target="#modalSolicitudDet" class="btn btn-warning btn-sm"><i class="fas fa-plus"></i> Agregar Detalle</button>
+                                <button id="btnAgregarDetalle" type="button" data-toggle="modal" data-target="#modalSolicitudDetalle" class="btn btn-warning btn-sm"><i class="fas fa-plus"></i> Agregar Detalle</button>
                             </div>
+
                         </div>
 
 
@@ -96,7 +95,6 @@
 
                         </div>
 
-
                     </div>
 
                 </div>
@@ -109,17 +107,15 @@
 
                 <div class="card card-body">
 
-                    <table class="table table-sm table-bordered table-hover display nowrap" id="tblDetalle">
+                    <table class="table table-sm table-bordered table-hover display nowrap" id="tblDetalle" style="width: 100%">
                         <thead class="thead-light">
                             <tr>
                                 <th class="ocultar-columna">idSolicitud</th>
-                                @*<th>Secuencia</th>*@
                                 <th>Codigo</th>
                                 <th class="">Fecha</th>
                                 <th class="">Estados</th>
                                 <th>Centro de Costo</th>
                                 <th>Concepto</th>
-                                @*<th>Concepto Detalle</th>*@
                                 <th class="">Moneda</th>
                                 <th>Valor</th>
                                 <th>Acciones</th>
@@ -178,14 +174,15 @@
             </div>
 
         </div>
-
-
     </div>
 
 </div>
 
 
-<div class="modal fade" id="modalSolicitudDet" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+@*  :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::     INSERTAR     ::::::::::::::::::::::::::::::::::::::::::::::.  *@
+
+
+<div class="modal fade" id="modalSolDetInsertar" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -208,59 +205,53 @@
                             <select class="form-control form-control-sm" id="idmCbxConcepCab"></select>
                         </div>
 
-                        <div class="col-8">
+                        <div class="col-6">
                             <label for="idmCbxCeCo">Centro de Costo:</label>
                             <select class="form-control form-control-sm" id="idmCbxCeCo"></select>
                         </div>
-                    </div>
 
-                    
-                    <div class="row mt-4">
-                        <div class="col-4">
-                            <div class="list-group" id="list-tab" role="tablist">
-                                <a class="list-group-item list-group-item-action active" id="list-home-list" data-toggle="list" href="#list-home" role="tab" aria-controls="home">Home</a>
-                                <a class="list-group-item list-group-item-action" id="list-profile-list" data-toggle="list" href="#list-profile" role="tab" aria-controls="profile">Profile</a>
-                                <a class="list-group-item list-group-item-action" id="list-messages-list" data-toggle="list" href="#list-messages" role="tab" aria-controls="messages">Messages</a>
-                                <a class="list-group-item list-group-item-action" id="list-settings-list" data-toggle="list" href="#list-settings" role="tab" aria-controls="settings">Settings</a>
-                            </div>
+                        <div class="col-2">
+                            <label for="idmdias">Dia:</label>
+                            <select class="form-control form-control-sm" id="idmdias">
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                            </select>
                         </div>
-                        <div class="col-8">
-                            <div class="tab-content" id="nav-tabContent">
-                                <div class="tab-pane fade show active" id="list-home" role="tabpanel" aria-labelledby="list-home-list">.aaaaa..</div>
-                                <div class="tab-pane fade" id="list-profile" role="tabpanel" aria-labelledby="list-profile-list">..bbbbb.</div>
-                                <div class="tab-pane fade" id="list-messages" role="tabpanel" aria-labelledby="list-messages-list">.ccccccc..</div>
-                                <div class="tab-pane fade" id="list-settings" role="tabpanel" aria-labelledby="list-settings-list">..dddddd.</div>
-                            </div>
-                        </div>
+
                     </div>
 
 
-
-                    @*<div class="row mt-2">
+                    <div class="container-fluid  mt-4">
+                        <div class="row">
                             <div class="col">
-                                <label for="idmCbxConcepDet">Concepto Detalle:</label>
-                                <select class="form-control form-control-sm" id="idmCbxConcepDet"></select>
+                                <ul class="list-group">
+
+                                    <li class="list-group-item">
+                                        <div class="row">
+                                            <div class="col-2">
+                                                <h6>Concepto</h6>
+                                            </div>
+                                            <div class="col-1">
+                                                <h6>Monto</h6>
+                                            </div>
+
+                                            <div class="col-8">
+                                                <h6>Consideracion</h6>
+                                            </div>
+                                            <div class="col-1">
+                                                <h6>Marcar</h6>
+                                            </div>
+                                        </div>
+                                    </li>
+
+                                    <li class="list-group-item" id="detalleConceptoInsertar">
+                                    </li>
+
+                                </ul>
                             </div>
-                        </div>*@
-
-                    <div class="row mt-4">
-                        <div class="col">
-                            <label for="idmConcepDetConsid">Consideraciones:</label>
-                            <span class="form-control form-control-sm" id="idmConcepDetConsid"></span>
                         </div>
-                    </div>
 
-
-
-                    <div class="row mt-2">
-                        <div class="col">
-                            <label for="idmvalor">Valor</label>
-                            <input class="form-control form-control-sm" type="number" id="idmvalor">
-                        </div>
-                        <div class="col">
-                            <label for="idmnota">Observación: (Opcional)</label>
-                            <textarea class="form-control form-control-sm" id="idmnota" maxlength="300"></textarea>
-                        </div>
                     </div>
 
                 </form>
@@ -275,8 +266,11 @@
 </div>
 
 
-<div class="modal fade" id="modalDetalleSol" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+
+@*  :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::     VISUALIZAR     ::::::::::::::::::::::::::::::::::::::::::::::.  *@
+
+<div class="modal fade" id="modalSolDetVisualizar" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Detalle de Solicitud</h5>
@@ -285,77 +279,75 @@
                 </button>
             </div>
             <div class="modal-body">
+
                 <form>
-
                     <div class="row">
-                        <div class="col">
-                            <label for="idmdcodigo">Codigo:</label>
-                            <span type="text" class="form-control form-control-sm" id="idmdcodigo"></span>
+                        <div class="col-2">
+                            <label for="idmdCodigo">Codigo:</label>
+                            <input type="text" class="form-control form-control-sm" id="idmdCodigo" readonly>
                         </div>
-                        <div class="col">
-                            <label for="idmdfecha">Fecha:</label>
-                            <span type="text" class="form-control form-control-sm" id="idmdfecha"></span>
+                        <div class="col-2">
+                            <label for="idmdConcepCab">Concepto:</label>
+                            <input class="form-control form-control-sm" id="idmdConcepCab" readonly>
                         </div>
-                        <div class="col">
-                            <label for="idmdestado">Estado:</label>
-                            <span type="text" class="form-control form-control-sm" id="idmdestado"></span>
-                        </div>
-                    </div>
 
-                    <div class="row mt-2 mb-2">
-                        <div class="col">
-                            <label for="idmdobs">Glosa:</label>
-                            <span class="form-control form-control-sm" id="idmdobs"></span>
+                        <div class="col-6">
+                            <label for="idmdCeCo">Centro de Costo:</label>
+                            <input class="form-control form-control-sm" id="idmdCeCo" readonly>
                         </div>
-                    </div>
 
-                    <div class="row mt-2 mb-2">
-                        <div class="col">
-                            <label for="idmdmoneda">Moneda:</label>
-                            <span class="form-control form-control-sm" id="idmdmoneda"></span>
-                        </div>
-                    </div>
+                        <div class="col-2">
+                            <label for="idmddias">Dia:</label>
+                            <select class="form-control form-control-sm" id="idmdias" disabled>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                            </select>
 
-                    <div class="row mt-2 mb-2">
-                        <div class="col">
-                            <label for="idmdceco">Centro de Costo</label>
-                            <span class="form-control form-control-sm" id="idmdceco"></span>
                         </div>
 
                     </div>
 
-                    <div class="row mt-2 mb-2">
-                        <div class="col">
-                            <label for="idmdconcepCab">Concepto:</label>
-                            <span class="form-control form-control-sm" id="idmdconcepCab"></span>
-                        </div>
-                        <div class="col">
-                            <label for="idmdconcepDet">Detalle Concepto:</label>
-                            <span class="form-control form-control-sm" id="idmdconcepDet"></span>
-                        </div>
-                    </div>
 
+                    <div class="container-fluid mt-4">
 
-                    <div class="row mt-2 mb-2">
-                        <div class="col">
-                            <label for="idmdnota">Glosa</label>
-                            <span class="form-control form-control-sm" id="idmdnota"></span>
-                        </div>
-                    </div>
+                        <div class="row">
+                            <div class="col">
+                                <ul class="list-group">
 
-                    <div class="row">
-                        <div class="col">
-                            <label for="idmdvalor">Valor:</label>
-                            <span class="form-control form-control-sm" id="idmdvalor"></span>
+                                    <li class="list-group-item">
+                                        <div class="row">
+                                            <div class="col-2">
+                                                <h6>Concepto</h6>
+                                            </div>
+                                            <div class="col-1">
+                                                <h6>Monto</h6>
+                                            </div>
+
+                                            <div class="col-8">
+                                                <h6>Consideracion</h6>
+                                            </div>
+                                            <div class="col-1">
+                                                <h6>Marcar</h6>
+                                            </div>
+                                        </div>
+                                    </li>
+
+                                    <li class="list-group-item" id="detalleConceptoVisualizar">
+                                    </li>
+
+                                </ul>
+                            </div>
                         </div>
+
                     </div>
 
                 </form>
 
+
             </div>
             <div class="modal-footer">
-                <button id="btnCancelar" type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                <button id="btnGuardarDetalle" type="button" class="btn btn-primary">Guardar</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">OK</button>
             </div>
         </div>
     </div>
@@ -368,7 +360,7 @@
         font-family: 'Roboto', sans-serif;
     }
 
-    #modalSolicitudDet input, select, span, label {
+    #modalSolicitudDetalle input, select, span, label {
         font-family: 'Roboto', sans-serif;
     }
 
@@ -410,9 +402,6 @@
     #solgas .kpi-cantidad {
     }
 
-
-
-
     #solgas #tblHistorial th {
         font-family: 'Roboto', sans-serif !important;
     }
@@ -440,7 +429,7 @@
         margin-right: 8px;
     }
 
-    #modalSolicitudDet #idmConcepDetConsid {
+    #modalSolicitudDetalle #idmConcepDetConsid {
         height: 100px !important;
     }
 
@@ -480,6 +469,56 @@
     }
 
 
+    #solgas #listDetalleConcept p {
+        font-size: 13px !important;
+        border: 1px solid #E5E8E8 !important;
+        padding: 3px !important;
+    }
+
+
+    input[type="checkbox"] {
+        position: relative;
+        width: 2.2em;
+        height: 2.2em;
+        color: #000;
+        border: 1px solid #D5D8DC;
+        border-radius: 4px;
+        appearance: none;
+        outline: 0;
+        cursor: pointer;
+        transition: background 175ms cubic-bezier(0.1, 0.1, 0.25, 1);
+    }
+
+        input[type="checkbox"]::before {
+            position: absolute;
+            content: '';
+            display: block;
+            top: 3px;
+            left: 8px;
+            width: 10px;
+            height: 16px;
+            border-style: solid;
+            border-color: #ffffff;
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg);
+            opacity: 0;
+        }
+
+
+        input[type="checkbox"]:checked {
+            color: #ffffff;
+            border-color: #28B463;
+            background: #28B463;
+        }
+
+
+        input[type="checkbox"]:before {
+            opacity: 1;
+        }
+
+
+
+
 
     @@media (min-width: 320px) and (max-width: 479.98px) {
     }
@@ -510,8 +549,12 @@
         var vCodCeCo = 0;
         var vIdConcepCab = 0;
         var vIdConcepDet = 0;
-
         var vIdTipo = 0;
+
+        var vChecked = false;
+
+        var conceptoDetArray = [];
+
 
         $(document).ready(function () {
 
@@ -523,9 +566,7 @@
                 let parametros = { nivelInterfaz: NIVEL_INTERFAZ };
                 getPermisosXCeCo(parametros);
 
-                getConceptoCab();
                 getTipoDeMoneda();
-                getTipos();
 
                 limpiarCabecera();
 
@@ -576,8 +617,11 @@
                 $("#idmConcepDetConsid").text("");
 
                 $("#idmCbxCeCo").val(0);
-                $("#idmvalor").val("");
-                $("#idmnota").val("");
+
+                $("#detalleConceptoInsertar").empty();
+                $("#listDetalleConcept").empty();
+
+                conceptoDetArray = [];
             }
 
             function mensajePrincipal(estado, mensaje) {
@@ -700,7 +744,7 @@
 
                     });
                 }
-                else if (vIdConcepDet == 0) {
+                else if (conceptoDetArray.length == 0) {
                     respuesta = false;
 
                     Swal.fire({
@@ -744,12 +788,13 @@
                 });
             }
 
-            function getConceptoCab() {
+            function getConceptoCab(idSolicitud) {
                 $.ajax({
                     type: "GET",
                     url: '/Finanzas/RG_ConceptoCab',
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
+                    data: { idSolicitud: idSolicitud },
                     success: function (data) {
                         $("#idmCbxConcepCab").empty();
                         $.each(data.lista, function () {
@@ -763,32 +808,47 @@
                 });
             }
 
-
             function getConceptoDet(idConceptoCab) {
                 $.ajax({
                     type: "GET",
-                    url: '/Finanzas/RG_ConceptoDet',
+                    url: '/Finanzas/RG_ConceptoDetalleInsertar',
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
                     data: { idConceptoCab: idConceptoCab },
                     success: function (data) {
-                        console.log(data);
-                        $("#idmCbxConcepDet").empty();
 
-                        let $select = $('#idmCbxConcepDet');
+                        $("#detalleConceptoInsertar").empty();
+
+                        let detHTML = "";
 
                         $.each(data.lista, function () {
-                            $select.append(`<option data-consideracion="${this.consideracion}" value="${this.idConceptoDet}">${this.conceptoDet}</option>`);
+
+                            detHTML += "<div class='row mt-1'>"
+                                        + "<div class='col-2'>"
+                                        + "      <p style='padding: 3px; border:1px solid #CCD1D1; border-radius: 3px;'>" + this.conceptoDet + "</p>"
+                                        + "</div>"
+                                        + "<div class='col-1'>"
+                                        + "     <p style='padding: 3px; border:1px solid #CCD1D1; border-radius: 3px;'>" + formatoNumero(this.montoMaximo) + "</p>"
+                                        + "</div>"
+                                        + "<div class='col-8'>"
+                                        + "     <p style='padding: 3px; border:1px solid #CCD1D1; border-radius: 3px;'>" + this.consideracion + "</p>"
+                                        + "</div>"
+                                        + "<div class='col-1'>"
+                                        + "     <input type='checkbox' class='cseleccion' data-id=" + this.idConceptoDet + " data-idConceptoDet=" + this.idConceptoDet  + ">"
+                                        + "</div>"
+                                + "</div>";
+
+                            conceptoDetArray.push({ idConceptoDet: this.idConceptoDet, seleccionadoDet: 0, codCeCo : 0 });
                         });
 
-                        $("#idmCbxConcepDet").val("0");
+                        $("#detalleConceptoInsertar").html(detHTML);
+
                     },
                     failure: function () {
                         console.error('error al cargar tipos periodos');
                     }
                 });
             }
-
 
             function getTipoDeMoneda() {
                 $.ajax({
@@ -810,16 +870,19 @@
             }
 
             function getTipos() {
+
                 $.ajax({
                     type: "GET",
                     url: '/Finanzas/RG_Tipos',
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
                     success: function (data) {
+
                         $("#idCbxTipo").empty();
                         $.each(data.lista, function () {
                             $("#idCbxTipo").append($("<option/>").val(this.idTipo).text(this.tipo));
                         });
+
                         $("#idCbxTipo").val(0);
                     },
                     failure: function () {
@@ -827,9 +890,6 @@
                     }
                 });
             }
-
-
-
 
             function getListaDetalle(pidSolicitud) {
 
@@ -849,7 +909,6 @@
                         }
                     },
                     failure: function () {
-                        console.error('error al cargar los periodos');
 
                         Swal.fire({
                             icon: 'error',
@@ -876,18 +935,16 @@
 
                     tr += "<tr> "
                         + " <td class='ocultar-columna'> " + obj.idSolicitud + "</td> "
-                        //+ " <td> " + obj.secuencia + "</td> "
                         + " <td> " + obj.codigo + "</td> "
                         + " <td> " + obj.fecha + "</td>"
                         + " <td> " + obj.estados + "</td>"
                         + " <td> " + obj.ceco + "</td> "
                         + " <td> " + obj.conceptoCab + "</td>"
-                        //+ " <td> " + obj.conceptoDet + "</td>"
                         + " <td> " + obj.tipoMoneda + "</td> "
                         + " <td> " + formatoNumero(obj.valor) + "</td> "
                         + " <td class='text-center'>"
-                        + "     <button data-idsolicitud='" + obj.idSolicitud + "' data-secuencia='" + obj.secuencia + "' data-toggle='collapse' data-target='#modalDetalleSol' class='btn btn-sm btn-primary' id='idIdSolicitudDet'> <i class='fas fa-eye'></i></button>"
-                        + "     <button data-idsolicitud='" + obj.idSolicitud + "' data-secuencia='" + obj.secuencia + "' data-toggle='collapse' class='btn btn-sm btn-danger ml-1' id='btnEliminarIdSol'><i class='fas fa-trash'></i></button>"
+                        + "     <button data-idsolicitud='" + obj.idSolicitud + "' data-idconceptocab='" + obj.idConceptoCab + "' data-toggle='collapse' class='btn btn-sm btn-primary solicitudDetalleItem' ><i class='fas fa-eye'></i></button>"
+                        + "     <button data-idsolicitud='" + obj.idSolicitud + "' data-idconceptocab='" + obj.idConceptoCab + "' data-toggle='collapse' class='btn btn-sm btn-danger ml-1 solicitudEliminarItem'><i class='fas fa-trash'></i></button>"
                         + " </td>"
                         + "</tr>";
                 });
@@ -905,7 +962,6 @@
                     }
                 );
             }
-
 
             function formatoNumero(x) {
                 x = x.toFixed(2);
@@ -938,12 +994,13 @@
                         'codCeCo': vCodCeCo,
                         'idConceptoDet': vIdConcepDet,
                         'valor': 0,
-                        'nota': '',
                         'secuencia': 0,
                         'usuario': USUARIO,
                         'usuarioCompleto': USUARIO_COMPLETO,
                         'nivelInterfaz': 0,
-                        'idTipo': vIdTipo
+                        'idTipo': vIdTipo,
+                        'seleccionadoDet': 0,
+                        'idConceptoCab': 0
                     }
 
                     $.ajax({
@@ -992,12 +1049,15 @@
 
             $("#btnAgregarDetalle").click(function () {
                 let codigoGenerado = $("#idtxtcodigo").val();
+                getConceptoCab(vIdSolicitud);
+
                 $("#idmcodigo").val(codigoGenerado);
-                $('#modalSolicitudDet').modal('show');
+                $('#modalSolDetInsertar').modal('show');
             });
 
 
             $("#btnGuardarDetalle").click(function () {
+
                 if (validacionDetalle()) {
 
                     let parametro = {
@@ -1013,27 +1073,27 @@
                         'codCeCo': vCodCeCo,
                         'idConceptoDet': vIdConcepDet,
                         'valor': $("#idmvalor").val(),
-                        'nota': $("#idmnota").val(),
                         'secuencia': 0,
                         'usuario': USUARIO,
                         'usuarioCompleto': USUARIO_COMPLETO,
                         'nivelInterfaz': 0,
-                        'idTipo': 0
+                        'idTipo': 0,
+                        'conceptoDetArray': conceptoDetArray
                     }
 
                     $.ajax({
-                        url: "/finanzas/RG_SetRendicionGastos",
+                        url: "/finanzas/RG_SetRendicionGastosDet",
                         type: "post",
                         data: parametro,
                         dataType: "json",
                         success: function (resultado) {
-                            console.log(resultado);
 
                             if (resultado.isRedirect) {
                                 window.location.href = resultado.redirectUrl;
                             }
                             else {
-                                $('#modalSolicitudDet').modal('hide');
+
+                                $('#modalSolDetInsertar').modal('hide');
 
                                 if (resultado.status.idResponse > 0) {
                                     mensajePrincipal(true, "Motivo Agregado");
@@ -1051,7 +1111,9 @@
                         }
                     });
                 }
+
             });
+
 
             $("#btnNuevo").click(function () {
                 limpiarCabecera();
@@ -1112,59 +1174,87 @@
             });
 
 
-            $("#tblDetalle").on('click', '#idIdSolicitudDet', function () {
+            $("#tblDetalle").on('click', '.solicitudDetalleItem', function () {
 
-                let idsolcitud = $(this).attr("data-idsolicitud");
-                let secuencia = $(this).attr("data-secuencia");
+                let idSolicitud = $(this).attr("data-idsolicitud");
+                let idConceptoCab = $(this).attr("data-idconceptoCab");
+
 
                 $.ajax({
                     type: "GET",
-                    url: '/finanzas/RG_IdSolicitudDet',
+                    url: '/Finanzas/RG_SolicitudDetalle',
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
-                    data: { idSolicitud: idsolcitud, secuencia : secuencia },
+                    data: { idSolicitud: idSolicitud, idConceptoCab: idConceptoCab },
                     success: function (data) {
+
+                        console.log(data);
 
                         if (data.isRedirect) {
                             window.location.href = data.redirectUrl;
                         }
                         else {
 
-                            $("#idmdcodigo").text(data.entidad.codigo);
-                            $("#idmdfecha").text(data.entidad.fecha);
-                            $("#idmdestado").text(data.entidad.estados);
-                            $("#idmdmoneda").text(data.entidad.tipoMoneda);
-                            $("#idmdceco").text(data.entidad.ceco);
+                            let detHTML = "";
+                            let checkeHTML = "";
 
-                            $("#idmdconcepCab").text(data.entidad.conceptoCab);
-                            $("#idmdvalor").text(data.entidad.valor);
-                            $("#idmdobs").text(data.entidad.observacion);
-                            $("#idmdnota").text(data.entidad.nota);
+                            $("#detalleConceptoVisualizar").empty();
 
-                            $('#modalDetalleSol').modal('show');
+                            $("#idmdCodigo").val(data.entidad.codigo);
+                            $("#idmdConcepCab").val(data.entidad.conceptoCab);
+                            $("#idmdCeCo").val(data.entidad.ceco);
+
+                            $.each(data.entidad.conceptoDetalle, function () {
+
+                                detHTML += "<div class='row mt-1'>"
+                                    + "<div class='col-2'>"
+                                    + "      <p style='padding: 3px; border:1px solid #CCD1D1; border-radius: 3px;'>" + this.conceptoDet + "</p>"
+                                    + "</div>"
+                                    + "<div class='col-1'>"
+                                    + "     <p style='padding: 3px; border:1px solid #CCD1D1; border-radius: 3px;'>" + formatoNumero(this.montoMaximo) + "</p>"
+                                    + "</div>"
+                                    + "<div class='col-8'>"
+                                    + "     <p style='padding: 3px; border:1px solid #CCD1D1; border-radius: 3px;'>" + this.consideracion + "</p>"
+                                    + "</div> ";
+
+
+                                if (this.existe == 0) {
+                                    checkeHTML = "<div class='col-1'>"
+                                        + "     <input type='checkbox' class='cseleccion' data-idConceptoDet=" + this.idConceptoDet + " disabled>"
+                                        + "</div>";
+                                }
+                                else {
+                                    checkeHTML = "<div class='col-1'>"
+                                        + "     <input type='checkbox' class='cseleccion' data-idConceptoDet=" + this.idConceptoDet + " readonly checked='checked'>"
+                                        + "</div>";
+                                }
+
+
+                                detHTML = detHTML + checkeHTML + "</div>";
+
+                            });
+
+                            $("#detalleConceptoVisualizar").html(detHTML);
+
+
+                            $('#modalSolDetVisualizar').modal('show');
                         }
+
                     },
                     failure: function () {
-                        console.error('error al cargar los periodos');
-
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error al mostrar datos',
-                            text: 'Textile Sourcing Company',
-                            showConfirmButton: false,
-                            timer: 2500,
-                        });
-
+                        console.error('error al cargar tipos periodos');
                     }
                 });
+
+
 
             });
 
 
-            $("#tblDetalle").on('click', '#btnEliminarIdSol', function () {
+            $("#tblDetalle").on('click', '.solicitudEliminarItem', function () {
 
                 let idsolcitud = $(this).attr("data-idsolicitud");
-                let secuencia = $(this).attr("data-secuencia");
+                let idconceptocab = $(this).attr("data-idconceptocab");
 
 
                 Swal.fire({
@@ -1193,14 +1283,15 @@
                             'codCeCo': vCodCeCo,
                             'idConceptoDet': vIdConcepDet,
                             'valor': 0,
-                            'nota': '',
-                            'secuencia': secuencia,
+                            'secuencia': 0,
                             'usuario': USUARIO,
                             'usuarioCompleto': USUARIO_COMPLETO,
                             'nivelInterfaz': 0,
-                            'idTipo': vIdTipo
-
+                            'idTipo': vIdTipo,
+                            'seleccionadoDet': 0,
+                            'idConceptoCab': idconceptocab
                         }
+
 
                         $.ajax({
                             url: "/finanzas/RG_EliminarSolicitud",
@@ -1263,8 +1354,6 @@
                         data: datos,
                         dataType: "json",
                         success: function (data) {
-
-                            console.log(data);
 
                             let tabla = $("#tblHistorial").DataTable();
 
@@ -1370,20 +1459,17 @@
             $('#idmCbxCeCo').change(function () {
                 var $option = $(this).find('option:selected');
                 vCodCeCo = parseInt($option.val());
-                console.log(vCodCeCo);
+                for (var i = 0; i < conceptoDetArray.length; i++) {
+                    conceptoDetArray[i].codCeCo = vCodCeCo;
+                }
             });
 
             $('#idmCbxConcepCab').change(function () {
                 var $option = $(this).find('option:selected');
                 vIdConcepCab = $option.val().toString();
 
-                if (vIdConcepCab != 0 && vIdConcepCab != null && typeof (vIdConcepCab) == "undefined") {
-
-
-
+                if (vIdConcepCab != 0 && vIdConcepCab != null && typeof (vIdConcepCab) != "undefined") {
                     getConceptoDet(vIdConcepCab);
-
-
                 }
 
             });
@@ -1402,15 +1488,12 @@
             $('#idCbxTipo').change(function () {
                 var $option = $(this).find('option:selected');
                 vIdTipo = parseInt($option.val());
-                console.log(vIdTipo);
             });
 
-
-
-
-            $('#modalSolicitudDet').on('hidden.bs.modal', function (e) {
+            $('#modalSolDetInsertar').on('hidden.bs.modal', function (e) {
                 limpiarDetalle();
             });
+
 
             $('#idtxtcodigo').keypress(function (event) {
                 var keycode = (event.keyCode ? event.keyCode : event.which);
@@ -1454,6 +1537,25 @@
                     else {
 
                         MostrarCarga("Buscando...");
+
+
+                        $.ajax({
+                            url: "/finanzas/RG_ValidarSolicitudAprobada",
+                            type: "POST",
+                            data: { 'codigo': codigo },
+                            dataType: "json",
+                            success: function (resultado) {
+
+                                
+
+                            },
+                            error: function (xhr, ajaxOptions, thrownError) {
+
+                            }
+                        });
+
+
+
 
 
                         $.ajax({
@@ -1578,11 +1680,34 @@
                 }
             });
 
-
-
-
-
         });
+
+
+        $('#detalleConceptoInsertar').on('click', '.cseleccion', function (e) {
+            var inputCheck = $(this);
+            var idConceptoDet = $(this).attr("data-id");
+
+            if (inputCheck.is(":checked")) {
+
+                for (var i = 0; i < conceptoDetArray.length; i++) {
+                    if (conceptoDetArray[i].idConceptoDet == idConceptoDet) {
+                        conceptoDetArray[i].seleccionadoDet = 1;
+                    }
+                }
+
+            } else {
+
+                for (var i = 0; i < conceptoDetArray.length; i++) {
+                    if (conceptoDetArray[i].idConceptoDet == idConceptoDet) {
+                        conceptoDetArray[i].seleccionadoDet = 0;
+                    }
+                }
+            }
+        });
+
+
+
+
 
 
 

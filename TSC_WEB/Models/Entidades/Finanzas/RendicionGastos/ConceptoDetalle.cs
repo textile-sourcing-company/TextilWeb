@@ -5,10 +5,11 @@ using System.Web;
 
 namespace TSC_WEB.Models.Entidades.Finanzas.RendicionGastos
 {
-    public class SPG20_ConceptoDet
+    public class ConceptoDetalle
     {
         public int idConceptoDet { get; set; }
-        public string conceptoDet { get; set; }
-        public string consideracion { get; set; }
+        public int codCeCo { get; set; }
+        public int secuencia { get; set; }
+        public int seleccionadoDet { get; set; }
     }
 }

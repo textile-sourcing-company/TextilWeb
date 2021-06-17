@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using TSC_WEB.Models.Entidades.Finanzas;
 using TSC_WEB.Models.Entidades.Finanzas.FlujoCaja;
 using TSC_WEB.Models.Entidades.Finanzas.FlujoEfectivo;
 using TSC_WEB.Models.Entidades.Finanzas.RegistrarProyectado;
@@ -637,6 +638,65 @@ namespace TSC_WEB.Controllers
         }
 
 
+        public JsonResult RG_SetRendicionGastosDet(SPS_ParametroDet parametro)
+        {
+            StatusResponse response = new StatusResponse();
+            SPG6_SolicitudCab solicitudCab = new SPG6_SolicitudCab();
+
+            if (Session["usuario"] != null)
+            {
+                RendicionGastosModel model = new RendicionGastosModel();
+
+                try
+                {
+                    SPS_Parametro entidad = new SPS_Parametro();
+
+                    entidad.opcion = parametro.opcion;
+                    entidad.idSolicitud = parametro.idSolicitud;
+                    entidad.codigo = parametro.codigo;
+                    entidad.idEmpresa = parametro.idEmpresa;
+                    entidad.idEstado = parametro.idEstado;
+                    entidad.idAnulado = parametro.idAnulado;
+                    entidad.idTipoMod = parametro.idTipoMod;
+                    entidad.observacion = parametro.observacion;
+                    entidad.codCeCo = parametro.codCeCo;
+                    entidad.usuario = parametro.usuario;
+                    entidad.usuarioCompleto = parametro.usuarioCompleto;
+                    entidad.nivelInterfaz = parametro.nivelInterfaz;
+                    entidad.idTipo = parametro.idTipo;
+
+                    foreach (var item in parametro.conceptoDetArray)
+                    {
+                        entidad.idConceptoDet = item.idConceptoDet;
+                        entidad.codCeCo = item.codCeCo;
+                        entidad.secuencia = 0;
+                        entidad.seleccionadoDet = item.seleccionadoDet;
+
+                        response = model.SetRendicionGastos(entidad);
+                    }
+
+                }
+                catch (Exception ex)
+                {
+                    response.idResponse = 0;
+                    response.statusResponse = ex.Message;
+                }
+
+                return Json(new
+                {
+                    status = response,
+                    responseEntity = solicitudCab,
+                    isRedirect = false,
+                    redirectUrl = ""
+
+                }, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json(new { status = response, responseEntity = new SPG6_SolicitudCab(), isRedirect = true, redirectUrl = "/login/index" }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
 
         [HttpGet]
         public async Task<JsonResult> RG_PermisosXCeCo(int nivelInterfaz)
@@ -664,7 +724,7 @@ namespace TSC_WEB.Controllers
         }
 
         [HttpGet]
-        public async Task<JsonResult> RG_ConceptoCab()
+        public async Task<JsonResult> RG_ConceptoCab(int idSolicitud)
         {
             IEnumerable<SPG1_ConceptoCab> lista = null;
 
@@ -672,7 +732,7 @@ namespace TSC_WEB.Controllers
             {
                 RendicionGastosModel objModel = new RendicionGastosModel();
 
-                lista = await objModel.ConceptosCab();
+                lista = await objModel.ConceptosCab(idSolicitud);
 
                 return Json(new
                 {
@@ -740,15 +800,57 @@ namespace TSC_WEB.Controllers
 
 
         [HttpGet]
-        public async Task<JsonResult> RG_IdSolicitudDet(int idSolicitud, int secuencia)
+        public async Task<JsonResult> RG_SolicitudDetalle(int idSolicitud, int idConceptoCab)
         {
-            SPG8_IdSolicitudDet entidad = null;
+            SPG8_SolicitudDetalle entidad = null;
+
 
             if (Session["usuario"] != null)
             {
                 RendicionGastosModel objModel = new RendicionGastosModel();
+                entidad = new SPG8_SolicitudDetalle();
+                entidad.conceptoDetalle = new List<SPG25_ConceptoDetalle>();
 
-                entidad = await objModel.IdSolicitudDet(idSolicitud, secuencia);
+                List<SPG25_ConceptoDetalle> conceptDetCompleto = new List<SPG25_ConceptoDetalle>();
+                List<SPG26_SolDetConceptos> conceptDetSolicitud = new List<SPG26_SolDetConceptos>();
+                List<SPG25_ConceptoDetalle> conceptoDetFinal = new List<SPG25_ConceptoDetalle>();
+
+                entidad = await objModel.IdSolicitudDetalle(idSolicitud, idConceptoCab);
+
+                conceptDetCompleto = objModel.ConceptosDetalleVisualizar(idConceptoCab);
+                conceptDetSolicitud = objModel.SolicitudDetalleConcepto(entidad.idSolicitud, idConceptoCab);
+
+
+                foreach (var item in conceptDetCompleto)
+                {
+                    bool existe = conceptDetSolicitud.Exists(x => x.idConceptoDet == item.idConceptoDet);
+
+                    if (existe)
+                    {
+                        conceptoDetFinal.Add(new SPG25_ConceptoDetalle()
+                        {
+                            idConceptoDet = item.idConceptoDet,
+                            conceptoDet = item.conceptoDet,
+                            consideracion = item.consideracion,
+                            montoMaximo = item.montoMaximo,
+                            existe = 1
+                        }); ;
+                    }
+                    else
+                    {
+                        conceptoDetFinal.Add(new SPG25_ConceptoDetalle()
+                        {
+                            idConceptoDet = item.idConceptoDet,
+                            conceptoDet = item.conceptoDet,
+                            consideracion = item.consideracion,
+                            montoMaximo = item.montoMaximo,
+                            existe = 0
+                        });
+                    }
+                }
+
+
+                entidad.conceptoDetalle = conceptoDetFinal;
 
                 return Json(new
                 {
@@ -763,6 +865,8 @@ namespace TSC_WEB.Controllers
                 return Json(new { entidad = new object(), isRedirect = true, redirectUrl = "/login/index" }, JsonRequestBehavior.AllowGet);
             }
         }
+
+
 
 
         public JsonResult RG_EliminarSolicitud(SPS_Parametro parametro)
@@ -882,7 +986,6 @@ namespace TSC_WEB.Controllers
         }
 
 
-
         [HttpGet]
         public async Task<JsonResult> RG_PendAprob20Det(int idSolicitud)
         {
@@ -972,7 +1075,6 @@ namespace TSC_WEB.Controllers
         }
 
 
-
         [HttpGet]
         public async Task<JsonResult> RG_PendientesAprobacion30(DateTime fechaInicio, DateTime fechaFin, int nivelInterfaz, int idEstado, string codigo)
         {
@@ -1053,9 +1155,6 @@ namespace TSC_WEB.Controllers
         }
 
 
-
-
-
         public JsonResult RG_AprobRech30(SPA_Parametro parametro)
         {
             StatusResponse response = new StatusResponse();
@@ -1088,7 +1187,6 @@ namespace TSC_WEB.Controllers
         }
 
 
-
         [HttpGet]
         public async Task<JsonResult> RG_Historial30(DateTime fechaInicio, DateTime fechaFin, string usuario)
         {
@@ -1113,7 +1211,6 @@ namespace TSC_WEB.Controllers
                 return Json(new { lista = new object(), isRedirect = true, redirectUrl = "/login/index" }, JsonRequestBehavior.AllowGet);
             }
         }
-
 
 
         [HttpGet]
@@ -1143,15 +1240,15 @@ namespace TSC_WEB.Controllers
 
 
         [HttpGet]
-        public async Task<JsonResult> RG_ConceptoDet(int idConceptoCab)
+        public async Task<JsonResult> RG_ConceptoDetalleInsertar(int idConceptoCab)
         {
-            IEnumerable<SPG20_ConceptoDet> lista = null;
+            IEnumerable<SPG20_ConceptoDetalle> lista = null;
 
             if (Session["usuario"] != null)
             {
                 RendicionGastosModel objModel = new RendicionGastosModel();
 
-                lista = await objModel.ConceptosDet(idConceptoCab);
+                lista = await objModel.ConceptosDetalleInsertar(idConceptoCab);
 
                 return Json(new
                 {
@@ -1220,7 +1317,6 @@ namespace TSC_WEB.Controllers
         }
 
 
-
         [HttpGet]
         public async Task<JsonResult> RG_SolBusquedaXCod(string codigo)
         {
@@ -1244,8 +1340,45 @@ namespace TSC_WEB.Controllers
             {
                 return Json(new { entidad = new object(), isRedirect = true, redirectUrl = "/login/index" }, JsonRequestBehavior.AllowGet);
             }
-
         }
+
+
+        [HttpPost]
+        public JsonResult RG_ValidarSolicitudAprobada(SPS_ParametroValid parametro)
+        {
+            StatusResponse response = new StatusResponse();
+
+            if (Session["usuario"] != null)
+            {
+                RendicionGastosModel model = new RendicionGastosModel();
+
+                try
+                {
+                    response = model.ValidacionRendGastos(parametro);
+                }
+                catch (Exception ex)
+                {
+                    response.idResponse = 0;
+                    response.statusResponse = ex.Message;
+                }
+
+                return Json(new
+                {
+                    status = response,
+                    isRedirect = false,
+                    redirectUrl = ""
+
+                }, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json(new { status = response, isRedirect = true, redirectUrl = "/login/index" }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+
+        
+
 
 
         #endregion

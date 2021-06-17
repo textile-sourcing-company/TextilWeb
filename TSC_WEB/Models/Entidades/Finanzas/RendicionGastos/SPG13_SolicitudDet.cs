@@ -12,7 +12,6 @@ namespace TSC_WEB.Models.Entidades.Finanzas.RendicionGastos
         public string fecha { get; set; }
         public string ceco { get; set; }
         public string conceptoDet { get; set; }
-        public string nota { get; set; }
         public string moneda { get; set; }
         public decimal valor { get; set; }
     }

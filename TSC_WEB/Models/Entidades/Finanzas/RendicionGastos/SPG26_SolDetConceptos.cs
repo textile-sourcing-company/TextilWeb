@@ -5,11 +5,9 @@ using System.Web;
 
 namespace TSC_WEB.Models.Entidades.Finanzas.RendicionGastos
 {
-    public class F06_SolicitudDet
+    public class SPG26_SolDetConceptos
     {
         public int idSolicitud { get; set; }
-        public int codCeCo { get; set; }
-        public string codMotivo { get; set; }
-        public decimal valor { get; set; }
+        public int idConceptoDet { get; set; }
     }
 }

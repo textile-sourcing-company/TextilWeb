@@ -5,7 +5,7 @@ using System.Web;
 
 namespace TSC_WEB.Models.Entidades.Finanzas.RendicionGastos
 {
-    public class SPS_Parametro
+    public class SPS_ParametroDet
     {
         public int opcion { get; set; }
         public int idSolicitud { get; set; }
@@ -19,14 +19,15 @@ namespace TSC_WEB.Models.Entidades.Finanzas.RendicionGastos
         public int codCeCo { get; set; }
         public int idConceptoDet { get; set; }
         public decimal valor { get; set; }
+        public string nota { get; set; }
 
         public int secuencia { get; set; }
         public string usuario { get; set; }
         public string usuarioCompleto { get; set; }
         public int nivelInterfaz { get; set; }
-        
+
         public int idTipo { get; set; }
-        public int seleccionadoDet { get; set; }
-        public int idConceptoCab { get; set; }
+
+        public ConceptoDetalle[] conceptoDetArray { get; set; }
     }
 }

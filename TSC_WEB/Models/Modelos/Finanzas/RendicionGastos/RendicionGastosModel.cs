@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using TSC_WEB.Config;
+using TSC_WEB.Models.Entidades.Finanzas;
 using TSC_WEB.Models.Entidades.Finanzas.RendicionGastos;
 
 namespace TSC_WEB.Models.Modelos.Finanzas.RendicionGastos
@@ -31,14 +32,15 @@ namespace TSC_WEB.Models.Modelos.Finanzas.RendicionGastos
 
                 sp_parametros.Add("@codCeCo", parametro.codCeCo, DbType.String, ParameterDirection.Input);
                 sp_parametros.Add("@idConceptoDet", parametro.idConceptoDet, DbType.String, ParameterDirection.Input);
-                sp_parametros.Add("@valor", parametro.valor, DbType.String, ParameterDirection.Input);
-                sp_parametros.Add("@nota", parametro.nota, DbType.String, ParameterDirection.Input);
                 sp_parametros.Add("@secuencia", parametro.secuencia, DbType.Int32, ParameterDirection.Input);
 
                 sp_parametros.Add("@usuario", parametro.usuario, DbType.String, ParameterDirection.Input);
                 sp_parametros.Add("@usuarioCompleto", parametro.usuarioCompleto, DbType.String, ParameterDirection.Input);
                 sp_parametros.Add("@nivelInterfaz", parametro.nivelInterfaz, DbType.Int32, ParameterDirection.Input);
                 sp_parametros.Add("@idTipo", parametro.idTipo, DbType.Int32, ParameterDirection.Input);
+
+                sp_parametros.Add("@seleccionadoDet", parametro.seleccionadoDet, DbType.Int32, ParameterDirection.Input);
+                sp_parametros.Add("@idConceptoCab", parametro.idConceptoCab, DbType.Int32, ParameterDirection.Input);
 
                 return conexion.QuerySingle<StatusResponse>("dbo.uspSetRendicionGastos",
                                                             sp_parametros,
@@ -60,6 +62,22 @@ namespace TSC_WEB.Models.Modelos.Finanzas.RendicionGastos
                 sp_parametros.Add("@valorEntrega", parametro.valorEntrega, DbType.Int32, ParameterDirection.Input);
 
                 return conexion.QuerySingle<StatusResponse>("dbo.uspSetRendicionAprobacion",
+                                                            sp_parametros,
+                                                            commandType: CommandType.StoredProcedure);
+            }
+        }
+
+
+        public StatusResponse ValidacionRendGastos(SPS_ParametroValid parametro)
+        {
+            using (var conexion = DBAccess.ObtenerConexionSQL())
+            {
+                var sp_parametros = new DynamicParameters();
+
+                sp_parametros.Add("@opcion", parametro.opcion, DbType.Int32, ParameterDirection.Input);
+                sp_parametros.Add("@idSolicitud", parametro.idSolicitud, DbType.Int32, ParameterDirection.Input);
+
+                return conexion.QuerySingle<StatusResponse>("dbo.uspSetRendicionGastos",
                                                             sp_parametros,
                                                             commandType: CommandType.StoredProcedure);
             }
@@ -94,7 +112,7 @@ namespace TSC_WEB.Models.Modelos.Finanzas.RendicionGastos
         }
 
 
-        public async Task<IEnumerable<SPG1_ConceptoCab>> ConceptosCab()
+        public async Task<IEnumerable<SPG1_ConceptoCab>> ConceptosCab(int idSolicitud)
         {
             using (var conexion = DBAccess.ObtenerConexionSQL())
             {
@@ -103,7 +121,7 @@ namespace TSC_WEB.Models.Modelos.Finanzas.RendicionGastos
                 sp_parametros.Add("@opcion", 1, DbType.Int32, ParameterDirection.Input);
                 sp_parametros.Add("@nivelInterfaz", 0, DbType.Int32, ParameterDirection.Input);
                 sp_parametros.Add("@usuario", "", DbType.String, ParameterDirection.Input);
-                sp_parametros.Add("@idSolicitud", 0, DbType.Int32, ParameterDirection.Input);
+                sp_parametros.Add("@idSolicitud", idSolicitud, DbType.Int32, ParameterDirection.Input);
                 sp_parametros.Add("@secuencia", 0, DbType.Int32, ParameterDirection.Input);
 
                 sp_parametros.Add("@fechaInicio", "", DbType.String, ParameterDirection.Input);
@@ -199,7 +217,7 @@ namespace TSC_WEB.Models.Modelos.Finanzas.RendicionGastos
         }
 
 
-        public async Task<SPG8_IdSolicitudDet> IdSolicitudDet(int idSolicitud, int secuencia)
+        public async Task<SPG8_SolicitudDetalle> IdSolicitudDetalle(int idSolicitud, int idConceptoCab)
         {
             using (var conexion = DBAccess.ObtenerConexionSQL())
             {
@@ -209,18 +227,18 @@ namespace TSC_WEB.Models.Modelos.Finanzas.RendicionGastos
                 sp_parametros.Add("@nivelInterfaz", 0, DbType.Int32, ParameterDirection.Input);
                 sp_parametros.Add("@usuario", "", DbType.String, ParameterDirection.Input);
                 sp_parametros.Add("@idSolicitud", idSolicitud, DbType.Int32, ParameterDirection.Input);
-                sp_parametros.Add("@secuencia", secuencia, DbType.Int32, ParameterDirection.Input);
+                sp_parametros.Add("@secuencia", 0, DbType.Int32, ParameterDirection.Input);
 
                 sp_parametros.Add("@fechaInicio", "", DbType.String, ParameterDirection.Input);
                 sp_parametros.Add("@fechaFin", "", DbType.String, ParameterDirection.Input);
 
                 sp_parametros.Add("@codigo", "", DbType.String, ParameterDirection.Input);
-                sp_parametros.Add("@idConceptoCab", 0, DbType.Int32, ParameterDirection.Input);
+                sp_parametros.Add("@idConceptoCab", idConceptoCab, DbType.Int32, ParameterDirection.Input);
                 sp_parametros.Add("@idEstado", 0, DbType.Int32, ParameterDirection.Input);
 
-                return await conexion.QueryFirstOrDefaultAsync<SPG8_IdSolicitudDet>("dbo.uspGetRendicionGastos",
-                                                            sp_parametros,
-                                                            commandType: CommandType.StoredProcedure);
+                return await conexion.QueryFirstOrDefaultAsync<SPG8_SolicitudDetalle>("dbo.uspGetRendicionGastos",
+                                                                sp_parametros,
+                                                                commandType: CommandType.StoredProcedure);
             }
         }
 
@@ -500,7 +518,7 @@ namespace TSC_WEB.Models.Modelos.Finanzas.RendicionGastos
         }
 
 
-        public async Task<IEnumerable<SPG20_ConceptoDet>> ConceptosDet(int idConceptoCab)
+        public async Task<IEnumerable<SPG20_ConceptoDetalle>> ConceptosDetalleInsertar(int idConceptoCab)
         {
             using (var conexion = DBAccess.ObtenerConexionSQL())
             {
@@ -519,9 +537,9 @@ namespace TSC_WEB.Models.Modelos.Finanzas.RendicionGastos
                 sp_parametros.Add("@idConceptoCab", idConceptoCab, DbType.Int32, ParameterDirection.Input);
                 sp_parametros.Add("@idEstado", 0, DbType.Int32, ParameterDirection.Input);
 
-                return await conexion.QueryAsync<SPG20_ConceptoDet>("dbo.uspGetRendicionGastos",
-                                                                    sp_parametros,
-                                                                    commandType: CommandType.StoredProcedure);
+                return await conexion.QueryAsync<SPG20_ConceptoDetalle>("dbo.uspGetRendicionGastos",
+                                                                sp_parametros,
+                                                                commandType: CommandType.StoredProcedure);
             }
         }
 
@@ -579,7 +597,6 @@ namespace TSC_WEB.Models.Modelos.Finanzas.RendicionGastos
         }
 
 
-
         public async Task<SPG23_BusquedaXCod> SolBusquedaXCod(string codigo)
         {
             using (var conexion = DBAccess.ObtenerConexionSQL())
@@ -604,6 +621,60 @@ namespace TSC_WEB.Models.Modelos.Finanzas.RendicionGastos
                                                                 commandType: CommandType.StoredProcedure);
             }
         }
+
+
+
+        public List<SPG25_ConceptoDetalle> ConceptosDetalleVisualizar(int idConceptoCab)
+        {
+            using (var conexion = DBAccess.ObtenerConexionSQL())
+            {
+                var sp_parametros = new DynamicParameters();
+
+                sp_parametros.Add("@opcion", 25, DbType.Int32, ParameterDirection.Input);
+                sp_parametros.Add("@nivelInterfaz", 0, DbType.Int32, ParameterDirection.Input);
+                sp_parametros.Add("@usuario", "", DbType.String, ParameterDirection.Input);
+                sp_parametros.Add("@idSolicitud", idConceptoCab, DbType.Int32, ParameterDirection.Input);
+                sp_parametros.Add("@secuencia", 0, DbType.Int32, ParameterDirection.Input);
+
+                sp_parametros.Add("@fechaInicio", "", DbType.String, ParameterDirection.Input);
+                sp_parametros.Add("@fechaFin", "", DbType.String, ParameterDirection.Input);
+
+                sp_parametros.Add("@codigo", "", DbType.String, ParameterDirection.Input);
+                sp_parametros.Add("@idConceptoCab", idConceptoCab, DbType.Int32, ParameterDirection.Input);
+                sp_parametros.Add("@idEstado", 0, DbType.Int32, ParameterDirection.Input);
+
+                return conexion.Query<SPG25_ConceptoDetalle>("dbo.uspGetRendicionGastos",
+                                                            sp_parametros,
+                                                            commandType: CommandType.StoredProcedure).ToList();
+            }
+        }
+
+
+        public List<SPG26_SolDetConceptos> SolicitudDetalleConcepto(int idSolicitud, int idConceptoCab)
+        {
+            using (var conexion = DBAccess.ObtenerConexionSQL())
+            {
+                var sp_parametros = new DynamicParameters();
+
+                sp_parametros.Add("@opcion", 26, DbType.Int32, ParameterDirection.Input);
+                sp_parametros.Add("@nivelInterfaz", 0, DbType.Int32, ParameterDirection.Input);
+                sp_parametros.Add("@usuario", "", DbType.String, ParameterDirection.Input);
+                sp_parametros.Add("@idSolicitud", idSolicitud, DbType.Int32, ParameterDirection.Input);
+                sp_parametros.Add("@secuencia", 0, DbType.Int32, ParameterDirection.Input);
+
+                sp_parametros.Add("@fechaInicio", "", DbType.String, ParameterDirection.Input);
+                sp_parametros.Add("@fechaFin", "", DbType.String, ParameterDirection.Input);
+
+                sp_parametros.Add("@codigo", "", DbType.String, ParameterDirection.Input);
+                sp_parametros.Add("@idConceptoCab", idConceptoCab, DbType.Int32, ParameterDirection.Input);
+                sp_parametros.Add("@idEstado", 0, DbType.Int32, ParameterDirection.Input);
+
+                return conexion.Query<SPG26_SolDetConceptos>("dbo.uspGetRendicionGastos",
+                                                        sp_parametros,
+                                                        commandType: CommandType.StoredProcedure).ToList();
+            }
+        }
+
 
     }
 }
