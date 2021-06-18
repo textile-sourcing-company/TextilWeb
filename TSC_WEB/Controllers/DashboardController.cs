@@ -114,6 +114,48 @@ namespace TSC_WEB.Controllers
         }
 
 
+        // LOGIN EXTERNO
+        [HttpPost]
+        public ActionResult LoginExterno(string usuario, string clave, int idempresa, string controlador, string vista)
+        {
+            UsuariosEntidad objUsuariosELogin = new UsuariosEntidad();
+
+            objUsuariosELogin = objUsuariosM.Login(usuario, clave, false);
+
+            if (objUsuariosELogin.usuario != null)
+            {
+                objUsuariosELogin = objUsuariosM.Login(usuario, clave, true);
+                if (objUsuariosELogin.usuario != null)
+                {
+                    Session["usuario"] = objUsuariosELogin.usuario;
+                    Session["nombre"] = objUsuariosELogin.nombre;
+                    Session["cod_funcionario"] = objUsuariosELogin.cod_funcionario.ToString();
+                    Session["codigo_cargo"] = objUsuariosELogin.codigo_cargo.ToString();
+                    Session["empresa"] = idempresa;
+                    //CARGANDO LOS MODULOS CORRESPONDIENTES POR USUARIO
+
+                    //Session["modulos"] = objModulosM.ListarModulos(objUsuariosELogin.codigo_cargo);
+                    Session["modulos_new"] = objModulosM.ListarModulos_New(1, objUsuariosELogin.codigo_cargo);
+                    Session["submodulos_new"] = objModulosM.ListarModulos_New(2, objUsuariosELogin.codigo_cargo);
+
+
+                    return RedirectToAction(vista, controlador,new  {
+                         hidemenu = "true"
+                    });
+
+                    //return Json(new { result = true, mensaje = "Acceso concedido" });
+                }
+                else
+                {
+                    return Json(new { result = false, mensaje = "Clave incorrecta" });
+                }
+            }
+            else
+            {
+                return Json(new { result = false, mensaje = "Usuario no existe" });
+            }
+        }
+
 
         #endregion
     }
