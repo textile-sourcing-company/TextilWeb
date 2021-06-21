@@ -195,6 +195,13 @@ namespace TSC_WEB.Models.Entidades.Corte.LiquidacionTela.reporteliquidacion
         public double anchototalexplosion { get; set; }
         public double densidadcotizacion { get; set; }
         public double densidadexplosion { get; set; }
+        public double densidadexplosion_gramos { 
+            get
+            {
+                return densidadexplosion != 0 ? densidadexplosion / 1000 : 0;
+            }
+        }
+
         public double consumolinealcotizacion { get; set; }
         public double consumolinealexplosion { get; set; }
         public double consumolinealprogramado { get; set; }
