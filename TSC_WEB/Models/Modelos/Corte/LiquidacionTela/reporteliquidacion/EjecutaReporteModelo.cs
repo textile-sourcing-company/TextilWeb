@@ -387,7 +387,7 @@ namespace TSC_WEB.Models.Modelos.Corte.LiquidacionTela.reporteliquidacion
                 merge("BG2:BG2", "Diferencia %", true, 6, Color.White, true, true, true, 9, 59, 8.29);
 
                 // DATOS DE TELA
-                merge("BH1:BV1", "Datos de tela", true, 1, Color.White);
+                merge("BH1:BR1", "Datos de tela", true, 1, Color.White);
                 merge("BH2:BH2", "Ancho Total Cotizado (m)", true, 1, Color.White, true, true, true, 9, 60, 11.86);
                 merge("BI2:BI2", "Ancho Total de explosión (m)", true, 1, Color.White, true, true, true, 9, 61, 11.86);
                 merge("BJ2:BJ2", "Ancho Total programado (m)", true, 1, Color.White, true, true, true, 9, 62, 11.86);
@@ -399,10 +399,10 @@ namespace TSC_WEB.Models.Modelos.Corte.LiquidacionTela.reporteliquidacion
                 merge("BP2:BP2", "Densidad Programada", true, 1, Color.White, true, true, true, 9, 68, 11.14);
                 merge("BQ2:BQ2", "Densidad Real", true, 1, Color.White, true, true, true, 9, 69, 8.29);
                 merge("BR2:BR2", "Variación de densidad (prog. vs real)", true, 1, Color.White, true, true, true, 9, 70, 15.71);
-                merge("BS2:BS2", "Consumo lineal - Cotización", true, 1, Color.White, true, true, true, 9, 71, 13.71);
-                merge("BT2:BT2", "Consumo lineal - Explosión", true, 1, Color.White, true, true, true, 9, 72, 13.71);
-                merge("BU2:BU2", "Consumo lineal - Programado", true, 1, Color.White, true, true, true, 9, 73, 13.71);
-                merge("BV2:BV2", "Consumo lineal - Real", true, 1, Color.White, true, true, true, 9, 74, 13.71);
+                //merge("BS2:BS2", "Consumo lineal - Cotización", true, 1, Color.White, true, true, true, 9, 71, 13.71);
+                //merge("BT2:BT2", "Consumo lineal - Explosión", true, 1, Color.White, true, true, true, 9, 72, 13.71);
+                //merge("BU2:BU2", "Consumo lineal - Programado", true, 1, Color.White, true, true, true, 9, 73, 13.71);
+                //merge("BV2:BV2", "Consumo lineal - Real", true, 1, Color.White, true, true, true, 9, 74, 13.71);
 
                 // ALTURA 
                 workSheet.Row(2).Height = 24.75;
@@ -461,7 +461,7 @@ namespace TSC_WEB.Models.Modelos.Corte.LiquidacionTela.reporteliquidacion
                     cells(i, 35, item.totalmermatendidorealpor, Color.White, Color.Black, false, true, true);
 
                     // TELA ADICIONAL
-                    cells(i, 36, item.adicional, Color.White, Color.Black, false, true, false, 2);
+                    cells(i, 36, item.telaadicional, Color.White, Color.Black, false, true, false, 2);
                     cells(i, 37, item.motivoadicional, Color.White, Color.Black, false, true);
 
                     // DEVOLUCION DE TELA
@@ -488,7 +488,7 @@ namespace TSC_WEB.Models.Modelos.Corte.LiquidacionTela.reporteliquidacion
                     cells(i, 54, item.totalmermacorte, Color.White, Color.Black, false, true, false, 2);
                 
                     // EFICIENCIA DE TIZADO
-                    cells(i, 55, item.eficienciacotizada, Color.White, Color.Black, false, true,true);
+                    cells(i, 55, item.eficienciacotizada_new, Color.White, Color.Black, false, true,true);
                     cells(i, 56, item.eficienciaexplosion, Color.White, Color.Black, false, true,true);
                     cells(i, 57, item.eficienciaprogramadatizados, Color.White, Color.Black, false, true,true);
                     cells(i, 58, item.eficienciarealtizados, Color.White, Color.Black, false, true,true);
@@ -501,15 +501,15 @@ namespace TSC_WEB.Models.Modelos.Corte.LiquidacionTela.reporteliquidacion
                     cells(i, 63, item.anchototalreal, Color.White, Color.Black, false, true, false, 2);
                     cells(i, 64, item.difanchproreal, Color.White, Color.Black, false, true, false, 2);
                     cells(i, 65, item.variacionancho, Color.White, Color.Black, false, true,true);
-                    cells(i, 66, item.densidadcotizacion, Color.White, Color.Black, false, true, false, 3);
+                    cells(i, 66, item.densidadcotizacion_gramos, Color.White, Color.Black, false, true, false, 3);
                     cells(i, 67, item.densidadexplosion_gramos, Color.White, Color.Black, false, true, false, 3);
                     cells(i, 68, item.densidadprogramada, Color.White, Color.Black, false, true, false, 3);
                     cells(i, 69, item.densidadreal, Color.White, Color.Black, false, true, false, 3);
                     cells(i, 70, item.variaciondedensidad, Color.White, Color.Black, false, true, true);
-                    cells(i, 71, item.consumolinealcotizacion, Color.White, Color.Black, false, true, false, 4);
-                    cells(i, 72, item.consumolinealexplosion, Color.White, Color.Black, false, true, false, 4);
-                    cells(i, 73, item.consumolinealprogramado, Color.White, Color.Black, false, true, false, 4);
-                    cells(i, 74, item.consumolinealreal, Color.White, Color.Black, false, true, false, 4);
+                    //cells(i, 71, item.consumolinealcotizacion, Color.White, Color.Black, false, true, false, 4);
+                    //cells(i, 72, item.consumolinealexplosion, Color.White, Color.Black, false, true, false, 4);
+                    //cells(i, 73, item.consumolinealprogramado, Color.White, Color.Black, false, true, false, 4);
+                    //cells(i, 74, item.consumolinealreal, Color.White, Color.Black, false, true, false, 4);
 
 
                     i++;

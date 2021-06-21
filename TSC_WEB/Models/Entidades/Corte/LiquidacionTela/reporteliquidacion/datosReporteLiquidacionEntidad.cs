@@ -190,10 +190,24 @@ namespace TSC_WEB.Models.Entidades.Corte.LiquidacionTela.reporteliquidacion
         public double devolucionerp { get; set; }
         public string codigoerp { get; set; }
         public double eficienciacotizada { get; set; }
+        public double eficienciacotizada_new { 
+            get
+            {
+                return eficienciacotizada > 0 ? eficienciacotizada / 100 : 0;
+            }
+        }
+
         public double eficienciaexplosion { get; set; }
         public double anchototalcotizado { get; set; }
         public double anchototalexplosion { get; set; }
         public double densidadcotizacion { get; set; }
+        public double densidadcotizacion_gramos
+        {
+            get
+            {
+                return densidadcotizacion != 0 ? densidadcotizacion / 1000 : 0;
+            }
+        }
         public double densidadexplosion { get; set; }
         public double densidadexplosion_gramos { 
             get
