@@ -118,11 +118,11 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td>@Model.DataGeneral.telaprogramado</td>
+                        <td>@Model.DataGeneral.telaprogramado_new</td>
                         <td>@Model.DataGeneral.telareal</td>
                         <td>@Math.Round(Model.DataGeneral.teladiferencia, 2)</td>
-                        <td>@Math.Round((Model.DataGeneral.teladiferencia / Model.DataGeneral.telaprogramado * 100), 2)%</td>
-                        <td>@Math.Round((Model.DataGeneral.telareal / Model.DataGeneral.telaprogramado * 100), 2)%</td>
+                        <td>@Math.Round((Model.DataGeneral.teladiferencia / Model.DataGeneral.telaprogramado_new * 100), 2)%</td>
+                        <td>@Math.Round((Model.DataGeneral.telareal / Model.DataGeneral.telaprogramado_new * 100), 2)%</td>
 
                     </tr>
                 </tbody>

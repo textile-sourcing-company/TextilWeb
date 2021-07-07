@@ -106,3 +106,8 @@ input[type=number] {
 select{
     font-size:100% !important;
 }
+
+/* ALINEAR VERTECAL */ 
+.align-vertical{
+    vertical-align:middle !important;
+}

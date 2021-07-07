@@ -1,0 +1,156 @@
+﻿@model TSC_WEB.Models.Entidades.Corte.LiquidacionRectilineos.LiquidacionRectilineosEntidad
+
+@{
+    ViewBag.Title = "Liquidación de Rectilineos";
+    ViewBag.Modulo = "Corte";
+    Layout = "~/Views/Plantillas/_Layout.cshtml";
+
+    string busqueda;
+    int cantidadtallas = Model.Tallas.Count;
+
+    try
+    {
+        busqueda = !string.IsNullOrEmpty(Request.Params["busqueda"]) ? PageContext.Page.Request.Params["busqueda"].ToString() : "";
+    }
+    catch
+    {
+        busqueda = "";
+    }
+
+}
+
+@* ESTILOS *@
+@section style{
+
+    <style>
+        .tablefixed{
+            table-layout:fixed;
+        }
+
+        .tablefixed th, .tablefixed td {
+            border: 1px solid #605e5e;
+        }
+
+        #theadtr th {
+            width: 130px;
+            overflow: auto;
+            border: 1px solid;
+        }
+    </style>
+
+}
+
+@*  BUSQUEDA *@
+<div class="card card-outline card-primary">
+    <div class="card-body">
+        <form autocomplete="off" class="row" method="post">
+
+            <div class="col-md-4">
+                <label for="">Ficha:</label>
+
+                <div class="input-group mb-3">
+                    <input type="number" class="form-control form-control-sm" name="txtficha" required />
+                    <div class="input-group-append">
+                        <button type="submit" class="btn btn-sm btn-primary">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <label for="">Combo:</label>
+                <input type="text" class="form-control form-control-sm" name="txtcombo" disabled />
+            </div>
+
+            <div class="col-md-4">
+                <label for="">Part. Rectilineo:</label>
+                <input type="text" class="form-control form-control-sm" name="txtpartidarectilineo" disabled />
+            </div>
+
+            <div class="col-md-4">
+                <label for="">Estilo TSC:</label>
+                <input type="text" class="form-control form-control-sm" name="txtestilo" disabled />
+            </div>
+
+            <div class="col-md-4">
+                <label for="">Pedido:</label>
+                <input type="text" class="form-control form-control-sm" disabled />
+            </div>
+
+            <div class="col-md-4">
+                <label for="">Estilo Cliente:</label>
+                <input type="text" class="form-control form-control-sm" disabled />
+            </div>
+
+            @* BUSQUEDA *@
+            <input type="hidden" name="busqueda" value="busqueda">
+
+        </form>
+    </div>
+</div>
+
+
+@* INFORMACION GENERAL DE LA PARTIDA *@
+<div class="card card-outline card-primary">
+    <div class="card-header text-center">
+        <label class="card-title">UNIDADES POR TALLA - PARTIDA #12373-21</label>
+    </div>
+    <div class="card-body">
+        <table class="table table-bordered table-sm tablainput tablefixed">
+            <thead class="text-center bg-danger">
+                @*<tr>
+                        <th rowspan="2"></th>
+                        <th colspan="@cantidadtallas">UNIDADES POR TALLA - PARTIDA #12373-21</th>
+                        <th rowspan="2" class="align-vertical">TOTAL</th>
+                    </tr>*@
+                <tr class="theadtr">
+                    <th></th>
+                    @foreach (var item in Model.Tallas)
+                    {
+                        <th>@item.talla</th>
+                    }
+                    <th class="align-vertical">TOTAL</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th>Cantidad 1ra</th>
+                    @foreach (var item in Model.Tallas)
+                    {
+                        <td> <input type="text" class="inputtabla"> </td>
+                    }
+                    @* TOTALES *@
+                    <td> <input type="text" class="inputtabla" readonly> </td>
+                </tr>
+                <tr>
+                    <th>Cantidad 2da</th>
+                    @foreach (var item in Model.Tallas)
+                    {
+                        <td> <input type="text" class="inputtabla"> </td>
+                    }
+                    @* TOTALES *@
+                    <td> <input type="text" class="inputtabla" readonly> </td>
+                </tr>
+                <tr>
+                    <th>Total Unidades</th>
+                    @foreach (var item in Model.Tallas)
+                    {
+                        <td> <input type="text" class="inputtabla"> </td>
+                    }
+                    @* TOTALES *@
+                    <td> <input type="text" class="inputtabla" readonly> </td>
+                </tr>
+                <tr>
+                    <th>Peso Bruto total</th>
+                    @foreach (var item in Model.Tallas)
+                    {
+                        <td> <input type="text" class="inputtabla"> </td>
+                    }
+                    @* TOTALES *@
+                    <td> <input type="text" class="inputtabla" readonly> </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
