@@ -58,6 +58,8 @@ namespace TSC_WEB.Models.Modelos.Corte.LiquidacionTela.reporteliquidacion
             objDataGeneral.densidadprogramado = Convert.ToDouble(resultado.Tables[0].Rows[0]["densidadprogramado"].ToString());
             objDataGeneral.densidadreal = Convert.ToDouble(resultado.Tables[0].Rows[0]["densidadreal"].ToString());
             objDataGeneral.telaprogramado = Convert.ToDouble(resultado.Tables[0].Rows[0]["telaprogramado"].ToString());
+            objDataGeneral.telaprogramado_new = Convert.ToDouble(resultado.Tables[0].Rows[0]["telaprogramado_new"].ToString());
+
             objDataGeneral.telareal = Convert.ToDouble(resultado.Tables[0].Rows[0]["telareal"].ToString());
             objDataGeneral.eficienciatizadosprogramado = Convert.ToDouble(resultado.Tables[0].Rows[0]["eficienciatizadosprogramado"].ToString());
             objDataGeneral.devolucionesprimera = Convert.ToDouble(resultado.Tables[0].Rows[0]["devolucionesprimera"].ToString());
