@@ -540,8 +540,9 @@
     <Compile Include="Models\Entidades\Contabilidad\ReporteGuiasContaEntidad.cs" />
     <Compile Include="Models\Entidades\ControlInterno\Liquidacion\FichasPendientesEntidad.cs" />
     <Compile Include="Models\Entidades\ControlInterno\ReporteStock\ReporteStock.cs" />
+    <Compile Include="Models\Entidades\Corte\LiquidacionRectilineos\FichaDatos.cs" />
     <Compile Include="Models\Entidades\Corte\LiquidacionRectilineos\LiquidacionRectilineosEntidad.cs" />
-    <Compile Include="Models\Entidades\Corte\LiquidacionRectilineos\TallasEntidad.cs" />
+    <Compile Include="Models\Entidades\Corte\LiquidacionRectilineos\FichasTallasEntidad.cs" />
     <Compile Include="Models\Entidades\Corte\LiquidacionTela\aperturaficha\AperturaFichaEntidad.cs" />
     <Compile Include="Models\Entidades\Corte\LiquidacionTela\CaidasEntidad.cs" />
     <Compile Include="Models\Entidades\Corte\LiquidacionTela\Corte_001Entidad.cs" />

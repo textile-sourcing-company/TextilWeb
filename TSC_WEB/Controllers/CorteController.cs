@@ -130,12 +130,15 @@ namespace TSC_WEB.Controllers
         {
             if (Session["usuario"] != null)
             {
-                var response = objRectilineosM.getTallasFicha(ficha);
+                var datosficha      = objRectilineosM.getDatosFicha(1,ficha);
+                var fichastallas    = objRectilineosM.getTallasFicha(2, ficha);
+
 
                 return View(
                     new LiquidacionRectilineosEntidad
                     {
-                        Tallas = response
+                        FichaCabecera   = datosficha,
+                        FichaTallas     = fichastallas
                     }
                 );
             }
