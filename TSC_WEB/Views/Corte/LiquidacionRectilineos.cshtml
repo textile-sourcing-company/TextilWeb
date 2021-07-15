@@ -1,12 +1,40 @@
 ﻿@model TSC_WEB.Models.Entidades.Corte.LiquidacionRectilineos.LiquidacionRectilineosEntidad
 
+@using TSC_WEB.Models.Entidades.Corte.LiquidacionRectilineos;
+
+
 @{
     ViewBag.Title = "Liquidación de Rectilineos";
     ViewBag.Modulo = "Corte";
     Layout = "~/Views/Plantillas/_Layout.cshtml";
 
     string busqueda;
-    int cantidadtallas = Model.Tallas.Count;
+    int cantidadtallas = Model.FichaTallas.Count;
+    int totaltallasprimera = 0;
+    int totaltallasfichas = 0;
+
+    var tallas = cantidadtallas > 0 ? Model.FichaTallas.GroupBy(std => std.talla).Select(cl => new FichasTallasEntidad
+    {
+        talla = cl.First().talla
+
+    }).ToList() : new List<FichasTallasEntidad> { };
+
+    var tallascantidadprimera = cantidadtallas > 0 ?
+
+    Model.FichaTallas.GroupBy(l => l.talla).Select(cl => new FichasTallasEntidad
+    {
+        talla = cl.First().talla,
+        cantidad = cl.Sum(c => c.cantidad)
+    }).ToList() : new List<FichasTallasEntidad>();
+
+    var fichastallas = cantidadtallas > 0 ?
+    Model.FichaTallas.GroupBy(l => l.ficha).Select(cl => new FichasTallasEntidad
+    {
+        ficha = cl.First().ficha,
+        
+    }).ToList() : new List<FichasTallasEntidad>();
+
+
 
     try
     {
@@ -23,13 +51,13 @@
 @section style{
 
     <style>
-        .tablefixed{
-            table-layout:fixed;
+        .tablefixed {
+            table-layout: fixed;
         }
 
-        .tablefixed th, .tablefixed td {
-            border: 1px solid #605e5e;
-        }
+            .tablefixed th, .tablefixed td {
+                border: 1px solid #605e5e;
+            }
 
         #theadtr th {
             width: 130px;
@@ -49,7 +77,7 @@
                 <label for="">Ficha:</label>
 
                 <div class="input-group mb-3">
-                    <input type="number" class="form-control form-control-sm" name="txtficha" required />
+                    <input type="number" class="form-control form-control-sm" min="0" name="ficha" value="@Model.FichaCabecera.ficha" required autofocus />
                     <div class="input-group-append">
                         <button type="submit" class="btn btn-sm btn-primary">
                             <i class="fas fa-search"></i>
@@ -60,27 +88,27 @@
 
             <div class="col-md-4">
                 <label for="">Combo:</label>
-                <input type="text" class="form-control form-control-sm" name="txtcombo" disabled />
+                <input type="text" class="form-control form-control-sm" name="txtcombo" value="@Model.FichaCabecera.combo" disabled />
             </div>
 
             <div class="col-md-4">
                 <label for="">Part. Rectilineo:</label>
-                <input type="text" class="form-control form-control-sm" name="txtpartidarectilineo" disabled />
+                <input type="text" class="form-control form-control-sm" name="txtpartidarectilineo" value="@Model.FichaCabecera.partidarectilineo" disabled />
             </div>
 
             <div class="col-md-4">
                 <label for="">Estilo TSC:</label>
-                <input type="text" class="form-control form-control-sm" name="txtestilo" disabled />
+                <input type="text" class="form-control form-control-sm" name="txtestilotsc" disabled value="@Model.FichaCabecera.estilotsc" />
             </div>
 
             <div class="col-md-4">
                 <label for="">Pedido:</label>
-                <input type="text" class="form-control form-control-sm" disabled />
+                <input type="text" class="form-control form-control-sm" disabled value="@Model.FichaCabecera.pedidos" />
             </div>
 
             <div class="col-md-4">
                 <label for="">Estilo Cliente:</label>
-                <input type="text" class="form-control form-control-sm" disabled />
+                <input type="text" class="form-control form-control-sm" disabled value="@Model.FichaCabecera.estilocliente" />
             </div>
 
             @* BUSQUEDA *@
@@ -94,19 +122,14 @@
 @* INFORMACION GENERAL DE LA PARTIDA *@
 <div class="card card-outline card-primary">
     <div class="card-header text-center">
-        <label class="card-title">UNIDADES POR TALLA - PARTIDA #12373-21</label>
+        <label class="card-title">UNIDADES POR TALLA - PARTIDA #@Model.FichaCabecera.partidarectilineo</label>
     </div>
     <div class="card-body">
         <table class="table table-bordered table-sm tablainput tablefixed">
             <thead class="text-center bg-danger">
-                @*<tr>
-                        <th rowspan="2"></th>
-                        <th colspan="@cantidadtallas">UNIDADES POR TALLA - PARTIDA #12373-21</th>
-                        <th rowspan="2" class="align-vertical">TOTAL</th>
-                    </tr>*@
                 <tr class="theadtr">
                     <th></th>
-                    @foreach (var item in Model.Tallas)
+                    @foreach (var item in tallas)
                     {
                         <th>@item.talla</th>
                     }
@@ -114,43 +137,248 @@
                 </tr>
             </thead>
             <tbody>
+
                 <tr>
                     <th>Cantidad 1ra</th>
-                    @foreach (var item in Model.Tallas)
+                    @foreach (var item in tallascantidadprimera)
                     {
-                        <td> <input type="text" class="inputtabla"> </td>
+                        totaltallasprimera += item.cantidad;
+                        <td> <input type="text" class="inputtabla" value="@item.cantidad" readonly> </td>
                     }
-                    @* TOTALES *@
-                    <td> <input type="text" class="inputtabla" readonly> </td>
+
+                    <td> <input type="text" class="inputtabla" value="@totaltallasprimera" readonly></td>
                 </tr>
-                <tr>
-                    <th>Cantidad 2da</th>
-                    @foreach (var item in Model.Tallas)
-                    {
-                        <td> <input type="text" class="inputtabla"> </td>
-                    }
-                    @* TOTALES *@
-                    <td> <input type="text" class="inputtabla" readonly> </td>
-                </tr>
-                <tr>
-                    <th>Total Unidades</th>
-                    @foreach (var item in Model.Tallas)
-                    {
-                        <td> <input type="text" class="inputtabla"> </td>
-                    }
-                    @* TOTALES *@
-                    <td> <input type="text" class="inputtabla" readonly> </td>
-                </tr>
-                <tr>
-                    <th>Peso Bruto total</th>
-                    @foreach (var item in Model.Tallas)
-                    {
-                        <td> <input type="text" class="inputtabla"> </td>
-                    }
-                    @* TOTALES *@
-                    <td> <input type="text" class="inputtabla" readonly> </td>
-                </tr>
+
+                @*<tr>
+                        <th>Cantidad 2da</th>
+                        @foreach (var item in Model.FichaTallas)
+                        {
+                            <td> <input type="text" class="inputtabla"> </td>
+                        }
+                         TOTALES
+                        <td> <input type="text" class="inputtabla" readonly> </td>
+                    </tr>
+                    <tr>
+                        <th>Total Unidades</th>
+                        @foreach (var item in Model.FichaTallas)
+                        {
+                            <td> <input type="text" class="inputtabla"> </td>
+                        }
+                         TOTALES
+                        <td> <input type="text" class="inputtabla" readonly> </td>
+                    </tr>
+                    <tr>
+                        <th>Peso Bruto total</th>
+                        @foreach (var item in Model.FichaTallas)
+                        {
+                            <td> <input type="text" class="inputtabla"> </td>
+                        }
+                         TOTALES
+                        <td> <input type="text" class="inputtabla" readonly> </td>
+                    </tr> *@
             </tbody>
         </table>
     </div>
 </div>
+
+
+@* ARMAMOS FICHAS *@
+
+
+
+    @foreach (var fichas in fichastallas)
+    {
+
+        <form  class="card card-outline card-primary formulariosfichas" >
+
+            <div class="card-header text-center">
+
+                <label class="card-title">FICHA @fichas.ficha</label>
+                <div class="card-tools">
+                    <button type="submit" class="btn btn-sm btn-primary" >
+                        <i class="fas fa-save"></i>
+                        Guardar
+                    </button>
+
+                </div>
+            </div>
+            <div class="card-body">
+
+                @*ID RECTILINEO*@
+                <input type="hidden" name="ficha" value="@Model.FichaCabecera.idrectilineohead">
+
+                @*FICHA*@
+                <input type="hidden" name="ficha" value="@fichas.ficha">
+
+
+
+                <table class="table table-bordered table-sm tablainput tablefixed">
+                    @*CABECERA*@
+                    <thead class="text-center bg-danger">
+                        <tr class="theadtr">
+                            <th></th>
+                            @foreach (var item in tallas)
+                            {
+                                <th>@item.talla</th>
+                            }
+                            <th class="align-vertical">TOTAL</th>
+                        </tr>
+                    </thead>
+                    @*CUERPO*@
+                    <tbody>
+
+                        @*PROGRAMADO*@
+                        <tr>
+                            <th>Programado</th>
+
+                            @{
+                                totaltallasfichas = 0;
+                                var tfichas = (
+
+                                    from t in tallas
+                                    join ft in Model.FichaTallas on t.talla equals ft.talla into lista
+                                    from pc in lista.DefaultIfEmpty()
+                                    select new
+                                    {
+                                        talla = pc.talla,
+                                        ficha = pc.ficha,
+                                        cantidad = pc.cantidad
+                                    }
+                                ).Where(obj => obj.ficha == fichas.ficha).ToList();
+                            }
+
+
+                            @foreach (var talla in tallas)
+                            {
+                                var response = tfichas.Where(obj =>
+                                    obj.talla == talla.talla
+                                ).ToList();
+
+                                if (response.Count == 0)
+                                {
+                                    <td> <input type="text" class="inputtabla" value="0" readonly> </td>
+                                }
+                                else
+                                {
+                                    totaltallasfichas += response[0].cantidad;
+                                    var clase = "programado_" + fichas.ficha + "_" + talla.talla;
+
+                                    <td> <input type="text" class="inputtabla programado @clase" data-talla="@talla.talla" data-ficha="@fichas.ficha" value="@response[0].cantidad"> </td>
+                                }
+
+                            }
+
+                            <td> <input type="text" class="inputtabla" value="@totaltallasfichas" readonly></td>
+                        </tr>
+
+                        @*MERMA PROGRAMADA*@
+                        <tr>
+                            <th>Merma Programada</th>
+                            @foreach (var item in tallas)
+                            {
+                                <td>0</td>
+                            }
+                            <td></td>
+                        </tr>
+
+                        @*REAL PRIMERA*@
+                        <tr>
+                            <th>Real (1ra)</th>
+                            @foreach (var item in tallas)
+                            {
+                                <td> <input type="number" min="0" max="10" class="inputtabla realesprimera" data-talla="@item.talla" data-ficha="@fichas.ficha"> </td>
+
+                            }
+                            <td></td>
+                        </tr>
+
+                        @*PENDIENTE*@
+                        <tr>
+                            <th>Pendiente</th>
+                            @foreach (var item in tallas)
+                            {
+                                var clase = "pendientes" + fichas.ficha + "_" + item.talla;
+                                <td> <input type="text" class="inputtabla pendientes @clase" data-talla="@item.talla" data-ficha="@fichas.ficha" value="0" readonly> </td>
+                            }
+                            <td></td>
+                        </tr>
+
+                        @*PESO NETO TOTAL*@
+                        <tr>
+                            <th>Peso Neto total</th>
+                            @foreach (var item in tallas)
+                            {
+                                <td>0</td>
+                            }
+                            <td></td>
+                        </tr>
+
+                    </tbody>
+                </table>
+
+            </div>
+        
+        </form>
+
+    }
+
+
+
+
+
+
+
+
+@section scripts{
+
+
+    <script>
+
+        let formulariosfichas = document.getElementsByClassName("formulariosfichas");
+
+        //loaD
+        window.addEventListener('load', () => {
+
+            for (let item of formulariosfichas) {
+
+                item.addEventListener('submit', () => {
+
+                });
+            }
+
+        });
+
+
+        // FUNCION PARA CALCULAR LOS PENDIENTES
+        $(".realesprimera").keyup(function () {
+
+            let real    = $(this).val();
+            let ficha   = $(this).data("ficha");
+            let talla = $(this).data("talla");
+
+            let programado = $(`.programado_${ficha}_${talla}`).val();
+
+            real = real == "" ? 0 : real;
+            real = !isNaN(real) ? parseFloat(real) : 0;
+            programado = parseFloat(programado);
+
+            let resto = programado - real;;
+            if (resto >= 0) {
+                $(`.pendientes${ficha}_${talla}`).val(resto);
+            } else {
+                $(`.pendientes${ficha}_${talla}`).val(0);
+            }
+
+
+
+        });
+
+
+        // FUNCION PARA REGISTRAR LAS FICHAS
+        
+
+
+    </script>
+
+
+}

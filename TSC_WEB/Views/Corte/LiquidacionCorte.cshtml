@@ -842,15 +842,15 @@
                             if(obj.u_registro == '@Session["usuario"]'){
                                 rows += `
                                 <td class='text-center'>
-                                    <a href='#' class='editar' data-id='${obj.id}' data-tono='${obj.tono}' data-celula='${obj.celula}' data-etapas='${obj.ETAPAS}'  data-numpanos='${obj.NUM_PANOS}'  data-largopanos='${obj.LARGO_PANOS}'  data-pesopanos='${obj.PESO_PANOS}'  data-anchotelareal='${obj.ANCHO_TELA_REAL}'  data-kxetapas='${obj.KXETAPAS}' >
+                                    <button  class='btn btn-primary btn-sm editar' data-id='${obj.id}' data-tono='${obj.tono}' data-celula='${obj.celula}' data-etapas='${obj.ETAPAS}'  data-numpanos='${obj.NUM_PANOS}'  data-largopanos='${obj.LARGO_PANOS}'  data-pesopanos='${obj.PESO_PANOS}'  data-anchotelareal='${obj.ANCHO_TELA_REAL}'  data-kxetapas='${obj.KXETAPAS}' >
                                         <i class='fas fa-edit'></i>
-                                    </a>
-                                    <a href='#' class='eliminar' data-id='${obj.id}'>
-                                        <i class='fas fa-trash' style='color:red'></i>
-                                    </a>
-                                    <a href='#' class='dividir' data-id='${obj.id}'>
+                                    </button>
+                                    <button  class='btn btn-danger btn-sm eliminar' data-id='${obj.id}'>
+                                        <i class='fas fa-trash'></i>
+                                    </button>
+                                    <button class='btn btn-warning btn-sm dividir' data-id='${obj.id}'>
                                         <i class='fas fa-cut'></i>
-                                    </a>
+                                    </button>
                                 </td>`;
                             }else{
                                 rows += `<td class='text-center'>

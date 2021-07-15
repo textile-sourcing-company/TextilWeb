@@ -70,7 +70,13 @@ namespace TSC_WEB.Models.Entidades.Corte.LiquidacionTela.reporteliquidacion
         public double telaprogramadakg { get; set; }
         public double telatizadakg { get; set; }
         public double teladespachadakg { get; set; }
-        public double adicional { get; set; }
+        //public double adicional { get; set; }
+        public double adicional { 
+            get {
+                return telaadicional;
+            } 
+        }
+
         public double teladespachadaadicional { 
             get {
                 return teladespachadakg + adicional;
