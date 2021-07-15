@@ -18,6 +18,7 @@ namespace TSC_WEB.Models.Entidades.Corte.LiquidacionTela.reporteliquidacion
         public double densidadprogramado { get; set; }
         public double densidadreal { get; set; }
         public double telaprogramado { get; set; }
+        public double telaprogramado_new { get; set; }
         public double telareal { get; set; }
         public double eficienciatizadosprogramado { get; set; }
         public double devolucionesprimera { get; set; }
@@ -55,7 +56,7 @@ namespace TSC_WEB.Models.Entidades.Corte.LiquidacionTela.reporteliquidacion
         {
             get
             {
-                return (telareal - telaprogramado);
+                return (telareal - telaprogramado_new);
             }
         }
 

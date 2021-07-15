@@ -10,8 +10,10 @@ using TSC_WEB.Models.Modelos.Corte.LiquidacionTela;
 using TSC_WEB.Models.Modelos.Corte.LiquidacionTela.reporteliquidacion;
 using TSC_WEB.Models.Modelos.Corte.LiquidacionTela.registrofichaspcp;
 using TSC_WEB.Models.Modelos.Corte.LiquidacionTela.aperturaficha;
+using TSC_WEB.Models.Modelos.Corte.LiquidacionRectilineos;
 using TSC_WEB.Models.Entidades.Corte.LiquidacionTela.tablasgenerales;
 using TSC_WEB.Models.Entidades.Corte.LiquidacionTela.indicadorliquidacion;
+using TSC_WEB.Models.Entidades.Corte.LiquidacionRectilineos;
 using Newtonsoft.Json;
 using System.Data;
 using System.Web.Script.Serialization;
@@ -36,6 +38,7 @@ namespace TSC_WEB.Controllers
         EjecutaReporteModelo objReporteLiquidacionM = new EjecutaReporteModelo();
         AperturarFichaModelo objAperturarFichaNewM = new AperturarFichaModelo();
         RecursosModelo objRecursosModeloM = new RecursosModelo();
+        LiquidacionRectilineosModelo objRectilineosM = new LiquidacionRectilineosModelo();
         
         #endregion
 
@@ -74,7 +77,6 @@ namespace TSC_WEB.Controllers
                 return Redirect("/");
             }
         }
-
         public ActionResult LiquidacionPorFichas(string partida,int combo, int version,string tipotela)
         {
 
@@ -100,7 +102,6 @@ namespace TSC_WEB.Controllers
                 return Redirect("/");
             }
         }
-
         public ActionResult ReporteControlUsoIndicador()
         {
             if (Session["usuario"] != null)
@@ -112,12 +113,34 @@ namespace TSC_WEB.Controllers
                 return Redirect("/");
             }
         }
-
         public ActionResult ReporteLiquidacionTela()
         {
             if (Session["usuario"] != null)
             {
                 return View();
+            }
+            else
+            {
+                return Redirect("/");
+            }
+        }
+
+        // REGISTRO DE RECTILINEOS
+        public ActionResult LiquidacionRectilineos(int? ficha)
+        {
+            if (Session["usuario"] != null)
+            {
+                var datosficha      = objRectilineosM.getDatosFicha(1,ficha);
+                var fichastallas    = objRectilineosM.getTallasFicha(2, ficha);
+
+
+                return View(
+                    new LiquidacionRectilineosEntidad
+                    {
+                        FichaCabecera   = datosficha,
+                        FichaTallas     = fichastallas
+                    }
+                );
             }
             else
             {
@@ -163,7 +186,6 @@ namespace TSC_WEB.Controllers
                 return Redirect("/");
             }
         }
-
 
         // APERTURA FICHA DE CORTE
         public ActionResult AperturaFichaCorte()
@@ -759,6 +781,12 @@ namespace TSC_WEB.Controllers
             var response = objAperturarFichaNewM.AperturaFichas(partida, combo, version, tipotela, estado, opcion, out mensaje);
             return Json(new { success = response, mensaje = mensaje },JsonRequestBehavior.AllowGet);
         }
+
+        #endregion
+
+        #region LIQUIDACION RECTILINEOS
+       
+
 
         #endregion
 

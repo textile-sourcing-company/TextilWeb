@@ -1,6 +1,26 @@
 ﻿@{
     var modulo = PageContext.Page.Request.RequestContext.RouteData.Values["controller"].ToString();
     var submodulo = PageContext.Page.Request.RequestContext.RouteData.Values["action"].ToString();
+
+    string hidemenu = "false";
+    string style = "";
+
+    try
+    {
+        //ficha = string.IsNullOrEmpty(PageContext.Page.Request.Params["ficha"].ToString()) ? "" : PageContext.Page.Request.Params["ficha"].ToString();
+        hidemenu = !string.IsNullOrEmpty(Request.Params["hidemenu"]) ? "true" : "false";
+        style   = !string.IsNullOrEmpty(Request.Params["hidemenu"]) ? "hidemenu" : "";
+
+        //string h = Request.Params["hidemenu"].ToString();
+        //hidemenu = true;
+
+    }
+    catch
+    {
+        hidemenu = "false";
+        style = "";
+    }
+
 }
 <!DOCTYPE html>
 <html lang="es">
@@ -38,79 +58,99 @@
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
 
+    <style>
+        .hidemenu {
+            margin-left: 0px !important;
+        }
+    </style>
+
+    @RenderSection("style", required: false)
+
 </head>
 
 
 <body class="hold-transition sidebar-mini layout-fixed">
     <div class="wrapper">
         <!-- Navbar -->
-        <nav class="main-header navbar navbar-expand border-bottom navbar-dark navbar-danger">
+        <nav class="main-header navbar navbar-expand border-bottom navbar-dark navbar-danger @style">
             <!-- Left navbar links -->
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link" data-widget="pushmenu" id="menu-icon" href="#"><i class="fas fa-bars"></i></a>
-                </li>
-            </ul>
+            @if (hidemenu == "false")
+            {
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" data-widget="pushmenu" id="menu-icon" href="#"><i class="fas fa-bars"></i></a>
+                    </li>
+                </ul>
+            }
 
-            <!-- Right navbar links -->
-            <ul class="navbar-nav ml-auto">
-                <!-- Notifications Dropdown Menu -->
-                <li class="nav-item dropdown">
-                    <a class="nav-link" data-toggle="dropdown" href="#">
-                        <i class="fas fa-cog"></i>
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-                        <span class="dropdown-item dropdown-header">Configuración</span>
-                        <!-- CAMBIAR CONTRASEÑA -->
-                        <div class="dropdown-divider"></div>
-                        <a href="#" class="dropdown-item">
-                            <i class="fas fa-lock mr-2"></i> Cambiar contraseña
+                <!-- Right navbar links -->
+                <ul class="navbar-nav ml-auto">
+                    <!-- Notifications Dropdown Menu -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link" data-toggle="dropdown" href="#">
+                            <i class="fas fa-cog"></i>
                         </a>
-                        <!-- CERRAR SESION -->
-                        <div class="dropdown-divider"></div>
-                        <a href="/dashboard/cerrarsesion" class="dropdown-item">
-                            <i class="fas fa-sign-out-alt mr-2"></i>Cerrar Sesión
-                        </a>
-                    </div>
-                </li>
+                        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+                            <span class="dropdown-item dropdown-header">Configuración</span>
+                            <!-- CAMBIAR CONTRASEÑA -->
+                            <div class="dropdown-divider"></div>
+                            <a href="#" class="dropdown-item">
+                                <i class="fas fa-lock mr-2"></i> Cambiar contraseña
+                            </a>
+                            <!-- CERRAR SESION -->
+                            <div class="dropdown-divider"></div>
+                            <a href="/dashboard/cerrarsesion" class="dropdown-item">
+                                <i class="fas fa-sign-out-alt mr-2"></i>Cerrar Sesión
+                            </a>
+                        </div>
+                    </li>
 
-            </ul>
-        </nav>
+                </ul>
+            </nav>
         <!-- /.navbar -->
         <!-- Main Sidebar Container -->
-        <aside class="main-sidebar elevation-4 sidebar-dark-danger">
-            <!-- LOGO TSC -->
-            <a href="/dashboard/" class="brand-link text-center" id="hreflogotsc">
-                <h4>T.S.C.</h4>
-                @*<img src="~/Public/logotsc.png" alt="TSC" />*@
-            </a>
-            <!-- FIN LOGO TSC -->
-            <!-- Sidebar -->
-            <div class="sidebar">
-                <!-- Sidebar user panel (optional) -->
-                <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-                    <div class="image">
-                        <img src="~/public/tecsito.png" class="img-circle elevation-2" alt="User Image">
+
+        @if(hidemenu == "false")
+        {
+
+
+            <aside class="main-sidebar elevation-4 sidebar-dark-danger">
+                <!-- LOGO TSC -->
+                <a href="/dashboard/" class="brand-link text-center" id="hreflogotsc">
+                    <h4>T.S.C.</h4>
+                    @*<img src="~/Public/logotsc.png" alt="TSC" />*@
+                </a>
+                <!-- FIN LOGO TSC -->
+                <!-- Sidebar -->
+                <div class="sidebar">
+                    <!-- Sidebar user panel (optional) -->
+                    <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+                        <div class="image">
+                            <img src="~/public/tecsito.png" class="img-circle elevation-2" alt="User Image">
+                        </div>
+                        <div class="info ">
+                            <a href="#" class="d-block"> @Session["nombre"]</a>
+                        </div>
                     </div>
-                    <div class="info ">
-                        <a href="#" class="d-block"> @Session["nombre"]</a>
-                    </div>
+                    <!-- Sidebar Menu -->
+                    <nav class="mt-2">
+                        <ul class="nav nav-pills nav-sidebar flex-column" id="ModulosLi" data-widget="treeview" role="menu" data-accordion="false">
+                            @* AQUI VAN LOS MODULOS*@
+
+                            @Html.Partial("/views/plantillas/modulos.cshtml")
+
+                        </ul>
+                    </nav>
+                    <!-- /.sidebar-menu -->
                 </div>
-                <!-- Sidebar Menu -->
-                <nav class="mt-2">
-                    <ul class="nav nav-pills nav-sidebar flex-column" id="ModulosLi" data-widget="treeview" role="menu" data-accordion="false">
-                        @* AQUI VAN LOS MODULOS*@
-
-                        @Html.Partial("/views/plantillas/modulos.cshtml")
-
-                    </ul>
-                </nav>
-                <!-- /.sidebar-menu -->
-            </div>
+                
             <!-- /.sidebar -->
-        </aside>
+            </aside>
+
+        }
+
         <!-- Content Wrapper. Contains page content -->
-        <div class="content-wrapper">
+        <div class="content-wrapper @style"  >
             <!-- Content Header (Page header) -->
             <div class="content-header">
                 <div class="container-fluid">

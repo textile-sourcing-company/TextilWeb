@@ -35,6 +35,14 @@
 
 }
 
+@section style{
+    <style>
+        ::-webkit-scrollbar {
+            width:none !important;
+         }
+    </style>
+}
+
 
 <div class="row">
 
@@ -93,26 +101,29 @@
     </div>
 
     @* TELAS *@
-    <div class="col-md-3">
+    <div class="col-md-6">
         <div class="card card-outline card-primary">
             <table class="table table-sm table-bordered table-hover text-center">
                 <thead class="thead-light">
                     <tr>
-                        <th colspan="4">Telas</th>
+                        <th colspan="5">Telas</th>
                     </tr>
                     <tr>
                         <th>Programado</th>
                         <th>Real</th>
                         <th>Diferencia</th>
                         <th>Diferencia %</th>
+                        <th>% Liquidación</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td>@Model.DataGeneral.telaprogramado</td>
+                        <td>@Model.DataGeneral.telaprogramado_new</td>
                         <td>@Model.DataGeneral.telareal</td>
                         <td>@Math.Round(Model.DataGeneral.teladiferencia, 2)</td>
-                        <td>@Math.Round((Model.DataGeneral.teladiferencia / Model.DataGeneral.telaprogramado * 100), 2)%</td>
+                        <td>@Math.Round((Model.DataGeneral.teladiferencia / Model.DataGeneral.telaprogramado_new * 100), 2)%</td>
+                        <td>@Math.Round((Model.DataGeneral.telareal / Model.DataGeneral.telaprogramado_new * 100), 2)%</td>
+
                     </tr>
                 </tbody>
 
@@ -136,8 +147,8 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td>@Model.DataGeneral.eficienciatizadosprogramado</td>
-                        <td>@Math.Round(Model.DataGeneral.eficienciatizadosreal * 100, 2)</td>
+                        <td>@Math.Round(Model.DataGeneral.eficienciatizadosprogramado, 2)%</td>
+                        <td>@Math.Round(Model.DataGeneral.eficienciatizadosreal * 100, 2)%</td>
                         <td>@Math.Round(Model.DataGeneral.eficienciatizadosdiferencia * 100, 2)%</td>
                     </tr>
                 </tbody>
@@ -226,7 +237,7 @@
 
         <div class="card">
 
-            <div class="table-responsive">
+            <div class="table-responsive" style="">
 
                 <table class="table table-bordered table-hover table-sm text-center">
 
@@ -279,7 +290,7 @@
                                 <td> @(x < cantfichas ? Model.DataFichas[x].prendasprogramado : 0)</td>
                                 <td> @(x < cantfichas ? Math.Round(Model.DataFichas[x].consumoprogramado,4) : 0) </td>
                                 <td> @(x < cantfichas ? Math.Round(Model.DataFichas[x].kilosprogramado, 2) : 0) </td>
-                                <td class="border-right"> @(x < cantfichas ? Math.Round(Model.DataFichas[x].porcentajekilosprogramado, 2) : 0) </td>
+                                <td class="border-right"> @(x < cantfichas ? Math.Round(Model.DataFichas[x].porcentajekilosprogramado * 100 , 2)  : 0)%</td>
 
                                 <td> @(x < cantfichas ? Model.DataFichas[x].prendastizado : 0) </td>
                                 <td> @(x < cantfichas ? Math.Round(Model.DataFichas[x].consumotizado,4) : 0) </td>
@@ -290,11 +301,11 @@
                                 <td> @( x < cantetapas ? Model.DataTendido[x].tallas  : 0 )</td>
                                 <td> @( x < cantetapas ? Model.DataTendido[x].largopano  : 0 )</td>
                                 <td> @( x < cantetapas ? Model.DataTendido[x].pesopano  : 0 )</td>
-                                <td class="border-right"> @( x < cantetapas ? Math.Round(Model.DataTendido[x].densidad,4)  : 0 )</td>
+                                <td class="border-right"> @( x < cantetapas ? Math.Round(Model.DataTendido[x].densidad,3)  : 0 )</td>
 
                                 <td> @(x < cantfichas ? Model.DataFichas[x].prendasneto : 0)</td>
-                                <td> @(x < cantfichas ? Math.Round(Model.DataFichas[x].consumoneto,4) : 0) </td>
-                                <td class="border-right"> @(x < cantfichas ? Math.Round(Model.DataFichas[x].kilosneto,3) : 0)</td>
+                                <td> @(x < cantfichas ? Math.Round(Model.DataFichas[x].consumoneto,3) : 0) </td>
+                                <td class="border-right"> @(x < cantfichas ? Math.Round(Model.DataFichas[x].kilosneto,2) : 0)</td>
 
                                 <td> @(x < cantfichas ? Math.Round(Model.DataFichas[x].consumolinealbruto,4) : 0) </td>
                                 <td> @(x < cantfichas ? Math.Round(Model.DataFichas[x].metrosbruto, 2) : 0)  </td>
@@ -335,30 +346,39 @@
                         @{
                             totalconsumoprogramado = totalkilosprogramado / totalprendasprogramado;
                             densidadpromedio = densidadpromedio / cantetapas;
-                            diferenciadensidad = (densidadpromedio - (Model.DataGeneral.densidadprogramado / 10)) / densidadpromedio;
+                            //diferenciadensidad = (densidadpromedio - (Model.DataGeneral.densidadprogramado / 10)) / densidadpromedio;
+                            diferenciadensidad = (densidadpromedio - (Model.DataGeneral.densidadprogramado / 10)) / (Model.DataGeneral.densidadprogramado / 10);
+
+
+                            // TOTAL KILOS NETO
+                            totalkilosneto += Model.DataGeneral.collaretas;
 
                         }
 
                         <tr>
                             <th class="border-left border-right border-bottom border-top" colspan="2">TOTAL</th>
-                            <th class="border-right border-bottom border-top">@totalprendasprogramado</th>
-                            <th class="border-right border-bottom border-top">@Math.Round(totalconsumoprogramado, 6)</th>
-                            <th class="border-right border-bottom border-top">@Math.Round(totalkilosprogramado, 2) </th>
-                            <th class="border-right border-bottom border-top">@(totalporcentajeprogramado * 100)%</th>
+                            <th class="border-right border-bottom border-top" style="background: #e9ecef !important">@totalprendasprogramado</th>
+                            <th class="border-right border-bottom border-top" style="background: #e9ecef !important">@Math.Round(totalconsumoprogramado, 4)</th>
+                            <th class="border-right border-bottom border-top" style="background: #e9ecef !important">@Math.Round(totalkilosprogramado, 2) </th>
+                            <th class="border-right border-bottom border-top" style="background: #e9ecef !important">@Math.Round(totalporcentajeprogramado * 100, 2)%</th>
 
-                            <th class="border-right border-bottom border-top">@totalprendastizado</th>
-                            <th class="border-right border-bottom border-top">@Model.DataGeneral.consumotizadosgeneral</th>
-                            <th class="border-right border-bottom border-top">@Math.Round(totalprendastizado * Model.DataGeneral.consumotizadosgeneral, 2) </th>
+                            <th class="border-right border-bottom border-top" style="background: #e9ecef !important">@totalprendastizado</th>
+                            <th class="border-right border-bottom border-top" style="background: #e9ecef !important">@Model.DataGeneral.consumotizadosgeneral</th>
+                            <th class="border-right border-bottom border-top" style="background: #e9ecef !important">@Math.Round(totalprendastizado * Model.DataGeneral.consumotizadosgeneral, 2) </th>
 
-                            <th colspan="5" class="border-right border-bottom border-top">Densidad Promedio</th>
-                            <th class="border-right border-bottom border-top">@Math.Round(densidadpromedio, 3)</th>
+                            <th colspan="5" class="border-right border-bottom border-top" style="text-align:right;">DENSIDAD PROMEDIO</th>
+                            @*<th class="border-right border-bottom border-top">@densidadpromedio</th>*@
+                            <th class="border-right border-bottom border-top" style="background: #e9ecef !important">@Math.Round(densidadpromedio, 3)</th>
 
-                            <th class="border-right border-bottom border-top">@totalprendasneto</th>
-                            <th class="border-right border-bottom border-top">@Math.Round(totalkilosneto / totalprendasneto, 4) </th>
-                            <th class="border-right border-bottom border-top">@totalkilosneto</th>
 
-                            <th colspan="2" class="border-right border-bottom border-top">@Model.DataGeneral.totalmetrosbruto </th>
-                            <th colspan="2" class="border-right border-bottom border-top">@Model.DataGeneral.totalkilosbruto</th>
+                            <th class="border-right border-bottom border-top" style="background: #e9ecef !important">@totalprendasneto</th>
+                            <th class="border-right border-bottom border-top" style="background: #e9ecef !important">@Math.Round(totalkilosneto / totalprendasneto, 3) </th>
+                            <th class="border-right border-bottom border-top" style="background: #e9ecef !important">@totalkilosneto</th>
+
+                            <th class="border-right border-bottom border-top"></th>
+                            <th class="border-right border-bottom border-top" style="background: #e9ecef !important">@Model.DataGeneral.totalmetrosbruto </th>
+                            <th class="border-right border-bottom border-top"></th>
+                            <th class="border-right border-bottom border-top" style="background: #e9ecef !important">@Model.DataGeneral.totalkilosbruto</th>
                         </tr>
                     </tfoot>
 
@@ -371,6 +391,7 @@
         </div>
 
     </div>
+
 
     @{
         // CALCULOS
@@ -414,10 +435,10 @@
                         <td colspan="2">POR ANCHO</td>
                         <td>@Math.Round(caidaancho, 2)</td>
                     </tr>
-                    <tr>
-                        <td colspan="2">EXCESO DE MERMA</td>
-                        <td>@Math.Round(caidamerma, 2)</td>
-                    </tr>
+                    @*<tr>
+                            <td colspan="2">EXCESO DE MERMA</td>
+                            <td>@Math.Round(caidamerma, 2)</td>
+                        </tr>*@
                     <tr>
                         <td colspan="2">DEFECTOS DE TELA</td>
                         <td>@Math.Round(caidatela, 2)</td>
@@ -466,7 +487,7 @@
                 <tfoot>
                     <tr>
                         <th>TOTAL</th>
-                        <th>@Model.DataGeneral.totalmerma</th>
+                        <th style="background: #e9ecef !important">@Model.DataGeneral.totalmerma</th>
                     </tr>
                 </tfoot>
             </table>
@@ -508,7 +529,7 @@
                 </div>
 
                 @*<h6>TENDIDO: @Model.DataGeneral.estadotendido </h6>
-                <h6>CORTE: @Model.DataGeneral.estadocorte </h6>*@
+                    <h6>CORTE: @Model.DataGeneral.estadocorte </h6>*@
 
 
             </div>
@@ -517,8 +538,8 @@
     </div>
 
     @*<div class="col-md-2">
-        <button class="btn btn-sm btn-block btn-primary">Aprobar Corte</button>
-    </div>*@
+            <button class="btn btn-sm btn-block btn-primary">Aprobar Corte</button>
+        </div>*@
 
 </div>
 
@@ -529,6 +550,9 @@
         //ACTULIZAMOS VARIABLES
         $("#densidadreal").text(@Math.Round(densidadpromedio, 3));
         $("#diferenciadensidad").text( @Math.Round(diferenciadensidad * 100, 1) + "%") ;
+
+        // @diferenciadensidad = (@densidadpromedio - (@Model.DataGeneral.densidadprogramado / 10)) / (@Model.DataGeneral.densidadprogramado / 10);
+
 
         let partida     = "@Model.DataGeneral.partida";
         let combo       = "@Model.DataGeneral.combo";

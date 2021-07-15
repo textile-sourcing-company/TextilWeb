@@ -70,7 +70,13 @@ namespace TSC_WEB.Models.Entidades.Corte.LiquidacionTela.reporteliquidacion
         public double telaprogramadakg { get; set; }
         public double telatizadakg { get; set; }
         public double teladespachadakg { get; set; }
-        public double adicional { get; set; }
+        //public double adicional { get; set; }
+        public double adicional { 
+            get {
+                return telaadicional;
+            } 
+        }
+
         public double teladespachadaadicional { 
             get {
                 return teladespachadakg + adicional;
@@ -190,11 +196,32 @@ namespace TSC_WEB.Models.Entidades.Corte.LiquidacionTela.reporteliquidacion
         public double devolucionerp { get; set; }
         public string codigoerp { get; set; }
         public double eficienciacotizada { get; set; }
+        public double eficienciacotizada_new { 
+            get
+            {
+                return eficienciacotizada > 0 ? eficienciacotizada / 100 : 0;
+            }
+        }
+
         public double eficienciaexplosion { get; set; }
         public double anchototalcotizado { get; set; }
         public double anchototalexplosion { get; set; }
         public double densidadcotizacion { get; set; }
+        public double densidadcotizacion_gramos
+        {
+            get
+            {
+                return densidadcotizacion != 0 ? densidadcotizacion / 1000 : 0;
+            }
+        }
         public double densidadexplosion { get; set; }
+        public double densidadexplosion_gramos { 
+            get
+            {
+                return densidadexplosion != 0 ? densidadexplosion / 1000 : 0;
+            }
+        }
+
         public double consumolinealcotizacion { get; set; }
         public double consumolinealexplosion { get; set; }
         public double consumolinealprogramado { get; set; }

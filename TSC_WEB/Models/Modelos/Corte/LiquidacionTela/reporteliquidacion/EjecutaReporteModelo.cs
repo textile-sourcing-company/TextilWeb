@@ -15,7 +15,9 @@ namespace TSC_WEB.Models.Modelos.Corte.LiquidacionTela.reporteliquidacion
     public class EjecutaReporteModelo
     {
         DBAccess conexion = new DBAccess();
-        private const string formatoporcentaje = "0.00%";
+        private const string formatoporcentaje  = "0.00%";
+        private const string formatonumero      = "0.00";
+
         ExcelWorksheet workSheet;
 
         // GET REPORTE
@@ -133,32 +135,66 @@ namespace TSC_WEB.Models.Modelos.Corte.LiquidacionTela.reporteliquidacion
 
 
         //  CREAR REPORTE
-        private void merge(string rango, string valor, bool merge, bool backcolor, Color fontcolor, bool negrita = true, bool bordes = true,bool autofit = false)
+        private void merge(string rango, string valor, bool merge, int backcolor, Color fontcolor, bool negrita = true, bool bordes = true,bool wraptext = false,int tamanoletra = 11,int columna = 0,double widthcolumna = 0)
         {
+            // RANGO COMBINADO
             workSheet.Cells[rango].Merge = merge;
+            // VALOR
             workSheet.Cells[rango].Value = valor;
 
             workSheet.Cells[rango].Style.Fill.PatternType = ExcelFillStyle.Solid;
-            // 
-            //workSheet.Cells[rango].Style.WrapText = false;
-            // AUTO FIT
-            //if (autofit)
-            //{
-            //    workSheet.Cells[rango].AutoFitColumns();
-            //}
+            // TAMAÑO DE LETRA
+            workSheet.Cells[rango].Style.Font.Size = tamanoletra;
 
-            if (backcolor)
-                workSheet.Cells[rango].Style.Fill.BackgroundColor.SetColor(1, 51, 63, 79);
-            else
-                workSheet.Cells[rango].Style.Fill.BackgroundColor.SetColor(1, 198, 89, 17);
+            // AJUSTAR TEXTO A COLUMNA
+            workSheet.Cells[rango].Style.WrapText = wraptext;
+
+            // TAMAÑO DE CELDA
+            if (columna != 0)
+            {
+                workSheet.Column(columna).Width = widthcolumna;
+            }
 
 
+            // BACKGROUND
+            switch (backcolor)
+            {
+                case 1:
+                    workSheet.Cells[rango].Style.Fill.BackgroundColor.SetColor(1, 51, 63, 79);
+                break;
+                case 2:
+                    workSheet.Cells[rango].Style.Fill.BackgroundColor.SetColor(1, 128, 128, 128);
+                break;
+                case 3:
+                    workSheet.Cells[rango].Style.Fill.BackgroundColor.SetColor(1, 55, 86, 35);
+                break;
+                case 4:
+                    workSheet.Cells[rango].Style.Fill.BackgroundColor.SetColor(1, 128, 96, 0);
+                break;
+                case 5:
+                    workSheet.Cells[rango].Style.Fill.BackgroundColor.SetColor(1, 198, 89, 17);
+                break;
+                case 6:
+                    workSheet.Cells[rango].Style.Fill.BackgroundColor.SetColor(1, 82, 82, 82);
+                break;
+
+            }
+
+            //if (backcolor)
+            //    workSheet.Cells[rango].Style.Fill.BackgroundColor.SetColor(1, 51, 63, 79);
+            //else
+            //    workSheet.Cells[rango].Style.Fill.BackgroundColor.SetColor(1, 198, 89, 17);
+
+            // COLOR DE TEXTO
             workSheet.Cells[rango].Style.Font.Color.SetColor(fontcolor);
-            workSheet.Cells[rango].Style.Font.Bold = true;
+
+            // NEGRITA
+            workSheet.Cells[rango].Style.Font.Bold = negrita;
+            // ALINEAMIENTO
             workSheet.Cells[rango].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
             workSheet.Cells[rango].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
-
+            // BORDES
             if (bordes)
             {
                 workSheet.Cells[rango].Style.Border.Top.Style = ExcelBorderStyle.Thin;
@@ -211,7 +247,24 @@ namespace TSC_WEB.Models.Modelos.Corte.LiquidacionTela.reporteliquidacion
 
             if (decimales != 0)
             {
-                workSheet.Cells[fila, columna].Value = Math.Round(valor, decimales);
+
+                ExcelRange rango = workSheet.SelectedRange[fila, columna];
+                rango.Style.Numberformat.Format = getcerosdecimales(decimales);
+                workSheet.Cells[fila, columna].Value = valor;
+
+                //if (decimales == 2)
+                //{
+                //    ExcelRange rango = workSheet.SelectedRange[fila, columna];
+                //    rango.Style.Numberformat.Format = formatonumero;
+                //    workSheet.Cells[fila, columna].Value = valor;
+
+
+                //}
+                //else
+                //{
+                //    workSheet.Cells[fila, columna].Value = Math.Round(valor, decimales);
+                //}
+
             }
             else
             {
@@ -246,110 +299,113 @@ namespace TSC_WEB.Models.Modelos.Corte.LiquidacionTela.reporteliquidacion
                 workSheet = package.Workbook.Worksheets.Add("Reporte Liquidación");
 
                 // PRINCIPALES
-                merge("A1:A2", "Fecha de Liquidación", true, true, Color.White);
-                merge("B1:B2", "Turno", true, true, Color.White);
-                merge("C1:C2", "Célula", true, true, Color.White);
-                merge("D1:D2", "Usuario", true, true, Color.White);
-                merge("E1:E2", "Ficha", true, true, Color.White);
-                merge("F1:F2", "Pedido", true, true, Color.White);
-                merge("G1:G2", "Partida", true, true, Color.White);
-                merge("H1:H2", "Combo", true, true, Color.White);
-                merge("I1:I2", "Programa", true, true, Color.White);
-                merge("J1:J2", "Estilo", true, true, Color.White);
-                merge("K1:K2", "Color", true, true, Color.White);
-                merge("L1:L2", "Código de Tela", true, true, Color.White);
-                merge("M1:M2", "Descripción de Tela", true, true, Color.White);
+                merge("A1:A2", "Fecha de Liquidación", true, 1, Color.White, true, true, true, 11, 1, 12);
+                merge("B1:B2", "Turno", true, 1, Color.White, true, true, true, 11, 2, 8.43);
+                merge("C1:C2", "Célula", true, 1, Color.White, true, true, true, 11, 3, 8.43);
+                merge("D1:D2", "Usuario", true, 1, Color.White, true, true, true, 11, 4, 9.29);
+                merge("E1:E2", "Ficha", true, 1, Color.White, true, true, true, 11, 5, 8.43);
+                merge("F1:F2", "Pedido", true, 1, Color.White, true, true, true, 11, 6, 8.43);
+                merge("G1:G2", "Partida", true, 1, Color.White, true, true, true, 11, 7, 8.43);
+                merge("H1:H2", "Combo", true, 1, Color.White, true, true, true, 11, 8, 8.43);
+                merge("I1:I2", "Programa", true, 1, Color.White, true, true, true, 11, 9, 8.43);
+                merge("J1:J2", "Estilo", true, 1, Color.White, true, true, true, 11, 10, 8.43);
+                merge("K1:K2", "Color", true, 1, Color.White, true, true, true, 11, 11, 8.43);
+                merge("L1:L2", "Código de Tela", true, 1, Color.White, true, true, true, 11, 12, 13.71);
+                merge("M1:M2", "Descripción de Tela", true, 1, Color.White, true, true, true, 11, 13, 20.86);
 
                 // BALANCE DE PRENDAS
-                merge("N1:Q1", "Balance de Prendas", true, true, Color.White);
-                merge("N2:N2", "Prendas Programadas por PCP", true, true, Color.White);
-                merge("O2:O2", "Prendas Liquidadas", true, true, Color.White);
-                merge("P2:P2", "Diferencia", true, true, Color.White);
-                merge("Q2:Q2", "%", true, true, Color.White);
+                merge("N1:Q1", "Balance de Prendas", true, 2, Color.White);
+                merge("N2:N2", "Prendas Programadas por PCP", true, 2, Color.White,true,true,true,9,14,15.43);
+                merge("O2:O2", "Prendas Liquidadas", true, 2, Color.White,true,true,true,9,15,9.86);
+                merge("P2:P2", "Diferencia", true, 2, Color.White, true, true, true, 9, 16, 7.86);
+                merge("Q2:Q2", "%", true, 2, Color.White, true, true, true, 9, 17, 6.86);
 
                 // CONSUMO  POR PRENDA
-                merge("R1:Y1", "Consumo por Prenda", true, true, Color.White);
-                merge("R2:R2", "Consumo neto programado (kg)", true, true, Color.White);
-                merge("S2:S2", "Consumo neto real (kg)", true, true, Color.White);
-                merge("T2:T2", "Consumo bruto cotización", true, true, Color.White);
-                merge("U2:U2", "Consumo bruto explosión", true, true, Color.White);
-                merge("V2:V2", "Consumo bruto Prog (kg)", true, true, Color.White);
-                merge("W2:W2", "Consumo bruto Tizados (kg)", true, true, Color.White);
-                merge("X2:X2", "Consumo bruto real", true, true, Color.White);
-                merge("Y2:Y2", "Diferencia (Consumo Bruto real  vs Bruto Programado)", true, true, Color.White);
+                merge("R1:Y1", "Consumo por Prenda", true, 1, Color.White);
+                merge("R2:R2", "Consumo neto programado (kg)", true, 1, Color.White, true, true, true, 9, 18, 13.29);
+                merge("S2:S2", "Consumo neto real (kg)", true, 1, Color.White, true, true, true, 9, 19, 10.86);
+                merge("T2:T2", "Consumo bruto cotización", true, 1, Color.White, true, true, true, 9, 20, 12.71);
+                merge("U2:U2", "Consumo bruto explosión", true, 1, Color.White, true, true, true, 9, 21, 14);
+                merge("V2:V2", "Consumo bruto Prog (kg)", true, 1, Color.White, true, true, true, 9, 22, 14);
+                merge("W2:W2", "Consumo bruto Tizados (kg)", true, 1, Color.White, true, true, true, 9, 23, 11.71);
+                merge("X2:X2", "Consumo bruto real", true, 1, Color.White, true, true, true, 9, 24, 10.14);
+                merge("Y2:Y2", "Diferencia (Consumo Bruto real  vs Bruto Programado)", true, 1, Color.White, true, true, true, 9, 25, 21.71);
 
                 // KILOS TENDIDO
-                merge("Z1:AA1", "Kilos Tendidos + Collaretas", true, true, Color.White);
-                merge("Z2:Z2", "Tela Tendida Neta(kg)", true, true, Color.White);
-                merge("AA2:AA2", "Tela de Collareta(kg)", true, true, Color.White);
+                merge("Z1:AA1", "Kilos Tendidos + Collaretas", true, 3, Color.White);
+                merge("Z2:Z2", "Tela Tendida Neta(kg)", true, 3, Color.White, true, true, true, 9, 26, 12.43);
+                merge("AA2:AA2", "Tela de Collareta(kg)", true, 3, Color.White, true, true, true, 9, 27, 11.29);
 
                 // MERMAS DE TENDIDO
-                merge("AB1:AI1", "Mermas de Tendido", true, true, Color.White);
-                merge("AB2:AB2", "Puntas(kg)", true, true, Color.White);
-                merge("AC2:AC2", "Retazos(kg)", true, true, Color.White);
-                merge("AD2:AD2", "Empalmes(kg)", true, true, Color.White);
-                merge("AE2:AE2", "Conos(kg)", true, true, Color.White);
-                merge("AF2:AF2", "Bolsas(kg)", true, true, Color.White);
-                merge("AG2:AG2", "Total merma de tendido(kg)", true, true, Color.White);
-                merge("AH2:AH2", "Merma de tendido programada %", true, true, Color.White);
-                merge("AI2:AI2", "Merma de tendido real %", true, true, Color.White);
+                merge("AB1:AI1", "Mermas de Tendido", true, 1, Color.White);
+                merge("AB2:AB2", "Puntas(kg)", true, 1, Color.White, true, true, true, 9, 28, 8.71);
+                merge("AC2:AC2", "Retazos(kg)", true, 1, Color.White, true, true, true, 9, 29, 10);
+                merge("AD2:AD2", "Empalmes(kg)", true, 1, Color.White, true, true, true, 9, 30, 10.71);
+                merge("AE2:AE2", "Conos(kg)", true, 1, Color.White, true, true, true, 9, 31, 9.14);
+                merge("AF2:AF2", "Bolsas(kg)", true, 1, Color.White, true, true, true, 9, 32, 8.86);
+                merge("AG2:AG2", "Total merma de tendido(kg)", true, 1, Color.White, true, true, true, 9, 33, 11.86);
+                merge("AH2:AH2", "Merma de tendido programada %", true, 1, Color.White, true, true, true, 9, 34, 15.71);
+                merge("AI2:AI2", "Merma de tendido real %", true, 1, Color.White, true, true, true, 9, 35, 11.71);
 
                 // TELA ADICIONAL
-                merge("AJ1:AK1", "Tela Adicional", true, true, Color.White);
-                merge("AJ2:AJ2", "Tela Adicional (kg)", true, true, Color.White);
-                merge("AK2:AK2", "Motivo Requerimiento", true, true, Color.White);
+                merge("AJ1:AK1", "Tela Adicional", true, 4, Color.White);
+                merge("AJ2:AJ2", "Tela Adicional (kg)", true, 4, Color.White, true, true, true, 9, 36, 11.14);
+                merge("AK2:AK2", "Motivo Requerimiento", true, 4, Color.White, true, true, true, 9, 37, 12.57);
 
                 // DEVOLUCION DE TELA
-                merge("AL1:AQ1", "Devolución de tela", true, true, Color.White);
-                merge("AL2:AL2", "Devolución de primeras (kg)", true, true, Color.White);
-                merge("AM2:AM2", "Motivo", true, true, Color.White);
-                merge("AN2:AN2", "Devolución de segundas (kg)", true, true, Color.White);
-                merge("AO2:AO2", "Motivo", true, true, Color.White);
-                merge("AP2:AP2", "Devolución ERP", true, true, Color.White);
-                merge("AQ2:AQ2", "Código ERP", true, true, Color.White);
+                merge("AL1:AQ1", "Devolución de tela", true, 1, Color.White);
+                merge("AL2:AL2", "Devolución de primeras (kg)", true, 1, Color.White, true, true, true, 9, 38, 12.14);
+                merge("AM2:AM2", "Motivo", true, 1, Color.White, true, true, true, 9, 39, 11.43);
+                merge("AN2:AN2", "Devolución de segundas (kg)", true, 1, Color.White, true, true, true, 9, 40, 10.71);
+                merge("AO2:AO2", "Motivo", true, 1, Color.White, true, true, true, 9, 41, 6.71);
+                merge("AP2:AP2", "Devolución ERP", true, 1, Color.White, true, true, true, 9, 42, 11);
+                merge("AQ2:AQ2", "Código ERP", true, 1, Color.White, true, true, true, 9, 43, 10.14);
 
                 // BALANCE DE TELA
-                merge("AR1:AX1", "Balance de tela", true, true, Color.White);
-                merge("AR2:AR2", "Tela Programada (kg)", true, true, Color.White);
-                merge("AS2:AS2", "Tela Asignada por Tizado (kg)", true, true, Color.White);
-                merge("AT2:AT2", "Tela Despachada (kg)", true, true, Color.White);
-                merge("AU2:AU2", "Tela Despachada + Adicional (kg)", true, true, Color.White);
-                merge("AV2:AV2", "Tela Liquidada (kg)", true, true, Color.White);
-                merge("AW2:AW2", "Diferencia (kg)", true, true, Color.White);
-                merge("AX2:AX2", "% Liquidación", true, true, Color.White);
+                merge("AR1:AX1", "Balance de tela", true, 5, Color.White);
+                merge("AR2:AR2", "Tela Programada (kg)", true, 5, Color.White, true, true, true, 9, 44, 13.29);
+                merge("AS2:AS2", "Tela Asignada por Tizado (kg)", true, 5, Color.White, true, true, true, 9, 45, 13.43);
+                merge("AT2:AT2", "Tela Despachada (kg)", true, 5, Color.White, true, true, true, 9, 46, 13.14);
+                merge("AU2:AU2", "Tela Despachada + Adicional (kg)", true, 5, Color.White, true, true, true, 9, 47, 16.86);
+                merge("AV2:AV2", "Tela Liquidada (kg)", true, 5, Color.White, true, true, true, 9, 48, 11.14);
+                merge("AW2:AW2", "Diferencia (kg)", true, 5, Color.White, true, true, true, 9, 49, 12);
+                merge("AX2:AX2", "% Liquidación", true, 5, Color.White, true, true, true, 9, 50, 10.29);
 
                 // MERMA DE CORTE
-                merge("AY1:BB1", "Merma de Corte", true, true, Color.White);
-                merge("AY2:AY2", "Entrecorte (kg)", true, true, Color.White);
-                merge("AZ2:AZ2", "Orillos (kg)", true, true, Color.White);
-                merge("BA2:BA2", "Extremos (kg)", true, true, Color.White);
-                merge("BB2:BB2", "Total Merma Corte (kg)", true, true, Color.White);
+                merge("AY1:BB1", "Merma de Corte", true, 1, Color.White);
+                merge("AY2:AY2", "Entrecorte (kg)", true, 1, Color.White, true, true, true, 9, 51, 8.43);
+                merge("AZ2:AZ2", "Orillos (kg)", true, 1, Color.White, true, true, true, 9, 52, 8.14);
+                merge("BA2:BA2", "Extremos (kg)", true, 1, Color.White, true, true, true, 9, 53, 9.57);
+                merge("BB2:BB2", "Total Merma Corte (kg)", true, 1, Color.White, true, true, true, 9, 54, 11.71);
 
                 // EFICIENCIA DE TIZADO
-                merge("BC1:BG1", "Eficiencia de tizado", true, true, Color.White);
-                merge("BC2:BC2", "Eficiencia cotizada", true, true, Color.White);
-                merge("BD2:BD2", "Eficiencia de explosión", true, true, Color.White);
-                merge("BE2:BE2", "Eficiencia programada", true, true, Color.White);
-                merge("BF2:BF2", "Eficiencia real", true, true, Color.White);
-                merge("BG2:BG2", "Diferencia %", true, true, Color.White);
+                merge("BC1:BG1", "Eficiencia de tizado", true, 6, Color.White);
+                merge("BC2:BC2", "Eficiencia cotizada", true, 6, Color.White, true, true, true, 9, 55, 9.86);
+                merge("BD2:BD2", "Eficiencia de explosión", true, 6, Color.White, true, true, true, 9, 56, 13);
+                merge("BE2:BE2", "Eficiencia programada", true, 6, Color.White, true, true, true, 9, 57, 10.86);
+                merge("BF2:BF2", "Eficiencia real", true, 6, Color.White, true, true, true, 9, 58, 8.71);
+                merge("BG2:BG2", "Diferencia %", true, 6, Color.White, true, true, true, 9, 59, 8.29);
 
                 // DATOS DE TELA
-                merge("BH1:BV1", "Datos de tela", true, true, Color.White);
-                merge("BH2:BH2", "Ancho Total Cotizado (m)", true, true, Color.White);
-                merge("BI2:BI2", "Ancho Total de explosión (m)", true, true, Color.White);
-                merge("BJ2:BJ2", "Ancho Total programado (m)", true, true, Color.White);
-                merge("BK2:BK2", "Ancho Total real (m)", true, true, Color.White);
-                merge("BL2:BL2", "Diferencia Ancho (m)", true, true, Color.White);
-                merge("BM2:BM2", "% Variación Ancho", true, true, Color.White);
-                merge("BN2:BN2", "Densidad de Cotización", true, true, Color.White);
-                merge("BO2:BO2", "Densidad de Explosión", true, true, Color.White);
-                merge("BP2:BP2", "Densidad Programada", true, true, Color.White);
-                merge("BQ2:BQ2", "Densidad Real", true, true, Color.White);
-                merge("BR2:BR2", "Variación de densidad (prog. vs real)", true, true, Color.White);
-                merge("BS2:BS2", "Consumo lineal - Cotización", true, true, Color.White);
-                merge("BT2:BT2", "Consumo lineal - Explosión", true, true, Color.White);
-                merge("BU2:BU2", "Consumo lineal - Programado", true, true, Color.White);
-                merge("BV2:BV2", "Consumo lineal - Real", true, true, Color.White);
+                merge("BH1:BR1", "Datos de tela", true, 1, Color.White);
+                merge("BH2:BH2", "Ancho Total Cotizado (m)", true, 1, Color.White, true, true, true, 9, 60, 11.86);
+                merge("BI2:BI2", "Ancho Total de explosión (m)", true, 1, Color.White, true, true, true, 9, 61, 11.86);
+                merge("BJ2:BJ2", "Ancho Total programado (m)", true, 1, Color.White, true, true, true, 9, 62, 11.86);
+                merge("BK2:BK2", "Ancho Total real (m)", true, 1, Color.White, true, true, true, 9, 63, 11.86);
+                merge("BL2:BL2", "Diferencia Ancho (m)", true, 1, Color.White, true, true, true, 9, 64, 11.86);
+                merge("BM2:BM2", "% Variación Ancho", true, 1, Color.White, true, true, true, 9, 65, 11.86);
+                merge("BN2:BN2", "Densidad de Cotización", true, 1, Color.White, true, true, true, 9, 66, 11.14);
+                merge("BO2:BO2", "Densidad de Explosión", true, 1, Color.White, true, true, true, 9, 67, 9.57);
+                merge("BP2:BP2", "Densidad Programada", true, 1, Color.White, true, true, true, 9, 68, 11.14);
+                merge("BQ2:BQ2", "Densidad Real", true, 1, Color.White, true, true, true, 9, 69, 8.29);
+                merge("BR2:BR2", "Variación de densidad (prog. vs real)", true, 1, Color.White, true, true, true, 9, 70, 15.71);
+                //merge("BS2:BS2", "Consumo lineal - Cotización", true, 1, Color.White, true, true, true, 9, 71, 13.71);
+                //merge("BT2:BT2", "Consumo lineal - Explosión", true, 1, Color.White, true, true, true, 9, 72, 13.71);
+                //merge("BU2:BU2", "Consumo lineal - Programado", true, 1, Color.White, true, true, true, 9, 73, 13.71);
+                //merge("BV2:BV2", "Consumo lineal - Real", true, 1, Color.White, true, true, true, 9, 74, 13.71);
+
+                // ALTURA 
+                workSheet.Row(2).Height = 24.75;
 
 
                 int i = 3;
@@ -381,13 +437,13 @@ namespace TSC_WEB.Models.Modelos.Corte.LiquidacionTela.reporteliquidacion
                     cells(i, 17, item.difprendasprogporc, Color.White, Color.Black, false, true,true);
 
                     // CONSUMO POR PRENDAS
-                    cells(i, 18, item.consumonetoprog, Color.White, Color.Black, false, true,false,5);
-                    cells(i, 19, item.consumonetoreal, Color.White, Color.Black, false, true,false,5);
-                    cells(i, 20, item.consumobrutocotizacion, Color.White, Color.Black, false, true, false, 5);
-                    cells(i, 21, item.consumobrutoexplosion, Color.White, Color.Black, false, true, false, 5);
-                    cells(i, 22, item.consumobrutoprogramado, Color.White, Color.Black, false, true, false, 5);
-                    cells(i, 23, item.consumobrutotizados, Color.White, Color.Black, false, true, false, 5);
-                    cells(i, 24, item.consumobrutoreal, Color.White, Color.Black, false, true, false, 5);
+                    cells(i, 18, item.consumonetoprog, Color.White, Color.Black, false, true,false,4);
+                    cells(i, 19, item.consumonetoreal, Color.White, Color.Black, false, true,false,4);
+                    cells(i, 20, item.consumobrutocotizacion, Color.White, Color.Black, false, true, false, 4);
+                    cells(i, 21, item.consumobrutoexplosion, Color.White, Color.Black, false, true, false, 4);
+                    cells(i, 22, item.consumobrutoprogramado, Color.White, Color.Black, false, true, false, 4);
+                    cells(i, 23, item.consumobrutotizados, Color.White, Color.Black, false, true, false, 4);
+                    cells(i, 24, item.consumobrutoreal, Color.White, Color.Black, false, true, false, 4);
                     cells(i, 25, item.difconsbrutorealprogpor, Color.White, Color.Black, false, true,true);
 
                     // KILOS TENDIDOS
@@ -405,7 +461,7 @@ namespace TSC_WEB.Models.Modelos.Corte.LiquidacionTela.reporteliquidacion
                     cells(i, 35, item.totalmermatendidorealpor, Color.White, Color.Black, false, true, true);
 
                     // TELA ADICIONAL
-                    cells(i, 36, item.adicional, Color.White, Color.Black, false, true, false, 2);
+                    cells(i, 36, item.telaadicional, Color.White, Color.Black, false, true, false, 2);
                     cells(i, 37, item.motivoadicional, Color.White, Color.Black, false, true);
 
                     // DEVOLUCION DE TELA
@@ -432,10 +488,10 @@ namespace TSC_WEB.Models.Modelos.Corte.LiquidacionTela.reporteliquidacion
                     cells(i, 54, item.totalmermacorte, Color.White, Color.Black, false, true, false, 2);
                 
                     // EFICIENCIA DE TIZADO
-                    cells(i, 55, item.eficienciacotizada, Color.White, Color.Black, false, true,true);
+                    cells(i, 55, item.eficienciacotizada_new, Color.White, Color.Black, false, true,true);
                     cells(i, 56, item.eficienciaexplosion, Color.White, Color.Black, false, true,true);
-                    cells(i, 57, item.eficienciaprogramadatizados, Color.White, Color.Black, false, true);
-                    cells(i, 58, item.eficienciarealtizados, Color.White, Color.Black, false, true);
+                    cells(i, 57, item.eficienciaprogramadatizados, Color.White, Color.Black, false, true,true);
+                    cells(i, 58, item.eficienciarealtizados, Color.White, Color.Black, false, true,true);
                     cells(i, 59, item.difefiprorealtizadospor, Color.White, Color.Black, false, true,true);
 
                     // DATOS DE TELA
@@ -445,22 +501,22 @@ namespace TSC_WEB.Models.Modelos.Corte.LiquidacionTela.reporteliquidacion
                     cells(i, 63, item.anchototalreal, Color.White, Color.Black, false, true, false, 2);
                     cells(i, 64, item.difanchproreal, Color.White, Color.Black, false, true, false, 2);
                     cells(i, 65, item.variacionancho, Color.White, Color.Black, false, true,true);
-                    cells(i, 66, item.densidadcotizacion, Color.White, Color.Black, false, true, false, 3);
-                    cells(i, 67, item.densidadexplosion, Color.White, Color.Black, false, true, false, 3);
+                    cells(i, 66, item.densidadcotizacion_gramos, Color.White, Color.Black, false, true, false, 3);
+                    cells(i, 67, item.densidadexplosion_gramos, Color.White, Color.Black, false, true, false, 3);
                     cells(i, 68, item.densidadprogramada, Color.White, Color.Black, false, true, false, 3);
                     cells(i, 69, item.densidadreal, Color.White, Color.Black, false, true, false, 3);
                     cells(i, 70, item.variaciondedensidad, Color.White, Color.Black, false, true, true);
-                    cells(i, 71, item.consumolinealcotizacion, Color.White, Color.Black, false, true, false, 5);
-                    cells(i, 72, item.consumolinealexplosion, Color.White, Color.Black, false, true, false, 5);
-                    cells(i, 73, item.consumolinealprogramado, Color.White, Color.Black, false, true, false, 5);
-                    cells(i, 74, item.consumolinealreal, Color.White, Color.Black, false, true, false, 5);
+                    //cells(i, 71, item.consumolinealcotizacion, Color.White, Color.Black, false, true, false, 4);
+                    //cells(i, 72, item.consumolinealexplosion, Color.White, Color.Black, false, true, false, 4);
+                    //cells(i, 73, item.consumolinealprogramado, Color.White, Color.Black, false, true, false, 4);
+                    //cells(i, 74, item.consumolinealreal, Color.White, Color.Black, false, true, false, 4);
 
 
                     i++;
                 }
 
                 //workSheet.Cells["A1:BV2"].AutoFitColumns();
-                workSheet.Cells.AutoFitColumns();
+                //workSheet.Cells.AutoFitColumns();
 
                 package.Save();
             }
@@ -468,6 +524,21 @@ namespace TSC_WEB.Models.Modelos.Corte.LiquidacionTela.reporteliquidacion
             stream.Position = 0;
             return stream;
         }
+
+
+        // CEROS DECIMALES
+        public string getcerosdecimales(int deci)
+        {
+            string devolver = "0.";
+
+            for (int x = 1; x <= deci; x++)
+            {
+                devolver += "0";
+            }
+
+            return devolver;
+        }
+
 
     }
 }
