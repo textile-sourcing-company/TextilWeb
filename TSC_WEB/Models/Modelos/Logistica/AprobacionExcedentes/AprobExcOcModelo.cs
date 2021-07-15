@@ -58,6 +58,7 @@ namespace TSC_WEB.Models.Modelos.Logistica.AprobacionExcedentes
             conexion.Desconectar();
             return objListar1;
         }
+
         public RespuestaOperacion AprobacionRechazo(int periodo, int ordencompra, string usuario, int estado, string observacion)
         {
             RespuestaOperacion respuesta = new RespuestaOperacion();
@@ -95,6 +96,7 @@ namespace TSC_WEB.Models.Modelos.Logistica.AprobacionExcedentes
             conexion.Desconectar();
             return respuesta;
         }
+
         public List<ListaAprobados> ListarAprobados(int codperiodo, string usuario)
         {
             List<ListaAprobados> objListar1 = new List<ListaAprobados>();
@@ -151,6 +153,7 @@ namespace TSC_WEB.Models.Modelos.Logistica.AprobacionExcedentes
             conexion.Desconectar();
             return objListar1;
         }
+       
         public List<ListaRechazados> ListarRechazados(int codperiodo, string usuario)
         {
             List<ListaRechazados> objListar1 = new List<ListaRechazados>();
@@ -205,6 +208,7 @@ namespace TSC_WEB.Models.Modelos.Logistica.AprobacionExcedentes
             conexion.Desconectar();
             return objListar1;
         }
+        
         public List<Informacion> InformacionExcedente(int periodo, int codgerencia, int codcc, int pedido)
         {
             List<Informacion> lista = new List<Informacion>();
@@ -249,6 +253,7 @@ namespace TSC_WEB.Models.Modelos.Logistica.AprobacionExcedentes
             conexion.Desconectar();
             return lista;
         }
+        
         public List<string> UsuariosPermitidos()
         {
             List<string> objListar1 = new List<string>();
@@ -276,6 +281,7 @@ namespace TSC_WEB.Models.Modelos.Logistica.AprobacionExcedentes
             conexion.Desconectar();
             return objListar1;
         }
+        
         public RespuestaOperacion EnviarEmail(int opcionEstado, int ordencompra, string usuario, string motivo)
         {
             RespuestaOperacion respuesta = new RespuestaOperacion();

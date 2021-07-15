@@ -15,6 +15,7 @@ namespace TSC_WEB.Models.Entidades.Finanzas.RendicionGastos
         public string ceco { get; set; }
         public int idConceptoCab { get; set; }
         public string conceptoCab { get; set; }
+        public int cantDias { get; set; }
         public string observacion { get; set; }
         public decimal valor { get; set; }
         public List<SPG25_ConceptoDetalle> conceptoDetalle { get; set; }

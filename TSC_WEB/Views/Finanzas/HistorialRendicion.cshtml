@@ -1,0 +1,264 @@
+﻿@{
+    ViewBag.Title = "Historial";
+    ViewBag.Modulo = "Finanzas";
+    Layout = "~/Views/Plantillas/_Layout.cshtml";
+}
+
+<div id="solgasapf" class="container-fluid">
+
+    <div class="container-fluid m-1">
+
+        <div class="card p-2">
+            <div class="form-inline">
+                <div class="form-group">
+                    <label for="idfechaIniHist">Fecha Desde: </label>
+                    <input class="form-control form-control-sm ml-1" type="date" id="idfechaIniHist">
+                </div>
+
+                <div class="form-group ml-4">
+                    <label for="idfechaFinHist">Fecha Hasta: </label>
+                    <input class="form-control form-control-sm ml-1" type="date" id="idfechaFinHist">
+                </div>
+
+                <div class="form-group ml-2">
+                    <button id="btnBuscarHistorial" type="button" class="btn btn-primary btn-sm pt-2">Buscar</button>
+                </div>
+
+            </div>
+        </div>
+
+        @*<div class="row m-2 form-inline">
+                <div class="col-3 p-1 form-group row">
+                    <label for="idfechaIniHist">Fecha Desde: </label>
+                    <div class="col-sm-10">
+                        <input class="form-control form-control-sm" type="date" id="idfechaIniHist">
+                    </div>
+                </div>
+
+                <div class="col-3 p-1 form-group row">
+                    <label for="idfechaFinHist">Fecha Hasta: </label>
+                    <div class="col-sm-10">
+                        <input class="form-control form-control-sm" type="date" id="idfechaFinHist">
+                    </div>
+                </div>
+                <div class="col-4 p-1 form-group row">
+                    <button id="btnBuscarHistorial" type="button" class="btn btn-primary btn-sm pt-2">Buscar</button>
+                </div>
+            </div>*@
+
+
+        <div class="card mt-1 p-1">
+            <table class="table table-sm table-bordered table-hover display nowrap" id="tblHistorial">
+                <thead class="thead-light">
+                    <tr>
+                        <th class="ocultar-columna">idSolicitud</th>
+                        <th>Fecha</th>
+                        <th>Codigo</th>
+                        <th>CeCo</th>
+                        <th>Glosa / Desc. Solicitud</th>
+                        <th class="">Estado</th>
+                        <th class="">Tipo</th>
+                        <th>Nivel Aprobacion</th>
+                        <th class="">Moneda</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody id="tblHistorialContent"></tbody>
+            </table>
+        </div>
+
+    </div>
+
+</div>
+
+<style>
+
+    #solgasapf label {
+        font-family: 'Roboto', sans-serif;
+    }
+
+
+    #solgasapf table .ocultar-columna {
+        display: none;
+    }
+
+    #modalDetalleSol table .ocultar-columna {
+        display: none;
+    }
+
+
+    #solgasapf table .row-aprob-det {
+        background-color: #D5F5E3;
+    }
+
+    #solgasapf table .row-recha-det {
+        background-color: #FADBD8;
+    }
+
+
+
+    #solgasapf input {
+        font-family: 'Roboto', sans-serif;
+    }
+
+
+    #solgasapf #tblResultado th {
+        font-family: 'Roboto', sans-serif !important;
+    }
+
+    #solgasapf #tblResultado td {
+        font-family: 'Roboto', sans-serif !important;
+    }
+
+    #solgasapf #tblDetallePend .monto-entregar {
+        width: 45px;
+    }
+
+
+    #solgasapf .cont-tblDetallePend {
+        overflow: hidden;
+    }
+
+
+    @@media (min-width: 320px) and (max-width: 479.98px) {
+    }
+
+    @@media (min-width: 480px) and (max-width: 767.98px) {
+    }
+
+    @@media (min-width: 768px) and (max-width: 991.98px) {
+    }
+
+    @@media (min-width: 992px) and (max-width: 1199.98px) {
+    }
+
+    @@media (min-width: 1200px) {
+    }
+</style>
+
+
+@section scripts {
+    <script>
+
+        const NIVEL_INTERFAZ = 30;
+        const USUARIO = "@Request.RequestContext.HttpContext.Session["usuario"]";
+        const USUARIO_COMPLETO = "@Request.RequestContext.HttpContext.Session["usuario"]" + " - " + "@Request.RequestContext.HttpContext.Session["nombre"]";
+
+        var vFechaIniPend = "";
+        var vFechaFinPend = "";
+        var vIdEstado = 0;
+        var solicitudesArray = [];
+
+        $(document).ready(function () {
+
+            Inicializar();
+
+
+            function Inicializar() {
+
+                var now = new Date();
+                var month = (now.getMonth() + 1);
+                var day = now.getDate();
+                if (month < 10)
+                    month = "0" + month;
+                if (day < 10)
+                    day = "0" + day;
+                var today = now.getFullYear() + '-' + month + '-' + day;
+
+                $('#idfechaIniHist').val(today);
+                $('#idfechaFinHist').val(today);
+
+            }
+
+            $("#btnBuscarHistorial").click(function () {
+
+                let fechaInicio = $('#idfechaIniHist').val();
+                let fechaFin = $('#idfechaFinHist').val();
+
+
+                if (fechaInicio == null ||
+                    fechaFin == null ||
+                    typeof (fechaInicio) == "undefined" ||
+                    typeof (fechaFin) == "undefined" ||
+                    fechaInicio.trim() == "" ||
+                    fechaFin.trim() == "") {
+
+                    Swal.fire('Seleccione la fecha, por favor');
+                }
+                else {
+                    var datos =
+                    {
+                        'fechaInicio': fechaInicio,
+                        'fechaFin': fechaFin,
+                        'usuario': USUARIO
+                    }
+
+
+                    $.ajax({
+                        type: "GET",
+                        url: '/finanzas/RG_Historial30',
+                        contentType: "application/json; charset=utf-8",
+                        data: datos,
+                        dataType: "json",
+                        success: function (data) {
+
+                            let tabla = $("#tblHistorial").DataTable();
+
+                            tabla.destroy();
+                            var tr = "";
+
+                            data.lista.forEach((obj) => {
+
+                                tr += "<tr> "
+                                    + " <td class='ocultar-columna'>" + obj.idSolicitud + "</td>"
+                                    + " <td> " + obj.fecha + "</td>"
+                                    + " <td> " + obj.codigo + "</td>"
+                                    + " <td> " + obj.codCeCo + "</td>"
+                                    + " <td> " + obj.observacion + "</td>"
+                                    + " <td> " + obj.estado + "</td>"
+                                    + " <td> " + obj.tipo + "</td>"
+                                    + " <td> " + obj.nivelAprobacion + "</td>"
+                                    + " <td> " + obj.moneda + "</td>"
+                                    + " <td> " + formatoNumero(obj.total) + "</td>"
+                                    + "</tr>";
+                            });
+
+                            $("#tblHistorialContent").html(tr);
+
+
+                            $("#tblHistorial").DataTable(
+                                {
+                                    dom: 'Bfrtip',
+                                    buttons: [
+                                        'excel', 'pdf', 'print'
+                                    ],
+                                    'language': { 'url': '/libs/datatables/spanish.json' },
+                                    lengthMenu: [[5, 10, 20, -1], [5, 10, 20, 'Todos']]
+                                });
+
+                        },
+                        failure: function () {
+                            console.error('error al cargar los periodos');
+                        }
+                    });
+
+
+                }
+
+            });
+
+
+            function formatoNumero(x) {
+                x = x.toFixed(2);
+                return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            }
+
+
+        });
+
+
+
+    </script>
+
+}
+

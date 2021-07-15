@@ -15,6 +15,8 @@ namespace TSC_WEB.Models.Entidades.Finanzas.RendicionGastos
         public string nivelAprobacion { get; set; }
         public string moneda { get; set; }
         public decimal total { get; set; }
+        public string usuSolicitante { get; set; }
+        public string colaborador { get; set; }
 
         public List<SPG13_SolicitudDet> listaDetalle { get; set; }
     }

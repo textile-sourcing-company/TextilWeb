@@ -83,6 +83,32 @@ namespace TSC_WEB.Controllers
             }
         }
 
+        public ActionResult AprobacionSolicitud()
+        {
+            if (Session["usuario"] != null)
+            {
+                return View();
+            }
+            else
+            {
+                return Redirect("/");
+            }
+        }
+
+
+        public ActionResult AprobSolicitudFinanzas()
+        {
+            if (Session["usuario"] != null)
+            {
+                return View();
+            }
+            else
+            {
+                return Redirect("/");
+            }
+        }
+
+
 
         public ActionResult AprobacionGastos()
         {
@@ -109,6 +135,29 @@ namespace TSC_WEB.Controllers
             }
         }
 
+        public ActionResult HistorialRendicion()
+        {
+            if (Session["usuario"] != null)
+            {
+                return View();
+            }
+            else
+            {
+                return Redirect("/");
+            }
+        }
+
+        public ActionResult Reembolso()
+        {
+            if (Session["usuario"] != null)
+            {
+                return View();
+            }
+            else
+            {
+                return Redirect("/");
+            }
+        }
 
         public ActionResult RendicionGastos()
         {
@@ -598,6 +647,7 @@ namespace TSC_WEB.Controllers
 
         #region RendicionGastos
 
+        [HttpPost]
         public async Task<JsonResult> RG_SetRendicionGastos(SPS_Parametro parametro)
         {
             StatusResponse response = new StatusResponse();
@@ -637,7 +687,7 @@ namespace TSC_WEB.Controllers
             }
         }
 
-
+        [HttpPost]
         public JsonResult RG_SetRendicionGastosDet(SPS_ParametroDet parametro)
         {
             StatusResponse response = new StatusResponse();
@@ -665,16 +715,20 @@ namespace TSC_WEB.Controllers
                     entidad.nivelInterfaz = parametro.nivelInterfaz;
                     entidad.idTipo = parametro.idTipo;
 
+
                     foreach (var item in parametro.conceptoDetArray)
                     {
                         entidad.idConceptoDet = item.idConceptoDet;
                         entidad.codCeCo = item.codCeCo;
                         entidad.secuencia = 0;
                         entidad.seleccionadoDet = item.seleccionadoDet;
+                        entidad.cantDias = item.cantDias;
+                        entidad.montoSolicitado = item.montoSolicitado;
+                        entidad.observacionDet = item.observacionDet;
 
                         response = model.SetRendicionGastos(entidad);
-                    }
 
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -696,6 +750,7 @@ namespace TSC_WEB.Controllers
                 return Json(new { status = response, responseEntity = new SPG6_SolicitudCab(), isRedirect = true, redirectUrl = "/login/index" }, JsonRequestBehavior.AllowGet);
             }
         }
+
 
 
         [HttpGet]
@@ -773,6 +828,7 @@ namespace TSC_WEB.Controllers
             }
         }
 
+
         [HttpGet]
         public async Task<JsonResult> RG_SolicitudDet(int idSolicitud)
         {
@@ -798,12 +854,10 @@ namespace TSC_WEB.Controllers
             }
         }
 
-
         [HttpGet]
         public async Task<JsonResult> RG_SolicitudDetalle(int idSolicitud, int idConceptoCab)
         {
             SPG8_SolicitudDetalle entidad = null;
-
 
             if (Session["usuario"] != null)
             {
@@ -811,46 +865,8 @@ namespace TSC_WEB.Controllers
                 entidad = new SPG8_SolicitudDetalle();
                 entidad.conceptoDetalle = new List<SPG25_ConceptoDetalle>();
 
-                List<SPG25_ConceptoDetalle> conceptDetCompleto = new List<SPG25_ConceptoDetalle>();
-                List<SPG26_SolDetConceptos> conceptDetSolicitud = new List<SPG26_SolDetConceptos>();
-                List<SPG25_ConceptoDetalle> conceptoDetFinal = new List<SPG25_ConceptoDetalle>();
-
-                entidad = await objModel.IdSolicitudDetalle(idSolicitud, idConceptoCab);
-
-                conceptDetCompleto = objModel.ConceptosDetalleVisualizar(idConceptoCab);
-                conceptDetSolicitud = objModel.SolicitudDetalleConcepto(entidad.idSolicitud, idConceptoCab);
-
-
-                foreach (var item in conceptDetCompleto)
-                {
-                    bool existe = conceptDetSolicitud.Exists(x => x.idConceptoDet == item.idConceptoDet);
-
-                    if (existe)
-                    {
-                        conceptoDetFinal.Add(new SPG25_ConceptoDetalle()
-                        {
-                            idConceptoDet = item.idConceptoDet,
-                            conceptoDet = item.conceptoDet,
-                            consideracion = item.consideracion,
-                            montoMaximo = item.montoMaximo,
-                            existe = 1
-                        }); ;
-                    }
-                    else
-                    {
-                        conceptoDetFinal.Add(new SPG25_ConceptoDetalle()
-                        {
-                            idConceptoDet = item.idConceptoDet,
-                            conceptoDet = item.conceptoDet,
-                            consideracion = item.consideracion,
-                            montoMaximo = item.montoMaximo,
-                            existe = 0
-                        });
-                    }
-                }
-
-
-                entidad.conceptoDetalle = conceptoDetFinal;
+                entidad = await objModel.IdSolicitudDetalle(idSolicitud);
+                entidad.conceptoDetalle = objModel.ConceptosDetalleVisualizar(idSolicitud, idConceptoCab);
 
                 return Json(new
                 {
@@ -866,9 +882,7 @@ namespace TSC_WEB.Controllers
             }
         }
 
-
-
-
+        [HttpPost]
         public JsonResult RG_EliminarSolicitud(SPS_Parametro parametro)
         {
             StatusResponse response = new StatusResponse();
@@ -902,7 +916,6 @@ namespace TSC_WEB.Controllers
             }
         }
 
-
         [HttpGet]
         public async Task<JsonResult> RG_BuscarHistorial(DateTime fechaInicio, DateTime fechaFin)
         {
@@ -927,7 +940,6 @@ namespace TSC_WEB.Controllers
                 return Json(new { lista = new List<object>(), isRedirect = true, redirectUrl = "/login/index" }, JsonRequestBehavior.AllowGet);
             }
         }
-
 
         [HttpGet]
         public async Task<JsonResult> RG_SolicitudXCodigo(string codigo)
@@ -959,9 +971,8 @@ namespace TSC_WEB.Controllers
             }
         }
 
-
         [HttpGet]
-        public async Task<JsonResult> RG_PendientesAprobacion20(DateTime fechaInicio, DateTime fechaFin, int nivelInterfaz)
+        public async Task<JsonResult> RG_PendientesAprobacion20(int nivelInterfaz)
         {
             IEnumerable<SPG11_ListaPendientes> lista = null;
 
@@ -969,7 +980,7 @@ namespace TSC_WEB.Controllers
             {
                 RendicionGastosModel objModel = new RendicionGastosModel();
 
-                lista = await objModel.PendientesAprobacion20(fechaInicio.ToString("yyyyMMdd"), fechaFin.ToString("yyyyMMdd"), nivelInterfaz, Session["usuario"].ToString());
+                lista = await objModel.PendientesAprobacion20(nivelInterfaz, Session["usuario"].ToString());
 
                 return Json(new
                 {
@@ -984,7 +995,6 @@ namespace TSC_WEB.Controllers
                 return Json(new { lista = new object(), isRedirect = true, redirectUrl = "/login/index" }, JsonRequestBehavior.AllowGet);
             }
         }
-
 
         [HttpGet]
         public async Task<JsonResult> RG_PendAprob20Det(int idSolicitud)
@@ -1014,9 +1024,10 @@ namespace TSC_WEB.Controllers
             }
         }
 
-
-        public JsonResult RG_AprobRech20(SPS_Parametro parametro)
+        [HttpPost]
+        public JsonResult RG_AprobRech20(SPS_ParametroAprob parametro)
         {
+            SPS_Parametro parametroAprob = new SPS_Parametro();
             StatusResponse response = new StatusResponse();
             SPG6_SolicitudCab solicitudCab = new SPG6_SolicitudCab();
 
@@ -1026,7 +1037,18 @@ namespace TSC_WEB.Controllers
 
                 try
                 {
-                    response = model.SetRendicionGastos(parametro);
+                    foreach (var item in parametro.solicitudesArray)
+                    {
+                        parametroAprob = new SPS_Parametro();
+
+                        parametroAprob.idSolicitud = Convert.ToInt32(item.idsolicitud);
+                        parametroAprob.opcion = parametro.opcion;
+                        parametroAprob.usuario = parametro.usuario;
+                        parametroAprob.nivelInterfaz = parametro.nivelInterfaz;
+
+                        response = model.SetRendicionGastos(parametroAprob);
+                    }
+
                 }
                 catch (Exception ex)
                 {
@@ -1047,7 +1069,6 @@ namespace TSC_WEB.Controllers
                 return Json(new { status = response, isRedirect = true, redirectUrl = "/login/index" }, JsonRequestBehavior.AllowGet);
             }
         }
-
 
         [HttpGet]
         public async Task<JsonResult> RG_Historial20(DateTime fechaInicio, DateTime fechaFin, string usuario)
@@ -1074,9 +1095,8 @@ namespace TSC_WEB.Controllers
             }
         }
 
-
         [HttpGet]
-        public async Task<JsonResult> RG_PendientesAprobacion30(DateTime fechaInicio, DateTime fechaFin, int nivelInterfaz, int idEstado, string codigo)
+        public async Task<JsonResult> RG_PendientesAprobacion30(int nivelInterfaz)
         {
             IEnumerable<SPG15_ListaPendientes30> lista = null;
 
@@ -1084,7 +1104,7 @@ namespace TSC_WEB.Controllers
             {
                 RendicionGastosModel objModel = new RendicionGastosModel();
 
-                lista = await objModel.PendientesAprobacion30(fechaInicio.ToString("yyyyMMdd"), fechaFin.ToString("yyyyMMdd"), nivelInterfaz, Session["usuario"].ToString(), idEstado, codigo);
+                lista = await objModel.PendientesAprobacion30(nivelInterfaz, Session["usuario"].ToString());
 
                 return Json(new
                 {
@@ -1099,7 +1119,6 @@ namespace TSC_WEB.Controllers
                 return Json(new { lista = new object(), isRedirect = true, redirectUrl = "/login/index" }, JsonRequestBehavior.AllowGet);
             }
         }
-
 
         [HttpGet]
         public async Task<JsonResult> RG_PendAprob30Det(int idSolicitud)
@@ -1119,7 +1138,6 @@ namespace TSC_WEB.Controllers
                     entidad = entidad,
                     isRedirect = false,
                     redirectUrl = ""
-
                 }, JsonRequestBehavior.AllowGet);
             }
             else
@@ -1127,7 +1145,6 @@ namespace TSC_WEB.Controllers
                 return Json(new { entidad = new object(), isRedirect = true, redirectUrl = "/login/index" }, JsonRequestBehavior.AllowGet);
             }
         }
-
 
         [HttpGet]
         public JsonResult RG_PendAprob30TablaDet(int idSolicitud)
@@ -1154,17 +1171,30 @@ namespace TSC_WEB.Controllers
             }
         }
 
-
-        public JsonResult RG_AprobRech30(SPA_Parametro parametro)
+        [HttpPost]
+        public JsonResult RG_AprobRech30(SPA_ParametroAprob parametro)
         {
             StatusResponse response = new StatusResponse();
+            SPA_Parametro parametroAprob = new SPA_Parametro();
+
             if (Session["usuario"] != null)
             {
                 RendicionGastosModel model = new RendicionGastosModel();
 
                 try
                 {
-                    response = model.AprobRendicionGastos(parametro);
+                    foreach (var item in parametro.solicitudesArray)
+                    {
+                        parametroAprob = new SPA_Parametro();
+
+                        parametroAprob.opcion = item.opcion;
+                        parametroAprob.opcionTipoAprob = item.opcionAprob;
+                        parametroAprob.idSolicitud = parametro.idsolicitud;
+                        parametroAprob.secuencia = item.secuencia;
+                        parametroAprob.valorEntrega = item.montoIngresado;
+
+                        response = model.AprobRendicionGastos(parametroAprob);
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -1185,7 +1215,6 @@ namespace TSC_WEB.Controllers
                 return Json(new { status = response, isRedirect = true, redirectUrl = "/login/index" }, JsonRequestBehavior.AllowGet);
             }
         }
-
 
         [HttpGet]
         public async Task<JsonResult> RG_Historial30(DateTime fechaInicio, DateTime fechaFin, string usuario)
@@ -1212,7 +1241,6 @@ namespace TSC_WEB.Controllers
             }
         }
 
-
         [HttpGet]
         public async Task<JsonResult> RG_Tipos()
         {
@@ -1237,7 +1265,6 @@ namespace TSC_WEB.Controllers
                 return Json(new { lista = new List<object>(), isRedirect = true, redirectUrl = "/login/index" }, JsonRequestBehavior.AllowGet);
             }
         }
-
 
         [HttpGet]
         public async Task<JsonResult> RG_ConceptoDetalleInsertar(int idConceptoCab)
@@ -1264,7 +1291,6 @@ namespace TSC_WEB.Controllers
             }
         }
 
-
         [HttpGet]
         public async Task<JsonResult> RG_EstadosSolcitud()
         {
@@ -1289,7 +1315,6 @@ namespace TSC_WEB.Controllers
                 return Json(new { lista = new List<object>(), isRedirect = true, redirectUrl = "/login/index" }, JsonRequestBehavior.AllowGet);
             }
         }
-
 
         [HttpGet]
         public async Task<JsonResult> RG_TipoComprobantes()
@@ -1316,17 +1341,20 @@ namespace TSC_WEB.Controllers
             }
         }
 
-
         [HttpGet]
-        public async Task<JsonResult> RG_SolBusquedaXCod(string codigo)
+        public JsonResult RG_SolBusquedaXCod(string codigo)
         {
             SPG23_BusquedaXCod entidad = null;
 
             if (Session["usuario"] != null)
             {
                 RendicionGastosModel objModel = new RendicionGastosModel();
+                entidad = new SPG23_BusquedaXCod();
 
-                entidad = await objModel.SolBusquedaXCod(codigo);
+                entidad = objModel.SolBusquedaXCod(codigo);
+
+                entidad.listaDetalle = new List<SPG32_DetalleSolicitud>();
+                entidad.listaDetalle = objModel.SolicitudDetalleRendicion(codigo);
 
                 return Json(new
                 {
@@ -1341,6 +1369,32 @@ namespace TSC_WEB.Controllers
                 return Json(new { entidad = new object(), isRedirect = true, redirectUrl = "/login/index" }, JsonRequestBehavior.AllowGet);
             }
         }
+
+
+        [HttpGet]
+        public JsonResult RG_SolicitudDetalleRendicion(string codigo)
+        {
+            List<SPG32_DetalleSolicitud> lista = new List<SPG32_DetalleSolicitud>(); ;
+
+            if (Session["usuario"] != null)
+            {
+                RendicionGastosModel objModel = new RendicionGastosModel();
+                lista = objModel.SolicitudDetalleRendicion(codigo).ToList();
+
+                return Json(new
+                {
+                    lista = lista,
+                    isRedirect = false,
+                    redirectUrl = ""
+                }, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json(new { lista = new object(), isRedirect = true, redirectUrl = "/login/index" }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+
 
 
         [HttpPost]
@@ -1376,10 +1430,650 @@ namespace TSC_WEB.Controllers
             }
         }
 
+        [HttpGet]
+        public async Task<JsonResult> RG_Dias()
+        {
+            IEnumerable<SPG27_Dias> lista = null;
 
-        
+            if (Session["usuario"] != null)
+            {
+                RendicionGastosModel objModel = new RendicionGastosModel();
+
+                lista = await objModel.Dias();
+
+                return Json(new
+                {
+                    lista = lista,
+                    isRedirect = false,
+                    redirectUrl = ""
+
+                }, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json(new { lista = new object(), isRedirect = true, redirectUrl = "/login/index" }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        [HttpGet]
+        public async Task<JsonResult> RG_DetalleEditar(int idSolicitud, int idConceptoCab)
+        {
+            SPG28_DetalleEditar entidad = null;
+
+            if (Session["usuario"] != null)
+            {
+                RendicionGastosModel objModel = new RendicionGastosModel();
+                entidad = new SPG28_DetalleEditar();
+                entidad.conceptoDetalle = new List<SPG30_ConceptoDetalle>();
+
+                entidad = await objModel.DetalleEditar(idSolicitud, idConceptoCab);
+
+                if (entidad != null)
+                {
+                    entidad.conceptoDetalle = objModel.ConceptosDetalleEditar(idSolicitud, idConceptoCab);
+                }
 
 
+                return Json(new
+                {
+                    entidad = entidad,
+                    isRedirect = false,
+                    redirectUrl = ""
+
+                }, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json(new { entidad = new object(), isRedirect = true, redirectUrl = "/login/index" }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        [HttpGet]
+        public async Task<JsonResult> RG_ConceptoCabEdit(int idSolicitud)
+        {
+            IEnumerable<SPG29_ConceptoCabEdit> lista = null;
+
+            if (Session["usuario"] != null)
+            {
+                RendicionGastosModel objModel = new RendicionGastosModel();
+
+                lista = await objModel.ConceptosCabEdit(idSolicitud);
+
+                return Json(new
+                {
+                    lista = lista,
+                    isRedirect = false,
+                    redirectUrl = ""
+
+                }, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json(new { lista = new List<object>(), isRedirect = true, redirectUrl = "/login/index" }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+
+        [HttpPost]
+        public async Task<JsonResult> RG_SetProveedorValidar(SPS_Proveedor parametro)
+        {
+            SPS1_Proveedor response = new SPS1_Proveedor();
+
+            if (Session["usuario"] != null)
+            {
+                RendicionGastosModel model = new RendicionGastosModel();
+
+                try
+                {
+                    response = await model.SetProveedorValidar(parametro);
+                }
+                catch (Exception ex)
+                {
+                    response.idResponse = 0;
+                    response.statusResponse = ex.Message;
+                }
+
+                return Json(new
+                {
+                    entidad = response,
+                    isRedirect = false,
+                    redirectUrl = ""
+
+                }, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json(new { entidad = response, isRedirect = true, redirectUrl = "/login/index" }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+
+        [HttpPost]
+        public async Task<JsonResult> RG_SetProveedorRegistrar(SPS_Proveedor parametro)
+        {
+            SPS2_Proveedor response = new SPS2_Proveedor();
+
+            if (Session["usuario"] != null)
+            {
+                RendicionGastosModel model = new RendicionGastosModel();
+
+                try
+                {
+                    response = await model.SetProveedorRegistrar(parametro);
+                }
+                catch (Exception ex)
+                {
+                    response.idResponse = 0;
+                    response.statusResponse = ex.Message;
+                }
+
+                return Json(new
+                {
+                    entidad = response,
+                    isRedirect = false,
+                    redirectUrl = ""
+
+                }, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json(new { entidad = response, isRedirect = true, redirectUrl = "/login/index" }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+
+
+        [HttpGet]
+        public async Task<JsonResult> RG_PendientesRendicion()
+        {
+            IEnumerable<SPG31_PendientesRendicion> lista = null;
+
+            if (Session["usuario"] != null)
+            {
+                RendicionGastosModel objModel = new RendicionGastosModel();
+
+                lista = await objModel.PendientesRendicion();
+
+                return Json(new
+                {
+                    lista = lista,
+                    isRedirect = false,
+                    redirectUrl = ""
+
+                }, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json(new { lista = new object(), isRedirect = true, redirectUrl = "/login/index" }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+
+        [HttpPost]
+        public JsonResult RG_SetRendicionComprobante(SPS_ComprobanteParametroTodo parametroTodo)
+        {
+            StatusResponse responseCab = new StatusResponse();
+            StatusResponse responseSeqSol = new StatusResponse();
+            StatusResponse responseDet = new StatusResponse();
+
+            SPS_ComprobanteParametro parametro = new SPS_ComprobanteParametro();
+
+            if (Session["usuario"] != null)
+            {
+                RendicionGastosModel model = new RendicionGastosModel();
+
+                try
+                {
+                    parametro = new SPS_ComprobanteParametro();
+
+                    parametro.opcion = parametroTodo.opcion;
+                    parametro.idRendCompte = parametroTodo.idRendCompte;
+                    parametro.idTipoComp = parametroTodo.idTipoComp;
+                    parametro.serieNumero = parametroTodo.serieNumero;
+                    parametro.rucDNI = parametroTodo.rucDNI;
+                    parametro.rs = parametroTodo.rs;
+                    parametro.codigoPC = parametroTodo.codigoPC;
+                    parametro.obs = parametroTodo.obs;
+                    parametro.fechaEmision = parametroTodo.fechaEmision;
+                    parametro.fecha = DateTime.Now;
+                    parametro.periodo = parametroTodo.fechaEmision.Year.ToString() + "-" + ((parametroTodo.fechaEmision.Month < 10) ? "0" + parametroTodo.fechaEmision.Month.ToString() : parametroTodo.fechaEmision.Month.ToString());
+                    parametro.ceco = parametroTodo.codceco;
+                    parametro.idTipoMod = parametroTodo.idTipoMod;
+
+                    // 1. Registro Comprobante
+                    responseCab = model.SetRendicionComprobanteCab(parametro);
+
+                    // 2. Registrar Comprobante con Solicitud
+                    foreach (var item in parametroTodo.solitudSeqArray)
+                    {
+                        parametro.opcion = 2;
+                        parametro.idRendCompte = responseCab.idResponse;
+                        parametro.idSolicitud = item.idSolicitud;
+                        parametro.secuencia = item.secuencia;
+
+                        responseSeqSol = model.SetRendicionComprobanteCab(parametro);
+                    }
+
+                    // 3. Registrar Detalle del Comprobante
+                    foreach (var item in parametroTodo.detalleComprobanteArray)
+                    {
+                        parametro.opcion = 3;
+                        parametro.idRendCompte = responseCab.idResponse;
+                        parametro.fecha = Convert.ToDateTime(item.fecha);
+                        parametro.detalle1 = item.detalle1;
+                        parametro.detalle2 = item.detalle2;
+                        parametro.codum = item.codum;
+                        parametro.valorunit = item.valorunit;
+                        parametro.cantidad = item.cantidad;
+
+                        responseDet = model.SetRendicionComprobanteCab(parametro);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    responseDet.idResponse = 0;
+                    responseDet.statusResponse = ex.Message;
+                }
+
+                return Json(new
+                {
+                    entidad = responseDet,
+                    isRedirect = false,
+                    redirectUrl = ""
+
+                }, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json(new { entidad = responseDet, isRedirect = true, redirectUrl = "/login/index" }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+
+        [HttpGet]
+        public async Task<JsonResult> RG_EstadoSolicitudRendGast(int idSolicitud)
+        {
+            SPV2_EstadoSolicitud entidad = null;
+
+            if (Session["usuario"] != null)
+            {
+                RendicionGastosModel objModel = new RendicionGastosModel();
+
+                entidad = await objModel.EstadoSolicitudRendGast(idSolicitud);
+
+                return Json(new
+                {
+                    entidad = entidad,
+                    isRedirect = false,
+                    redirectUrl = ""
+
+                }, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json(new { entidad = new object(), isRedirect = true, redirectUrl = "/login/index" }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+
+        [HttpGet]
+        public async Task<JsonResult> RG_PendientesAprobRendGastos(int nivelInterfaz)
+        {
+            IEnumerable<SPG33_PendAprobRendGastos> lista = null;
+
+            if (Session["usuario"] != null)
+            {
+                RendicionGastosModel objModel = new RendicionGastosModel();
+
+                lista = await objModel.PendientesAprobRendGastos(nivelInterfaz, Session["usuario"].ToString());
+
+                return Json(new
+                {
+                    lista = lista,
+                    isRedirect = false,
+                    redirectUrl = ""
+
+                }, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json(new { lista = new object(), isRedirect = true, redirectUrl = "/login/index" }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+
+        [HttpGet]
+        public JsonResult RG_PendientesAprobRendGastosDet(int idSolicitud)
+        {
+            SPG34_PendApbRdGstsCab entidad = null;
+
+            if (Session["usuario"] != null)
+            {
+                RendicionGastosModel objModel = new RendicionGastosModel();
+
+                entidad = objModel.PendientesAprobRendGastosCab(idSolicitud);
+                entidad.listaDetalle = objModel.PendientesAprobRendGastosDet(idSolicitud).ToList();
+
+                return Json(new
+                {
+                    entidad = entidad,
+                    isRedirect = false,
+                    redirectUrl = ""
+
+                }, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json(new { entidad = new object(), isRedirect = true, redirectUrl = "/login/index" }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+
+
+        [HttpPost]
+        public JsonResult RG_AprobGastoRendido20(SPA_Parametro parametro)
+        {
+            StatusResponse response = new StatusResponse();
+            SPA_Parametro parametroAprob = new SPA_Parametro();
+
+            if (Session["usuario"] != null)
+            {
+                RendicionGastosModel model = new RendicionGastosModel();
+
+                try
+                {
+                    response = model.AprobRendicionGastos(parametro);
+                }
+                catch (Exception ex)
+                {
+                    response.idResponse = 0;
+                    response.statusResponse = ex.Message;
+                }
+
+                return Json(new
+                {
+                    status = response,
+                    isRedirect = false,
+                    redirectUrl = ""
+
+                }, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json(new { status = response, isRedirect = true, redirectUrl = "/login/index" }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+
+        [HttpGet]
+        public async Task<JsonResult> RG_ListaRendicionFinanzas(DateTime fechaInicio, DateTime fechaFin, int nivelInterfaz, string codigo)
+        {
+            IEnumerable<SPG36_RndGstsAprobGstsFnzas> lista = null;
+
+            if (Session["usuario"] != null)
+            {
+                RendicionGastosModel objModel = new RendicionGastosModel();
+
+                lista = await objModel.ListaRendicionFinanzas(nivelInterfaz, Session["usuario"].ToString(), fechaInicio.ToString("yyyyMMdd"), fechaFin.ToString("yyyyMMdd"), codigo);
+
+                return Json(new
+                {
+                    lista = lista,
+                    isRedirect = false,
+                    redirectUrl = ""
+
+                }, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json(new { lista = new object(), isRedirect = true, redirectUrl = "/login/index" }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+
+        [HttpGet]
+        public JsonResult RG_RendGstsPendDetalle30(int idSolicitud)
+        {
+            SPG37_DetalleCab entidad = null;
+
+            if (Session["usuario"] != null)
+            {
+                RendicionGastosModel objModel = new RendicionGastosModel();
+
+                entidad = objModel.RendGstsPend30Cab(idSolicitud);
+                entidad.listaDetalle = new List<SPG38_DetalleDet>();
+                entidad.listaDetalle = objModel.RendGstsPend30Det(idSolicitud).ToList();
+
+                return Json(new
+                {
+                    entidad = entidad,
+                    isRedirect = false,
+                    redirectUrl = ""
+                }, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json(new { entidad = new object(), isRedirect = true, redirectUrl = "/login/index" }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+
+        [HttpPost]
+        public JsonResult RG_AprobRendicionGastos30(SPA_Parametro parametro)
+        {
+            StatusResponse response = new StatusResponse();
+            SPA_Parametro parametroAprob = new SPA_Parametro();
+
+            if (Session["usuario"] != null)
+            {
+                RendicionGastosModel model = new RendicionGastosModel();
+
+                try
+                {
+                    response = model.AprobRendicionGastos(parametro);
+                }
+                catch (Exception ex)
+                {
+                    response.idResponse = 0;
+                    response.statusResponse = ex.Message;
+                }
+
+                return Json(new
+                {
+                    status = response,
+                    isRedirect = false,
+                    redirectUrl = ""
+
+                }, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json(new { status = response, isRedirect = true, redirectUrl = "/login/index" }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+
+
+        [HttpGet]
+        public async Task<JsonResult> RG_TiposAprobGstsFnzs()
+        {
+            IEnumerable<SPG39_Tipos> lista = null;
+
+            if (Session["usuario"] != null)
+            {
+                RendicionGastosModel objModel = new RendicionGastosModel();
+
+                lista = await objModel.TiposAprobGstsFnzs();
+
+                return Json(new
+                {
+                    lista = lista,
+                    isRedirect = false,
+                    redirectUrl = ""
+
+                }, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json(new { lista = new List<object>(), isRedirect = true, redirectUrl = "/login/index" }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        [HttpGet]
+        public async Task<JsonResult> RG_ColaboradorSofya(string filtro)
+        {
+            IEnumerable<SPG40_Colaborador> lista = null;
+
+            if (Session["usuario"] != null)
+            {
+                RendicionGastosModel objModel = new RendicionGastosModel();
+
+                lista = await objModel.ColaboradorSofya(filtro);
+
+                return Json(new
+                {
+                    lista = lista,
+                    isRedirect = false,
+                    redirectUrl = ""
+
+                }, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json(new { lista = new List<object>(), isRedirect = true, redirectUrl = "/login/index" }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+
+
+        [HttpGet]
+        public async Task<JsonResult> RG_RendicionDetalle(int idRendCompte)
+        {
+            IEnumerable<SPG41_RendicionDetalle> lista = null;
+
+            if (Session["usuario"] != null)
+            {
+                RendicionGastosModel objModel = new RendicionGastosModel();
+
+                lista = await objModel.RendicionDetalle(idRendCompte);
+
+                return Json(new
+                {
+                    lista = lista,
+                    isRedirect = false,
+                    redirectUrl = ""
+
+                }, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json(new { lista = new List<object>(), isRedirect = true, redirectUrl = "/login/index" }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+
+        [HttpGet]
+        public async Task<JsonResult> RG_BuscarColaboradorXDNI(string dni)
+        {
+            SPG42_ColaboradorSofya entidad = null;
+
+            if (Session["usuario"] != null)
+            {
+                RendicionGastosModel objModel = new RendicionGastosModel();
+
+                entidad = await objModel.BuscarColaboradorXDNI(dni);
+
+                return Json(new
+                {
+                    entidad = entidad,
+                    isRedirect = false,
+                    redirectUrl = ""
+
+                }, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json(new { entidad = new object(), isRedirect = true, redirectUrl = "/login/index" }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+
+        [HttpGet]
+        public async Task<JsonResult> RG_EstadoSolicitud(int idSolicitud)
+        {
+            SPG43_EstadoSolicitud entidad = null;
+
+            if (Session["usuario"] != null)
+            {
+                RendicionGastosModel objModel = new RendicionGastosModel();
+
+                entidad = await objModel.EstadoSolicitud(idSolicitud);
+
+                return Json(new
+                {
+                    entidad = entidad,
+                    isRedirect = false,
+                    redirectUrl = ""
+
+                }, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json(new { entidad = new object(), isRedirect = true, redirectUrl = "/login/index" }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+
+        [HttpGet]
+        public async Task<JsonResult> RG_UnidadesMedida()
+        {
+            IEnumerable<SPG44_UnidadesMedida> lista = null;
+
+            if (Session["usuario"] != null)
+            {
+                RendicionGastosModel objModel = new RendicionGastosModel();
+
+                lista = await objModel.UnidadesMedida();
+
+                return Json(new
+                {
+                    lista = lista,
+                    isRedirect = false,
+                    redirectUrl = ""
+
+                }, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json(new { lista = new object(), isRedirect = true, redirectUrl = "/login/index" }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+
+        [HttpGet]
+        public async Task<JsonResult> RG_SolicitudDetReembolso(int idSolicitud)
+        {
+            IEnumerable<SPG45_SolicitudDetalle> lista = null;
+
+            if (Session["usuario"] != null)
+            {
+                RendicionGastosModel objModel = new RendicionGastosModel();
+
+                lista = await objModel.SolicitudDetReembolso(idSolicitud);
+
+                return Json(new
+                {
+                    lista = lista,
+                    isRedirect = false,
+                    redirectUrl = ""
+
+                }, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json(new { lista = new List<object>(), isRedirect = true, redirectUrl = "/login/index" }, JsonRequestBehavior.AllowGet);
+            }
+        }
 
         #endregion
 

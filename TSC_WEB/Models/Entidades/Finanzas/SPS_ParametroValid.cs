@@ -9,5 +9,6 @@ namespace TSC_WEB.Models.Entidades.Finanzas
     {
         public int opcion { get; set; }
         public int idSolicitud { get; set; }
+        public string codigo { get; set; }
     }
 }

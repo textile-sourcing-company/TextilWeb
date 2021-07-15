@@ -17,6 +17,9 @@ namespace TSC_WEB.Models.Entidades.Finanzas.RendicionGastos
         public int idTipoMod { get; set; }
         public string observacion { get; set; }
         public int idTipo { get; set; }
+        public string ctpava_bnf { get; set; }
+        public string canvar_bnf { get; set; }
+        public string colaborador { get; set; }
 
         public List<SPG7_SolicitudDet> listaDetalle { get; set; }
     }

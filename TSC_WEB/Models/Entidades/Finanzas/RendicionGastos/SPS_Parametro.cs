@@ -28,5 +28,13 @@ namespace TSC_WEB.Models.Entidades.Finanzas.RendicionGastos
         public int idTipo { get; set; }
         public int seleccionadoDet { get; set; }
         public int idConceptoCab { get; set; }
+
+        public int cantDias { get; set; }
+        public decimal montoSolicitado { get; set; }
+        public string observacionDet { get; set; }
+
+        public string ctpava_bnf { get; set; }
+        public string canvar_bnf { get; set; }
+        public string colaborador { get; set; }
     }
 }

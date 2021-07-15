@@ -7,174 +7,183 @@
 
 <div id="solgas" class="container-fluid">
 
-    <ul class="nav nav-tabs nav-justified md-tabs indigo" id="myTabJust" role="tablist">
-        <li class="nav-item">
-            <a class="nav-link active" id="firma-tab-just" data-toggle="tab" href="#sg-registro" role="tab" aria-controls="firma-just"
-               aria-selected="true">Registro</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" id="aprobados-tab-just" data-toggle="tab" href="#sg-historial" role="tab" aria-controls="aprobadas-just"
-               aria-selected="false">Historial</a>
-        </li>
-    </ul>
+    @*<ul class="nav nav-tabs nav-justified md-tabs indigo" id="myTabJust" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" id="firma-tab-just" data-toggle="tab" href="#sg-registro" role="tab" aria-controls="firma-just"
+                   aria-selected="true">Registro</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="aprobados-tab-just" data-toggle="tab" href="#sg-historial" role="tab" aria-controls="aprobadas-just"
+                   aria-selected="false">Historial</a>
+            </li>
+        </ul>*@
 
 
 
-    <div class="tab-content card pt-1" id="myTabContentJust">
-        <div class="tab-pane fade show active" id="sg-registro" role="tabpanel" aria-labelledby="firma-tab-just">
+    @*<div class="tab-content card pt-1" id="myTabContentJust">
+            <div class="tab-pane fade show active" id="sg-registro" role="tabpanel" aria-labelledby="firma-tab-just">
 
-            <div class="container-fluid">
+        <div class="container-fluid">*@
 
-                <div class="row d-flex flex-row-reverse m-1 mr-3">
-                    <div class="estado-solicitud  d-flex flex-row-reverse">
-                        <div id="estado-icon"></div>
-                        <h5 id="estado-desc"></h5>
-                    </div>
-                </div>
-
-                <div class="row m-2">
-
-                    <div class="col-4 p-1">
-                        <label for="idtxtcodigo">Codigo de Solicitud</label>
-                        <input class="form-control form-control-sm" type="text" id="idtxtcodigo" placeholder="Busca un código <Enter>" maxlength="10">
-                    </div>
-
-                    <div class="col-2 p-1">
-                        <label for="iddttFechaHora">Fecha</label>
-                        <input class="form-control form-control-sm" type="text" id="iddttFechaHora" disabled>
-                    </div>
-
-                    <div class="col-2 p-1">
-                        <label for="idCbxTipo">Tipo</label>
-                        <select class="form-control form-control-sm" id="idCbxTipo"></select>
-                    </div>
-
-
-                    <div class="col-4 p-1">
-                        <label for="idusuario">Usuario</label>
-                        <input class="form-control form-control-sm" type="text" id="idusuario" disabled>
-                    </div>
-
-                    <div class="col-3 p-1">
-                        <label for="idCbxTipoMod">Tipo de Moneda</label>
-                        <select class="form-control form-control-sm" id="idCbxTipoMod"></select>
-                    </div>
-
-                    <div class="col-9 p-1">
-                        <label for="idtxtaobs">Motivo Glosa / Descripción Solicitud</label>
-                        <input type="text" class="form-control form-control-sm" placeholder="Ingrese una nota (opcional)" id="idtxtaobs" maxlength="300" />
-                    </div>
-
-
-                    <div class="col-12 p-2 d-flex justify-content-between">
-                        <div class="col-8 d-flex justify-content-between cbtn-acciones">
-
-                            <div>
-                                <button id="btnNuevo" type="button" class="btn btn-primary btn-sm"><i class="fas fa-file"></i> Nuevo</button>
-                                <button id="btnGuardarCabecera" type="button" class="btn btn-primary btn-sm ml-1 mr-1"><i class="fas fa-save"></i> Guardar</button>
-                                <button id="btnBuscarCodigo" type="button" class="btn btn-primary btn-sm"><i class="fas fa-search"></i> Buscar</button>
-                            </div>
-                            <div>
-                                <button id="btnAgregarDetalle" type="button" data-toggle="modal" data-target="#modalSolicitudDetalle" class="btn btn-warning btn-sm"><i class="fas fa-plus"></i> Agregar Detalle</button>
-                            </div>
-
-                        </div>
-
-
-                        <div class="col-3 ckpi-total d-flex justify-content-between">
-
-                            <div class="ckpi-item">
-                                <h5 id="kpi-cantidad">0</h5>
-                                <span>Cantidad</span>
-                            </div>
-
-                            <div class="ckpi-item">
-                                <h5 id="kpi-total">0</h5>
-                                <span>Total</span>
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-                <div class="mt-1 mb-1">
-                    <hr />
-                </div>
-
-
-                <div class="card card-body">
-
-                    <table class="table table-sm table-bordered table-hover display nowrap" id="tblDetalle" style="width: 100%">
-                        <thead class="thead-light">
-                            <tr>
-                                <th class="ocultar-columna">idSolicitud</th>
-                                <th>Codigo</th>
-                                <th class="">Fecha</th>
-                                <th class="">Estados</th>
-                                <th>Centro de Costo</th>
-                                <th>Concepto</th>
-                                <th class="">Moneda</th>
-                                <th>Valor</th>
-                                <th>Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tblDetalleContent"></tbody>
-                    </table>
-
-
-                </div>
-
-            </div>
-        </div>
-
-
-        <div class="tab-pane fade seccion-ap-rech" id="sg-historial" role="tabpanel" aria-labelledby="aprobadas-tab-just">
-
-            <div class="container-fluid m-2">
-
-                <div class="row m-2">
-                    <div class="col-3 p-1">
-                        <label for="idfechaInicio">Fecha Desde: </label>
-                        <input class="form-control form-control-sm" type="date" id="idfechaInicio">
-                    </div>
-
-                    <div class="col-3 p-1">
-                        <label for="idfechaFin">Fecha Hasta: </label>
-                        <input class="form-control form-control-sm" type="date" id="idfechaFin">
-                    </div>
-                    <div class="col-4 p-1 form-group">
-                        <div> &nbsp; &nbsp;</div>
-                        <button id="btnBuscar" type="button" class="btn btn-primary btn-sm pt-2">Buscar</button>
-                    </div>
-                </div>
-
-
-                <div class="card m-2">
-                    <table class="table table-sm table-bordered table-hover display nowrap" id="tblHistorial">
-                        <thead class="thead-light">
-                            <tr>
-                                <th class="ocultar-columna">idSolicitud</th>
-                                <th>Fecha</th>
-                                <th>Codigo</th>
-                                <th>Glosa / Desc. Solicitud</th>
-                                <th class="">Estado</th>
-                                <th class="">Tipo</th>
-                                <th>Nivel Aprobacion</th>
-                                <th class="">Moneda</th>
-                                <th>Valor</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tblHistorialContent"></tbody>
-                    </table>
-                </div>
-
-            </div>
-
+    <div class="row d-flex flex-row-reverse m-1 mr-3">
+        <div class="estado-solicitud  d-flex flex-row-reverse">
+            <div id="estado-icon"></div>
+            <h5 id="estado-desc"></h5>
         </div>
     </div>
+
+    <div class="card">
+        <div class="row m-2">
+            <div class="col-4 p-1">
+                <label for="idtxtcodigo">Codigo de Solicitud</label>
+                <input class="form-control form-control-sm" type="text" id="idtxtcodigo" placeholder="Busca un código <Enter>" maxlength="10">
+            </div>
+
+            <div class="col-2 p-1">
+                <label for="iddttFechaHora">Fecha</label>
+                <input class="form-control form-control-sm" type="text" id="iddttFechaHora" disabled>
+            </div>
+
+            <div class="col-2 p-1">
+                <label for="idCbxTipo">Tipo</label>
+                <select class="form-control form-control-sm" id="idCbxTipo"></select>
+            </div>
+
+
+            <div class="col-4 p-1">
+                <label for="idusuario">Usuario</label>
+                <input class="form-control form-control-sm" type="text" id="idusuario" disabled>
+            </div>
+
+
+            <div class="col-2 p-1">
+                <label for="idCbxTipoMod">Tipo de Moneda</label>
+                <select class="form-control form-control-sm" id="idCbxTipoMod"></select>
+            </div>
+
+            <div class="col-5 p-1">
+                <label for="idtxtaobs">Motivo Glosa / Descripción Solicitud</label>
+                <input type="text" class="form-control form-control-sm" placeholder="Ingrese una nota (opcional)" id="idtxtaobs" maxlength="300" />
+            </div>
+
+            <div class="col-5 p-1">
+                <label for="">Buscar Colaborador - SOFYA (Beneficiario)</label>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <button type="button" id="btnBuscarColaborador" class="btn btn-warning btn-sm"><i class="fas fa-search"></i></button>
+                    </div>
+                    <input type="text" class="form-control form-control-sm" placeholder="Colaborador" id="txtcolaborador" aria-label="Username" disabled>
+                </div>
+            </div>
+
+
+
+
+            <div class="col-12 p-2 d-flex justify-content-between">
+                <div class="col-8 d-flex justify-content-between cbtn-acciones">
+
+                    <div>
+                        <button id="btnNuevo" type="button" class="btn btn-primary btn-sm"><i class="fas fa-file"></i> Nuevo</button>
+                        <button id="btnGuardarCabecera" type="button" class="btn btn-primary btn-sm ml-1 mr-1"><i class="fas fa-save"></i> Guardar</button>
+                        <button id="btnBuscarCodigo" type="button" class="btn btn-primary btn-sm"><i class="fas fa-search"></i> Buscar</button>
+                    </div>
+                    <div>
+                        <button id="btnAgregarDetalle" type="button" data-toggle="modal" data-target="#modalSolicitudDetalle" class="btn btn-warning btn-sm"><i class="fas fa-plus"></i> Agregar Detalle</button>
+                    </div>
+
+                </div>
+
+
+                <div class="col-3 ckpi-total d-flex justify-content-between">
+
+                    <div class="ckpi-item">
+                        <h5 id="kpi-cantidad">0</h5>
+                        <span>Cantidad</span>
+                    </div>
+
+                    <div class="ckpi-item">
+                        <h5 id="kpi-total">0</h5>
+                        <span>Total</span>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+    <div class="card card-body mt-2">
+
+        <table class="table table-sm table-bordered table-hover display nowrap" id="tblDetalle" style="width: 100%">
+            <thead class="thead-light">
+                <tr>
+                    <th class="ocultar-columna">idSolicitud</th>
+                    <th>Codigo</th>
+                    <th class="">Fecha</th>
+                    <th class="">Tipo</th>
+                    <th class="">Estados</th>
+                    <th>Centro de Costo</th>
+                    <th>Concepto</th>
+                    <th class="">Moneda</th>
+                    <th>Valor</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody id="tblDetalleContent"></tbody>
+        </table>
+
+
+    </div>
+
+    @*    </div>
+            </div>
+
+
+            <div class="tab-pane fade seccion-ap-rech" id="sg-historial" role="tabpanel" aria-labelledby="aprobadas-tab-just">
+
+                <div class="container-fluid m-2">
+
+                    <div class="row m-2">
+                        <div class="col-3 p-1">
+                            <label for="idfechaInicio">Fecha Desde: </label>
+                            <input class="form-control form-control-sm" type="date" id="idfechaInicio">
+                        </div>
+
+                        <div class="col-3 p-1">
+                            <label for="idfechaFin">Fecha Hasta: </label>
+                            <input class="form-control form-control-sm" type="date" id="idfechaFin">
+                        </div>
+                        <div class="col-4 p-1 form-group">
+                            <div> &nbsp; &nbsp;</div>
+                            <button id="btnBuscar" type="button" class="btn btn-primary btn-sm pt-2">Buscar</button>
+                        </div>
+                    </div>
+
+
+                    <div class="card m-2">
+                        <table class="table table-sm table-bordered table-hover display nowrap" id="tblHistorial">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th class="ocultar-columna">idSolicitud</th>
+                                    <th>Fecha</th>
+                                    <th>Codigo</th>
+                                    <th>Glosa / Desc. Solicitud</th>
+                                    <th class="">Estado</th>
+                                    <th class="">Tipo</th>
+                                    <th>Nivel Aprobacion</th>
+                                    <th class="">Moneda</th>
+                                    <th>Valor</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tblHistorialContent"></tbody>
+                        </table>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>*@
 
 </div>
 
@@ -200,7 +209,7 @@
                             <label for="idmcodigo">Codigo:</label>
                             <input type="text" class="form-control form-control-sm" id="idmcodigo" readonly>
                         </div>
-                        <div class="col-2">
+                        <div class="col-4">
                             <label for="idmCbxConcepCab">Concepto:</label>
                             <select class="form-control form-control-sm" id="idmCbxConcepCab"></select>
                         </div>
@@ -209,43 +218,59 @@
                             <label for="idmCbxCeCo">Centro de Costo:</label>
                             <select class="form-control form-control-sm" id="idmCbxCeCo"></select>
                         </div>
+                    </div>
 
-                        <div class="col-2">
-                            <label for="idmdias">Dia:</label>
-                            <select class="form-control form-control-sm" id="idmdias">
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                            </select>
+
+                    <div class="row p-2 mt-1 d-flex flex-row justify-content-between">
+
+                        <div class="card col-9 p-2 d-flex flex-row justify-content-start">
+                            <div class="d-flex justify-content-center align-items-center">
+                                <input type='checkbox' id="seleccionar-todo" class="form-control form-control-sm">
+                            </div>
+                            <div class="d-flex justify-content-center align-items-center">
+                                <div class="ml-2">Seleccionar Todo</div>
+                            </div>
+                        </div>
+
+                        <div class="card col-2 p-2">
+                            <div class="d-flex flex-column justify-content-center align-content-center">
+                                <div class="cant-sum-total-det" id="sum-total-det">0.00</div>
+                                <div class="subt-sum-total-det">Total</div>
+                            </div>
                         </div>
 
                     </div>
 
 
-                    <div class="container-fluid  mt-4">
+                    <div class="container-fluid">
                         <div class="row">
                             <div class="col">
                                 <ul class="list-group">
 
                                     <li class="list-group-item">
                                         <div class="row">
+                                            <div class="col-1">
+                                                <h6>Marcar</h6>
+                                            </div>
                                             <div class="col-2">
                                                 <h6>Concepto</h6>
                                             </div>
                                             <div class="col-1">
                                                 <h6>Monto</h6>
                                             </div>
-
-                                            <div class="col-8">
+                                            <div class="col-4">
+                                                <h6>Observación</h6>
+                                            </div>
+                                            <div class="col-3">
                                                 <h6>Consideracion</h6>
                                             </div>
                                             <div class="col-1">
-                                                <h6>Marcar</h6>
+                                                <h6>Días</h6>
                                             </div>
                                         </div>
                                     </li>
 
-                                    <li class="list-group-item" id="detalleConceptoInsertar">
+                                    <li class="list-group-item" id="detalleConceptoInsertarEditar">
                                     </li>
 
                                 </ul>
@@ -286,26 +311,15 @@
                             <label for="idmdCodigo">Codigo:</label>
                             <input type="text" class="form-control form-control-sm" id="idmdCodigo" readonly>
                         </div>
-                        <div class="col-2">
+                        <div class="col-4">
                             <label for="idmdConcepCab">Concepto:</label>
                             <input class="form-control form-control-sm" id="idmdConcepCab" readonly>
                         </div>
 
                         <div class="col-6">
                             <label for="idmdCeCo">Centro de Costo:</label>
-                            <input class="form-control form-control-sm" id="idmdCeCo" readonly>
+                            <input class="form-control form-control-sm" id="idmdCeCo" disabled>
                         </div>
-
-                        <div class="col-2">
-                            <label for="idmddias">Dia:</label>
-                            <select class="form-control form-control-sm" id="idmdias" disabled>
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                            </select>
-
-                        </div>
-
                     </div>
 
 
@@ -317,6 +331,10 @@
 
                                     <li class="list-group-item">
                                         <div class="row">
+                                            <div class="col-1">
+                                                <h6>Marca</h6>
+                                            </div>
+
                                             <div class="col-2">
                                                 <h6>Concepto</h6>
                                             </div>
@@ -324,12 +342,14 @@
                                                 <h6>Monto</h6>
                                             </div>
 
-                                            <div class="col-8">
+                                            <div class="col-4">
+                                                <h6>Observacion</h6>
+                                            </div>
+
+                                            <div class="col-4">
                                                 <h6>Consideracion</h6>
                                             </div>
-                                            <div class="col-1">
-                                                <h6>Marcar</h6>
-                                            </div>
+
                                         </div>
                                     </li>
 
@@ -354,7 +374,63 @@
 </div>
 
 
+
+
+@*  :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::     BUSQUEDA COLABORADOR BENEFICIERIO     ::::::::::::::::::::::::::::::::::::::::::::::.  *@
+
+<div class="modal fade bd-example-modal-lg" id="modalColaboradorSofya" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Buscar Colaborador - SOFYA</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <div class="form-group">
+                    <input type="text" class="form-control form-control-sm" id="idBusquedaColaborador" placeholder="Buscar Colaborador <Presionar Enter>">
+                </div>
+
+                <table class="table table-sm table-bordered table-hover display nowrap" id="tblColaborador" style="width: 100%">
+                    <thead class="thead-light">
+                        <tr>
+                            <th>Codigo SOFYA</th>
+                            <th>Colaborador</th>
+                            <th>Seleecionar</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tblColaboradorContent"></tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
 <style>
+
+
+
+
+    #modalSolDetInsertar .cant-sum-total-det {
+        text-align: center;
+        font-weight: 600;
+        font-size: 18px;
+    }
+
+
+    #modalSolDetInsertar .subt-sum-total-det {
+        text-align: center;
+        font-weight: 600;
+        font-size: 14px;
+    }
+
+
 
     #solgas label {
         font-family: 'Roboto', sans-serif;
@@ -472,7 +548,7 @@
     #solgas #listDetalleConcept p {
         font-size: 13px !important;
         border: 1px solid #E5E8E8 !important;
-        padding: 3px !important;
+        padding: 4px !important;
     }
 
 
@@ -517,9 +593,6 @@
         }
 
 
-
-
-
     @@media (min-width: 320px) and (max-width: 479.98px) {
     }
 
@@ -544,6 +617,8 @@
         const USUARIO = "@Request.RequestContext.HttpContext.Session["usuario"]";
         const USUARIO_COMPLETO = "@Request.RequestContext.HttpContext.Session["usuario"]" + " - " + "@Request.RequestContext.HttpContext.Session["nombre"]";
 
+        var switchInsertarEditar = 0; // 1: Insertar, 2: Editar
+
         var vIdSolicitud = 0;
         var vIdTipoMod = 0;
         var vCodCeCo = 0;
@@ -553,8 +628,20 @@
 
         var vChecked = false;
 
+        var diasArray = [];
+        var entidadEditar = {};
+        var diasArrayEditar = [];
         var conceptoDetArray = [];
+        var tipoMonedaArray = [];
 
+        var sumTotalDetalle = 0;
+
+        var vCodColSofya = "";
+        var vColaboradorSofya = "";
+
+        var vctpava_bnfcol = "";
+        var vcanvar_bnfcol = "";
+        var vcolaborador = "";
 
         $(document).ready(function () {
 
@@ -567,6 +654,8 @@
                 getPermisosXCeCo(parametros);
 
                 getTipoDeMoneda();
+                getTipos();
+                getDias();
 
                 limpiarCabecera();
 
@@ -588,15 +677,14 @@
                 document.getElementById("idCbxTipo").disabled = true;
                 document.getElementById("idCbxTipoMod").disabled = true;
                 document.getElementById("idtxtaobs").disabled = true;
-
-
+                document.getElementById("btnBuscarColaborador").disabled = true;
             }
 
+
             // Funcionalidades.
+
             function limpiarCabecera() {
                 let now = new Date();
-
-                //$("#iddttFechaHora").val(new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString().substring(0, 19).toString());
 
                 $("#iddttFechaHora").val("");
                 $("#idtxtcodigo").val("");
@@ -605,7 +693,11 @@
                 $("#idCbxTipoMod").val(0);
                 $("#idtxtaobs").val("");
                 $("#idusuario").val("");
+                $("#txtcolaborador").val("");
 
+                vctpava_bnfcol = "";
+                vcanvar_bnfcol = "";
+                $("#txtcolaborador").val("");
             }
 
             function limpiarDetalle() {
@@ -616,60 +708,23 @@
                 $("#idmCbxConcepDet").val(0);
                 $("#idmConcepDetConsid").text("");
 
+                $("#idmCbxConcepCab").prop("disabled", false);
                 $("#idmCbxCeCo").val(0);
+                $("#idmCbxDias").val(1);
+                $("#sum-total-det").text("0.00");
 
-                $("#detalleConceptoInsertar").empty();
+                $("#seleccionar-todo").prop("checked", false);
+
+                $("#detalleConceptoInsertarEditar").empty();
                 $("#listDetalleConcept").empty();
 
                 conceptoDetArray = [];
-            }
-
-            function mensajePrincipal(estado, mensaje) {
-                if (estado == true) {
-
-                    const Toast = Swal.mixin({
-                        toast: true,
-                        position: 'top-end',
-                        showConfirmButton: false,
-                        timer: 2500,
-                        timerProgressBar: true,
-                        didOpen: (toast) => {
-                            toast.addEventListener('mouseenter', Swal.stopTimer)
-                            toast.addEventListener('mouseleave', Swal.resumeTimer)
-                        }
-                    })
-
-                    Toast.fire({
-                        icon: 'success',
-                        title: mensaje
-                    });
-
-                }
-                else if (estado == false) {
-
-                    const Toast = Swal.mixin({
-                        toast: true,
-                        position: 'top-end',
-                        showConfirmButton: false,
-                        timer: 2500,
-                        timerProgressBar: true,
-                        didOpen: (toast) => {
-                            toast.addEventListener('mouseenter', Swal.stopTimer)
-                            toast.addEventListener('mouseleave', Swal.resumeTimer)
-                        }
-                    })
-
-                    Toast.fire({
-                        icon: 'error',
-                        title: mensaje
-                    });
-
-                }
+                sumTotalDetalle = 0;
+                vCodCeCo = 0;
             }
 
             function validacionCabecera() {
                 var respuesta = false;
-
 
                 if ($("#idtxtcodigo").val().trim() != "0") {
                     respuesta = false;
@@ -684,7 +739,8 @@
                     });
 
                 }
-                else if (vIdTipoMod == 0) {
+                else
+                if (vIdTipoMod == 0) {
                     respuesta = false;
 
                     Swal.fire({
@@ -720,6 +776,18 @@
                         confirmButtonText: 'Ok'
                     });
                 }
+                else if (vctpava_bnfcol == "" || vctpava_bnfcol == null || typeof (vctpava_bnfcol) == "undefined") {
+                    respuesta = false;
+
+                    Swal.fire({
+                        title: 'Registre el colaborador beneficierio',
+                        text: "Textile Sourcing Company",
+                        icon: 'warning',
+                        showConfirmButton: true,
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'Ok'
+                    });
+                }
                 else {
                     respuesta = true;
                 }
@@ -727,12 +795,14 @@
                 return respuesta;
             }
 
-
             function validacionDetalle() {
-                var respuesta = false;
+                let respuesta = true;
+                let isFalseLoop = false;
+                let cantConceptpDetArray = 0;
+
+                cantConceptpDetArray = conceptoDetArray.filter(x => x.isChecked == true).length;
 
                 if (vIdSolicitud == 0) {
-                    respuesta = false;
 
                     Swal.fire({
                         title: 'Debe generar el codigo de solicitud para continuar',
@@ -743,9 +813,10 @@
                         confirmButtonText: 'Ok'
 
                     });
+
+                    return false;
                 }
-                else if (conceptoDetArray.length == 0) {
-                    respuesta = false;
+                else if (cantConceptpDetArray == 0 || cantConceptpDetArray == null || typeof (cantConceptpDetArray) == "undefined") {
 
                     Swal.fire({
                         title: 'Seleccione un concepto, por favor',
@@ -755,14 +826,188 @@
                         confirmButtonColor: '#3085d6',
                         confirmButtonText: 'Ok'
                     });
+
+                    return false;
+                }
+                else if (vCodCeCo == 0 || vCodCeCo == null) {
+
+                    Swal.fire({
+                        title: 'Seleccione un centro de costo',
+                        text: "Textile Sourcing Company",
+                        icon: 'warning',
+                        showConfirmButton: true,
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'Ok'
+                    });
+
+                    return false;
+                }
+
+                $("#detalleConceptoInsertarEditar input[type='number']").each(function (i, obj) {
+
+                    let valorIngresado = $(obj).val();
+                    let valorMaximoS = $(obj).attr("data-valor-maxs");
+                    let valorMaximoD = $(obj).attr("data-valor-maxd");
+
+                    let nombreID = obj.id;
+                    let idConceptoDet = $(obj).attr("data-idconceptodet");
+
+                    let estaSeleccionado = conceptoDetArray.find(x => x.idConceptoDet == idConceptoDet && x.isChecked == true);
+
+
+                    if (typeof (estaSeleccionado) != "undefined") {
+
+                        if (valorIngresado.toString().trim() == "" || valorIngresado == null || typeof (valorIngresado) == "undefined" || valorIngresado.toString().trim() == "0") {
+                            Swal.fire({
+                                title: 'Ingrese el monto por favor',
+                                text: "Textile Sourcing Company",
+                                icon: 'warning',
+                                showConfirmButton: true,
+                                confirmButtonColor: '#3085d6',
+                                confirmButtonText: 'Ok'
+                            });
+
+                            document.getElementById(nombreID).focus();
+                            isFalseLoop = true;
+                            return false;
+
+                        } else if (vIdTipoMod == 1) {
+
+                            if (parseFloat(valorIngresado) > valorMaximoS) {
+                                isFalseLoop = true;
+                                return false;
+
+                                $("#txtMontoSol" + idConceptoDet.toString() + "").val(0);
+                                valorActual = 0;
+
+                                Swal.fire({
+                                    title: 'El monto ingresado no puede ser mayor al maximo permitido',
+                                    text: "Textile Sourcing Company",
+                                    icon: 'warning',
+                                    showConfirmButton: true,
+                                    confirmButtonColor: '#3085d6',
+                                    confirmButtonText: 'Ok'
+                                });
+
+                                document.getElementById("txtMontoSol" + idConceptoDet.toString() + "").focus();
+                            }
+                        }
+                        else if (vIdTipoMod == 2) {
+                            // DOLAR
+                            if (parseFloat(valorIngresado) > valorMaximoD) {
+                                isFalseLoop = true;
+                                return false;
+
+                                $("#txtMontoSol" + idConceptoDet.toString() + "").val(0);
+                                valorActual = 0;
+
+                                Swal.fire({
+                                    title: 'El monto ingresado no puede ser mayor al maximo permitido',
+                                    text: "Textile Sourcing Company",
+                                    icon: 'warning',
+                                    showConfirmButton: true,
+                                    confirmButtonColor: '#3085d6',
+                                    confirmButtonText: 'Ok'
+                                });
+
+                                document.getElementById("txtMontoSol" + idConceptoDet.toString() + "").focus();
+                            }
+
+                        }
+                        else if (parseFloat(valorIngresado) < 0) {
+
+                            Swal.fire({
+                                title: 'El monto ingresado no debe ser negativo',
+                                text: "Textile Sourcing Company",
+                                icon: 'warning',
+                                showConfirmButton: true,
+                                confirmButtonColor: '#3085d6',
+                                confirmButtonText: 'Ok'
+                            });
+
+                            document.getElementById(nombreID).focus();
+                            isFalseLoop = true;
+                            return false;
+                        }
+                    }
+
+                });
+
+                // Servicio
+                if (vIdConcepCab == "5") {
+                    $("#detalleConceptoInsertarEditar input.cobsdet").each(function (i, obj) {
+                        let obsIngresado = $(this).val();
+
+                        if (obsIngresado == "" || obsIngresado == null || typeof (obsIngresado) == "undefined") {
+                            Swal.fire({
+                                title: 'Debe ingresar una descripción para el tipo de Solicitud',
+                                text: "Textile Sourcing Company",
+                                icon: 'warning',
+                                showConfirmButton: true,
+                                confirmButtonColor: '#3085d6',
+                                confirmButtonText: 'Ok'
+                            });
+
+                            isFalseLoop = true;
+                            return false;
+                        }
+                    });
+                }
+
+
+                if (isFalseLoop) {
+                    respuesta = false;
                 }
                 else {
                     respuesta = true;
                 }
 
                 return respuesta;
+
             }
 
+            function generarTablaDetalle(lista, idEstado) {
+
+                let vTotal = 0;
+                let tabla = $("#tblDetalle").DataTable();
+                tabla.destroy();
+                var tr = "";
+
+                lista.forEach((obj) => {
+
+                    vTotal = vTotal + obj.valor;
+
+                    tr += "<tr> "
+                        + " <td class='ocultar-columna'> " + obj.idSolicitud + "</td> "
+                        + " <td> " + obj.codigo + "</td> "
+                        + " <td> " + obj.fecha + "</td>"
+                        + " <td> " + obj.tipo + "</td>"
+                        + " <td> " + obj.estados + "</td>"
+                        + " <td> " + obj.ceco + "</td> "
+                        + " <td> " + obj.conceptoCab + "</td>"
+                        + " <td> " + obj.tipoMoneda + "</td> "
+                        + " <td> " + formatoNumero(obj.valor) + "</td> "
+                        + " <td class='text-center'>"
+                        + "     <button data-idsolicitud='" + obj.idSolicitud + "' data-idconceptocab='" + obj.idConceptoCab + "' data-toggle='collapse' class='btn btn-sm btn-primary solicitudDetalleItem'><i class='fas fa-eye'></i></button>"
+                        + "     <button data-idsolicitud='" + obj.idSolicitud + "' data-idconceptocab='" + obj.idConceptoCab + "' data-toggle='collapse' class='btn btn-sm btn-success ml-1 solicitudEditarItem'" + (idEstado > 1 ? " disabled " : " ") + "><i class='fas fa-edit'></i></button>"
+                        + "     <button data-idsolicitud='" + obj.idSolicitud + "' data-idconceptocab='" + obj.idConceptoCab + "' data-toggle='collapse' class='btn btn-sm btn-danger ml-1 solicitudEliminarItem'" + (idEstado > 1 ? " disabled " : " ") + "><i class='fas fa-trash'></i></button>"
+                        + " </td>"
+                        + "</tr>";
+                });
+
+
+                $("#kpi-cantidad").text(lista.length.toString());
+                $("#kpi-total").text(formatoNumero(vTotal).toString());
+
+                $("#tblDetalleContent").html(tr);
+
+                $("#tblDetalle").DataTable(
+                    {
+                        'language': { 'url': '/libs/datatables/spanish.json' },
+                        lengthMenu: [[5, 10, 20, -1], [5, 10, 20, 'Todos']]
+                    }
+                );
+            }
 
 
 
@@ -808,41 +1053,18 @@
                 });
             }
 
-            function getConceptoDet(idConceptoCab) {
+            function getDias() {
                 $.ajax({
                     type: "GET",
-                    url: '/Finanzas/RG_ConceptoDetalleInsertar',
+                    url: '/Finanzas/RG_Dias',
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
-                    data: { idConceptoCab: idConceptoCab },
                     success: function (data) {
-
-                        $("#detalleConceptoInsertar").empty();
-
-                        let detHTML = "";
+                        diasArray = [];
 
                         $.each(data.lista, function () {
-
-                            detHTML += "<div class='row mt-1'>"
-                                        + "<div class='col-2'>"
-                                        + "      <p style='padding: 3px; border:1px solid #CCD1D1; border-radius: 3px;'>" + this.conceptoDet + "</p>"
-                                        + "</div>"
-                                        + "<div class='col-1'>"
-                                        + "     <p style='padding: 3px; border:1px solid #CCD1D1; border-radius: 3px;'>" + formatoNumero(this.montoMaximo) + "</p>"
-                                        + "</div>"
-                                        + "<div class='col-8'>"
-                                        + "     <p style='padding: 3px; border:1px solid #CCD1D1; border-radius: 3px;'>" + this.consideracion + "</p>"
-                                        + "</div>"
-                                        + "<div class='col-1'>"
-                                        + "     <input type='checkbox' class='cseleccion' data-id=" + this.idConceptoDet + " data-idConceptoDet=" + this.idConceptoDet  + ">"
-                                        + "</div>"
-                                + "</div>";
-
-                            conceptoDetArray.push({ idConceptoDet: this.idConceptoDet, seleccionadoDet: 0, codCeCo : 0 });
+                            diasArray.push({ codDia: this.codDia, dia: this.dia });
                         });
-
-                        $("#detalleConceptoInsertar").html(detHTML);
-
                     },
                     failure: function () {
                         console.error('error al cargar tipos periodos');
@@ -857,6 +1079,9 @@
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
                     success: function (data) {
+                        tipoMonedaArray = [];
+                        tipoMonedaArray = data.lista;
+
                         $("#idCbxTipoMod").empty();
                         $.each(data.lista, function () {
                             $("#idCbxTipoMod").append($("<option/>").val(this.idTipoMod).text(this.descripcion));
@@ -922,60 +1147,88 @@
                 });
             }
 
-            function generarTablaDetalle(lista) {
+            function resetControles() {
+                limpiarCabecera();
+                limpiarDetalle();
 
-                let vTotal = 0;
+
+                document.getElementById("btnBuscarCodigo").disabled = false;
+                $("#btnBuscarCodigo").removeClass("btn-secondary");
+                $("#btnBuscarCodigo").addClass("btn-primary");
+
+                document.getElementById("idCbxTipo").disabled = false;
+                document.getElementById("idCbxTipoMod").disabled = false;
+                document.getElementById("idtxtaobs").disabled = false;
+                document.getElementById("btnBuscarColaborador").disabled = false;
+
+                $("#idusuario").val(USUARIO_COMPLETO);
+
+                let now = new Date();
+                $("#iddttFechaHora").val(new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString().substring(0, 19).toString());
+
+                document.getElementById("btnGuardarCabecera").disabled = false;
+                $("#btnGuardarCabecera").removeClass("btn-secondary");
+                $("#btnGuardarCabecera").addClass("btn-primary");
+
+                document.getElementById("btnAgregarDetalle").disabled = true;
+                $("#btnAgregarDetalle").removeClass("btn-warning");
+                $("#btnAgregarDetalle").addClass("btn-secondary");
+
+                $("#kpi-cantidad").text("0");
+                $("#kpi-total").text("0");
+
                 let tabla = $("#tblDetalle").DataTable();
                 tabla.destroy();
                 var tr = "";
-
-                lista.forEach((obj) => {
-
-                    vTotal = vTotal + obj.valor;
-
-                    tr += "<tr> "
-                        + " <td class='ocultar-columna'> " + obj.idSolicitud + "</td> "
-                        + " <td> " + obj.codigo + "</td> "
-                        + " <td> " + obj.fecha + "</td>"
-                        + " <td> " + obj.estados + "</td>"
-                        + " <td> " + obj.ceco + "</td> "
-                        + " <td> " + obj.conceptoCab + "</td>"
-                        + " <td> " + obj.tipoMoneda + "</td> "
-                        + " <td> " + formatoNumero(obj.valor) + "</td> "
-                        + " <td class='text-center'>"
-                        + "     <button data-idsolicitud='" + obj.idSolicitud + "' data-idconceptocab='" + obj.idConceptoCab + "' data-toggle='collapse' class='btn btn-sm btn-primary solicitudDetalleItem' ><i class='fas fa-eye'></i></button>"
-                        + "     <button data-idsolicitud='" + obj.idSolicitud + "' data-idconceptocab='" + obj.idConceptoCab + "' data-toggle='collapse' class='btn btn-sm btn-danger ml-1 solicitudEliminarItem'><i class='fas fa-trash'></i></button>"
-                        + " </td>"
-                        + "</tr>";
-                });
-
-
-                $("#kpi-cantidad").text(lista.length.toString());
-                $("#kpi-total").text(formatoNumero(vTotal).toString());
-
                 $("#tblDetalleContent").html(tr);
-
                 $("#tblDetalle").DataTable(
                     {
                         'language': { 'url': '/libs/datatables/spanish.json' },
                         lengthMenu: [[5, 10, 20, -1], [5, 10, 20, 'Todos']]
                     }
                 );
+                $("#estado-desc").text("");
+
+                $("#estado-icon").removeClass("icon-liberado");
+                $("#estado-icon").removeClass("icon-aprobado");
+                $("#estado-icon").removeClass("icon-rechazado");
+                $("#estado-icon").removeClass("icon-pendiente");
+
+                $("#estado-desc").removeClass("desc-est-liberado");
+                $("#estado-desc").removeClass("desc-est-aprobado");
+                $("#estado-desc").removeClass("desc-est-rechazado");
+                $("#estado-desc").removeClass("desc-est-pendiente");
+
             }
 
-            function formatoNumero(x) {
-                x = x.toFixed(2);
-                return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+            function ajaxConceptoEdit(idSolicitud) {
+                return $.ajax({
+                    type: "GET",
+                    url: "/Finanzas/RG_ConceptoCabEdit",
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    data: { idSolicitud: idSolicitud }
+                });
             }
 
+            function ajaxDetalleEditar(idSolicitud, idConceptoCab) {
+                return $.ajax({
+                    type: "GET",
+                    url: "/Finanzas/RG_DetalleEditar",
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    data: { idSolicitud: idSolicitud, idConceptoCab: idConceptoCab }
+                });
+            }
 
 
 
             // Eventos Click
+
             $("#btnCancelar").click(function () {
                 document.getElementById("idmCbxCeCo").focus();
             });
-
 
             $("#btnGuardarCabecera").click(function () {
 
@@ -1000,7 +1253,14 @@
                         'nivelInterfaz': 0,
                         'idTipo': vIdTipo,
                         'seleccionadoDet': 0,
-                        'idConceptoCab': 0
+                        'idConceptoCab': 0,
+
+                        'cantDias': 0,
+                        'montoSolicitado': 0,
+                        'observacionDet': '',
+                        'ctpava_bnf': vctpava_bnfcol,
+                        'canvar_bnf': vcanvar_bnfcol,
+                        'colaborador': vcolaborador
                     }
 
                     $.ajax({
@@ -1009,7 +1269,6 @@
                         data: parametro,
                         dataType: "json",
                         success: function (resultado) {
-                            console.log(resultado);
 
                             if (resultado.isRedirect) {
                                 window.location.href = resultado.redirectUrl;
@@ -1022,7 +1281,15 @@
                                     $("#idtxtcodigo").val(resultado.responseEntity.codigo);
                                     $("#idtxtcodigo").addClass("idtxtcodigo-ok");
 
-                                    mensajePrincipal(true, "Solicitud Generada Correctamente");
+                                    document.getElementById("idtxtcodigo").disabled = false;
+                                    document.getElementById("idCbxTipo").disabled = true;
+                                    document.getElementById("idCbxTipoMod").disabled = true;
+                                    document.getElementById("idtxtaobs").disabled = true;
+                                    document.getElementById("btnBuscarColaborador").disabled = true;
+
+                                    mensajePrincipal(true, resultado.status.statusResponse);
+                                    estadoSolicitud(vIdSolicitud);
+
                                     $("#btnGuardarCabecera").removeClass("btn-primary");
                                     $("#btnGuardarCabecera").addClass("btn-secondary");
                                     document.getElementById("btnGuardarCabecera").disabled = true;
@@ -1034,8 +1301,6 @@
                                 }
                                 else {
                                     mensajePrincipal(false, "Ocurrio un problema");
-
-                                    console.log(status.resultado.statusResponse);
                                 }
                             }
                         },
@@ -1047,18 +1312,98 @@
             });
 
 
-            $("#btnAgregarDetalle").click(function () {
-                let codigoGenerado = $("#idtxtcodigo").val();
-                getConceptoCab(vIdSolicitud);
+            function estadoSolicitud(pIdSolicitud) {
+                $.ajax({
+                    url: "/finanzas/RG_EstadoSolicitud",
+                    type: "GET",
+                    data: { idSolicitud: pIdSolicitud },
+                    dataType: "json",
+                    success: function (resultado) {
 
-                $("#idmcodigo").val(codigoGenerado);
-                $('#modalSolDetInsertar').modal('show');
+                        if (resultado.isRedirect) {
+                            window.location.href = resultado.redirectUrl;
+                        }
+                        else {
+                            $("#estado-desc").text(resultado.entidad.estado);
+                            indicadorEstado(resultado.entidad.idEstado);
+                        }
+                    },
+                    error: function (xhr, ajaxOptions, thrownError) {
+                    }
+                });
+            }
+
+
+
+            $("#btnAgregarDetalle").click(function () {
+                if (validarAgregarDetalle()) {
+                    switchInsertarEditar = 1; // 1: Insertar
+
+                    let codigoGenerado = $("#idtxtcodigo").val();
+                    getConceptoCab(vIdSolicitud);
+
+                    $("#idmcodigo").val(codigoGenerado);
+                    $('#modalSolDetInsertar').modal('show');
+                }
             });
+
+            function validarAgregarDetalle() {
+                let respuesta = false;
+                let codigoGenerado = $("#idtxtcodigo").val();
+
+                if (vIdTipoMod == 0) {
+                    respuesta = false;
+
+                    Swal.fire({
+                        title: 'Debe seleccionar el tipo de Moneda',
+                        text: "Textile Sourcing Company",
+                        icon: 'warning',
+                        showConfirmButton: true,
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'Ok'
+                    });
+
+                }
+                else if (codigoGenerado == "" || codigoGenerado == null || typeof (codigoGenerado) == "undefined") {
+                    respuesta = false;
+                    Swal.fire({
+                        title: 'Debe Generar la cabecera de la Solicitud para continuar',
+                        text: "Textile Sourcing Company",
+                        icon: 'warning',
+                        showConfirmButton: true,
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'Ok'
+                    });
+
+                }
+                else {
+                    respuesta = true;
+                }
+
+                return respuesta;
+            }
 
 
             $("#btnGuardarDetalle").click(function () {
 
                 if (validacionDetalle()) {
+
+
+                    $("#detalleConceptoInsertarEditar input[type='number']").each(function (i, obj) {
+                        let idConceptoDet = $(obj).attr("data-idconceptodet");
+                        let estaSeleccionado = conceptoDetArray.find(x => x.idConceptoDet == idConceptoDet && x.isChecked == true);
+                        if (typeof (estaSeleccionado) != "undefined") {
+                            for (var i = 0; i < conceptoDetArray.length; i++) {
+                                if (conceptoDetArray[i].isChecked == true && conceptoDetArray[i].idConceptoDet == idConceptoDet) {
+                                    conceptoDetArray[i].montoSolicitado = parseFloat($("#detalleConceptoInsertarEditar #txtMontoSol" + idConceptoDet.toString() + "").val());
+                                    conceptoDetArray[i].observacionDet = $("#detalleConceptoInsertarEditar #txtObsDet" + idConceptoDet.toString() + "").val();
+                                }
+                            }
+                        }
+                    });
+
+
+                    conceptoDetArray = conceptoDetArray.filter(x => x.isChecked == true);
 
                     let parametro = {
                         'opcion': 2,
@@ -1069,7 +1414,6 @@
                         'idAnulado': 0,
                         'idTipoMod': 0,
                         'observacion': '',
-
                         'codCeCo': vCodCeCo,
                         'idConceptoDet': vIdConcepDet,
                         'valor': $("#idmvalor").val(),
@@ -1096,7 +1440,7 @@
                                 $('#modalSolDetInsertar').modal('hide');
 
                                 if (resultado.status.idResponse > 0) {
-                                    mensajePrincipal(true, "Motivo Agregado");
+                                    mensajePrincipal(true, "Actualizando Detalle");
                                 }
                                 else {
                                     mensajePrincipal(false, "Ocurrio un problema al agregar el motivo");
@@ -1111,74 +1455,22 @@
                         }
                     });
                 }
-
             });
+
 
 
             $("#btnNuevo").click(function () {
-                limpiarCabecera();
-                limpiarDetalle();
-
-
-                document.getElementById("btnBuscarCodigo").disabled = false;
-                $("#btnBuscarCodigo").removeClass("btn-secondary");
-                $("#btnBuscarCodigo").addClass("btn-primary");
-
-                document.getElementById("idCbxTipo").disabled = false;
-                document.getElementById("idCbxTipoMod").disabled = false;
-                document.getElementById("idtxtaobs").disabled = false;
-
-                $("#idusuario").val(USUARIO_COMPLETO);
-
-                let now = new Date();
-                $("#iddttFechaHora").val(new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString().substring(0, 19).toString());
+                resetControles();
 
                 $("#idtxtcodigo").val("0");
                 document.getElementById("idtxtcodigo").disabled = true;
-
-                document.getElementById("btnGuardarCabecera").disabled = false;
-                $("#btnGuardarCabecera").removeClass("btn-secondary");
-                $("#btnGuardarCabecera").addClass("btn-primary");
-
-                document.getElementById("btnAgregarDetalle").disabled = true;
-                $("#btnAgregarDetalle").removeClass("btn-warning");
-                $("#btnAgregarDetalle").addClass("btn-secondary");
-
-                $("#kpi-cantidad").text("0");
-                $("#kpi-total").text("0");
-
-                let tabla = $("#tblDetalle").DataTable();
-                tabla.destroy();
-                var tr = "";
-                $("#tblDetalleContent").html(tr);
-                $("#tblDetalle").DataTable(
-                    {
-                        'language': { 'url': '/libs/datatables/spanish.json' },
-                        lengthMenu: [[5, 10, 20, -1], [5, 10, 20, 'Todos']]
-                    }
-                );
-
-                $("#estado-desc").text("");
-
-                $("#estado-icon").removeClass("icon-liberado");
-                $("#estado-icon").removeClass("icon-aprobado");
-                $("#estado-icon").removeClass("icon-rechazado");
-                $("#estado-icon").removeClass("icon-pendiente");
-
-                $("#estado-desc").removeClass("desc-est-liberado");
-                $("#estado-desc").removeClass("desc-est-aprobado");
-                $("#estado-desc").removeClass("desc-est-rechazado");
-                $("#estado-desc").removeClass("desc-est-pendiente");
-
                 document.getElementById("idCbxTipo").focus();
             });
-
 
             $("#tblDetalle").on('click', '.solicitudDetalleItem', function () {
 
                 let idSolicitud = $(this).attr("data-idsolicitud");
                 let idConceptoCab = $(this).attr("data-idconceptoCab");
-
 
                 $.ajax({
                     type: "GET",
@@ -1187,8 +1479,6 @@
                     dataType: "json",
                     data: { idSolicitud: idSolicitud, idConceptoCab: idConceptoCab },
                     success: function (data) {
-
-                        console.log(data);
 
                         if (data.isRedirect) {
                             window.location.href = data.redirectUrl;
@@ -1204,19 +1494,10 @@
                             $("#idmdConcepCab").val(data.entidad.conceptoCab);
                             $("#idmdCeCo").val(data.entidad.ceco);
 
+
                             $.each(data.entidad.conceptoDetalle, function () {
 
-                                detHTML += "<div class='row mt-1'>"
-                                    + "<div class='col-2'>"
-                                    + "      <p style='padding: 3px; border:1px solid #CCD1D1; border-radius: 3px;'>" + this.conceptoDet + "</p>"
-                                    + "</div>"
-                                    + "<div class='col-1'>"
-                                    + "     <p style='padding: 3px; border:1px solid #CCD1D1; border-radius: 3px;'>" + formatoNumero(this.montoMaximo) + "</p>"
-                                    + "</div>"
-                                    + "<div class='col-8'>"
-                                    + "     <p style='padding: 3px; border:1px solid #CCD1D1; border-radius: 3px;'>" + this.consideracion + "</p>"
-                                    + "</div> ";
-
+                                detHTML += "<div class='row mt-1'>";
 
                                 if (this.existe == 0) {
                                     checkeHTML = "<div class='col-1'>"
@@ -1229,33 +1510,166 @@
                                         + "</div>";
                                 }
 
+                                detHTML = detHTML + checkeHTML;
 
-                                detHTML = detHTML + checkeHTML + "</div>";
+                                detHTML = detHTML + "<div class='col-2'>"
+                                    + "      <p style='padding: 3px; border:1px solid #CCD1D1; border-radius: 3px;'>" + this.conceptoDet + "</p>"
+                                    + "</div>"
+                                    + "<div class='col-1'>"
+                                    + "     <p style='padding: 3px; border:1px solid #CCD1D1; border-radius: 3px;'>" + formatoNumero(this.montoSolicitado) + "</p>"
+                                    + "</div>"
+                                    + "<div class='col-4'>"
+                                    + "     <p style='padding: 3px; border:1px solid #CCD1D1; border-radius: 3px;'>" + this.observacionDet + "</p>"
+                                    + "</div>"
+                                    + "<div class='col-4'>"
+                                    + "     <p style='padding: 3px; border:1px solid #CCD1D1; border-radius: 3px;'>" + this.consideracion + "</p>"
+                                    + "</div> ";
+
+                                detHTML = detHTML + "</div>";
 
                             });
 
                             $("#detalleConceptoVisualizar").html(detHTML);
-
-
                             $('#modalSolDetVisualizar').modal('show');
                         }
-
                     },
                     failure: function () {
                         console.error('error al cargar tipos periodos');
                     }
                 });
-
-
-
             });
 
+
+            $("#tblDetalle").on('click', '.solicitudEditarItem', function () {
+
+                let idSolicitud = $(this).attr("data-idsolicitud");
+                let idConceptoCab = $(this).attr("data-idconceptoCab");
+                switchInsertarEditar = 2; // 2: Editar
+
+                $.when(ajaxConceptoEdit(idSolicitud), ajaxDetalleEditar(idSolicitud, idConceptoCab)).done(function (dataConcepto, dataDetalle) {
+
+                    entidadEditar = {};
+
+                    if (dataConcepto.isRedirect) {
+                        window.location.href = dataConcepto[0].redirectUrl;
+                    }
+                    else {
+
+                        let detHTML = "";
+                        let cbxDiasHTML = "";
+                        let cantChecked = 0;
+                        let primerLoopCbxDia = true;
+                        let cantDiaSeleccionado = 0;
+
+                        diasArrayEditar = [];
+                        entidadEditar = dataDetalle[0].entidad;
+                        vCodCeCo = dataDetalle[0].entidad.codCeCo;
+                        vIdSolicitud = dataDetalle[0].entidad.idSolicitud;
+
+
+                        $("#detalleConceptoInsertarEditar").empty();
+
+
+                        // Concepto
+                        $("#idmCbxConcepCab").empty();
+                        $.each(dataConcepto[0].lista, function () {
+                            $("#idmCbxConcepCab").append($("<option/>").val(this.idConceptoCab).text(this.conceptoCab));
+                        });
+
+
+                        // Detalle
+                        $.each(diasArray, function () {
+
+                            if (primerLoopCbxDia) {
+                                cbxDiasHTML += "<option value='" + this.codDia + "' selected>" + this.dia + "</option>";
+                                cantDiaSeleccionado = this.codDia;
+                            }
+                            else {
+                                cbxDiasHTML += "<option value='" + this.codDia + "'>" + this.dia + "</option>";
+                            }
+
+                            primerLoopCbxDia = false;
+                        });
+
+                        $.each(dataDetalle[0].entidad.conceptoDetalle, function () {
+
+                            detHTML += "<div class='row mt-1'>";
+
+                            if (this.existe == 0) {
+                                checkeHTML = "<div class='col-1'>"
+                                    + "     <input type='checkbox' class='cseleccion' data-id=" + this.idConceptoDet + " data-valor=" + this.montoSolicitado + " >"
+                                    + "</div>";
+                                conceptoDetArray.push({ idConceptoDet: this.idConceptoDet, seleccionadoDet: 0, codCeCo: vCodCeCo, isChecked: false, cantDias: this.cantDias, montoSolicitado: this.montoSolicitado, observacionDet : this.observacionDet });
+                            }
+                            else {
+                                checkeHTML = "<div class='col-1'>"
+                                    + "     <input type='checkbox' class='cseleccion' data-id=" + this.idConceptoDet + " data-valor=" + this.montoSolicitado + "  checked='checked'>"
+                                    + "</div>";
+                                conceptoDetArray.push({ idConceptoDet: this.idConceptoDet, seleccionadoDet: 1, codCeCo: vCodCeCo, isChecked: true, cantDias: this.cantDias, montoSolicitado: this.montoSolicitado, observacionDet: this.observacionDet });
+
+                                sumTotalDetalle = sumTotalDetalle + parseFloat(this.montoSolicitado * this.cantDias);
+                                cantChecked++;
+                            }
+
+                            detHTML = detHTML + checkeHTML;
+
+                            detHTML = detHTML
+                                + "<div class='col-2'>"
+                                + "      <p style='padding: 4px; border:1px solid #CCD1D1; border-radius: 3px;'>" + this.conceptoDet + "</p>"
+                                + "</div>"
+
+                                + "<div class='col-1'>"
+                                + "     <input class='form-control form-control-sm cmontosolicitar' type='number' id='txtMontoSol" + this.idConceptoDet + "' min='0' data-valor-maxs = '" + this.montoMaximoS + "' data-valor-maxd = '" + this.montoMaximoD + "'  data-idconceptodet='" + this.idConceptoDet + "' value='" + this.montoSolicitado + "'>"
+                                + "</div>"
+
+                                + "<div class='col-2'>"
+                                + "     <input class='form-control form-control-sm cobsdet' type='text' id='txtObsDet" + this.idConceptoDet + "' data-idconceptodet='" + this.idConceptoDet + "' value='" + this.observacionDet + "'>"
+                                + "</div>"
+
+                                + "<div class='col-5'>"
+                                + "     <p style='padding: 4px; border:1px solid #CCD1D1; border-radius: 3px;'>" + this.consideracion + "</p>"
+                                + "</div> "
+
+                                + "<div class='col-1'>"
+                                + "   <select class='form-control form-control-sm cdias cbxDias" + this.idConceptoDet + "' data-valor-maxs = '" + this.montoMaximoS + "' data-valor-maxd = '" + this.montoMaximoD + "' data-id=" + this.idConceptoDet + "" + ((this.existe == 0 || idConceptoCab == 5) ? " disabled " : " ") + ">"
+                                + cbxDiasHTML
+                                + "</select>"
+
+                                + "</div>"
+                                + "</div>"
+
+
+                            diasArrayEditar.push({ idConceptoDet: this.idConceptoDet, cantDias: this.cantDias });
+
+                        });
+
+                        if (cantChecked == dataDetalle[0].entidad.conceptoDetalle.length) {
+                            $("#seleccionar-todo").prop("checked", true);
+                        }
+
+
+                        let codigoGenerado = $("#idtxtcodigo").val();
+
+                        $("#idmcodigo").val(codigoGenerado);
+                        $("#idmCbxConcepCab").val(entidadEditar.idConceptoCab);
+                        $("#idmCbxCeCo").val(entidadEditar.codCeCo);
+                        vCodCeCo = entidadEditar.codCeCo;
+
+                        $("#sum-total-det").text(formatoNumero(sumTotalDetalle * cantDiaSeleccionado));
+                        $("#detalleConceptoInsertarEditar").html(detHTML);
+                        $('#modalSolDetInsertar').modal('show');
+                    }
+
+                });
+
+            });
 
             $("#tblDetalle").on('click', '.solicitudEliminarItem', function () {
 
                 let idsolcitud = $(this).attr("data-idsolicitud");
                 let idconceptocab = $(this).attr("data-idconceptocab");
 
+                MostrarCarga("Eliminando registro...");
 
                 Swal.fire({
                     title: '¿Esta seguro de eliminar el registro?',
@@ -1289,7 +1703,11 @@
                             'nivelInterfaz': 0,
                             'idTipo': vIdTipo,
                             'seleccionadoDet': 0,
-                            'idConceptoCab': idconceptocab
+                            'idConceptoCab': idconceptocab,
+                            'observacionDet': "",
+                            'ctpava_bnf':"",
+                            'canvar_bnf': "",
+                            'colaborador':""
                         }
 
 
@@ -1323,7 +1741,6 @@
                 })
 
             });
-
 
             $("#btnBuscar").click(function () {
 
@@ -1409,6 +1826,7 @@
                 document.getElementById("idCbxTipo").disabled = true;
                 document.getElementById("idCbxTipoMod").disabled = true;
                 document.getElementById("idtxtaobs").disabled = true;
+                document.getElementById("btnBuscarColaborador").disabled = true;
 
                 vIdSolicitud = 0;
                 $("#idtxtcodigo").val("");
@@ -1446,14 +1864,12 @@
 
 
 
+            // Otros Eventos
 
-
-
-            // Eventos Change
             $('#idCbxTipoMod').change(function () {
                 var $option = $(this).find('option:selected');
                 vIdTipoMod = parseInt($option.val());
-                console.log(vIdTipoMod);
+
             });
 
             $('#idmCbxCeCo').change(function () {
@@ -1462,16 +1878,6 @@
                 for (var i = 0; i < conceptoDetArray.length; i++) {
                     conceptoDetArray[i].codCeCo = vCodCeCo;
                 }
-            });
-
-            $('#idmCbxConcepCab').change(function () {
-                var $option = $(this).find('option:selected');
-                vIdConcepCab = $option.val().toString();
-
-                if (vIdConcepCab != 0 && vIdConcepCab != null && typeof (vIdConcepCab) != "undefined") {
-                    getConceptoDet(vIdConcepCab);
-                }
-
             });
 
             $('#idmCbxConcepDet').change(function () {
@@ -1483,17 +1889,22 @@
                 $("#idmConcepDetConsid").text(consideracion);
             });
 
-
-
             $('#idCbxTipo').change(function () {
+                debugger
+
                 var $option = $(this).find('option:selected');
                 vIdTipo = parseInt($option.val());
-            });
 
-            $('#modalSolDetInsertar').on('hidden.bs.modal', function (e) {
-                limpiarDetalle();
-            });
+                if (vIdTipo == 1 || vIdTipo == 2) {
+                    $("#idCbxTipoMod").val(1);
+                    vIdTipoMod = $("#idCbxTipoMod").val();
 
+                    document.getElementById("idCbxTipoMod").disabled = true;
+                }
+                else if (vIdTipo == 3) {
+                    document.getElementById("idCbxTipoMod").disabled = false;
+                }
+            });
 
             $('#idtxtcodigo').keypress(function (event) {
                 var keycode = (event.keyCode ? event.keyCode : event.which);
@@ -1540,32 +1951,11 @@
 
 
                         $.ajax({
-                            url: "/finanzas/RG_ValidarSolicitudAprobada",
-                            type: "POST",
-                            data: { 'codigo': codigo },
-                            dataType: "json",
-                            success: function (resultado) {
-
-                                
-
-                            },
-                            error: function (xhr, ajaxOptions, thrownError) {
-
-                            }
-                        });
-
-
-
-
-
-                        $.ajax({
                             url: "/finanzas/RG_SolicitudXCodigo",
                             type: "GET",
                             data: { 'codigo': codigo },
                             dataType: "json",
                             success: function (resultado) {
-
-                                console.log(resultado);
 
                                 if (resultado.isRedirect) {
                                     window.location.href = resultado.redirectUrl;
@@ -1582,91 +1972,82 @@
                                         $("#idCbxTipo").val(resultado.entidad.idTipo);
                                         $("#idCbxTipoMod").val(resultado.entidad.idTipoMod);
                                         $("#idtxtaobs").val(resultado.entidad.observacion);
+
+                                        vctpava_bnfcol = resultado.entidad.ctpava_bnf;
+                                        vcanvar_bnfcol = resultado.entidad.canvar_bnf;
+                                        vcolaborador = resultado.entidad.colaborador;
+
+                                        $("#txtcolaborador").val(resultado.entidad.colaborador);
+
                                         $("#estado-desc").text(resultado.entidad.estado);
 
-                                        if (resultado.entidad.idEstado == 1) {
-                                            // Pendiente
-                                            $("#estado-icon").removeClass("icon-liberado");
-                                            $("#estado-icon").removeClass("icon-aprobado");
-                                            $("#estado-icon").removeClass("icon-rechazado");
-                                            $("#estado-icon").addClass("icon-pendiente");
-
-                                            $("#estado-desc").removeClass("desc-est-liberado");
-                                            $("#estado-desc").removeClass("desc-est-aprobado");
-                                            $("#estado-desc").removeClass("desc-est-rechazado");
-                                            $("#estado-desc").addClass("desc-est-pendiente");
-
-                                        }
-                                        else if (resultado.entidad.idEstado == 2) {
-                                            // Liberado
-                                            $("#estado-icon").removeClass("icon-pendiente");
-                                            $("#estado-icon").removeClass("icon-aprobado");
-                                            $("#estado-icon").removeClass("icon-rechazado");
-                                            $("#estado-icon").addClass("icon-liberado");
-
-                                            $("#estado-desc").removeClass("desc-est-pendiente");
-                                            $("#estado-desc").removeClass("desc-est-aprobado");
-                                            $("#estado-desc").removeClass("desc-est-rechazado");
-                                            $("#estado-desc").addClass("desc-est-liberado");
-
-                                        }
-                                        else if (resultado.entidad.idEstado == 3) {
-                                            // Aprobado Total
-                                            $("#estado-icon").removeClass("icon-pendiente");
-                                            $("#estado-icon").removeClass("icon-liberado");
-                                            $("#estado-icon").removeClass("icon-rechazado");
-                                            $("#estado-icon").addClass("icon-aprobado");
-
-                                            $("#estado-desc").removeClass("desc-est-pendiente");
-                                            $("#estado-desc").removeClass("desc-est-liberado");
-                                            $("#estado-desc").removeClass("desc-est-rechazado");
-                                            $("#estado-desc").addClass("desc-est-aprobado");
-
-                                        }
-                                        else if (resultado.entidad.idEstado == 4) {
-                                            // Aprobado Parcial
-                                            $("#estado-icon").removeClass("icon-pendiente");
-                                            $("#estado-icon").removeClass("icon-liberado");
-                                            $("#estado-icon").removeClass("icon-rechazado");
-                                            $("#estado-icon").addClass("icon-aprobado");
-
-                                            $("#estado-desc").removeClass("desc-est-pendiente");
-                                            $("#estado-desc").removeClass("desc-est-liberado");
-                                            $("#estado-desc").removeClass("desc-est-rechazado");
-                                            $("#estado-desc").addClass("desc-est-aprobado");
-
-                                        }
-                                        else if (resultado.entidad.idEstado == 5) {
-                                            // Rechazado
-                                            $("#estado-icon").removeClass("icon-pendiente");
-                                            $("#estado-icon").removeClass("icon-liberado");
-                                            $("#estado-icon").removeClass("icon-aprobado");
-                                            $("#estado-icon").addClass("icon-rechazado");
-
-                                            $("#estado-desc").removeClass("desc-est-pendiente");
-                                            $("#estado-desc").removeClass("desc-est-liberado");
-                                            $("#estado-desc").removeClass("desc-est-aprobado");
-                                            $("#estado-desc").addClass("desc-est-rechazado");
-                                        }
-
+                                        indicadorEstado(resultado.entidad.idEstado);
 
                                         $("#btnGuardarCabecera").removeClass("btn-primary");
                                         $("#btnGuardarCabecera").addClass("btn-secondary");
                                         document.getElementById("btnGuardarCabecera").disabled = true;
 
-                                        $("#btnAgregarDetalle").removeClass("btn-secondary");
-                                        $("#btnAgregarDetalle").addClass("btn-warning");
-                                        document.getElementById("btnAgregarDetalle").disabled = false;
-                                        document.getElementById("btnAgregarDetalle").focus();
+
+                                        // Si tiene estado mayor a 0, tiene aprobación
+                                        if (resultado.entidad.idEstado > 1) {
+                                            document.getElementById("btnAgregarDetalle").disabled = true;
+                                            $("#btnAgregarDetalle").removeClass("btn-warning");
+                                            $("#btnAgregarDetalle").addClass("btn-secondary");
+                                        }
+                                        else {
+
+                                            $("#btnAgregarDetalle").removeClass("btn-secondary");
+                                            $("#btnAgregarDetalle").addClass("btn-warning");
+                                            document.getElementById("btnAgregarDetalle").disabled = false;
+                                            document.getElementById("btnAgregarDetalle").focus();
+                                        }
 
                                         if (resultado.entidad.listaDetalle.length > 0) {
-                                            generarTablaDetalle(resultado.entidad.listaDetalle);
+                                            generarTablaDetalle(resultado.entidad.listaDetalle, resultado.entidad.idEstado);
+                                        }
+                                        else {
+                                            limpiarDetalle();
+
+                                            let tabla = $("#tblDetalle").DataTable();
+                                            tabla.destroy();
+                                            var tr = "";
+                                            $("#tblDetalleContent").html(tr);
+                                            $("#tblDetalle").DataTable(
+                                                {
+                                                    'language': { 'url': '/libs/datatables/spanish.json' },
+                                                    lengthMenu: [[5, 10, 20, -1], [5, 10, 20, 'Todos']]
+                                                }
+                                            );
+
+                                            $("#kpi-cantidad").text("0");
+                                            $("#kpi-total").text("0");
+
+                                            sumTotalDetalle = 0;
                                         }
 
                                         mensajePrincipal(true, "Mostrando Solicitud");
                                     }
                                     else {
                                         mensajePrincipal(false, "Solicitud no encontrada");
+
+                                        resetControles();
+
+                                        $("#idtxtcodigo").val("");
+                                        document.getElementById("idtxtcodigo").disabled = false;
+                                        document.getElementById("idCbxTipo").disabled = true;
+                                        document.getElementById("idCbxTipoMod").disabled = true;
+                                        document.getElementById("idtxtaobs").disabled = true;
+                                        document.getElementById("btnBuscarColaborador").disabled = true;
+
+                                        document.getElementById("btnGuardarCabecera").disabled = true;
+                                        $("#btnGuardarCabecera").removeClass("btn-primary");
+                                        $("#btnGuardarCabecera").addClass("btn-secondary");
+
+                                        document.getElementById("btnBuscarCodigo").disabled = true;
+                                        $("#btnBuscarCodigo").removeClass("btn-primary");
+                                        $("#btnBuscarCodigo").addClass("btn-secondary");
+
+                                        document.getElementById("idtxtcodigo").focus();
                                     }
                                 }
                             },
@@ -1680,33 +2061,655 @@
                 }
             });
 
+            $('#modalSolDetInsertar').on('hidden.bs.modal', function (e) {
+                limpiarDetalle();
+            });
+
         });
 
 
-        $('#detalleConceptoInsertar').on('click', '.cseleccion', function (e) {
-            var inputCheck = $(this);
-            var idConceptoDet = $(this).attr("data-id");
+        $('#detalleConceptoInsertarEditar').on('click', '.cseleccion', function (e) {
+
+            let inputCheck = $(this);
+            let idConceptoDet = $(this).attr("data-id");
+            let valorPre = "";
+            let valor = 0;
 
             if (inputCheck.is(":checked")) {
 
+
                 for (var i = 0; i < conceptoDetArray.length; i++) {
                     if (conceptoDetArray[i].idConceptoDet == idConceptoDet) {
+
                         conceptoDetArray[i].seleccionadoDet = 1;
+                        conceptoDetArray[i].isChecked = true;
+
+                        // Servicio y Otros
+                        if (conceptoDetArray[i].idConceptoDet == 10) {
+                            $("#detalleConceptoInsertarEditar .cbxDias" + idConceptoDet.toString() + "").attr("disabled", true);
+                        }
+                        else {
+                            $("#detalleConceptoInsertarEditar .cbxDias" + idConceptoDet.toString() + "").attr("disabled", false);
+                        }
+
+                        valorPre = $("#detalleConceptoInsertarEditar #txtMontoSol" + idConceptoDet.toString() + "").val();
+
+                        if (valorPre == null || typeof (valorPre) == "undefined" || valorPre.trim() == "") {
+                            valor = 0;
+                        }
+                        else {
+                            valor = parseFloat(valorPre);
+                        }
+
+                        sumTotalDetalle = sumTotalDetalle + (valor * parseFloat(conceptoDetArray[i].cantDias));
                     }
                 }
 
             } else {
-
                 for (var i = 0; i < conceptoDetArray.length; i++) {
                     if (conceptoDetArray[i].idConceptoDet == idConceptoDet) {
                         conceptoDetArray[i].seleccionadoDet = 0;
+                        conceptoDetArray[i].isChecked = false;
+                        conceptoDetArray[i].cantDias = $("#detalleConceptoInsertarEditar .cbxDias" + idConceptoDet.toString() + "").val();
+                        conceptoDetArray[i].observacionDet = $("#detalleConceptoInsertarEditar #txtObsDet" + idConceptoDet.toString() + "").val();
+
+                        valorPre = $("#detalleConceptoInsertarEditar #txtMontoSol" + idConceptoDet.toString() + "").val();
+
+                        if (valorPre == null || typeof (valorPre) == "undefined" || valorPre.trim() == "") {
+                            valor = 0;
+                        }
+                        else {
+                            valor = parseFloat(valorPre);
+                        }
+
+                        sumTotalDetalle = sumTotalDetalle - valor * parseFloat(conceptoDetArray[i].cantDias);
                     }
                 }
+                $("#detalleConceptoInsertarEditar .cbxDias" + idConceptoDet.toString() + "").attr("disabled", true);
+            }
+
+            if (conceptoDetArray.filter(x => x.isChecked == true).length == conceptoDetArray.length) {
+                $("#seleccionar-todo").prop("checked", true);
+            }
+            else {
+                $("#seleccionar-todo").prop("checked", false);
+            }
+
+            $("#sum-total-det").text(formatoNumero(sumTotalDetalle));
+        });
+
+        $('#modalSolDetInsertar').on('click', '#seleccionar-todo', function (e) {
+            let idConceptoDet = 0;
+            var inputCheck = $(this);
+            sumTotalDetalle = 0;
+
+            let valorPre = "";
+            let valor = 0;
+
+            if (inputCheck.is(":checked")) {
+
+                let valorXConceptDet = 0;
+
+                $("#detalleConceptoInsertarEditar input[type='checkbox']").each(function (i, obj) {
+                    idConceptoDet = $(this).attr("data-id");
+                    valorXConceptDet = 0;
+
+                    if (conceptoDetArray[i].idConceptoDet == idConceptoDet) {
+
+                        conceptoDetArray[i].seleccionadoDet = 1;
+                        conceptoDetArray[i].cantDias = $("#detalleConceptoInsertarEditar .cbxDias" + idConceptoDet.toString() + "").val();
+                        conceptoDetArray[i].observacionDet = $("#detalleConceptoInsertarEditar #txtObsDet" + idConceptoDet.toString() + "").val();
+                    }
+
+                    conceptoDetArray[i].isChecked = true;
+
+                    valorPre = $("#detalleConceptoInsertarEditar #txtMontoSol" + idConceptoDet.toString() + "").val();
+
+
+                    if (valorPre == null || typeof (valorPre) == "undefined" || valorPre.trim() == "") {
+                        valor = 0;
+                    }
+                    else {
+                        valor = parseFloat(valorPre);
+                    }
+
+                    $(this).prop("checked", true);
+
+                    // Servicio y Otros
+                    if (conceptoDetArray[i].idConceptoDet == 10) {
+                        $("#detalleConceptoInsertarEditar .cbxDias" + idConceptoDet.toString() + "").attr("disabled", true);
+                    }
+                    else {
+                        $("#detalleConceptoInsertarEditar .cbxDias" + idConceptoDet.toString() + "").attr("disabled", false);
+                    }
+
+                    valorXConceptDet = parseFloat(valor) * conceptoDetArray[i].cantDias;
+
+                    sumTotalDetalle = sumTotalDetalle + valorXConceptDet;
+                });
+
+            } else {
+                $("#detalleConceptoInsertarEditar input[type='checkbox']").each(function (i, obj) {
+                    idConceptoDet = $(this).attr("data-id");
+
+                    if (conceptoDetArray[i].idConceptoDet == idConceptoDet) {
+                        conceptoDetArray[i].seleccionadoDet = 0;
+                        conceptoDetArray[i].cantDias = $("#detalleConceptoInsertarEditar .cbxDias" + idConceptoDet.toString() + "").val();
+                        conceptoDetArray[i].observacionDet = $("#detalleConceptoInsertarEditar #txtObsDet" + idConceptoDet.toString() + "").val();
+                    }
+
+                    conceptoDetArray[i].isChecked = false;
+                    $(this).prop("checked", false);
+                    $("#detalleConceptoInsertarEditar .cbxDias" + idConceptoDet.toString() + "").attr("disabled", true);
+
+                    sumTotalDetalle = 0;
+                });
+            }
+
+            $("#sum-total-det").text(formatoNumero(sumTotalDetalle));
+        });
+
+        $('#idmCbxConcepCab').change(function () {
+            var $option = $(this).find('option:selected');
+            vIdConcepCab = $option.val().toString();
+
+            if (vIdConcepCab != 0 && vIdConcepCab != null && typeof (vIdConcepCab) != "undefined") {
+
+                sumTotalDetalle = 0;
+                conceptoDetArray = [];
+
+                $("#sum-total-det").text(formatoNumero(sumTotalDetalle));
+                getConceptoDet(vIdConcepCab);
+
             }
         });
 
 
 
+        $('#detalleConceptoInsertarEditar').on('change', '.cdias', function (e) {
+            sumTotalDetalle = 0;
+            let valorPre = "";
+            let valorActual = 0;
+            let valorMaximoS = $(this).attr("data-valor-maxs");
+            let valorMaximoD = $(this).attr("data-valor-maxd");
+
+
+            $("#detalleConceptoInsertarEditar input[type='checkbox']").each(function (i, obj) {
+
+                idConceptoDet = $(this).attr("data-id");
+
+                if (conceptoDetArray[i].isChecked == true) {
+
+
+                    conceptoDetArray[i].seleccionadoDet = 1;
+
+                    conceptoDetArray[i].cantDias = $("#detalleConceptoInsertarEditar .cbxDias" + idConceptoDet.toString() + "").val();
+                    conceptoDetArray[i].montoSolicitado = $("#detalleConceptoInsertarEditar #txtMontoSol" + idConceptoDet.toString() + "").val();
+                    conceptoDetArray[i].observacionDet = $("#detalleConceptoInsertarEditar #txtObsDet" + idConceptoDet.toString() + "").val();
+
+
+                    valorPre = $("#detalleConceptoInsertarEditar #txtMontoSol" + idConceptoDet.toString() + "").val();
+
+                    if (valorPre == null || typeof (valorPre) == "undefined" || valorPre.trim() == "") {
+                        valorActual = 0;
+                    }
+                    else {
+                        valorActual = parseFloat(valorPre);
+                    }
+
+
+                    // SOLES
+                    if (vIdTipoMod == 1) {
+                        if (valorActual > parseFloat(valorMaximoS)) {
+
+                            $("#txtMontoSol" + idConceptoDet.toString() + "").val(0);
+                            valorActual = 0;
+
+                            Swal.fire({
+                                title: 'El monto ingresado no puede ser mayor al maximo permitido',
+                                text: "Textile Sourcing Company",
+                                icon: 'warning',
+                                showConfirmButton: true,
+                                confirmButtonColor: '#3085d6',
+                                confirmButtonText: 'Ok'
+                            });
+
+                            document.getElementById("txtMontoSol" + idConceptoDet.toString() + "").focus();
+                        }
+
+                        sumTotalDetalle = sumTotalDetalle + (valorActual * parseFloat(conceptoDetArray[i].cantDias));
+                    }
+                    else if (vIdTipoMod == 2) {
+                        // DOLAR
+
+                        if (valorActual > parseFloat(valorMaximoD)) {
+
+                            $("#txtMontoSol" + idConceptoDet.toString() + "").val(0);
+                            valorActual = 0;
+
+                            Swal.fire({
+                                title: 'El monto ingresado no puede ser mayor al maximo permitido',
+                                text: "Textile Sourcing Company",
+                                icon: 'warning',
+                                showConfirmButton: true,
+                                confirmButtonColor: '#3085d6',
+                                confirmButtonText: 'Ok'
+                            });
+
+                            document.getElementById("txtMontoSol" + idConceptoDet.toString() + "").focus();
+                        }
+
+                        sumTotalDetalle = sumTotalDetalle + (valorActual * parseFloat(conceptoDetArray[i].cantDias));
+                    }
+
+
+                }
+                else {
+
+                    conceptoDetArray[i].seleccionadoDet = 0;
+                    conceptoDetArray[i].cantDias = $("#detalleConceptoInsertarEditar .cbxDias" + idConceptoDet.toString() + "").val();
+                    conceptoDetArray[i].observacionDet = $("#detalleConceptoInsertarEditar #txtObsDet" + idConceptoDet.toString() + "").val();
+                }
+            });
+
+            $("#sum-total-det").text(formatoNumero(sumTotalDetalle));
+        });
+
+
+
+        $('#modalSolDetInsertar').on('shown.bs.modal', function (e) {
+
+            let idConceptoDet = 0;
+            let primerCantDias = 0;
+            let primerLoopCbxDia = true;
+
+            if (switchInsertarEditar == 2) {
+                $("#detalleConceptoInsertarEditar .cdias").each(function (i, obj) {
+
+                    idConceptoDet = $(this).attr("data-id");
+                    $("#idmCbxConcepCab").prop("disabled", true);
+
+                    $.each(diasArray, function () {
+                        if (primerLoopCbxDia) {
+                            primerCantDias = this.codDia;
+                        }
+                        primerLoopCbxDia = false;
+                    });
+
+                    let dias = diasArrayEditar.find(x => x.idConceptoDet == idConceptoDet).cantDias;
+
+                    if (dias > 0) {
+                        $("#detalleConceptoInsertarEditar .cbxDias" + idConceptoDet.toString() + "").val(dias);
+                    }
+                    else {
+                        $("#detalleConceptoInsertarEditar .cbxDias" + idConceptoDet.toString() + "").val(primerCantDias);
+                    }
+                });
+            }
+
+        });
+
+        $("#detalleConceptoInsertarEditar").on("keyup", ".cmontosolicitar", function () {
+
+            sumTotalDetalle = 0;
+
+            $("#detalleConceptoInsertarEditar input[type='number']").each(function (i, obj) {
+                idConceptoDet = $(obj).attr("data-idconceptodet");
+
+                let valorMaximoS = $(obj).attr("data-valor-maxs");
+                let valorMaximoD = $(obj).attr("data-valor-maxd");
+
+                if (conceptoDetArray[i].idConceptoDet == idConceptoDet && conceptoDetArray[i].isChecked == true) {
+                    let valorActual = 0;
+                    let cantDias = $("#detalleConceptoInsertarEditar .cbxDias" + idConceptoDet.toString() + "").val();
+
+
+                    if ($(obj).val() == null || typeof ($(obj).val()) == "undefined" || $(obj).val().trim() == "") {
+                        valorActual = 0;
+                    }
+                    else {
+                        valorActual = parseFloat($(obj).val());
+                    }
+
+
+                    // SOLES
+                    if (vIdTipoMod == 1) {
+                        if (valorActual > parseFloat(valorMaximoS)) {
+
+                            $("#txtMontoSol" + idConceptoDet.toString() + "").val(0);
+                            valorActual = 0;
+
+                            Swal.fire({
+                                title: 'El monto ingresado no puede ser mayor al maximo permitido',
+                                text: "Textile Sourcing Company",
+                                icon: 'warning',
+                                showConfirmButton: true,
+                                confirmButtonColor: '#3085d6',
+                                confirmButtonText: 'Ok'
+                            });
+
+                            document.getElementById("txtMontoSol" + idConceptoDet.toString() + "").focus();
+                        }
+
+                    }
+                    else if (vIdTipoMod == 2) {
+                        // DOLAR
+
+                        if (valorActual > parseFloat(valorMaximoD)) {
+
+                            $("#txtMontoSol" + idConceptoDet.toString() + "").val(0);
+                            valorActual = 0;
+
+                            Swal.fire({
+                                title: 'El monto ingresado no puede ser mayor al maximo permitido',
+                                text: "Textile Sourcing Company",
+                                icon: 'warning',
+                                showConfirmButton: true,
+                                confirmButtonColor: '#3085d6',
+                                confirmButtonText: 'Ok'
+                            });
+
+                            document.getElementById("txtMontoSol" + idConceptoDet.toString() + "").focus();
+                        }
+                    }
+
+                    sumTotalDetalle = sumTotalDetalle + (valorActual * parseFloat(cantDias));
+                }
+            });
+
+            $("#sum-total-det").text(formatoNumero(sumTotalDetalle));
+        });
+
+
+        $("#btnBuscarColaborador").click(function () {
+            $("#modalColaboradorSofya").modal("show");
+        });
+
+
+        $('#idBusquedaColaborador').keypress(function (event) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+
+            let filtro = $("#idBusquedaColaborador").val();
+
+            if (keycode == '13') {
+
+                if (filtro == "") {
+                    Swal.fire({
+                        title: 'Ingrese el filtro para la busqueda',
+                        text: "Textile Sourcing Company",
+                        icon: 'warning',
+                        showConfirmButton: true,
+                        showCancelButton: false,
+                        confirmButtonText: 'Ok',
+                        cancelButtonText: 'Cancel',
+                        focusConfirm: true
+                    }).then(result => {
+                        if (result.value) {
+                            document.getElementById("idBusquedaColaborador").focus();
+                        }
+                    });
+                }
+                else {
+
+                    MostrarCarga("Buscando...");
+
+                    $.ajax({
+                        url: "/finanzas/RG_ColaboradorSofya",
+                        type: "GET",
+                        data: { 'filtro': filtro },
+                        dataType: "json",
+                        success: function (resultado) {
+
+                            if (resultado.isRedirect) {
+                                window.location.href = resultado.redirectUrl;
+                            }
+                            else {
+                                let tabla = $("#tblColaborador").DataTable();
+
+                                tabla.destroy();
+                                var tr = "";
+
+                                resultado.lista.forEach((obj) => {
+
+                                    tr += "<tr> "
+                                        + " <td> " + obj.codsofya + "</td>"
+                                        + " <td> " + obj.colaborador + "</td>"
+                                        + " <td class='text-center'>"
+                                        + "     <button data-ctpava='" + obj.ctpava + "' data-canvar='" + obj.canvar + "' data-codsofya='" + obj.codsofya + "' data-colaborador='" + obj.colaborador + "' data-toggle='collapse' class='btn btn-sm btn-success cseleccionar ml-1'><i class='fas fa-check'></i></button>"
+                                        + "</td>"
+                                        + "</tr>";
+                                });
+
+                                $("#tblColaboradorContent").html(tr);
+
+                                $("#tblColaborador").DataTable(
+                                    {
+                                        'language': { 'url': '/libs/datatables/spanish.json' },
+                                        lengthMenu: [[5, 10, 20, -1], [5, 10, 20, 'Todos']]
+                                    });
+
+                                mensajePrincipal(true, "Mostrando resultados de busqueda");
+                            }
+                        },
+                        error: function (xhr, ajaxOptions, thrownError) {
+
+                        }
+                    });
+
+                }
+
+            }
+        });
+
+        function mensajePrincipal(estado, mensaje) {
+            if (estado == true) {
+
+                const Toast = Swal.mixin({
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 2500,
+                    timerProgressBar: true,
+                    didOpen: (toast) => {
+                        toast.addEventListener('mouseenter', Swal.stopTimer)
+                        toast.addEventListener('mouseleave', Swal.resumeTimer)
+                    }
+                })
+
+                Toast.fire({
+                    icon: 'success',
+                    title: mensaje
+                });
+
+            }
+            else if (estado == false) {
+
+                const Toast = Swal.mixin({
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 2500,
+                    timerProgressBar: true,
+                    didOpen: (toast) => {
+                        toast.addEventListener('mouseenter', Swal.stopTimer)
+                        toast.addEventListener('mouseleave', Swal.resumeTimer)
+                    }
+                })
+
+                Toast.fire({
+                    icon: 'error',
+                    title: mensaje
+                });
+
+            }
+        }
+
+        $('#tblColaborador').on('click', '.cseleccionar', function (e) {
+            vCodColSofya = $(this).attr("data-codsofya");
+            vColaboradorSofya = $(this).attr("data-colaborador");
+            vctpava_bnfcol = $(this).attr("data-ctpava");
+            vcanvar_bnfcol = $(this).attr("data-canvar");
+
+            vcolaborador = $.trim(vCodColSofya) + " " + $.trim(vColaboradorSofya);
+            $("#txtcolaborador").val($.trim(vCodColSofya) + " " + $.trim(vColaboradorSofya));
+
+            $("#modalColaboradorSofya").modal("hide");
+        });
+
+
+
+        // Funciones Generales
+
+        function formatoNumero(x) {
+            x = x.toFixed(2);
+            return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+
+        function getConceptoDet(idConceptoCab) {
+            $.ajax({
+                type: "GET",
+                url: '/Finanzas/RG_ConceptoDetalleInsertar',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                data: { idConceptoCab: idConceptoCab },
+                success: function (data) {
+
+                    $("#detalleConceptoInsertarEditar").empty();
+
+                    let detHTML = "";
+                    let cbxDiasHTML = "";
+
+                    let primerLoopCbxDia = true;
+                    let cantDiaSeleccionado = 0;
+
+                    $.each(diasArray, function () {
+
+                        if (primerLoopCbxDia) {
+                            cbxDiasHTML += "<option value='" + this.codDia + "' selected>" + this.dia + "</option>";
+                            cantDiaSeleccionado = this.codDia;
+                        }
+                        else {
+                            cbxDiasHTML += "<option value='" + this.codDia + "'>" + this.dia + "</option>";
+                        }
+
+                        primerLoopCbxDia = false;
+                    });
+
+                    console.log(data.lista);
+
+                    $.each(data.lista, function () {
+
+                        detHTML += "<div class='row mt-1'>"
+                            + "<div class='col-1'>"
+                            + "     <input type='checkbox' class='cseleccion' data-id=" + this.idConceptoDet + " data-valor=" + this.montoMaximo + ">"
+                            + "</div>"
+                            + "<div class='col-2'>"
+                            + "      <p style='padding: 4px; border:1px solid #CCD1D1; border-radius: 3px;'>" + this.conceptoDet + "</p>"
+                            + "</div>"
+                            + "<div class='col-1'>"
+                            + "     <input class='form-control form-control-sm cmontosolicitar' type='number' id='txtMontoSol" + this.idConceptoDet + "' min='0' max='" + this.montoMaximo + "' data-idconceptodet='" + this.idConceptoDet + "' data-valor-maxs = '" + this.montoMaximoS + "' data-valor-maxd='" + this.montoMaximoD + "'>"
+                            + "</div>"
+
+                            + "<div class='col-2'>"
+                            + "     <input class='form-control form-control-sm cobsdet' type='text' id='txtObsDet" + this.idConceptoDet + "' data-idconceptodet='" + this.idConceptoDet + "'>"
+                            + "</div>"
+
+                            + "<div class='col-5'>"
+                            + "     <p style='padding: 4px; border:1px solid #CCD1D1; border-radius: 3px;'>" + this.consideracion + "</p>"
+                            + "</div>"
+                            + "<div class='col-1'>"
+                            + "   <select class='form-control form-control-sm cdias cbxDias" + this.idConceptoDet + "' data-id=" + this.idConceptoDet + " data-valor-maxs = '" + this.montoMaximoS + "' data-valor-maxd='" + this.montoMaximoD + "' disabled>"
+                            + cbxDiasHTML
+                            + "</select>"
+                            + "</div>"
+                            + "</div>";
+
+                        //sumTotalDetalle = sumTotalDetalle + parseFloat(this.montoMaximo);
+                        sumTotalDetalle = 0;
+                        conceptoDetArray.push({ idConceptoDet: this.idConceptoDet, seleccionadoDet: 1, codCeCo: vCodCeCo, isChecked: false, cantDias: cantDiaSeleccionado, montoSolicitado: 0, observacionDet : this.observacionDet });
+                    });
+
+                    $("#seleccionar-todo").prop("checked", false);
+                    $("#detalleConceptoInsertarEditar").html(detHTML);
+                    $("#sum-total-det").text(formatoNumero(sumTotalDetalle * cantDiaSeleccionado));
+
+                },
+                failure: function () {
+                    console.error('error al cargar tipos periodos');
+                }
+            });
+        }
+
+        function indicadorEstado(idEstado) {
+
+            if (idEstado == 1) {
+                // Pendiente
+                $("#estado-icon").removeClass("icon-liberado");
+                $("#estado-icon").removeClass("icon-aprobado");
+                $("#estado-icon").removeClass("icon-rechazado");
+                $("#estado-icon").addClass("icon-pendiente");
+
+                $("#estado-desc").removeClass("desc-est-liberado");
+                $("#estado-desc").removeClass("desc-est-aprobado");
+                $("#estado-desc").removeClass("desc-est-rechazado");
+                $("#estado-desc").addClass("desc-est-pendiente");
+
+            }
+            else if (idEstado == 2) {
+                // Liberado
+                $("#estado-icon").removeClass("icon-pendiente");
+                $("#estado-icon").removeClass("icon-aprobado");
+                $("#estado-icon").removeClass("icon-rechazado");
+                $("#estado-icon").addClass("icon-liberado");
+
+                $("#estado-desc").removeClass("desc-est-pendiente");
+                $("#estado-desc").removeClass("desc-est-aprobado");
+                $("#estado-desc").removeClass("desc-est-rechazado");
+                $("#estado-desc").addClass("desc-est-liberado");
+
+            }
+            else if (idEstado == 3) {
+                // Aprobado Total
+                $("#estado-icon").removeClass("icon-pendiente");
+                $("#estado-icon").removeClass("icon-liberado");
+                $("#estado-icon").removeClass("icon-rechazado");
+                $("#estado-icon").addClass("icon-aprobado");
+
+                $("#estado-desc").removeClass("desc-est-pendiente");
+                $("#estado-desc").removeClass("desc-est-liberado");
+                $("#estado-desc").removeClass("desc-est-rechazado");
+                $("#estado-desc").addClass("desc-est-aprobado");
+
+            }
+            else if (idEstado == 4) {
+                // Aprobado Parcial
+                $("#estado-icon").removeClass("icon-pendiente");
+                $("#estado-icon").removeClass("icon-liberado");
+                $("#estado-icon").removeClass("icon-rechazado");
+                $("#estado-icon").addClass("icon-aprobado");
+
+                $("#estado-desc").removeClass("desc-est-pendiente");
+                $("#estado-desc").removeClass("desc-est-liberado");
+                $("#estado-desc").removeClass("desc-est-rechazado");
+                $("#estado-desc").addClass("desc-est-aprobado");
+
+            }
+            else if (idEstado == 5) {
+                // Rechazado
+                $("#estado-icon").removeClass("icon-pendiente");
+                $("#estado-icon").removeClass("icon-liberado");
+                $("#estado-icon").removeClass("icon-aprobado");
+                $("#estado-icon").addClass("icon-rechazado");
+
+                $("#estado-desc").removeClass("desc-est-pendiente");
+                $("#estado-desc").removeClass("desc-est-liberado");
+                $("#estado-desc").removeClass("desc-est-aprobado");
+                $("#estado-desc").addClass("desc-est-rechazado");
+            }
+
+
+
+        }
 
 
 
@@ -1714,4 +2717,5 @@
     </script>
 
 }
+
 

@@ -16,7 +16,7 @@ namespace TSC_WEB.Models.Entidades.Finanzas.RendicionGastos
         public string moneda { get; set; }
         public string nivelAprobacion { get; set; }
         public decimal total { get; set; }
-
+        public string usuSolicitante { get; set; }
         public string htmlDisabledBtn { get; set; }
     }
 }

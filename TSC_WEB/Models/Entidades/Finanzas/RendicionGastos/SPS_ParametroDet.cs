@@ -27,7 +27,6 @@ namespace TSC_WEB.Models.Entidades.Finanzas.RendicionGastos
         public int nivelInterfaz { get; set; }
 
         public int idTipo { get; set; }
-
         public ConceptoDetalle[] conceptoDetArray { get; set; }
     }
 }

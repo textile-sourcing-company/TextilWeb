@@ -11,8 +11,9 @@ namespace TSC_WEB.Models.Entidades.Finanzas.RendicionGastos
         public int idConceptoDet { get; set; }
         public string conceptoDet { get; set; }
         public string consideracion { get; set; }
-        public decimal montoMaximo { get; set; }
+        public decimal montoSolicitado { get; set; }
 
         public int existe { get; set; }
+        public string observacionDet { get; set; }
     }
 }

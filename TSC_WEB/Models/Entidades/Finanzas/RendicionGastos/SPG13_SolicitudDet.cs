@@ -11,8 +11,14 @@ namespace TSC_WEB.Models.Entidades.Finanzas.RendicionGastos
         public int secuencia { get; set; }
         public string fecha { get; set; }
         public string ceco { get; set; }
+        public string tipo { get; set; }
+        public string conceptoCab { get; set; }
         public string conceptoDet { get; set; }
         public string moneda { get; set; }
+
+        public int cantDias { get; set; }
         public decimal valor { get; set; }
+        public decimal total { get; set; }
+        public string simbolo { get; set; }
     }
 }

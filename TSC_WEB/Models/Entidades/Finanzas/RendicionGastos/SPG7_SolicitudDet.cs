@@ -16,5 +16,6 @@ namespace TSC_WEB.Models.Entidades.Finanzas.RendicionGastos
         public int idConceptoCab { get; set; }
         public string conceptoCab { get; set; }
         public decimal valor { get; set; }
+        public string tipo { get; set; }
     }
 }
