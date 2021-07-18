@@ -426,6 +426,8 @@ namespace TSC_WEB.Models.Modelos.Corte.LiquidacionTela
                 comando.Parameters.Add(new OracleParameter("i_fecha", cort006.f_registro));
                 comando.Parameters.Add(new OracleParameter("i_estadotendido", cort006.estadotendido));
                 comando.Parameters.Add(new OracleParameter("i_estadocorte", cort006.estadocorte));
+                comando.Parameters.Add(new OracleParameter("i_comentario", cort006.comentario));
+
 
 
                 comando.ExecuteNonQuery();
@@ -532,9 +534,7 @@ namespace TSC_WEB.Models.Modelos.Corte.LiquidacionTela
 
                 ObjFichasLista.ESTADO = registros["ESTADO"].ToString();
                 ObjFichasLista.fecha = registros["f_registro"].ToString();
-
-
-
+                ObjFichasLista.comentario = registros["comentario"].ToString();
 
             }
             con.Desconectar();

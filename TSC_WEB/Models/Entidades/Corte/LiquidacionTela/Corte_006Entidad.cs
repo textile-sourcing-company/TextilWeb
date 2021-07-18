@@ -30,6 +30,8 @@ namespace TSC_WEB.Models.Entidades.Corte
         public string ESTADO { get; set; }
 
         public string fecha { get; set; }
+        public string comentario { get; set; }
+
 
 
 

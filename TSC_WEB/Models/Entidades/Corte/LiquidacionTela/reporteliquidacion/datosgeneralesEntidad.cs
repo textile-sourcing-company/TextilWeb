@@ -39,8 +39,7 @@ namespace TSC_WEB.Models.Entidades.Corte.LiquidacionTela.reporteliquidacion
         public string estadotendido { get; set; }
         public string estadocorte { get; set; }
 
-
-
+        public string comentario { get; set; }
 
 
         //CALCULADOS
