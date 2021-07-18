@@ -67,10 +67,10 @@
 
         </div>
 
-
     </div>
 
     <div class="col-md-9">
+
         <div class="card card-outline card-primary">
             <div class="card-header">
                 <h3 class="card-title">Versiones</h3>
@@ -96,11 +96,11 @@
                 </div>
             </div>
         </div>
+
     </div>
 
 
     <div class="col-md-12">
-
 
         <div class="card card-outline card-primary">
             <div class="card-header">
@@ -135,6 +135,7 @@
 
             </div>
         </div>
+
     </div>
 
 </div>
@@ -151,6 +152,7 @@
             <button type="button" class="btn btn-tool" data-widget="collapse"><i class="fas fa-minus"></i></button>
         </div>
     </div>
+
     <div class="card-body">
 
         <form class="row" id="frmregistroetapas">
@@ -202,6 +204,16 @@
                     <option value="E">E</option>
                     <option value="F">F</option>
                     <option value="G">G</option>
+                    <option value="H">H</option>
+                    <option value="I">I</option>
+                    <option value="J">J</option>
+                    <option value="K">K</option>
+                    <option value="L">L</option>
+                    <option value="M">M</option>
+                    <option value="N">N</option>
+                    <option value="O">O</option>
+                    <option value="P">P</option>
+                    <option value="Q">Q</option>
                 </select>
             </div>
 
@@ -219,6 +231,8 @@
                     <option value="Celula 8">Celula 8</option>
                     <option value="Celula 9">Celula 9</option>
                     <option value="Celula 10">Celula 10</option>
+                    <option value="Celula 11">Celula 11</option>
+
 
 
                 </select>
@@ -300,6 +314,8 @@
 
 
 <div class="row">
+
+    @*FICHAS ASOCIADAS*@
     <div class="col-xl-5 col-lg-6 col-md-12 col-sm-12 col-12">
 
         <!-- LISTA DE FICHAS -->
@@ -360,6 +376,21 @@
                 <div class="col-4">
                     <input class="form-control form-control-sm calculokilos" type="number" step="any" id="txtkgentregados" value="0" />
                 </div>
+            </div>
+
+        </div>
+
+        <!-- COMENTARIO -->
+        <div class="card card-outline card-primary">
+            <div class="card-header">
+                <h3 class="card-title">Comentario</h3>
+            </div>
+
+            <div class="card-body">
+
+
+                <textarea class="form-control form-control-sm" id="txtcomentario"  rows="5"></textarea>
+
             </div>
 
         </div>
@@ -470,6 +501,7 @@
         </div>
 
     </div>
+
 </div>
 
 
@@ -510,23 +542,23 @@
                     <div class="col-xl-6 form-group">
                         <label>Tono</label>
                         <select class="custom-select custom-select-sm" id="cbotonomodificar">
-                            <option value="A">Etapa A</option>
-                            <option value="B">Etapa B</option>
-                            <option value="C">Etapa C</option>
-                            <option value="D">Etapa D</option>
-                            <option value="E">Etapa E</option>
-                            <option value="F">Etapa F</option>
-                            <option value="G">Etapa G</option>
-                            <option value="H">Etapa H</option>
-                            <option value="I">Etapa I</option>
-                            <option value="J">Etapa J</option>
-                            <option value="K">Etapa K</option>
-                            <option value="L">Etapa L</option>
-                            <option value="M">Etapa M</option>
-                            <option value="N">Etapa N</option>
-                            <option value="O">Etapa O</option>
-                            <option value="P">Etapa P</option>
-                            <option value="Q">Etapa Q</option>
+                            <option value="A">A</option>
+                            <option value="B">B</option>
+                            <option value="C">C</option>
+                            <option value="D">D</option>
+                            <option value="E">E</option>
+                            <option value="F">F</option>
+                            <option value="G">G</option>
+                            <option value="H">H</option>
+                            <option value="I">I</option>
+                            <option value="J">J</option>
+                            <option value="K">K</option>
+                            <option value="L">L</option>
+                            <option value="M">M</option>
+                            <option value="N">N</option>
+                            <option value="O">O</option>
+                            <option value="P">P</option>
+                            <option value="Q">Q</option>
                         </select>
                     </div>
 
@@ -536,6 +568,14 @@
                             <option value="Celula 1">Celula 1</option>
                             <option value="Celula 2">Celula 2</option>
                             <option value="Celula 3">Celula 3</option>
+                            <option value="Celula 4">Celula 4</option>
+                            <option value="Celula 5">Celula 5</option>
+                            <option value="Celula 6">Celula 6</option>
+                            <option value="Celula 7">Celula 7</option>
+                            <option value="Celula 8">Celula 8</option>
+                            <option value="Celula 9">Celula 9</option>
+                            <option value="Celula 10">Celula 10</option>
+                            <option value="Celula 11">Celula 11</option>
                         </select>
                     </div>
 
@@ -919,7 +959,7 @@
                 $("#txtkgentregados").val(KGENTREGADOS);
                 $("#cbodevoprimera").val(response.DEVO_PRIMERA_MOT);
                 $("#cbodevosegunda").val(response.DEVO_SEGUNDA_MOT);
-
+                $("#txtcomentario").val(response.comentario);
                 // FECHA DE REGISTRO
                 if (response.fecha != "" && response.fecha != null) {
                     $("#txtfecha").val(response.fecha);
@@ -999,7 +1039,7 @@
                 let response = await get("Corte", "GetEstadosLiquidacion", { ficha, combo, version, tela }, true);
                 //console.log(response);
 
-                if (response.estadotendido == 2) {
+                if (response.estadotendido == 2 || @Session["codigo_cargo"] == 150) {
                     OCULTAR = false;
                     $("#BtnGrabar").removeClass("d-none");
                     $("#BtnAgregar").removeClass("d-none");
@@ -1095,7 +1135,7 @@
             // EVENTO DE REGISTRAR
             $("#BtnGrabar").click(async function (e) {
 
-                console.log("Liquidado", KGTELALIQUIDADA, "Despachado", KGTELADESPACHADA, "Adicional", KGTELAADICIONAL);
+                //console.log("Liquidado", KGTELALIQUIDADA, "Despachado", KGTELADESPACHADA, "Adicional", KGTELAADICIONAL);
 
                 if (!OCULTAR) {
 
@@ -1159,6 +1199,7 @@
                 var estadotendido = "0";
                 var estadocorte = null;
                 var f_registro = $("#txtfecha").val();
+                let comentario = $("#txtcomentario").val();
 
 
                 if (kg_adicionales > 0 && mot_kgadicional.length < 0) {
@@ -1173,13 +1214,15 @@
                              empalmes ,     devo_primera,       devo_segunda,       conos,
                              plastico,      u_registro,         kg_adicionales,     mot_kgadicional,
                              kgentregados,  devo_primera_mot,   devo_segunda_mot,   almacen,
-                             estadotendido, estadocorte,        f_registro
+                            estadotendido, estadocorte, f_registro, comentario
                         }
 
                         post("Corte", "RegistrarCabecera", datos, true)
                             .then((response) => {
-                                InformarMini("Correcto");
-                                console.log(response);
+
+                                Informar("Registrado correctamente",700,true);
+
+                                //console.log(response);
                             })
                             .catch(error => {
                                 Advertir("Ocurrio un error");

@@ -540,6 +540,9 @@
     <Compile Include="Models\Entidades\Contabilidad\ReporteGuiasContaEntidad.cs" />
     <Compile Include="Models\Entidades\ControlInterno\Liquidacion\FichasPendientesEntidad.cs" />
     <Compile Include="Models\Entidades\ControlInterno\ReporteStock\ReporteStock.cs" />
+    <Compile Include="Models\Entidades\Corte\LiquidacionRectilineos\FichaDatos.cs" />
+    <Compile Include="Models\Entidades\Corte\LiquidacionRectilineos\FichasTallasEntidad.cs" />
+    <Compile Include="Models\Entidades\Corte\LiquidacionRectilineos\LiquidacionRectilineosEntidad.cs" />
     <Compile Include="Models\Entidades\Corte\LiquidacionTela\aperturaficha\AperturaFichaEntidad.cs" />
     <Compile Include="Models\Entidades\Corte\LiquidacionTela\CaidasEntidad.cs" />
     <Compile Include="Models\Entidades\Corte\LiquidacionTela\Corte_001Entidad.cs" />
@@ -806,6 +809,7 @@
     <Compile Include="Models\Modelos\ControlInterno\Liquidacion\LiquidacionModelo.cs" />
     <Compile Include="Models\Modelos\ControlInterno\ReporteStock\ReporteStock.cs" />
     <Compile Include="Models\Modelos\Corte\FichasModeloOld.cs" />
+    <Compile Include="Models\Modelos\Corte\LiquidacionRectilineos\LiquidacionRectilineosModelo.cs" />
     <Compile Include="Models\Modelos\Corte\LiquidacionTela\aperturaficha\AperturarFichaModelo.cs" />
     <Compile Include="Models\Modelos\Corte\LiquidacionTela\AperturarFichasCorteModelo.cs" />
     <Compile Include="Models\Modelos\Corte\LiquidacionTela\AperturarFichasTendidoModelo.cs" />
@@ -1007,6 +1011,7 @@
     <Content Include="Views\Finanzas\AprobSolicitudFinanzas.cshtml" />
     <Content Include="Views\Finanzas\Reembolso.cshtml" />
     <Content Include="Views\Finanzas\HistorialRendicion.cshtml" />
+    <Content Include="Views\Corte\LiquidacionRectilineos.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

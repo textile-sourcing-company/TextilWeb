@@ -420,7 +420,7 @@
             let response = await get("Corte", "GetEstadosLiquidacion", { ficha, combo, version, tela }, true);
             //console.log(response);
 
-            if (response.estadocorte == 2) {
+            if (response.estadocorte == 2 && (response.estadotendido == 1 || response.estadotendido == 0)) {
                 $("#frmregistro").removeClass("d-none");
             } else {
                 $("#frmregistro").addClass("d-none");

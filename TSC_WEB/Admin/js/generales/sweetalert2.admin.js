@@ -7,9 +7,35 @@ function Advertir(mensaje) {
     swal.fire(mensaje, "Textile Web", "error");
 }
 //INFORMAR -- SUCCESS
-function Informar(mensaje) {
-    swal.fire(mensaje, "Textile Web", "success");
+//function Informar(mensaje) {
+//    swal.fire(mensaje, "Textile Web", "success");
+//}
+function Informar(mensaje, autocierre = false, reload = false) {
+
+    if (reload) {
+        setTimeout(() => {
+            location.reload();
+        }, autocierre + 100);
+    }
+
+    if (autocierre) {
+
+        Swal.fire({
+            icon: 'success',
+            title: mensaje,
+            text: 'Textile Web',
+            timer: autocierre,
+            allowEscapeKey: false,
+            allowOutsideClick: false
+            // timerProgressBar: true,
+        })
+
+    } else {
+        Swal.fire(mensaje, "Textile Web", "success");
+    }
+
 }
+
 
 // TOAST
 function InformarMini(mensaje, tiempo = false) {

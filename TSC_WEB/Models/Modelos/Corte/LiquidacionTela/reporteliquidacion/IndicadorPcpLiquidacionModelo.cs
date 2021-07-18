@@ -78,9 +78,7 @@ namespace TSC_WEB.Models.Modelos.Corte.LiquidacionTela.reporteliquidacion
             objDataGeneral.consumotizadosgeneral = Convert.ToDouble(resultado.Tables[0].Rows[0]["consumotizadosgeneral"].ToString());
             objDataGeneral.estadotendido = resultado.Tables[0].Rows[0]["estadotendido"].ToString();
             objDataGeneral.estadocorte = resultado.Tables[0].Rows[0]["estadocorte"].ToString();
-
-
-
+            objDataGeneral.comentario = resultado.Tables[0].Rows[0]["comentario"].ToString();
 
 
             // DATOS POR FICHA

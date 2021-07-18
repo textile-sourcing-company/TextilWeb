@@ -495,6 +495,30 @@
         </div>
     </div>
 
+    @*COMENTARIO*@
+    <div class="col-md-3">
+        <div class="card card-primary card-outline">
+
+            <table class="table table-bordered table-hover table-sm text-center">
+                <thead class="thead-light">
+                    <tr>
+                        <th >Comentario</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            @Model.DataGeneral.comentario
+                        </td>
+                    </tr>
+                </tbody>
+                
+            </table>
+
+        </div>
+    </div>
+
+    @*OPERACIONES*@
     <div class="col-md-3">
 
         <div class="card card-outline card-primary">
@@ -528,18 +552,13 @@
                     </div>
                 </div>
 
-                @*<h6>TENDIDO: @Model.DataGeneral.estadotendido </h6>
-                    <h6>CORTE: @Model.DataGeneral.estadocorte </h6>*@
-
 
             </div>
         </div>
 
     </div>
 
-    @*<div class="col-md-2">
-            <button class="btn btn-sm btn-block btn-primary">Aprobar Corte</button>
-        </div>*@
+
 
 </div>
 
