@@ -13,6 +13,9 @@ namespace TSC_WEB.Models.Entidades.Corte.LiquidacionRectilineos
         public string fechacrea { get; set; }
         public string usuariocrea { get; set; }
 
+        public decimal mermarecorte { get; set; }
+        public decimal mermahilos { get; set; }
+
 
         // DATOS ERP
         public int? ficha { get; set; }

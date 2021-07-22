@@ -111,6 +111,26 @@ function MostrarCarga(mensaje) {
     })
 }
 
+function MostrarCarga_new(mensaje) {
+
+    Swal.fire({
+        title: mensaje,
+        html: 'Esto puede tardar unos minutos',
+        //timer: 2000,
+        allowEscapeKey: false,
+        allowOutsideClick: false,
+        timerProgressBar: true,
+        onBeforeOpen: () => {
+            Swal.showLoading()
+        }
+    })
+}
+
+function OcultarCarga() {
+    Swal.hideLoading();
+    Swal.clickConfirm();
+}
+
 //LOGIN ACCESO
 function EntrarSistema(mensaje) {
     let timerInterval;

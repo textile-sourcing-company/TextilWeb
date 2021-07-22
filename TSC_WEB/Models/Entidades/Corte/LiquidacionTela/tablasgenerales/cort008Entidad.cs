@@ -20,7 +20,7 @@ namespace TSC_WEB.Models.Entidades.Corte.LiquidacionTela.tablasgenerales
         public string etapa { get; set; }
         public string estadotendido { get; set; }
         public string estadocorte { get; set; }
-
+        public int correlativo { get; set; }
 
     }
 }
