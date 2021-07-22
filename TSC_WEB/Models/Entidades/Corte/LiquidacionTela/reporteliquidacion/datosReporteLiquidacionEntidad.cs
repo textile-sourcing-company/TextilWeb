@@ -61,7 +61,7 @@ namespace TSC_WEB.Models.Entidades.Corte.LiquidacionTela.reporteliquidacion
 
         public double totalmermatendidorealpor
         {
-            get { return totalmermacombo / telarealcombo; }
+            get { return telarealcombo > 0 ? (totalmermacombo / telarealcombo) : 0; }
         }
 
         public double telaadicional { get; set; }

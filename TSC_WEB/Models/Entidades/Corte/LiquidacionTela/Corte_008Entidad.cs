@@ -18,6 +18,8 @@ namespace TSC_WEB.Models.Entidades.Corte
         public string U_REGISTRO { get; set; }
         public string TURNO { get; set; }
         public string ETAPA { get; set; }
+        public int? CORRELATIVO { get; set; }
+
 
     }
 }

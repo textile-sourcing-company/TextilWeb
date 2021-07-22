@@ -627,7 +627,7 @@ namespace TSC_WEB.Models.Modelos.Corte.LiquidacionTela
             SistemaEntidad objSistema = new SistemaEntidad();
 
             //GRABAR
-            OracleCommand comando = new OracleCommand("SYSTEXTILRPT.CORT_008_GRABAR", con.Acceder());
+            OracleCommand comando = new OracleCommand("SYSTEXTILRPT.CORT_008_GRABAR_N_CORRELATIVO", con.Acceder());
             comando.CommandType = CommandType.StoredProcedure;
             con.Conectar();
             try
@@ -642,6 +642,8 @@ namespace TSC_WEB.Models.Modelos.Corte.LiquidacionTela
                 comando.Parameters.Add(new OracleParameter("i_entrecorte", cort008.entrecorte));
                 comando.Parameters.Add(new OracleParameter("i_u_registro", cort008.u_registro));
                 comando.Parameters.Add(new OracleParameter("i_etapa", cort008.etapa));
+                comando.Parameters.Add(new OracleParameter("i_correlativo", cort008.correlativo));
+
 
 
                 comando.ExecuteNonQuery();
@@ -763,6 +765,20 @@ namespace TSC_WEB.Models.Modelos.Corte.LiquidacionTela
                 ObjFichasListaE.U_REGISTRO = Convert.ToString(registros["U_REGISTRO"].ToString());
 
                 ObjFichasListaE.ETAPA = Convert.ToString(registros["ETAPAS"].ToString());
+
+
+                if (registros["CORRELATIVO"].ToString() == "")
+                {
+                    ObjFichasListaE.CORRELATIVO = null;
+                }
+                else
+                {
+                    ObjFichasListaE.CORRELATIVO = Convert.ToInt32(registros["CORRELATIVO"].ToString());
+                }
+
+                 //? null : Convert.ToInt32(registros["CORRELATIVO"].ToString());
+
+
 
                 ObjFichasLista.Add(ObjFichasListaE);
             }

@@ -177,27 +177,47 @@
                 let turno = $("#cboturno").val();
 
                 // RECORREMOS REGISTROS
-                $(`#tbodyregistros .datos `).each(function (obj) {
-                    let input = $(this);
+                //$(`#tbodyregistros .datos `).each(function (obj) {
+                //    let input = $(this);
+
+                //    let etapa = input.find(".etapa").text();
+                //    let orillos = input.find(".orillos").val();
+                //    let extremos = input.find(".extremos").val();
+                //    let entrecorte = input.find(".entrecorte").val();
+                //    let correlativo = input.find(".entrecorte").data("correlativo");
+
+                //    //
+                //    //console.log(etapa, orillos, extremos, entrecorte, turno);
+
+                //    // REGISTRAMOS INDIVIDUAL
+                //    RegistrarIndividual(orillos, extremos, entrecorte, turno, etapa, correlativo)
+                //        .then(response => {
+                //            console.log("Registrado",response);
+                //        })
+                //        .catch(error => {
+                //            console.log(error);
+                //        });
+
+                //});
+
+
+                let datos = $(`#tbodyregistros .datos `);
+                for (let item of datos) {
+
+                    let input = $(item);
 
                     let etapa = input.find(".etapa").text();
                     let orillos = input.find(".orillos").val();
                     let extremos = input.find(".extremos").val();
                     let entrecorte = input.find(".entrecorte").val();
+                    let correlativo = input.find(".entrecorte").data("correlativo");
+                    
+                    //let correlativo = null;
+                    //console.log(etapa, orillos, extremos, entrecorte, turno);
 
-                    //
-                    console.log(etapa, orillos, extremos, entrecorte, turno);
+                    await RegistrarIndividual(orillos, extremos, entrecorte, turno, etapa, correlativo);
+                }
 
-                    // REGISTRAMOS INDIVIDUAL
-                    RegistrarIndividual(orillos, extremos, entrecorte, turno, etapa)
-                        .then(response => {
-                            console.log("Registrado",response);
-                        })
-                        .catch(error => {
-                            console.log(error);
-                        });
-
-                });
 
                 InformarMini("Registrado correctamente");
 
@@ -208,12 +228,12 @@
         }
 
         // FUNCION PARA REGISTRAR INDIVIDUAL
-        async function RegistrarIndividual(orillos,extremos,entrecorte,turno,etapa) {
+        async function RegistrarIndividual(orillos,extremos,entrecorte,turno,etapa,correlativo) {
 
             await get("corte", "RegistrarCorte008", {
                 ficha, orillos, extremos,
                 entrecorte, version, tipotela:tela,
-                combo, turno, etapa
+                combo, turno, etapa, correlativo
             }, true)
                 .then(response => {
 
@@ -335,9 +355,9 @@
                             <tr class='datos'>
                                 <td class='calculos etapa'>${obj.ETAPA}</td>
                                 <td>${obj.PANOS}</td>
-                                <td> <input value='${obj.ORILLOS}'      class='inputtabla  orillos' /> </td>
-                                <td> <input value='${obj.EXTREMOS}'     class='inputtabla  extremos' />  </td>
-                                <td> <input value='${obj.ENTRECORTE}'   class='inputtabla  entrecorte' />  </td>
+                                <td> <input value='${obj.ORILLOS}'      data-correlativo='${obj.CORRELATIVO}'       class='inputtabla  orillos' /> </td>
+                                <td> <input value='${obj.EXTREMOS}'     data-correlativo='${obj.CORRELATIVO}'       class='inputtabla  extremos' />  </td>
+                                <td> <input value='${obj.ENTRECORTE}'   data-correlativo='${obj.CORRELATIVO}'       class='inputtabla  entrecorte' />  </td>
                             </tr>
                         `;
 
@@ -420,7 +440,8 @@
             let response = await get("Corte", "GetEstadosLiquidacion", { ficha, combo, version, tela }, true);
             //console.log(response);
 
-            if (response.estadocorte == 2 && (response.estadotendido == 1 || response.estadotendido == 0)) {
+            //if (response.estadocorte == 2 && (response.estadotendido == 1 || response.estadotendido == 0)) {
+            if (response.estadocorte == 2) {
                 $("#frmregistro").removeClass("d-none");
             } else {
                 $("#frmregistro").addClass("d-none");

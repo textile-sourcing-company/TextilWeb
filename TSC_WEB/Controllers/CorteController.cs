@@ -413,7 +413,7 @@ namespace TSC_WEB.Controllers
         [HttpGet]
         public JsonResult BuscarRegistro008(string ficha, string version, string tela, string combo)
         {
-            return Json(objFichas.BuscarRegistro008(ficha, version, tela, "14", combo), JsonRequestBehavior.AllowGet);
+            return Json(objFichas.BuscarRegistro008(ficha, version, tela, "18", combo), JsonRequestBehavior.AllowGet);
         }
 
         // ELIMINAR ETAPA
@@ -785,8 +785,33 @@ namespace TSC_WEB.Controllers
         #endregion
 
         #region LIQUIDACION RECTILINEOS
-       
+            
+            // CABECERA DE RECTILINEO
+            [HttpGet]
+            public JsonResult saveHeadRectilineo(string partida,int lote,decimal mermarecorte,decimal mermahilos)
+            {
+                string mensaje = string.Empty;
+                var response = objRectilineosM.saveHead(partida, Session["usuario"].ToString() , lote, mermarecorte,mermahilos, out mensaje);
+                return Json(new { success = response,mensaje = mensaje },JsonRequestBehavior.AllowGet);
+            }
 
+            // FICHAS DE RECTILINEO
+            [HttpGet]
+            public JsonResult saveFichaRectilineo(int? idrectilineoficha, int? idrectilineohead, int ficha)
+            {
+                string mensaje = string.Empty;
+                var response = objRectilineosM.saveFichas(idrectilineoficha, idrectilineohead, ficha, Session["usuario"].ToString(), out mensaje);
+                return Json(new { success = response, mensaje = mensaje }, JsonRequestBehavior.AllowGet);
+            }
+
+            // TALLAS DE RECTILINEO
+            [HttpGet]
+            public JsonResult saveTallasRectilineo(int? idrectilineoficha, string talla, int realprimera,decimal pesoneto)
+            {
+                string mensaje = string.Empty;
+                var response = objRectilineosM.saveTallas(idrectilineoficha, talla, realprimera, pesoneto, out mensaje);
+                return Json(new { success = response, mensaje = mensaje }, JsonRequestBehavior.AllowGet);
+            }
 
         #endregion
 
