@@ -806,10 +806,10 @@ namespace TSC_WEB.Controllers
 
             // TALLAS DE RECTILINEO
             [HttpGet]
-            public JsonResult saveTallasRectilineo(int? idrectilineoficha, string talla, int realprimera,decimal pesoneto)
+            public JsonResult saveTallasRectilineo(int? idrectilineoficha, string talla, int realprimera,decimal pesoneto,int orden)
             {
                 string mensaje = string.Empty;
-                var response = objRectilineosM.saveTallas(idrectilineoficha, talla, realprimera, pesoneto, out mensaje);
+                var response = objRectilineosM.saveTallas(idrectilineoficha, talla, realprimera, pesoneto, orden, out mensaje);
                 return Json(new { success = response, mensaje = mensaje }, JsonRequestBehavior.AllowGet);
             }
 

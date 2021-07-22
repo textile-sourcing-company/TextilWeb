@@ -216,7 +216,7 @@ namespace TSC_WEB.Models.Modelos.Corte.LiquidacionRectilineos
         }
 
         // REGISTRO DE TALLAS
-        public bool saveTallas(int? idrectilineoficha, string talla, int realprimera,decimal pesoneto  ,out string mensaje)
+        public bool saveTallas(int? idrectilineoficha, string talla, int realprimera,decimal pesoneto ,int orden ,out string mensaje)
         {
 
             //FichaDatos obj = new FichaDatos();
@@ -233,6 +233,7 @@ namespace TSC_WEB.Models.Modelos.Corte.LiquidacionRectilineos
                 comando.Parameters.Add(new OracleParameter("i_talla", talla));
                 comando.Parameters.Add(new OracleParameter("i_realprimera", realprimera));
                 comando.Parameters.Add(new OracleParameter("i_pesoneto", pesoneto));
+                comando.Parameters.Add(new OracleParameter("i_orden", orden));
                 //comando.Parameters.Add(new OracleParameter("i_usuario", usuario));
                 //comando.Parameters.Add(new OracleParameter("o_cursor", OracleDbType.RefCursor)).Direction = ParameterDirection.Output;
 

@@ -18,7 +18,8 @@
 
     var tallas = cantidadtallas > 0 ? Model.FichaTallas.GroupBy(std => std.talla).Select(cl => new FichasTallasEntidad
     {
-        talla = cl.First().talla
+        talla = cl.First().talla,
+        orden = cl.First().orden
 
     }).ToList() : new List<FichasTallasEntidad> { };
 
@@ -67,6 +68,15 @@
             overflow: auto;
             border: 1px solid;
         }
+
+        table .inputtabla {
+            text-align:center;
+        }
+
+        .bg-bloqueado {
+            background: #d6d6d6 !important;
+        }
+
     </style>
 
 }
@@ -74,7 +84,7 @@
 @*  BUSQUEDA *@
 <div class="card card-outline card-primary">
     <div class="card-body">
-        <form autocomplete="off" class="row" method="post">
+        <form autocomplete="off" class="row" method="post" id="frmbusqueda">
 
             <div class="col-md-4">
                 <label for="">Ficha:</label>
@@ -122,7 +132,7 @@
 </div>
 
 @* SI HA BUSCADO *@
-@if (Model.FichaCabecera.idrectilineohead != null)
+@if (Model.FichaCabecera.ficha != null)
 {
 
 
@@ -234,19 +244,19 @@
 
                                 if (response.Count == 0)
                                 {
-                                    <td> <input type="text" class="inputtabla" value="0" readonly> </td>
+                                    <td> <input type="text" class="inputtabla bg-bloqueado" value="0" readonly> </td>
                                 }
                                 else
                                 {
                                     totales += response[0].programado;
                                     var clase = "programado_" + fichas.ficha + "_" + talla.talla;
 
-                                    <td> <input type="text" class="inputtabla programado @clase" data-talla="@talla.talla" data-ficha="@fichas.ficha" value="@response[0].programado"> </td>
+                                    <td> <input type="text" readonly class="bg-bloqueado inputtabla programado @clase font-weight-bold" data-orden="@talla.orden" data-talla="@talla.talla" data-ficha="@fichas.ficha" value="@response[0].programado"> </td>
                                 }
 
                             }
 
-                            <td> <input type="text" class="inputtabla" value="@totales" readonly></td>
+                            <td> <input type="text" class="inputtabla bg-bloqueado font-weight-bold" value="@totales" readonly> </td>
                         </tr>
 
                         @*MERMA PROGRAMADA*@
@@ -258,10 +268,12 @@
                                     @{
                                         var clase = "mermaprogramada" + fichas.ficha + "_" + item.talla;
                                     }
-                                    <input type="number" class="inputtabla mermaprogramada @clase" data-ficha="@fichas.ficha" data-talla="@item.talla" readonly>
+                                    <input type="number" class="inputtabla mermaprogramada bg-bloqueado @clase" value="0" data-orden="@item.orden" data-ficha="@fichas.ficha" data-talla="@item.talla" readonly>
                                 </td>
                             }
-                            <td></td>
+                            <td>
+                                <input type="number" class="inputtabla mermaprogramada bg-bloqueado" data-ficha="@fichas.ficha" value="0" readonly>
+                            </td>
                         </tr>
 
                         @*REAL PRIMERA*@
@@ -285,12 +297,15 @@
 
                                     totales += response[0].real;
                                     var clase = "realesprimera_" + fichas.ficha;
-                                    <td> <input type="number" class="inputtabla realesprimera @clase" data-ficha="@fichas.ficha" data-talla="@talla.talla" max="@response[0].programado" value="@response[0].real"> </td>
+                                    <td> <input type="number" class="inputtabla realesprimera @clase" data-ficha="@fichas.ficha" data-orden="@talla.orden" data-talla="@talla.talla" max="@response[0].programado" value="@response[0].real"> </td>
                                 }
 
                             }
 
-                            <td id="totalprimera_@fichas.ficha">@totales</td>
+                        
+                            <td>
+                                <input type="text" class="inputtabla " id="totalprimera_@fichas.ficha" value="@totales" readonly>
+                            </td>
 
                         </tr>
 
@@ -309,7 +324,7 @@
 
                                 if (response.Count == 0)
                                 {
-                                    <td> <input type="text" class="inputtabla" value="0" readonly> </td>
+                                    <td> <input type="text" class="inputtabla bg-bloqueado" value="0" readonly> </td>
                                 }
                                 else
                                 {
@@ -318,11 +333,14 @@
                                     var clase = "pendientes_" + fichas.ficha;
                                     var clase_new = "pendientes_" + fichas.ficha + "_" + talla.talla;
 
-                                    <td> <input type="number" class="inputtabla pendientes @clase @clase_new" data-ficha="@fichas.ficha" data-talla="@talla.talla" readonly value="@response[0].pendiente"> </td>
+                                    <td> <input type="number" class="bg-bloqueado inputtabla pendientes @clase @clase_new" data-orden="@talla.orden" data-ficha="@fichas.ficha" data-talla="@talla.talla" readonly value="@response[0].pendiente"> </td>
                                 }
 
                             }
-                            <td id="totalpendientes_@fichas.ficha">@totales</td>
+                            <td>
+                                <input type="text" class="inputtabla bg-bloqueado" id="totalpendientes_@fichas.ficha" value="@totales" readonly>
+                            </td>
+                      
                         </tr>
 
                         @*PESO NETO TOTAL*@
@@ -349,11 +367,13 @@
                                     var clase = "pesoneto_" + fichas.ficha;
                                     var id = "pesoneto_" + fichas.ficha + "_" + talla.talla;
 
-                                    <td> <input type="number" id="@id" class="inputtabla pesoneto @clase" data-ficha="@fichas.ficha" data-talla="@talla.talla" step="0.01" value="@response[0].pesonetoreal"> </td>
+                                    <td> <input type="number" id="@id" class="inputtabla pesoneto @clase" data-ficha="@fichas.ficha" data-orden="@talla.orden" data-talla="@talla.talla" step="0.01" value="@response[0].pesonetoreal"> </td>
                                 }
 
                             }
-                            <td id="totalpesoneto_@fichas.ficha">@totalesd</td>
+                            <td>
+                                <input type="text" class="inputtabla" id="totalpesoneto_@fichas.ficha" value="@totalesd" readonly>
+                            </td>
                         </tr>
 
                     </tbody>
@@ -423,6 +443,7 @@
         let LOTE                = "@Model.FichaCabecera.lote" == "" ? null : "@Model.FichaCabecera.lote";
 
         let frmregistro = document.getElementById("frmregistro");
+        let frmbusqueda = document.getElementById("frmbusqueda");
 
 
         let formularioactivo = null;
@@ -438,6 +459,10 @@
                 });
             }
 
+        });
+
+        frmbusqueda.addEventListener('submit', (e) => {
+            MostrarCarga("Cargando...");
         });
 
 
@@ -495,7 +520,7 @@
                 totalprimera += valor;
             }
 
-            $(`#${total}_${ficha}`).text(totalprimera);
+            $(`#${total}_${ficha}`).val(totalprimera);
         }
 
 
@@ -560,6 +585,7 @@
                     // REGISTRAMOS TALLAS
                     let talla = item.dataset.talla;
                     let ficha = item.dataset.ficha;
+                    let orden = item.dataset.orden;
                     let realprimera = item.value == "" ? 0 : item.value;
 
                     let id = `pesoneto_${ficha}_${talla}`;
@@ -567,7 +593,7 @@
                     let pesoneto = document.getElementById(id).value;
 
                     let response = await get("corte", "saveTallasRectilineo", {
-                        talla, realprimera, idrectilineoficha, pesoneto
+                        talla, realprimera, idrectilineoficha, pesoneto, orden
                     }, true);
 
                 }
@@ -582,7 +608,10 @@
         frmregistro.addEventListener('submit', (e) => {
             e.preventDefault();
 
+            MostrarCarga_new("Registrando");
+
             saveHead().then(response => {
+                OcultarCarga();
                 console.log(response);
             })
             .catch(error => {
