@@ -1,0 +1,224 @@
+﻿@model List<TSC_WEB.Models.Entidades.Corte.LiquidacionRectilineos.ReporteEntidad>
+@using TSC_WEB.Models.Entidades.Corte.LiquidacionRectilineos;
+
+@{
+    ViewBag.Title = "Reporte de Rectilineos";
+    ViewBag.Modulo = "Corte";
+    Layout = "~/Views/Plantillas/_Layout.cshtml";
+
+    int cantregistros = Model.Count;
+
+    // TALLAS
+    var tallas = cantregistros > 0 ? Model.GroupBy(std => std.talla)
+        .Select(cl => new ReporteEntidad
+        {
+            talla = cl.First().talla,
+            ordentalla = cl.First().ordentalla
+        }).OrderBy(or => or.ordentalla).ToList() : new List<ReporteEntidad>();
+
+    var canttallas = tallas.Count;
+
+    //  LISTAS
+    var lista = cantregistros > 0 ? Model.GroupBy(
+            grp => new
+            {
+                grp.usuariocrea,
+                grp.fechamod,
+                grp.ficha,
+                grp.partida,
+                grp.pedido,
+                grp.combo,
+                grp.estilotsc,
+                grp.estilocliente
+            }
+        ).Select(sel => new ReporteEntidad
+        {
+            usuariocrea = sel.First().usuariocrea,
+            fechamod = sel.First().fechamod,
+            ficha = sel.First().ficha,
+            partida = sel.First().partida,
+            pedido = sel.First().pedido,
+            combo = sel.First().combo,
+            estilotsc = sel.First().estilotsc,
+            estilocliente = sel.First().estilocliente
+        }).OrderBy(obj => obj.ficha).ToList() : new List<ReporteEntidad>();
+
+    lista = lista.Distinct().ToList();
+
+}
+
+@section style{
+    <style>
+        table {
+            table-layout: fixed;
+        }
+
+        #filafija .thcabeceras {
+            width: 263px !important;
+            overflow: auto !important;
+            vertical-align:middle !important;
+        }
+
+        #filafija .thcabecerasdatos {
+            width: 100px !important;
+            overflow: auto !important;
+        }
+
+        tbody td{
+            vertical-align:middle;
+        }
+    </style>
+}
+
+
+<div class="card card-primary card-outline">
+
+    <div class="card-header">
+    </div>
+
+    <div class="card-body">
+
+        <div class="table-responsive">
+
+            <table class="table table-bordered table-sm table-hover text-center">
+                <thead class="thead-light ">
+                    <tr id="filafija">
+                        <th rowspan="2" style="vertical-align:middle" class="thcabecerasdatos">Usuario</th>
+                        <th rowspan="2" style="vertical-align:middle" class="thcabecerasdatos">Fecha de Liquidación</th>
+                        <th rowspan="2" style="vertical-align:middle" class="thcabecerasdatos">Ficha</th>
+                        <th rowspan="2" style="vertical-align:middle" class="thcabecerasdatos">Partida R.</th>
+                        <th rowspan="2" style="vertical-align:middle" class="thcabecerasdatos">Pedido</th>
+                        <th rowspan="2" style="vertical-align:middle" class="thcabecerasdatos">Combo</th>
+                        <th rowspan="2" style="vertical-align:middle" class="thcabecerasdatos">Estilo TSC</th>
+                        <th rowspan="2" style="vertical-align:middle" class="thcabecerasdatos">Estilo Cliente</th>
+                        <th colspan="@canttallas" class="thcabeceras">Programado/Girado (Unidades)</th>
+                        <th colspan="@canttallas" class="thcabeceras">Liquidado (Unidades)</th>
+                        <th colspan="@canttallas" class="thcabeceras">Pendiente Liquidación por talla (Unidades)</th>
+                        <th colspan="@canttallas" class="thcabeceras">% Liquidación por talla</th>
+                    </tr>
+                    <tr >
+                        @foreach (var talla in tallas)
+                        {
+                            <th class="">@talla.talla</th>
+                        }
+                        @foreach (var talla in tallas)
+                        {
+                            <th class="">@talla.talla</th>
+                        }
+                        @foreach (var talla in tallas)
+                        {
+                            <th class="">@talla.talla</th>
+                        }
+                        @foreach (var talla in tallas)
+                        {
+                            <th class="">@talla.talla</th>
+                        }
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in lista)
+                    {
+                    <tr>
+                        <td>@item.usuariocrea</td>
+                        <td>@item.fechamod</td>
+                        <td>@item.ficha</td>
+                        <td>@item.partida</td>
+                        <td>@item.pedido</td>
+                        <td>@item.combo</td>
+                        <td>@item.estilotsc</td>
+                        <td>@item.estilocliente</td>
+
+                        @* CANTIDAD DE PROGRAMADO *@
+                        @foreach (var talla in tallas)
+                        {
+
+                            var filtro = Model.Where(
+                                    obj => obj.ficha == item.ficha && obj.partida == item.partida
+                                    && obj.pedido == item.pedido && obj.talla == talla.talla
+                            ).ToList();
+
+                            if (filtro.Count > 0)
+                            {
+                                <td>@filtro[0].programado</td>
+                            }
+                            else
+                            {
+                                <td>0</td>
+                            }
+
+                        }
+
+                        @* LIQUIDADO *@
+                        @foreach (var talla in tallas)
+                        {
+
+                            var filtro = Model.Where(
+                                    obj => obj.ficha == item.ficha && obj.partida == item.partida
+                                    && obj.pedido == item.pedido && obj.talla == talla.talla
+                            ).ToList();
+
+                            if (filtro.Count > 0)
+                            {
+                                <td>@filtro[0].realprimera</td>
+                            }
+                            else
+                            {
+                                <td>0</td>
+                            }
+
+                        }
+
+                        @* PENDIENTES *@
+                        @foreach (var talla in tallas)
+                        {
+
+                            var filtro = Model.Where(
+                                    obj => obj.ficha == item.ficha && obj.partida == item.partida
+                                    && obj.pedido == item.pedido && obj.talla == talla.talla
+                            ).ToList();
+
+                            if (filtro.Count > 0)
+                            {
+                                <td>@filtro[0].pendiente</td>
+                            }
+                            else
+                            {
+                                <td>0</td>
+                            }
+
+                        }
+
+                        @* % LIQUIDACION POR TALLAS *@
+                        @foreach (var talla in tallas)
+                        {
+
+                            var filtro = Model.Where(
+                                    obj => obj.ficha == item.ficha && obj.partida == item.partida
+                                    && obj.pedido == item.pedido && obj.talla == talla.talla
+                            ).ToList();
+
+                            if (filtro.Count > 0)
+                            {
+                                 
+                                    var porcentaje = filtro[0].porcentajeliquidaciontalla * 100;
+                                    porcentaje = Math.Round(porcentaje,2);
+                                
+                                <td>@porcentaje%</td>
+                            }
+                            else
+                            {
+                                <td>0 %</td>
+                            }
+
+                        }
+
+                    </tr>
+                    }
+
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+
+</div>

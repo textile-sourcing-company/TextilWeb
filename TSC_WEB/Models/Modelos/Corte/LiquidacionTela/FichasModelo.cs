@@ -103,8 +103,8 @@ namespace TSC_WEB.Models.Modelos.Corte.LiquidacionTela
                 ObjFichasLista.comentario = registros["comentario"].ToString();
                 ObjFichasLista.despachos = registros["despachos"].ToString();
                 ObjFichasLista.despachos_ser = registros["despachos_ser"].ToString();
-
-
+                ObjFichasLista.color = registros["color"].ToString();
+                ObjFichasLista.cod_tela = registros["cod_tela"].ToString();
 
             }
             con.Desconectar();

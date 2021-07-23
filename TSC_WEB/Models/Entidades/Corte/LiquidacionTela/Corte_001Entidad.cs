@@ -41,7 +41,8 @@ namespace TSC_WEB.Models.Entidades.Corte
         public string despachos { get; set; }
         public string despachos_ser { get; set; }
 
-
+        public string color { get; set; }
+        public string cod_tela { get; set; }
 
 
     }
