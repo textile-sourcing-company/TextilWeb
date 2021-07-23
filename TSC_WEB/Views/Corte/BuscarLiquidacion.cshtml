@@ -191,7 +191,7 @@
                             <td id="idcliente"></td>
                         </tr>
                         <tr>
-                            <td class="font-weight-bold">Porgrama</td>
+                            <td class="font-weight-bold">Programa</td>
                             <td id="idprograma"></td>
                         </tr>
                         <tr>
@@ -201,6 +201,14 @@
                         <tr>
                             <td class="font-weight-bold">Estilos</td>
                             <td id="idestilos"></td>
+                        </tr>
+                        <tr>
+                            <td class="font-weight-bold">Color</td>
+                            <td id="tdcolor"></td>
+                        </tr>
+                        <tr>
+                            <td class="font-weight-bold">Cod. Tela</td>
+                            <td id="tdcodtela"></td>
                         </tr>
                     </tbody>
 
@@ -547,6 +555,9 @@
                 $("#idprograma").text("");
                 $("#idpedidos").text("");
                 $("#idestilos").text("");
+                $("#tdcolor").text("");
+                $("#tdcodtela").text("");
+
 
                 $("#num1").text("");
                 $("#num2").text("");
@@ -611,6 +622,8 @@
                     $("#idprograma").text(response.PROGRAMAS);
                     $("#idpedidos").text(response.PEDIDOS);
                     $("#idestilos").text(response.ESTILOS);
+                    $("#tdcolor").text(response.color);
+                    $("#tdcodtela").text(response.cod_tela);
 
                     $("#num1").text(response.KG_ASIGNADO);
                     $("#num2").text(response.KG_SEGUN_TIZADO);

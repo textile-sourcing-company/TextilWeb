@@ -239,6 +239,20 @@ namespace TSC_WEB.Controllers
             }
         }
 
+        // REPORTE RECTILINEOS
+        public ActionResult getReporteRectilineos()
+        {
+            if (Session["usuario"] != null)
+            {
+                var response = objRectilineosM.getReporte();
+                //return Json(response, JsonRequestBehavior.AllowGet);
+                return View(response);
+            }
+            else
+            {
+                return Redirect("/");
+            }
+        }
 
         #endregion
 
@@ -812,6 +826,14 @@ namespace TSC_WEB.Controllers
                 var response = objRectilineosM.saveTallas(idrectilineoficha, talla, realprimera, pesoneto, orden, out mensaje);
                 return Json(new { success = response, mensaje = mensaje }, JsonRequestBehavior.AllowGet);
             }
+
+            // REPORTE
+            //[HttpGet]
+            //public JsonResult getReporteRectilineo()
+            //{
+            //    var response = objRectilineosM.getReporte();
+            //    return Json(response,JsonRequestBehavior.AllowGet);
+            //}
 
         #endregion
 

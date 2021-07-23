@@ -45,7 +45,10 @@ namespace TSC_WEB.Models.Modelos.Corte.LiquidacionRectilineos
                     obj.talla = registros["talla"].ToString();
                     obj.realprimera = Convert.ToInt32(registros["realprimera"].ToString());
                     obj.pesonetoreal = Convert.ToDecimal(registros["pesonetoreal"].ToString());
-
+                    obj.pedido = Convert.ToInt32(registros["pedido"].ToString());
+                    obj.estilotsc = registros["estilotsc"].ToString();
+                    obj.estilocliente = registros["estilocliente"].ToString();
+                    obj.color = registros["color"].ToString();
 
 
                     objLista.Add(obj);
@@ -57,7 +60,6 @@ namespace TSC_WEB.Models.Modelos.Corte.LiquidacionRectilineos
           
             return objLista;
         }
-
 
         // BUSCAMOS DATOS DE LA FICHA (CABECERA)
         public FichaDatos getDatosFicha(int opcion, int? ficha)
@@ -262,5 +264,47 @@ namespace TSC_WEB.Models.Modelos.Corte.LiquidacionRectilineos
 
         }
 
+
+        // REPORTE
+        public List<ReporteEntidad> getReporte()
+        {
+            List<ReporteEntidad> objLista = new List<ReporteEntidad>();
+
+            
+                OracleCommand comando = new OracleCommand("SYSTEXTILRPT.PQ_LIQUI_RECTILINEO.SPU_GETRECTILINEOS_REPORTE", conexion.Acceder());
+                comando.CommandType = CommandType.StoredProcedure;
+                conexion.Conectar();
+
+                comando.Parameters.Add(new OracleParameter("o_cursor", OracleDbType.RefCursor)).Direction = ParameterDirection.Output;
+
+
+                OracleDataReader registros = comando.ExecuteReader();
+
+                while (registros.Read())
+                {
+                    ReporteEntidad obj = new ReporteEntidad();
+
+                    obj.usuariocrea = registros["usuariocrea"].ToString();
+                    obj.fechamod = Convert.ToDateTime(registros["fechamod"].ToString()).ToShortDateString();
+                    obj.ficha = Convert.ToInt32(registros["ficha"].ToString());
+                    obj.partida = registros["partida"].ToString();
+                    obj.pedido = Convert.ToInt32(registros["pedido"].ToString());
+                    obj.combo = registros["combo"].ToString();
+                    obj.estilotsc = registros["estilotsc"].ToString();
+                    obj.estilocliente = registros["estilocliente"].ToString();
+                    obj.talla = registros["talla"].ToString();
+                    obj.realprimera = Convert.ToInt32(registros["realprimera"].ToString());
+                    obj.programado = Convert.ToInt32(registros["programado"].ToString());
+                    obj.ordentalla = Convert.ToInt32(registros["ordentalla"].ToString());
+
+                    objLista.Add(obj);
+                }
+
+                conexion.Desconectar();
+            
+
+
+            return objLista;
+        }
     }
 }

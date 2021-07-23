@@ -28,7 +28,8 @@
     Model.FichaTallas.GroupBy(l => l.talla).Select(cl => new FichasTallasEntidad
     {
         talla = cl.First().talla,
-        cantidad = cl.Sum(c => c.cantidad)
+        cantidad = cl.Sum(c => c.cantidad),
+        realprimera = cl.Sum(b => b.realprimera)
     }).ToList() : new List<FichasTallasEntidad>();
 
     var fichastallas = cantidadtallas > 0 ?
@@ -70,13 +71,12 @@
         }
 
         table .inputtabla {
-            text-align:center;
+            text-align: center;
         }
 
         .bg-bloqueado {
             background: #d6d6d6 !important;
         }
-
     </style>
 
 }
@@ -169,6 +169,53 @@
             </table>
         </div>
     </div>
+
+    //PENDIENTES POR TALLA (UNIDADES/KILOS)
+    <div class="card card-outline card-primary">
+        <div class="card-header text-center">
+            <label class="card-title">PENDIENTES POR TALLA (UNIDADES/KILOS)</label>
+        </div>
+        <div class="card-body">
+            <table class="table table-bordered table-sm tablainput tablefixed">
+                <thead class="text-center bg-danger">
+                    <tr class="theadtr">
+                        <th></th>
+                        @foreach (var item in tallas)
+                        {
+                            <th>@item.talla</th>
+                        }
+                    </tr>
+                </thead>
+                <tbody>
+
+                    <tr>
+                        <th>Cantidad 1ra</th>
+                        @foreach (var item in tallascantidadprimera)
+                        {
+                            <td> <input type="text" class="inputtabla" max="@item.cantidad" value="@item.pendiente" readonly> </td>
+                        }
+
+                    </tr>
+                    <tr>
+                        <th>Peso Bruto total</th>
+                        @foreach (var item in tallascantidadprimera)
+                        {
+                            <td> <input type="text" class="inputtabla" readonly> </td>
+                        }
+                    </tr>
+                    <tr>
+                        <th>Estado</th>
+                        @foreach (var item in tallascantidadprimera)
+                        {
+                            <td> </td>
+                        }
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
 
 
     @* ARMAMOS FICHAS *@
@@ -302,7 +349,7 @@
 
                             }
 
-                        
+
                             <td>
                                 <input type="text" class="inputtabla " id="totalprimera_@fichas.ficha" value="@totales" readonly>
                             </td>
@@ -340,7 +387,7 @@
                             <td>
                                 <input type="text" class="inputtabla bg-bloqueado" id="totalpendientes_@fichas.ficha" value="@totales" readonly>
                             </td>
-                      
+
                         </tr>
 
                         @*PESO NETO TOTAL*@

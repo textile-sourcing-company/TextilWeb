@@ -17,6 +17,10 @@ namespace TSC_WEB.Models.Entidades.Corte.LiquidacionRectilineos
 
         public int orden { get; set; }
         public string talla { get; set; }
+        public int pedido { get; set; }
+        public string estilotsc { get; set; }
+        public string estilocliente { get; set; }
+        public string color { get; set; }
 
         public int pendiente
         {

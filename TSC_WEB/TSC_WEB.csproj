@@ -543,6 +543,7 @@
     <Compile Include="Models\Entidades\Corte\LiquidacionRectilineos\FichaDatos.cs" />
     <Compile Include="Models\Entidades\Corte\LiquidacionRectilineos\FichasTallasEntidad.cs" />
     <Compile Include="Models\Entidades\Corte\LiquidacionRectilineos\LiquidacionRectilineosEntidad.cs" />
+    <Compile Include="Models\Entidades\Corte\LiquidacionRectilineos\ReporteEntidad.cs" />
     <Compile Include="Models\Entidades\Corte\LiquidacionTela\aperturaficha\AperturaFichaEntidad.cs" />
     <Compile Include="Models\Entidades\Corte\LiquidacionTela\CaidasEntidad.cs" />
     <Compile Include="Models\Entidades\Corte\LiquidacionTela\Corte_001Entidad.cs" />
@@ -1012,6 +1013,7 @@
     <Content Include="Views\Finanzas\Reembolso.cshtml" />
     <Content Include="Views\Finanzas\HistorialRendicion.cshtml" />
     <Content Include="Views\Corte\LiquidacionRectilineos.cshtml" />
+    <Content Include="Views\Corte\getReporteRectilineos.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
