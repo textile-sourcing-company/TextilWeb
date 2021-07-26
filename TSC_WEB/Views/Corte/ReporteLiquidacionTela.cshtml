@@ -377,7 +377,8 @@
             //MOSTRAMOS BOTON PARA EXPORTAR
             $("#btnExportar").removeClass("d-none");
             // INFORMAMOS
-            InformarMini("Reporte generado");
+            //InformarMini("Reporte generado");
+            OcultarCarga();
         }
 
         function setTabla(tr) {
@@ -422,9 +423,10 @@
                 type: "GET",
                 //data: datos,
                 success: function () {
-                    InformarMini("Reporte generado correctamente");
+                    //InformarMini("Reporte generado correctamente");
+                    
                     window.location = "/Corte/getReporteLiquidacionExcelNew";
-
+                    OcultarCarga();
                 }
             });
 

@@ -218,8 +218,8 @@
                     await RegistrarIndividual(orillos, extremos, entrecorte, turno, etapa, correlativo);
                 }
 
-
                 InformarMini("Registrado correctamente");
+
 
 
             }
@@ -380,7 +380,8 @@
                         
                     `;
 
-                    InformarMini("Datos encontrados",1500);
+                    //InformarMini("Datos encontrados", 1500);
+                    OcultarCarga();
                     $("#tbodyregistros").html(tr);
                         
 
@@ -454,7 +455,7 @@
         $("#btncerrarregistro").click(async function () {
 
             let estadotendido = await getestadotendido();
-            console.log(estadotendido);
+            //console.log(estadotendido);
             if(estadotendido.PARTIDA != null){
 
 
