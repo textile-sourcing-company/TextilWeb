@@ -248,7 +248,8 @@
 
                 if (response.response) {
                     window.open("/Corte/PDFIndicadoruso/", "_blank");
-                    Informar("Reporte generado");
+                    //Informar("Reporte generado");
+                    OcultarCarga();
                 }
 
             }).catch(error => {
@@ -381,7 +382,8 @@
                     //$("#btnmodal").removeClass("d-none");
 
                     // OCULTAMOS CARGA
-                    InformarMini("Generado correctamente");
+                    //InformarMini("Generado correctamente");
+                    OcultarCarga();
                 }
 
 
