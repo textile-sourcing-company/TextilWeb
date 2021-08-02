@@ -26,11 +26,32 @@ namespace TSC_WEB.Models.Entidades.Corte.LiquidacionRectilineos
             } 
         }
 
+        public decimal pendienteliquidacionkg
+        {
+            get
+            {
+                return pesoprogramado - pesonetoreal;
+
+            }
+        }
+
+        public decimal pesonetoreal { get; set; }
+        public decimal pesoprogramado { get; set; }
+            
+
         public decimal porcentajeliquidaciontalla
         {
             get
             {
                 return programado > 0 ? realprimera / programado : 0;  
+            }
+        }
+
+        public decimal porcentajeliquidaciontallakg
+        {
+            get
+            {
+                return pesoprogramado > 0 ? pesonetoreal / pesoprogramado : 0;
             }
         }
 

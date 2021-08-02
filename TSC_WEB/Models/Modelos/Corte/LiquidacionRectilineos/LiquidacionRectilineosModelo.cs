@@ -50,6 +50,10 @@ namespace TSC_WEB.Models.Modelos.Corte.LiquidacionRectilineos
                     obj.estilocliente = registros["estilocliente"].ToString();
                     obj.color = registros["color"].ToString();
 
+                    if (registros["consumo"].ToString() != string.Empty)
+                        obj.consumo = Convert.ToDecimal(registros["consumo"].ToString());
+                    else
+                        obj.consumo = 0;
 
                     objLista.Add(obj);
                 }
@@ -174,7 +178,7 @@ namespace TSC_WEB.Models.Modelos.Corte.LiquidacionRectilineos
         }
 
         // REGISTRAMOS FICHAS
-        public bool saveFichas(int? idrectilineoficha,int? idrectilineohead,int ficha, string usuario , out string mensaje)
+        public bool saveFichas(int? idrectilineoficha,int? idrectilineohead,int ficha, string usuario,int pedido,string estilotsc,string estilocliente,string combo, out string mensaje)
         {
 
             //FichaDatos obj = new FichaDatos();
@@ -191,6 +195,10 @@ namespace TSC_WEB.Models.Modelos.Corte.LiquidacionRectilineos
                 comando.Parameters.Add(new OracleParameter("i_idrectilineohead", idrectilineohead));
                 comando.Parameters.Add(new OracleParameter("i_ficha", ficha));
                 comando.Parameters.Add(new OracleParameter("i_usuario", usuario));
+                comando.Parameters.Add(new OracleParameter("i_pedido", pedido));
+                comando.Parameters.Add(new OracleParameter("i_estilotsc", estilotsc));
+                comando.Parameters.Add(new OracleParameter("i_estilocliente", estilocliente));
+                comando.Parameters.Add(new OracleParameter("i_combo", combo));
                 comando.Parameters.Add(new OracleParameter("o_cursor", OracleDbType.RefCursor)).Direction = ParameterDirection.Output;
 
 
@@ -218,7 +226,7 @@ namespace TSC_WEB.Models.Modelos.Corte.LiquidacionRectilineos
         }
 
         // REGISTRO DE TALLAS
-        public bool saveTallas(int? idrectilineoficha, string talla, int realprimera,decimal pesoneto ,int orden ,out string mensaje)
+        public bool saveTallas(int? idrectilineoficha, string talla, int realprimera,decimal pesoneto,decimal programado ,int orden ,decimal pesoprogramado, out string mensaje)
         {
 
             //FichaDatos obj = new FichaDatos();
@@ -235,7 +243,10 @@ namespace TSC_WEB.Models.Modelos.Corte.LiquidacionRectilineos
                 comando.Parameters.Add(new OracleParameter("i_talla", talla));
                 comando.Parameters.Add(new OracleParameter("i_realprimera", realprimera));
                 comando.Parameters.Add(new OracleParameter("i_pesoneto", pesoneto));
+                comando.Parameters.Add(new OracleParameter("i_programado", programado));
                 comando.Parameters.Add(new OracleParameter("i_orden", orden));
+                comando.Parameters.Add(new OracleParameter("i_pesoprogramado", pesoprogramado));
+
                 //comando.Parameters.Add(new OracleParameter("i_usuario", usuario));
                 //comando.Parameters.Add(new OracleParameter("o_cursor", OracleDbType.RefCursor)).Direction = ParameterDirection.Output;
 
@@ -295,9 +306,12 @@ namespace TSC_WEB.Models.Modelos.Corte.LiquidacionRectilineos
                     obj.talla = registros["talla"].ToString();
                     obj.realprimera = Convert.ToInt32(registros["realprimera"].ToString());
                     obj.programado = Convert.ToInt32(registros["programado"].ToString());
+                    obj.pesonetoreal = Convert.ToDecimal(registros["pesonetoreal"].ToString());
+                    obj.pesoprogramado = Convert.ToDecimal(registros["pesoprogramado"].ToString());
                     obj.ordentalla = Convert.ToInt32(registros["ordentalla"].ToString());
 
-                    objLista.Add(obj);
+
+                objLista.Add(obj);
                 }
 
                 conexion.Desconectar();

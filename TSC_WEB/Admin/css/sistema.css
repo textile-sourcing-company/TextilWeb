@@ -111,3 +111,16 @@ select{
 .align-vertical{
     vertical-align:middle !important;
 }
+
+
+.border-table {
+    border: 1.5px solid #acb1b7 !important;
+}
+
+.border-table-left {
+    border-left: 1.5px solid #acb1b7 !important;
+}
+
+.border-table-right {
+    border-right: 1.5px solid #acb1b7 !important;
+}
