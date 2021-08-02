@@ -10,6 +10,7 @@ namespace TSC_WEB.Models.Entidades.Corte.LiquidacionRectilineos
         public int? idrectilineoficha { get; set; }
         public int realprimera { get; set; }
         public decimal pesonetoreal { get; set; }
+        public decimal consumo { get; set; }
 
 
         public int ficha { get; set; }
@@ -29,5 +30,22 @@ namespace TSC_WEB.Models.Entidades.Corte.LiquidacionRectilineos
                 return cantidad - realprimera;
             }
         }
+
+        public decimal pesobrutotalla
+        {
+            get
+            {
+                return cantidad * consumo;
+            }
+        }
+
+        public decimal pesobrutorealtalla
+        {
+            get
+            {
+                return realprimera * consumo;
+            }
+        }
+
     }
 }

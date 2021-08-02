@@ -11,6 +11,7 @@
     string busqueda;
     int cantidadtallas = Model.FichaTallas.Count;
     int totaltallasprimera = 0;
+    decimal totalpesobruto = 0;
     //int totaltallasfichas = 0;
     //int? totaltallasfichasreales = 0;
     int totales = 0;
@@ -21,7 +22,7 @@
         talla = cl.First().talla,
         orden = cl.First().orden
 
-    }).ToList() : new List<FichasTallasEntidad> { };
+    }).OrderBy(or => or.orden).ToList() : new List<FichasTallasEntidad> { };
 
     var tallascantidadprimera = cantidadtallas > 0 ?
 
@@ -29,13 +30,28 @@
     {
         talla = cl.First().talla,
         cantidad = cl.Sum(c => c.cantidad),
-        realprimera = cl.Sum(b => b.realprimera)
-    }).ToList() : new List<FichasTallasEntidad>();
+        realprimera = cl.Sum(b => b.realprimera),
+        consumo = cl.First().consumo,
+        orden = cl.First().orden
+    }).OrderBy(or => or.orden).ToList() : new List<FichasTallasEntidad>();
 
     var fichastallas = cantidadtallas > 0 ?
-    Model.FichaTallas.GroupBy(l => l.ficha).Select(cl => new FichasTallasEntidad
+    Model.FichaTallas.GroupBy(
+        l => new
+        {
+            l.ficha,
+            l.pedido,
+            l.estilotsc,
+            l.estilocliente,
+            l.color
+        }
+    ).Select(cl => new FichasTallasEntidad
     {
         ficha = cl.First().ficha,
+        pedido = cl.First().pedido,
+        estilotsc = cl.First().estilotsc,
+        estilocliente = cl.First().estilocliente,
+        color = cl.First().color
 
     }).ToList() : new List<FichasTallasEntidad>();
 
@@ -77,6 +93,7 @@
         .bg-bloqueado {
             background: #d6d6d6 !important;
         }
+
     </style>
 
 }
@@ -160,11 +177,47 @@
                         @foreach (var item in tallascantidadprimera)
                         {
                             totaltallasprimera += item.cantidad;
-                            <td> <input type="text" class="inputtabla" value="@item.cantidad" readonly> </td>
+                            <td> <input type="text" class="inputtabla" id="programado_talla_@item.talla" value="@item.cantidad" readonly> </td>
                         }
 
                         <td> <input type="text" class="inputtabla" value="@totaltallasprimera" readonly></td>
                     </tr>
+
+                    <tr>
+                        <th>Cantidad 2da</th>
+                        @foreach (var item in tallascantidadprimera)
+                        {
+
+                            <td> <input type="text" class="inputtabla" id="" value="0" readonly> </td>
+                        }
+
+                        <td> <input type="text" class="inputtabla" value="0" readonly></td>
+                    </tr>
+
+                    <tr>
+                        <th>Total Unidades</th>
+                        @{
+                            totaltallasprimera = 0;
+                        }
+                        @foreach (var item in tallascantidadprimera)
+                        {
+                            totaltallasprimera += item.cantidad;
+                            <td> <input type="text" class="inputtabla" id="" value="@item.cantidad" readonly> </td>
+                        }
+
+                        <td> <input type="text" class="inputtabla" value="@totaltallasprimera" readonly></td>
+                    </tr>
+                    <tr>
+                        <th>Peso Bruto Total</th>
+                        @foreach (var item in tallascantidadprimera)
+                        {
+                            totalpesobruto += item.pesobrutotalla;
+                            <td> <input type="text" class="inputtabla" id="" value="@Math.Round(item.pesobrutotalla,2)" readonly> </td>
+                        }
+                        <td> <input type="text" class="inputtabla" value="@Math.Round(totalpesobruto,2)" readonly></td>
+
+                    </tr>
+
                 </tbody>
             </table>
         </div>
@@ -192,7 +245,7 @@
                         <th>Cantidad 1ra</th>
                         @foreach (var item in tallascantidadprimera)
                         {
-                            <td> <input type="text" class="inputtabla" max="@item.cantidad" value="@item.pendiente" readonly> </td>
+                            <td> <input type="text" class="inputtabla" id="pendiente_talla_@item.talla" max="@item.cantidad" value="@item.pendiente" readonly> </td>
                         }
 
                     </tr>
@@ -200,14 +253,29 @@
                         <th>Peso Bruto total</th>
                         @foreach (var item in tallascantidadprimera)
                         {
-                            <td> <input type="text" class="inputtabla" readonly> </td>
+                            <td> <input type="text" class="inputtabla" id="pesototal_talla_@item.talla" value="@Math.Round(item.pesobrutorealtalla,2)" readonly> </td>
                         }
                     </tr>
                     <tr>
                         <th>Estado</th>
                         @foreach (var item in tallascantidadprimera)
                         {
-                            <td> </td>
+                            if (item.pendiente > 0)
+                            {
+                                <td class="text-center" id="tdestadotalla_@item.talla">
+                                    <span class="badge bg-warning" title="Quedan prendas por liquidar">
+                                        PENDIENTE
+                                    </span>
+                                </td>
+                            }
+                            else
+                            {
+                                <td class="text-center" id="tdestadotalla_@item.talla">
+                                    <span class="badge bg-success" title="Todas las prendas fueron liquidadas">
+                                        OK
+                                    </span>
+                                </td>
+                            }
                         }
                     </tr>
                 </tbody>
@@ -226,7 +294,7 @@
 
             <div class="card-header text-center">
 
-                <label class="card-title">FICHA @fichas.ficha</label>
+                <label class="card-title">FICHA: @fichas.ficha - PEDIDO: @fichas.pedido</label>
                 <div class="card-tools">
                     <button type="submit" class="btn btn-sm btn-primary">
                         <i class="fas fa-save"></i>
@@ -242,6 +310,18 @@
 
                 @*FICHA*@
                 <input type="hidden" class="fichas" name="fichas" value="@fichas.ficha">
+
+                @*PEDIDO*@
+                <input type="hidden" class="pedido" name="pedido" value="@fichas.pedido">
+
+                @*ESTILO TSC*@
+                <input type="hidden" class="estilotsc" name="estilotsc" value="@fichas.estilotsc">
+
+                @*ESTILO CLIENTE*@
+                <input type="hidden" class="estilocliente" name="estilocliente" value="@fichas.estilocliente">
+
+                @*COLOR*@
+                <input type="hidden" class="color" name="color" value="@fichas.color">
 
                 <table class="table table-bordered table-sm tablainput tablefixed">
                     @*CABECERA*@
@@ -273,7 +353,8 @@
                                     programado = pc.cantidad,
                                     real = pc.realprimera,
                                     pendiente = pc.pendiente,
-                                    pesonetoreal = pc.pesonetoreal
+                                    pesonetoreal = pc.pesonetoreal,
+                                    pesobrutotalla = pc.pesobrutotalla
 
                                 }
                             ).Where(obj => obj.ficha == fichas.ficha).ToList();
@@ -291,7 +372,7 @@
 
                                 if (response.Count == 0)
                                 {
-                                    <td> <input type="text" class="inputtabla bg-bloqueado" value="0" readonly> </td>
+                                    <td> <input type="text" class="inputtabla bg-bloqueado" value="" readonly> </td>
                                 }
                                 else
                                 {
@@ -337,14 +418,14 @@
 
                                 if (response.Count == 0)
                                 {
-                                    <td> <input type="text" class="inputtabla" value="0" readonly> </td>
+                                    <td> <input type="text" class="inputtabla" value="" readonly> </td>
                                 }
                                 else
                                 {
 
                                     totales += response[0].real;
                                     var clase = "realesprimera_" + fichas.ficha;
-                                    <td> <input type="number" class="inputtabla realesprimera @clase" data-ficha="@fichas.ficha" data-orden="@talla.orden" data-talla="@talla.talla" max="@response[0].programado" value="@response[0].real"> </td>
+                                    <td> <input type="number" class="inputtabla realesprimera @clase talla_@talla.talla" data-ficha="@fichas.ficha" data-pesoprogramado="@response[0].pesobrutotalla" data-programado="@response[0].programado" data-orden="@talla.orden" data-talla="@talla.talla" max="@response[0].programado" value="@response[0].real"> </td>
                                 }
 
                             }
@@ -371,7 +452,7 @@
 
                                 if (response.Count == 0)
                                 {
-                                    <td> <input type="text" class="inputtabla bg-bloqueado" value="0" readonly> </td>
+                                    <td> <input type="text" class="inputtabla bg-bloqueado" value="" readonly> </td>
                                 }
                                 else
                                 {
@@ -405,7 +486,7 @@
 
                                 if (response.Count == 0)
                                 {
-                                    <td> <input type="text" class="inputtabla" value="0" readonly> </td>
+                                    <td> <input type="text" class="inputtabla" value="" readonly> </td>
                                 }
                                 else
                                 {
@@ -474,11 +555,6 @@
 
 
 
-
-
-
-
-
 @section scripts{
 
 
@@ -534,6 +610,9 @@
                 $(`.pendientes_${ficha}_${talla}`).val(0);
             }
 
+            // TOTALES POR TALLA
+            getTotalPendientesTalla(talla);
+
             // TOTALES REALES PRIMERA
             gettotales("realesprimera","totalprimera",ficha);
 
@@ -573,7 +652,7 @@
 
         // FUNCION PARA REGISTRAR LAS FICHAS
         async function saveFichas(form) {
-
+            //console.log(form);
             MostrarCarga_new("Registrando...");
 
             saveHead().then(async (response) => {
@@ -581,16 +660,22 @@
                 let idrectilineohead = response;
                 let idficharectilineo   = form[1].value;
                 let ficha = form[2].value;
+                let pedido = form[3].value;
+                let estilotsc = form[4].value;
+                let estilocliente = form[5].value;
+                let combo = form[6].value;
+
+
 
                 let rptficha = await get("corte", "saveFichaRectilineo", {
-                    idrectilineohead, idficharectilineo,ficha
+                    idrectilineohead, idficharectilineo, ficha, pedido, estilotsc, estilocliente,combo
                 }, true);
 
                 if (rptficha.success) {
 
                     let id      = rptficha.mensaje;
                     let card    = form.children[1];
-                    let tabla   = card.children[2];
+                    let tabla   = card.children[6];
                     let tbody   = tabla.children[1];
 
                     // REGISTRAMOS TALLAS
@@ -602,8 +687,6 @@
                 } else {
                     Advertir(rptficha.mensaje);
                 }
-
-
 
 
             }).catch((error) => {
@@ -633,14 +716,17 @@
                     let talla = item.dataset.talla;
                     let ficha = item.dataset.ficha;
                     let orden = item.dataset.orden;
+                    let programado = item.dataset.programado;
                     let realprimera = item.value == "" ? 0 : item.value;
+                    let pesoprogramado = item.dataset.pesoprogramado;
+
 
                     let id = `pesoneto_${ficha}_${talla}`;
                     //console.log(id);
                     let pesoneto = document.getElementById(id).value;
 
                     let response = await get("corte", "saveTallasRectilineo", {
-                        talla, realprimera, idrectilineoficha, pesoneto, orden
+                        talla, realprimera, idrectilineoficha, pesoneto, orden, programado, pesoprogramado
                     }, true);
 
                 }
@@ -667,7 +753,6 @@
             })
         });
 
-
         // REGISTRAR CABECERA
         async function saveHead() {
 
@@ -693,7 +778,78 @@
 
         }
 
+
+        // CALCULTA TOTAL DE PENDIENTES POR TALLA
+        function getTotalPendientesTalla(talla) {
+
+            let programado  = document.getElementById(`programado_talla_${talla}`);
+            let pendiente = document.getElementById(`pendiente_talla_${talla}`);
+            let estado = document.getElementById(`tdestadotalla_${talla}`);
+
+
+            // OBTENEMOS VALORES REGISTRADOS
+            let totalliquidado = 0;
+            let liquidados = document.getElementsByClassName(`talla_${talla}`);
+
+            for (let item of liquidados) {
+                let string = item.value == "" ? 0 : item.value;
+                let valor = !isNaN(string) ? parseFloat(string) : 0;
+                totalliquidado += valor;
+            }
+
+            let pend = parseFloat(programado.value) - totalliquidado;
+            pendiente.value = pend;
+
+            if (pend == 0) {
+                estado.innerHTML = `
+                    <span class="badge bg-success" title="Todas las prendas fueron liquidadas">
+                        OK
+                    </span>
+                `;
+            }
+
+            if (pend > 0){
+                estado.innerHTML = `
+                    <span class="badge bg-warning" title="Quedan prendas por liquidar">
+                        PENDIENTE
+                    </span>
+                `;
+            }
+
+            if (pend < 0) {
+                estado.innerHTML = `
+                    <span class="badge bg-danger" title="No puede liquidar mas de lo programado">
+                        EXCEDE CANTIDAD
+                    </span>
+                `;
+            }
+
+            //console.log(talla,programado,pendiente);
+
+        }
     </script>
 
+
+    <script>
+        //Get the button
+        var mybutton = document.getElementById("btnGoToTop");
+
+        // When the user scrolls down 20px from the top of the document, show the button
+        window.onscroll = function () { scrollFunction() };
+
+        function scrollFunction() {
+            if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+                $("#btnGoToTop").fadeIn("slow");
+            } else {
+                $("#btnGoToTop").fadeOut("slow");
+            }
+        }
+
+        // When the user clicks on the button, scroll to the top of the document
+        function topFunction() {
+            $('html, body').animate({ scrollTop: 0 }, 'slow');
+        }
+
+    </script>
 
 }

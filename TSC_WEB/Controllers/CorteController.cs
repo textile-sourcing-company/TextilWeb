@@ -811,19 +811,19 @@ namespace TSC_WEB.Controllers
 
             // FICHAS DE RECTILINEO
             [HttpGet]
-            public JsonResult saveFichaRectilineo(int? idrectilineoficha, int? idrectilineohead, int ficha)
+            public JsonResult saveFichaRectilineo(int? idrectilineoficha, int? idrectilineohead, int ficha, string usuario, int pedido, string estilotsc, string estilocliente, string combo)
             {
                 string mensaje = string.Empty;
-                var response = objRectilineosM.saveFichas(idrectilineoficha, idrectilineohead, ficha, Session["usuario"].ToString(), out mensaje);
+                var response = objRectilineosM.saveFichas(idrectilineoficha, idrectilineohead, ficha, Session["usuario"].ToString(),pedido,estilotsc,estilocliente,combo, out mensaje);
                 return Json(new { success = response, mensaje = mensaje }, JsonRequestBehavior.AllowGet);
             }
 
             // TALLAS DE RECTILINEO
             [HttpGet]
-            public JsonResult saveTallasRectilineo(int? idrectilineoficha, string talla, int realprimera,decimal pesoneto,int orden)
+            public JsonResult saveTallasRectilineo(int? idrectilineoficha, string talla, int realprimera,decimal pesoneto,decimal programado,decimal pesoprogramado, int orden)
             {
                 string mensaje = string.Empty;
-                var response = objRectilineosM.saveTallas(idrectilineoficha, talla, realprimera, pesoneto, orden, out mensaje);
+                var response = objRectilineosM.saveTallas(idrectilineoficha, talla, realprimera, pesoneto, programado, orden, pesoprogramado, out mensaje);
                 return Json(new { success = response, mensaje = mensaje }, JsonRequestBehavior.AllowGet);
             }
 
