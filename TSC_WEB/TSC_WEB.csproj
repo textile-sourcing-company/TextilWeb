@@ -542,8 +542,16 @@
     <Compile Include="Models\Entidades\ControlInterno\ReporteStock\ReporteStock.cs" />
     <Compile Include="Models\Entidades\Corte\LiquidacionRectilineos\FichaDatos.cs" />
     <Compile Include="Models\Entidades\Corte\LiquidacionRectilineos\FichasTallasEntidad.cs" />
+    <Compile Include="Models\Entidades\Corte\LiquidacionRectilineos\FichasTallasSegundasEntidad.cs" />
+    <Compile Include="Models\Entidades\Corte\LiquidacionRectilineos\IngresoRectilineosCompletoEntidad.cs" />
+    <Compile Include="Models\Entidades\Corte\LiquidacionRectilineos\IngresoRectilineosEntidad.cs" />
     <Compile Include="Models\Entidades\Corte\LiquidacionRectilineos\LiquidacionRectilineosEntidad.cs" />
+    <Compile Include="Models\Entidades\Corte\LiquidacionRectilineos\PartidaRectilineoTallasEntidad.cs" />
+    <Compile Include="Models\Entidades\Corte\LiquidacionRectilineos\PartidaTelaEntidad.cs" />
+    <Compile Include="Models\Entidades\Corte\LiquidacionRectilineos\PartidaTelaRectilineoEntidad.cs" />
     <Compile Include="Models\Entidades\Corte\LiquidacionRectilineos\ReporteEntidad.cs" />
+    <Compile Include="Models\Entidades\Corte\LiquidacionRectilineos\ReporteIngresoRectilineosAlmacenEntidad.cs" />
+    <Compile Include="Models\Entidades\Corte\LiquidacionRectilineos\TallasEntidad.cs" />
     <Compile Include="Models\Entidades\Corte\LiquidacionTela\aperturaficha\AperturaFichaEntidad.cs" />
     <Compile Include="Models\Entidades\Corte\LiquidacionTela\CaidasEntidad.cs" />
     <Compile Include="Models\Entidades\Corte\LiquidacionTela\Corte_001Entidad.cs" />
@@ -888,6 +896,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Util\Comercial\EBBaseMulti.cs" />
     <Compile Include="Util\Comercial\EBMaestra.cs" />
+    <Compile Include="Util\Sistema\Excel.cs" />
     <Compile Include="Util\Sistema\URL_EXTERNO.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -1014,6 +1023,9 @@
     <Content Include="Views\Finanzas\HistorialRendicion.cshtml" />
     <Content Include="Views\Corte\LiquidacionRectilineos.cshtml" />
     <Content Include="Views\Corte\getReporteRectilineos.cshtml" />
+    <Content Include="Views\Almacenes\IngresoRectilineos.cshtml" />
+    <Content Include="Views\Almacenes\IngresoRectilineos_old.cshtml" />
+    <Content Include="Views\Almacenes\ReporteIngresoRectilineos.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

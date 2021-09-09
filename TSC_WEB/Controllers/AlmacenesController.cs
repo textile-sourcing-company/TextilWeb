@@ -1,32 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
-using System.Runtime.InteropServices;
-using System.Threading.Tasks;
 using System.Web.Script.Serialization;
-using TSC_WEB.Models.Entidades.Logistica.AcumuladoXCuenta;
-using TSC_WEB.Models.Entidades.Logistica.AlterarSituacion;
-using TSC_WEB.Models.Entidades.Logistica.AprobacionExcedentes;
-using TSC_WEB.Models.Entidades.Logistica.AprobacionOC;
-using TSC_WEB.Models.Modelos.Logistica.AcumGerCecoCuenta;
-using TSC_WEB.Models.Modelos.Logistica.AcumuladoXCuenta;
 using TSC_WEB.Models.Modelos.Logistica.AlterarSituacionOC;
-using TSC_WEB.Models.Modelos.Logistica.AprobacionExcedentes;
 using TSC_WEB.Models.Modelos.Logistica.AprobacionOC;
-using TSC_WEB.Models.Modelos.Logistica.Graficos;
-using TSC_WEB.Models.Modelos.Logistica.OCPendienteCierre;
-using TSC_WEB.Models.Modelos.Logistica.OCPendienteFirma;
-using TSC_WEB.Models.Modelos.Logistica.PlanContable;
 using TSC_WEB.Models.Modelos.Logistica.ReporteStockFecha;
 using TSC_WEB.Models.Entidades.Almacenes.ReporteStockFecha;
 using TSC_WEB.Models.Modelos.Sistema;
-using TSC_WEB.Util.Sistema;
 using System.Web.Mvc;
 using TSC_WEB.Models.Modelos.Almacenes.ReporteStockFecha;
 using TSC_WEB.Models.Entidades.MovimientoPorPeriodo;
 using TSC_WEB.Models.Modelos.Logistica;
 using System.IO;
+using TSC_WEB.Models.Entidades.Corte.LiquidacionRectilineos;
+using TSC_WEB.Models.Modelos.Corte.LiquidacionRectilineos;
 using OfficeOpenXml.Style;
 using OfficeOpenXml;
 using System.Drawing;
@@ -42,6 +29,7 @@ namespace TSC_WEB.Controllers
         CentroCostoModelo objCentroCosto = new CentroCostoModelo();
         ReporteStockFechaModelo objReporteStockFecha = new ReporteStockFechaModelo();
         ReporteStockFechaModelo ReporteModelo = new ReporteStockFechaModelo();
+        LiquidacionRectilineosModelo objRectilineosM = new LiquidacionRectilineosModelo();
 
         public static List<ReporteStockFechaEntidad> listaRespaldoExportar = null;
 
@@ -81,6 +69,58 @@ namespace TSC_WEB.Controllers
             }
         }
 
+        // VISTA PARA REPORTE DE INGRESO DE RECTILINEOS
+        public ActionResult ReporteIngresoRectilineos()
+        {
+            if (Session["usuario"] != null)
+            {
+                var response = objRectilineosM.getReporteIngresoRectilineosAlmacen();
+                return View(response);
+            }
+            else
+            {
+                return View();
+            }
+        }
+
+        // VISTA PARA INGRESO DE RECTILINEOS
+        public ActionResult IngresoRectilineos(string partida,string buscar = "")
+        {
+            if (Session["usuario"] != null)
+            {
+                var partidatela             = new PartidaTelaEntidad();
+                var partidarectilineo       = new List<PartidaTelaRectilineoEntidad>();
+                var partidarectilineotalla  = new List<PartidaRectilineoTallasEntidad>();
+                var tallas                  = new List<TallasEntidad>();
+
+                // BUSCAMOS
+                if (buscar != "")
+                {
+                    partidatela = objRectilineosM.getPartidaTela(partida.ToUpper());
+                    partidatela.busqueda = true;
+                    partidatela.partidatela = partida.ToUpper();
+                    partidarectilineo = objRectilineosM.getPartidaTelaRectilineo(partida.ToUpper());
+                    partidarectilineotalla = objRectilineosM.getPartidaTelaRectilineoTallas(partida.ToUpper());
+                    tallas = objRectilineosM.getTallasRegistro();
+                }
+                else
+                {
+                    partidatela.busqueda = false;
+                }
+
+
+                return View(new IngresoRectilineosCompletoEntidad {
+                    Partida = partidatela,
+                    PartidaRectilineos = partidarectilineo,
+                    PartidaRectilineosTallas = partidarectilineotalla,
+                    Tallas = tallas
+                });
+            }
+            else
+            {
+                return Redirect("/");
+            }
+        }
 
         #endregion
 

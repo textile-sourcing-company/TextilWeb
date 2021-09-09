@@ -96,7 +96,7 @@ async function Preguntar(pregunta) {
     return resultado;
 }
 
-function MostrarCarga(mensaje) {
+function MostrarCarga(mensaje = "Cargando") {
 
     Swal.fire({
         title: mensaje,

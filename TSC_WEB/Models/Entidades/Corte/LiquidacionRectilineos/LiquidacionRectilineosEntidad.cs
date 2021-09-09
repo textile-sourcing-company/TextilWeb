@@ -8,6 +8,8 @@ namespace TSC_WEB.Models.Entidades.Corte.LiquidacionRectilineos
     public class LiquidacionRectilineosEntidad
     {
         public List<FichasTallasEntidad> FichaTallas { get; set; }
+        public List<FichasTallasSegundasEntidad> SegundasTallas { get; set; }
+
         public FichaDatos FichaCabecera { get; set; }
 
     }

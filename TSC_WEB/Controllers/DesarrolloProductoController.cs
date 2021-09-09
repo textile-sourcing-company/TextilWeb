@@ -387,6 +387,42 @@ namespace TSC_WEB.Controllers
         }
 
 
+        //REGISTRA MOLDES
+        public async Task<JsonResult> PruebaSubida(string estilo,HttpPostedFileBase archivo)
+        {
+            try
+            {
+
+                //string usuario = Session["usuario"].ToString();
+                string rutaarchivo = @"C:/tmp_moldes/";
+                string extension = Path.GetExtension(archivo.FileName);
+                DateTime fecha = DateTime.Now;
+                string nombrearchivo =
+                    fecha.Day.ToString() +
+                    fecha.Month.ToString() +
+                    fecha.Year.ToString() +
+                    fecha.Hour.ToString() +
+                    fecha.Minute.ToString() +
+                    fecha.Second.ToString() +
+                    fecha.Millisecond.ToString() +
+                    extension;
+                var data = await objOneDrive2.SubirCompartirArchivo(rutaarchivo, "MoldesAuditex", nombrearchivo, archivo);
+
+                //REGISTRAMOS
+                //objRegistroM.Registrar(estilo, programa, pedidos, observacion, usuario, data.mensajesistema);
+                return Json(new { mensaje = data.mensajesistema, error = false });
+
+            }
+            catch (Exception ex)
+            {
+                return Json(new { mensaje = ex.Message, error = true });
+            }
+
+
+        }
+
+
+
 
 
         #endregion

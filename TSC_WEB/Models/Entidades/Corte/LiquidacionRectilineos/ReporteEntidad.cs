@@ -8,6 +8,7 @@ namespace TSC_WEB.Models.Entidades.Corte.LiquidacionRectilineos
     public class ReporteEntidad
     {
         public string usuariocrea { get; set; }
+        public string tipo { get; set; }
         public string fechamod { get; set; }
         public int ficha { get; set; }
         public int ordentalla { get; set; }
@@ -37,7 +38,9 @@ namespace TSC_WEB.Models.Entidades.Corte.LiquidacionRectilineos
 
         public decimal pesonetoreal { get; set; }
         public decimal pesoprogramado { get; set; }
-            
+        public decimal mermahilos { get; set; }
+        public decimal mermarecorte { get; set; }
+
 
         public decimal porcentajeliquidaciontalla
         {
@@ -55,6 +58,43 @@ namespace TSC_WEB.Models.Entidades.Corte.LiquidacionRectilineos
             }
         }
 
+        public decimal mermaprogramadarecorte { get; set; }
+        public decimal mermaprogramadahilo { get; set; }
+
+        public decimal mermarealrecorte { get; set; }
+        public decimal mermarealhilo { get; set; }
+
+        public decimal variacionmermaderecorte
+        {
+            get
+            {
+                return mermarealrecorte - mermaprogramadarecorte;
+            }
+        }
+
+        public decimal variacionmermadehilo
+        {
+            get
+            {
+                return mermarealhilo - mermaprogramadahilo;
+            }
+        }
+
+        public decimal variacionmermaderecortepor
+        {
+            get
+            {
+                return mermaprogramadarecorte > 0 ? variacionmermaderecorte / mermaprogramadarecorte : 0;
+            }
+        }
+
+        public decimal variacionmermadehilopor
+        {
+            get
+            {
+                return mermaprogramadahilo > 0 ? variacionmermadehilo / mermaprogramadahilo : 0;
+            }
+        }
 
     }
 }
