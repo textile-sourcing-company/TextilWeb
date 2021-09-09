@@ -29,7 +29,10 @@
                 grp.pedido,
                 grp.combo,
                 grp.estilotsc,
-                grp.estilocliente
+                grp.estilocliente,
+                grp.tipo,
+                grp.mermahilos,
+                grp.mermarecorte
             }
         ).Select(sel => new ReporteEntidad
         {
@@ -40,12 +43,81 @@
             pedido = sel.First().pedido,
             combo = sel.First().combo,
             estilotsc = sel.First().estilotsc,
-            estilocliente = sel.First().estilocliente
-        }).OrderBy(obj => obj.ficha).ToList() : new List<ReporteEntidad>();
+            estilocliente = sel.First().estilocliente,
+            tipo = sel.First().tipo,
+            mermahilos = sel.First().mermahilos,
+            mermarecorte = sel.First().mermarecorte
+
+        }).OrderBy(obj => obj.tipo).ThenBy(t => t.ficha).ToList() : new List<ReporteEntidad>();
 
     lista = lista.Distinct().ToList();
 
     string ultimatalla = canttallas > 0 ? tallas[canttallas - 1].talla : string.Empty;
+
+    // TOTALES
+    decimal totalprogramado = 0;
+    decimal totalliquidado = 0;
+    decimal totalpendiente = 0;
+    decimal totalprogramadokg = 0;
+    decimal totalliquidadokg = 0;
+    decimal totalpendientekg = 0;
+    decimal porcentajeficha = 0;
+
+    decimal recorteprogramado = 0;
+    decimal hiloprogramado = 0;
+    decimal recortereal = 0;
+    decimal hiloreal = 0;
+
+
+
+    decimal dividido = 0;
+
+
+    int canttallasficha = 0;
+    decimal totalliquidadopor = 0;
+    decimal totalliquidadokgpor = 0;
+
+    decimal difunidades;
+    decimal difunidadespor;
+    decimal difkilos;
+    decimal difkilospor;
+
+
+    string fechai = string.Empty;
+    string fechaf = string.Empty;
+    string ficha = string.Empty;
+    string partida = string.Empty;
+    string tipo = string.Empty;
+    string busqueda = string.Empty;
+
+
+
+
+
+    try
+    {
+        fechai = !string.IsNullOrEmpty(Request.Params["fechai"]) ? PageContext.Page.Request.Params["fechai"].ToString() : "";
+        fechaf = !string.IsNullOrEmpty(Request.Params["fechaf"]) ? PageContext.Page.Request.Params["fechaf"].ToString() : "";
+        ficha = !string.IsNullOrEmpty(Request.Params["ficha"]) ? PageContext.Page.Request.Params["ficha"].ToString() : "";
+        partida = !string.IsNullOrEmpty(Request.Params["partida"]) ? PageContext.Page.Request.Params["partida"].ToString() : "";
+        tipo = !string.IsNullOrEmpty(Request.Params["tipo"]) ? PageContext.Page.Request.Params["tipo"].ToString() : "";
+        busqueda = !string.IsNullOrEmpty(Request.Params["busqueda"]) ? PageContext.Page.Request.Params["busqueda"].ToString() : "";
+
+    }
+    catch
+    {
+        fechai = string.Empty;
+        fechaf = string.Empty;
+        ficha = string.Empty;
+        partida = string.Empty;
+        tipo = string.Empty;
+        busqueda = string.Empty;
+
+    }
+
+
+
+
 }
 
 @section style{
@@ -57,296 +129,611 @@
         #filafija .thcabeceras {
             width: 263px !important;
             overflow: auto !important;
-            vertical-align:middle !important;
+            vertical-align: middle !important;
+        }
+
+        #filafija .thcabeceras2 {
+            width: 500px !important;
+            overflow: auto !important;
+            vertical-align: middle !important;
+        }
+
+        #filafija .thcabeceras3 {
+            width: 700px !important;
+            overflow: auto !important;
+            vertical-align: middle !important;
         }
 
         #filafija .thcabecerasdatos {
             width: 100px !important;
             overflow: auto !important;
+            vertical-align: middle !important;
+        }
+
+        #filafija .totales {
+            width: 51px !important;
+            overflow: auto !important;
+            vertical-align: middle !important;
+        }
+
+        #filafija .thcabecerasdatos2 {
+            width: 120px !important;
+            overflow: auto !important;
+            vertical-align: middle !important;
         }
 
         #tbodydatos td {
             vertical-align: middle;
         }
+
+        #thead th {
+            vertical-align: middle;
+        }
+
+        .vertical {
+            vertical-align: middle !important;
+        }
     </style>
 }
 
-
 <div class="card card-primary card-outline">
-
     <div class="card-header">
-    </div>
 
+    </div>
     <div class="card-body">
 
-        <div class="table-responsive">
+        <form class="row" id="frmbusqueda" autocomplete="off" method="get">
 
-            <table class="table table-bordered table-sm table-hover text-center">
-                <thead class="thead-light ">
-                    <tr id="filafija">
-                        <th rowspan="2" style="vertical-align:middle" class="thcabecerasdatos border-table">Usuario</th>
-                        <th rowspan="2" style="vertical-align:middle" class="thcabecerasdatos border-table">Fecha de Liquidación</th>
-                        <th rowspan="2" style="vertical-align:middle" class="thcabecerasdatos border-table">Ficha</th>
-                        <th rowspan="2" style="vertical-align:middle" class="thcabecerasdatos border-table">Partida R.</th>
-                        <th rowspan="2" style="vertical-align:middle" class="thcabecerasdatos border-table">Pedido</th>
-                        <th rowspan="2" style="vertical-align:middle" class="thcabecerasdatos border-table">Combo</th>
-                        <th rowspan="2" style="vertical-align:middle" class="thcabecerasdatos border-table">Estilo TSC</th>
-                        <th rowspan="2" style="vertical-align:middle" class="thcabecerasdatos border-table">Estilo Cliente</th>
-                        <th colspan="@canttallas" class="thcabeceras border-table">Programado/Girado (Unidades)</th>
-                        <th colspan="@canttallas" class="thcabeceras border-table">Liquidado (Unidades)</th>
-                        <th colspan="@canttallas" class="thcabeceras border-table">Pendiente Liquidación por talla (Unidades)</th>
-                        <th colspan="@canttallas" class="thcabeceras border-table">% Liquidación por talla</th>
-                        <th colspan="@canttallas" class="thcabeceras border-table">Programado (kg)</th>
-                        <th colspan="@canttallas" class="thcabeceras border-table">Liquidado (kg)</th>
-                        <th colspan="@canttallas" class="thcabeceras border-table">Pendiente Liquidación por talla (kg)</th>
-                        <th colspan="@canttallas" class="thcabeceras border-table">% Liquidación por talla (kg)</th>
+            <div class="col-md-3">
+                <label for="">Fecha Inicio</label>
+                <input type="date" name="fechai" value="@fechai" class="form-control form-control-sm" />
+            </div>
 
+            <div class="col-md-3">
+                <label for="">Fecha Fin</label>
+                <input type="date" name="fechaf" value="@fechaf" class="form-control form-control-sm" />
+            </div>
 
-                    </tr>
-                    <tr>
-                        @foreach (var talla in tallas)
-                        {
-                            <th class="border-table">@talla.talla</th>
-                        }
-                        @foreach (var talla in tallas)
-                        {
-                            <th class="border-table">@talla.talla</th>
-                        }
-                        @foreach (var talla in tallas)
-                        {
-                            <th class="border-table">@talla.talla</th>
-                        }
-                        @foreach (var talla in tallas)
-                        {
-                            <th class="border-table">@talla.talla</th>
-                        }
-                        @foreach (var talla in tallas)
-                        {
-                            <th class="border-table">@talla.talla</th>
-                        }
-                        @foreach (var talla in tallas)
-                        {
-                            <th class="border-table">@talla.talla</th>
-                        }
-                        @foreach (var talla in tallas)
-                        {
-                            <th class="border-table">@talla.talla</th>
-                        }
-                        @foreach (var talla in tallas)
-                        {
-                            <th class="border-table">@talla.talla</th>
-                        }
-                    </tr>
-                </thead>
-                <tbody id="tbodydatos">
-                    @foreach (var item in lista)
+            <div class="col-md-3">
+                <label for="">Ficha</label>
+                <input type="number" name="ficha" value="@ficha" class="form-control form-control-sm" />
+            </div>
+
+            <div class="col-md-3">
+                <label for="">Partida</label>
+                <input type="text" name="partida" value="@partida" class="form-control form-control-sm" />
+            </div>
+
+            <div class="col-md-2">
+                <label for="">Tipo</label>
+                <select name="tipo" id="" class="custom-select custom-select-sm">
+                    <option value="">Seleccione</option>
+                    @if (tipo == "CUELLO")
                     {
-                    <tr>
-                        <td class="border-table-left border-table-right">@item.usuariocrea</td>
-                        <td class="border-table-left border-table-right">@item.fechamod</td>
-                        <td class="border-table-left border-table-right">@item.ficha</td>
-                        <td class="border-table-left border-table-right">@item.partida</td>
-                        <td class="border-table-left border-table-right">@item.pedido</td>
-                        <td class="border-table-left border-table-right">@item.combo</td>
-                        <td class="border-table-left border-table-right">@item.estilotsc</td>
-                        <td class="border-table-left border-table-right">@item.estilocliente</td>
-
-                        @* CANTIDAD DE PROGRAMADO *@
-                        @foreach (var talla in tallas)
-                        {
-
-                            var filtro = Model.Where(
-                                    obj => obj.ficha == item.ficha && obj.partida == item.partida
-                                    && obj.pedido == item.pedido && obj.talla == talla.talla
-                            ).ToList();
-
-
-                            if (filtro.Count > 0)
-                            {
-                                var clase = filtro[0].talla == ultimatalla ? "border-table-right" : "";
-                                <td class="@clase" >@filtro[0].programado</td>
-                            }
-                            else
-                            {
-                                <td class=""></td>
-                            }
-
-                        }
-
-                        @* LIQUIDADO *@
-                        @foreach (var talla in tallas)
-                        {
-
-                            var filtro = Model.Where(
-                                    obj => obj.ficha == item.ficha && obj.partida == item.partida
-                                    && obj.pedido == item.pedido && obj.talla == talla.talla
-                            ).ToList();
-
-                            if (filtro.Count > 0)
-                            {
-                                var clase = filtro[0].talla == ultimatalla ? "border-table-right" : "";
-                                <td class="@clase">@filtro[0].realprimera</td>
-                            }
-                            else
-                            {
-                                <td></td>
-                            }
-
-                        }
-
-                        @* PENDIENTES *@
-                        @foreach (var talla in tallas)
-                        {
-
-                            var filtro = Model.Where(
-                                    obj => obj.ficha == item.ficha && obj.partida == item.partida
-                                    && obj.pedido == item.pedido && obj.talla == talla.talla
-                            ).ToList();
-
-                            if (filtro.Count > 0)
-                            {
-                                var clase = filtro[0].talla == ultimatalla ? "border-table-right" : "";
-                                <td class="@clase">@filtro[0].pendiente</td>
-                            }
-                            else
-                            {
-                                <td></td>
-                            }
-
-                        }
-
-                        @* % LIQUIDACION POR TALLAS *@
-                        @foreach (var talla in tallas)
-                        {
-
-                            var filtro = Model.Where(
-                                    obj => obj.ficha == item.ficha && obj.partida == item.partida
-                                    && obj.pedido == item.pedido && obj.talla == talla.talla
-                            ).ToList();
-
-                            if (filtro.Count > 0)
-                            {
-
-                                var porcentaje = filtro[0].porcentajeliquidaciontalla * 100;
-                                porcentaje = Math.Round(porcentaje, 2);
-                                var clase = filtro[0].talla == ultimatalla ? "border-table-right" : "";
-
-                                <td class="@clase">@porcentaje%</td>
-                            }
-                            else
-                            {
-                                <td></td>
-                            }
-
-                        }
-
-                        @* PESO PROGRAMADO *@
-                        @foreach (var talla in tallas)
-                        {
-
-                            var filtro = Model.Where(
-                                    obj => obj.ficha == item.ficha && obj.partida == item.partida
-                                    && obj.pedido == item.pedido && obj.talla == talla.talla
-                            ).ToList();
-
-                            if (filtro.Count > 0)
-                            {
-
-                                var pesoprogramado = filtro[0].pesoprogramado;
-                                pesoprogramado = Math.Round(pesoprogramado, 2);
-
-                                var clase = filtro[0].talla == ultimatalla ? "border-table-right" : "";
-                                <td class="@clase">@pesoprogramado</td>
-                            }
-                            else
-                            {
-                                <td></td>
-                            }
-
-                        }
-
-                        @* PESO LIQUIDADO *@
-                        @foreach (var talla in tallas)
-                        {
-
-                            var filtro = Model.Where(
-                                    obj => obj.ficha == item.ficha && obj.partida == item.partida
-                                    && obj.pedido == item.pedido && obj.talla == talla.talla
-                            ).ToList();
-
-                            if (filtro.Count > 0)
-                            {
-
-                                var pesonetoreal = filtro[0].pesonetoreal;
-                                pesonetoreal = Math.Round(pesonetoreal, 2);
-
-                                var clase = filtro[0].talla == ultimatalla ? "border-table-right" : "";
-                                <td class="@clase">@pesonetoreal</td>
-                            }
-                            else
-                            {
-                                <td></td>
-                            }
-
-                        }
-
-                        @* PENDIENTE LIQUIDACION POR TALLA (KG) *@
-                        @foreach (var talla in tallas)
-                        {
-
-                            var filtro = Model.Where(
-                                    obj => obj.ficha == item.ficha && obj.partida == item.partida
-                                    && obj.pedido == item.pedido && obj.talla == talla.talla
-                            ).ToList();
-
-                            if (filtro.Count > 0)
-                            {
-
-                                var pendienteliquidacionkg = filtro[0].pendienteliquidacionkg;
-                                pendienteliquidacionkg = Math.Round(pendienteliquidacionkg, 2);
-
-                                var clase = filtro[0].talla == ultimatalla ? "border-table-right" : "";
-                                <td class="@clase">@pendienteliquidacionkg</td>
-                            }
-                            else
-                            {
-                                <td></td>
-                            }
-
-                        }
-
-                        @* % LIQUIDACION POR TALLAS (KG) *@
-                        @foreach (var talla in tallas)
-                        {
-
-                            var filtro = Model.Where(
-                                    obj => obj.ficha == item.ficha && obj.partida == item.partida
-                                    && obj.pedido == item.pedido && obj.talla == talla.talla
-                            ).ToList();
-
-                            if (filtro.Count > 0)
-                            {
-
-                                var porcentaje = filtro[0].porcentajeliquidaciontallakg * 100;
-                                porcentaje = Math.Round(porcentaje, 2);
-
-                                var clase = filtro[0].talla == ultimatalla ? "border-table-right" : "";
-                                <td class="@clase">@porcentaje%</td>
-                            }
-                            else
-                            {
-                                <td></td>
-                            }
-
-                        }
-
-                    </tr>
+                        <option selected value="CUELLO">CUELLO</option>
+                    }
+                    else
+                    {
+                        <option value="CUELLO">CUELLO</option>
                     }
 
-                </tbody>
-            </table>
+                    @if (tipo == "PUÑO")
+                    {
+                        <option selected value="PUÑO">PUÑO</option>
+                    }
+                    else
+                    {
+                        <option value="PUÑO">PUÑO</option>
+                    }
+                </select>
+            </div>
 
+            @if (busqueda != string.Empty)
+            {
+
+                <div class="col-md-2">
+                    <label for="">&nbsp;</label>
+                    <button class="btn btn-sm btn-block btn-success" type="button" id="btnexportar">Exportar</button>
+                </div>
+            }
+
+            @* BUSQUEDA *@
+            <input type="hidden" name="busqueda" value="busqueda">
+
+            <div class="col-md-2">
+                <label for="">&nbsp;</label>
+                <button class="btn btn-sm btn-block btn-primary" type="submit">Buscar</button>
+            </div>
+
+
+        </form>
+
+
+        <form id="frmexportar" class="d-none" action="@Url.Action("getReporteRectilineosExcel", "Corte")" method="get" target="_blank" autocomplete="off" > 
+            <input type="hidden"/>
+        </form>
+
+    </div>
+</div>
+
+@if (busqueda != string.Empty)
+{
+
+    <div class="card card-primary card-outline">
+
+        <div class="card-header">
         </div>
+
+        <div class="card-body">
+
+            <div class="table-responsive">
+
+                <table class="table table-bordered table-sm table-hover text-center">
+                    <thead class="thead-light " id="thead">
+                        <tr id="filafija">
+                            <th rowspan="2" style="vertical-align:middle" class="thcabecerasdatos border-table">Tipo</th>
+                            <th rowspan="2" style="vertical-align:middle" class="thcabecerasdatos border-table">Usuario</th>
+                            <th rowspan="2" style="vertical-align:middle" class="thcabecerasdatos border-table">Fecha de Liquidación</th>
+                            <th rowspan="2" style="vertical-align:middle" class="thcabecerasdatos border-table">Ficha</th>
+                            <th rowspan="2" style="vertical-align:middle" class="thcabecerasdatos border-table">Partida R.</th>
+                            <th rowspan="2" style="vertical-align:middle" class="thcabecerasdatos border-table">Pedido</th>
+                            <th rowspan="2" style="vertical-align:middle" class="thcabecerasdatos border-table">Combo</th>
+                            <th rowspan="2" style="vertical-align:middle" class="thcabecerasdatos border-table">Estilo TSC</th>
+                            <th rowspan="2" style="vertical-align:middle" class="thcabecerasdatos border-table">Estilo Cliente</th>
+
+                            <th colspan="@canttallas" class="thcabeceras border-table">Programado/Girado (Unidades)</th>
+                            @*<th rowspan="2" class="totales border-table">Total</th>*@
+                            <th colspan="@canttallas" class="thcabeceras border-table">Liquidado (Unidades)</th>
+                            @*<th rowspan="2" class="totales border-table">Total</th>*@
+                            <th colspan="@canttallas" class="thcabeceras border-table">Pendiente Liquidación por talla (Unidades)</th>
+                            <th rowspan="2" class="totales border-table">Total</th>
+                            <th colspan="@canttallas" class="thcabeceras border-table">% Liquidación por talla</th>
+                            <th rowspan="2" class="totales border-table">Total</th>
+                            <th colspan="@canttallas" class="thcabeceras border-table">Programado (kg)</th>
+                            <th rowspan="2" class="totales border-table">Total</th>
+                            <th colspan="@canttallas" class="thcabeceras border-table">Liquidado (kg)</th>
+                            <th rowspan="2" class="totales border-table">Total</th>
+                            <th colspan="@canttallas" class="thcabeceras border-table">Pendiente Liquidación por talla (kg)</th>
+                            <th rowspan="2" class="totales border-table">Total</th>
+                            <th colspan="@canttallas" class="thcabeceras border-table">% Liquidación por talla (kg)</th>
+                            <th rowspan="2" class="totales border-table">Total</th>
+                            @*<th colspan="2" style="vertical-align:middle" class="thcabecerasdatos2 border-table">Merma Programada</th>*@
+                            <th colspan="2" style="vertical-align:middle" class="thcabecerasdatos2 border-table">Merma Real</th>
+                            @*<th colspan="4" style="vertical-align:middle" class="thcabeceras2 border-table">Balance de Merma</th>*@
+                            <th colspan="8" style="vertical-align:middle" class="thcabeceras3 border-table">Balance General</th>
+
+                        </tr>
+                        <tr>
+                            @foreach (var talla in tallas)
+                            {
+                                <th class="border-table">@talla.talla</th>
+                            }
+                            @foreach (var talla in tallas)
+                            {
+                                <th class="border-table">@talla.talla</th>
+                            }
+                            @foreach (var talla in tallas)
+                            {
+                                <th class="border-table">@talla.talla</th>
+                            }
+                            @foreach (var talla in tallas)
+                            {
+                                <th class="border-table">@talla.talla</th>
+                            }
+                            @foreach (var talla in tallas)
+                            {
+                                <th class="border-table">@talla.talla</th>
+                            }
+                            @foreach (var talla in tallas)
+                            {
+                                <th class="border-table">@talla.talla</th>
+                            }
+                            @foreach (var talla in tallas)
+                            {
+                                <th class="border-table">@talla.talla</th>
+                            }
+                            @foreach (var talla in tallas)
+                            {
+                                <th class="border-table">@talla.talla</th>
+                            }
+
+                            @*<th class="border-table">Recorte</th>
+                            <th class="border-table">Hilo</th>*@
+
+                            <th class="border-table">Recorte</th>
+                            <th class="border-table">Hilo</th>
+
+                            @*<th class="border-table">Variación Merma de Recorte (Kg)</th>
+                            <th class="border-table">Variación Merma de Hilo (Kg)</th>
+                            <th class="border-table">Variación Merma de Recorte (%)</th>
+                            <th class="border-table">Variación Merma de Hilo (%)</th>*@
+
+                            <th class="border-table">Programado total (UN)</th>
+                            <th class="border-table">Liquidado total (UN)</th>
+                            <th class="border-table">Diferencia (UN)</th>
+                            <th class="border-table">Diferencia (%)</th>
+                            <th class="border-table">Programado total (Kg)</th>
+                            <th class="border-table">Liquidado total (Kg)</th>
+                            <th class="border-table">Diferencia (kg)</th>
+                            <th class="border-table">Diferencia (%)</th>
+
+
+                        </tr>
+                    </thead>
+                    <tbody id="tbodydatos">
+                        @foreach (var item in lista)
+                        {
+                            // REINICAMOS TOTALES
+                            totalprogramado = 0;
+                            totalliquidado = 0;
+                            totalpendiente = 0;
+
+                            totalprogramadokg = 0;
+                            totalliquidadokg = 0;
+                            totalpendientekg = 0;
+
+                            totalliquidadopor = 0;
+                            totalliquidadokgpor = 0;
+                            canttallasficha = 0;
+                            porcentajeficha = 0;
+
+                            recorteprogramado = 0;
+                            hiloprogramado = 0;
+                            recortereal = 0;
+                            hiloreal = 0;
+
+                            <tr>
+                                <td class="border-table-left border-table-right">@item.tipo</td>
+                                <td class="border-table-left border-table-right">@item.usuariocrea</td>
+                                <td class="border-table-left border-table-right">@item.fechamod</td>
+                                <td class="border-table-left border-table-right">@item.ficha</td>
+                                <td class="border-table-left border-table-right">@item.partida</td>
+                                <td class="border-table-left border-table-right">@item.pedido</td>
+                                <td class="border-table-left border-table-right">@item.combo</td>
+                                <td class="border-table-left border-table-right">@item.estilotsc</td>
+                                <td class="border-table-left border-table-right">@item.estilocliente</td>
+
+                                @* CANTIDAD DE PROGRAMADO *@
+                                @foreach (var talla in tallas)
+                                {
+
+                                    var filtro = Model.Where(
+                                            obj => obj.ficha == item.ficha && obj.partida == item.partida
+                                            && obj.pedido == item.pedido && obj.talla == talla.talla
+                                    ).ToList();
+
+
+                                    if (filtro.Count > 0)
+                                    {
+                                        var clase = filtro[0].talla == ultimatalla ? "border-table-right" : "";
+                                        totalprogramado += filtro[0].programado;
+
+                                        <td class="@clase">@filtro[0].programado</td>
+                                    }
+                                    else
+                                    {
+                                        <td class=""></td>
+                                    }
+
+                                }
+
+
+                                @* LIQUIDADO *@
+                                @foreach (var talla in tallas)
+                                {
+
+                                    var filtro = Model.Where(
+                                            obj => obj.ficha == item.ficha && obj.partida == item.partida
+                                            && obj.pedido == item.pedido && obj.talla == talla.talla
+                                    ).ToList();
+
+                                    if (filtro.Count > 0)
+                                    {
+                                        var clase = filtro[0].talla == ultimatalla ? "border-table-right" : "";
+                                        totalliquidado += filtro[0].realprimera;
+
+                                        <td class="@clase">@filtro[0].realprimera</td>
+                                    }
+                                    else
+                                    {
+                                        <td></td>
+                                    }
+
+                                }
+
+
+                                @* PENDIENTES *@
+                                @foreach (var talla in tallas)
+                                {
+
+                                    var filtro = Model.Where(
+                                            obj => obj.ficha == item.ficha && obj.partida == item.partida
+                                            && obj.pedido == item.pedido && obj.talla == talla.talla
+                                    ).ToList();
+
+                                    if (filtro.Count > 0)
+                                    {
+                                        var clase = filtro[0].talla == ultimatalla ? "border-table-right" : "";
+                                        totalpendiente += filtro[0].pendiente;
+                                        <td class="@clase">@filtro[0].pendiente</td>
+                                    }
+                                    else
+                                    {
+                                        <td></td>
+                                    }
+
+                                }
+
+                                @*TOTAL*@
+                                <th class="border-table-right vertical">
+                                    @totalpendiente
+                                </th>
+
+                                @* % LIQUIDACION POR TALLAS *@
+                                @foreach (var talla in tallas)
+                                {
+
+                                    var filtro = Model.Where(
+                                            obj => obj.ficha == item.ficha && obj.partida == item.partida
+                                            && obj.pedido == item.pedido && obj.talla == talla.talla
+                                    ).ToList();
+
+                                    if (filtro.Count > 0)
+                                    {
+                                        canttallasficha++;
+                                        var porcentaje = filtro[0].porcentajeliquidaciontalla * 100;
+                                        totalliquidadopor += porcentaje;
+                                        porcentaje = Math.Round(porcentaje);
+                                        var clase = filtro[0].talla == ultimatalla ? "border-table-right" : "";
+
+                                        <td class="@clase">@porcentaje%</td>
+                                    }
+                                    else
+                                    {
+                                        <td></td>
+                                    }
+
+                                }
+
+                                @*TOTAL*@
+                                <th class="border-table-right vertical">
+                                    @{
+                                        dividido = totalliquidadopor / canttallasficha;
+                                    }
+
+                                    @Math.Round(dividido)%
+                                </th>
+
+                                @* PESO PROGRAMADO *@
+                                @foreach (var talla in tallas)
+                                {
+
+                                    var filtro = Model.Where(
+                                            obj => obj.ficha == item.ficha && obj.partida == item.partida
+                                            && obj.pedido == item.pedido && obj.talla == talla.talla
+                                    ).ToList();
+
+                                    if (filtro.Count > 0)
+                                    {
+
+                                        var pesoprogramado = filtro[0].pesoprogramado;
+                                        totalprogramadokg += pesoprogramado;
+                                        pesoprogramado = Math.Round(pesoprogramado, 2);
+
+                                        var clase = filtro[0].talla == ultimatalla ? "border-table-right" : "";
+                                        <td class="@clase">@pesoprogramado</td>
+                                    }
+                                    else
+                                    {
+                                        <td></td>
+                                    }
+
+                                }
+
+                                @*TOTAL*@
+                                <th class="border-table-right vertical">
+                                    @Math.Round(totalprogramadokg, 2)
+                                </th>
+
+                                @* PESO LIQUIDADO *@
+                                @foreach (var talla in tallas)
+                                {
+
+                                    var filtro = Model.Where(
+                                            obj => obj.ficha == item.ficha && obj.partida == item.partida
+                                            && obj.pedido == item.pedido && obj.talla == talla.talla
+                                    ).ToList();
+
+                                    if (filtro.Count > 0)
+                                    {
+
+                                        var pesonetoreal = filtro[0].pesonetoreal;
+                                        totalliquidadokg += pesonetoreal;
+                                        pesonetoreal = Math.Round(pesonetoreal, 2);
+
+                                        var clase = filtro[0].talla == ultimatalla ? "border-table-right" : "";
+                                        <td class="@clase">@pesonetoreal</td>
+                                    }
+                                    else
+                                    {
+                                        <td></td>
+                                    }
+
+                                }
+
+                                @*TOTAL*@
+                                <th class="border-table-right vertical">
+                                    @Math.Round(totalliquidadokg, 2)
+                                </th>
+
+                                @* PENDIENTE LIQUIDACION POR TALLA (KG) *@
+                                @foreach (var talla in tallas)
+                                {
+
+                                    var filtro = Model.Where(
+                                            obj => obj.ficha == item.ficha && obj.partida == item.partida
+                                            && obj.pedido == item.pedido && obj.talla == talla.talla
+                                    ).ToList();
+
+                                    if (filtro.Count > 0)
+                                    {
+
+                                        var pendienteliquidacionkg = filtro[0].pendienteliquidacionkg;
+                                        totalpendientekg += pendienteliquidacionkg;
+
+                                        pendienteliquidacionkg = Math.Round(pendienteliquidacionkg, 2);
+
+                                        var clase = filtro[0].talla == ultimatalla ? "border-table-right" : "";
+                                        <td class="@clase">@pendienteliquidacionkg</td>
+                                    }
+                                    else
+                                    {
+                                        <td></td>
+                                    }
+
+                                }
+
+                                @*TOTAL*@
+                                <th class="border-table-right vertical">
+                                    @Math.Round(totalpendientekg, 2)
+                                </th>
+
+                                @* % LIQUIDACION POR TALLAS (KG) *@
+                                @foreach (var talla in tallas)
+                                {
+
+                                    var filtro = Model.Where(
+                                            obj => obj.ficha == item.ficha && obj.partida == item.partida
+                                            && obj.pedido == item.pedido && obj.talla == talla.talla
+                                    ).ToList();
+
+                                    if (filtro.Count > 0)
+                                    {
+
+                                        var porcentaje = filtro[0].porcentajeliquidaciontallakg * 100;
+                                        totalliquidadokgpor += porcentaje;
+                                        porcentaje = Math.Round(porcentaje);
+
+                                        var clase = filtro[0].talla == ultimatalla ? "border-table-right" : "";
+                                        <td class="@clase">@porcentaje%</td>
+                                    }
+                                    else
+                                    {
+                                        <td></td>
+                                    }
+
+                                }
+
+                                @*TOTAL*@
+                                <th class="border-table-right vertical">
+                                    @{
+                                        dividido = totalliquidadokgpor / canttallasficha;
+                                    }
+
+                                    @Math.Round(dividido)%
+                                    @*@Math.Round(totalliquidadokgpor / )%*@
+                                </th>
+
+                                @{
+                                    var sumatotal = Model.Where(
+                                       obj =>
+                                          obj.partida == item.partida && obj.tipo == item.tipo
+                                    ).Sum(s => s.realprimera);
+
+                                    porcentajeficha = totalliquidado / sumatotal;
+
+                                    item.mermarealrecorte = porcentajeficha * item.mermarecorte;
+                                    item.mermarealhilo = porcentajeficha * item.mermahilos;
+                                    //recortereal = 0;
+                                    //hiloreal = 0;
+                                    item.mermaprogramadarecorte = 5;
+                                    item.mermaprogramadahilo = 6;
+
+
+                                }
+
+
+
+                                @*MERMA PROGRAMADA*@
+                                @*<td>@Math.Round(item.mermaprogramadarecorte, 2)</td>*@
+                                @*<td class="border-table-right">@Math.Round(item.mermaprogramadahilo, 2)</td>*@
+
+                                @*MERMA REAL*@
+                                <td>@Math.Round(item.mermarealrecorte, 2)</td>
+                                <td class="border-table-right">@Math.Round(item.mermarealhilo, 2)</td>
+
+                                @* BALANCE DE MERMAS *@
+                                @*<td>@Math.Round(item.variacionmermaderecorte, 2)</td>
+                                <td>@Math.Round(item.variacionmermadehilo, 2)</td>
+                                <td>@Math.Round(item.variacionmermaderecortepor * 100)%</td>
+                                <td class="border-table-right">@Math.Round(item.variacionmermadehilopor * 100)%</td>*@
+
+                                <td>@totalprogramado</td>
+                                <td>@totalliquidado</td>
+                                <td>
+                                    @{
+                                        difunidades = totalliquidado - totalprogramado;
+                                    }
+                                    @difunidades
+                                </td>
+                                <td>
+
+                                    @{
+                                        difunidadespor = totalprogramado > 0 ? difunidades / totalprogramado : 0;
+                                    }
+
+                                    @Math.Round(difunidadespor * 100)%
+
+                                </td>
+                                <td>@Math.Round(totalprogramadokg, 2)</td>
+                                <td>@totalliquidadokg</td>
+                                <td>
+                                    @{
+                                        difkilos = totalliquidadokg - totalprogramadokg;
+                                    }
+                                    @Math.Round(difkilos, 2)
+                                </td>
+                                <td class="border-table-right">
+                                    @{
+                                        difkilospor = totalprogramadokg > 0 ? difkilos / totalprogramadokg : 0;
+                                    }
+                                    @Math.Round(difkilospor, 2)
+                                </td>
+
+                            </tr>
+                        }
+
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+
     </div>
 
-</div>
+
+   
+
+}
+
+@section scripts {
+    <script>
+
+        const   frmbusqueda = document.getElementById("frmbusqueda");
+        let     btnexportar = document.getElementById("btnexportar");
+        const   frmexportar = document.getElementById("frmexportar");
+        
+
+
+        // PARA BUSCAR
+        frmbusqueda.addEventListener('submit', () => {
+            MostrarCarga("Buscando");
+        });
+
+        // PARA EXPORTAR
+        btnexportar.addEventListener('click', () => {
+            frmexportar.submit();
+        });
+
+    </script>
+}

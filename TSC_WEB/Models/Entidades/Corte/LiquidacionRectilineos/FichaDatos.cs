@@ -15,6 +15,7 @@ namespace TSC_WEB.Models.Entidades.Corte.LiquidacionRectilineos
 
         public decimal mermarecorte { get; set; }
         public decimal mermahilos { get; set; }
+        //public decimal cantdespachada { get; set; }
 
 
         // DATOS ERP
@@ -24,6 +25,7 @@ namespace TSC_WEB.Models.Entidades.Corte.LiquidacionRectilineos
         public string estilotsc { get; set; }
         public string pedidos { get; set; }
         public string estilocliente { get; set; }
+        public string tipo { get; set; }
 
     }
 }

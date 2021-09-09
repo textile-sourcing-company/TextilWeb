@@ -1,0 +1,295 @@
+﻿@{
+    ViewBag.Title = "Ingreso de Rectilineos";
+    ViewBag.Modulo = "Almacenes";
+    Layout = "~/Views/Plantillas/_Layout.cshtml";
+}
+
+@section style{
+    <style>
+        table {
+            table-layout: fixed;
+        }
+
+        /*.filafija .thcabeceras {
+            width: 263px !important;
+            overflow: auto !important;
+            vertical-align: middle !important;
+        }*/
+
+        .filafija .partida {
+            width: 60px !important;
+            overflow: auto !important;
+            vertical-align: middle !important;
+        }
+
+        .filafija .tallas {
+            width: 30px !important;
+            overflow: auto !important;
+            vertical-align: middle !important;
+        }
+
+        /*#tbodydatos td {
+            vertical-align: middle;
+        }*/
+    </style>
+}
+
+
+
+<div class="row">
+
+    <div class="col-md-6">
+
+        <div class="card card-outline card-primary">
+            <div class="card-header text-center">
+                <h1 class="card-title">Cuellos Rectilineos</h1>
+                <div class="card-tools">
+
+                    <button type="button" class="btn btn-sm btn-success" id="btnsavecuello">
+                        <i class="fas fa-save"></i>
+                        Guardar
+                    </button>
+
+                    <button type="button" class="btn btn-sm btn-primary" id="btnaddcuello">
+                        <i class="fas fa-plus"></i>
+                        Partida
+                    </button>
+
+                </div>
+            </div>
+            <div class="card-body">
+
+                <div class="table-responsive">
+
+                    <table class="table table-bordered table-sm text-center tablainput">
+                        <thead class="thead-light">
+                            <tr class="tr-thead filafija">
+                            </tr>
+                        </thead>
+                        <tbody id="tbodycuello">
+                        </tbody>
+                    </table>
+
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+
+    <div class="col-md-6">
+
+        <div class="card card-outline card-primary">
+            <div class="card-header text-center">
+                <h1 class="card-title">Puños Rectilineos</h1>
+                <div class="card-tools">
+
+                    <button type="button" class="btn btn-sm btn-success" id="btnsavepuno">
+                        <i class="fas fa-save"></i>
+                        Guardar
+                    </button>
+
+                    <button type="button" class="btn btn-sm btn-primary" id="btnaddpuno">
+                        <i class="fas fa-plus"></i>
+                        Partida
+                    </button>
+
+                </div>
+            </div>
+            <div class="card-body">
+
+                <div class="table-responsive">
+                    <table class="table table-bordered table-sm text-center tablainput">
+                        <thead class="thead-light">
+                            <tr class="tr-thead filafija">
+                            </tr>
+                        </thead>
+                        <tbody id="tbodypunos">
+                        </tbody>
+                    </table>                        
+                </div>
+                
+            </div>
+        </div>
+
+    </div>
+
+
+</div>
+
+@section scripts {
+
+    <script>
+
+        let tallas = [
+            { orden: 1, talla: "XS" },
+            { orden: 2, talla: "S" },
+            { orden: 3, talla: "M" },
+            { orden: 4, talla: "L" },
+            { orden: 5, talla: "XL" },
+            { orden: 6, talla: "2XL" },
+            { orden: 7, talla: "3XL" },
+            { orden: 8, talla: "4XL" },
+            { orden: 9, talla: "5XL" },
+        ];
+
+        let partidas_cuello = [];
+        let partidas_punos = [];
+        let control;
+
+        window.addEventListener('load', () => {
+
+            sethead();
+
+        });
+
+        // ARMAS CABECERA DE TALLAS
+        function sethead() {
+
+            let tallas_ordenada = tallas.sort((a, b) => a.orden - b.orden);
+
+            let th = "<th class='border-table partida'>PARTIDA</th>";
+            for (let item of tallas_ordenada) {
+                th += "<th class='border-table tallas' >" + item.talla + "</th>";
+            }
+            th += "<th class='border-table tallas' >Total</th>";
+            $(".tr-thead").html(th);
+        }
+
+        // GET TALLAS
+        function getTallas(partida,id) {
+
+            let retornar = "";
+
+            for (let item of tallas) {
+                retornar += `
+                    <td>
+                        <input type='number'  id="${partida}_${item.talla}_${id}" class="inputtabla" data-partida="${partida}" data-talla="${item.talla}" >
+                    </td>`;
+            }
+            return retornar;
+        }
+
+        // AGREGAR PARTIDA CUELLO
+        $("#btnaddcuello").click(function () {
+            addPartidas("cuello").then(response => {
+            }).catch(error => {
+
+            });
+        });
+
+        // GUARDAR PARTIDAS CUELLO
+        $("#btnsavecuello").click(function () {
+            
+            saveTallasCantidad("cuello").then(response => {
+                console.log(response);
+            }).catch(error => {
+
+            });
+
+        });
+
+        // AGREGAR PARTIDA CUELLO
+        $("#btnaddpuno").click(function () {
+            addPartidas("punos").then(response => {
+            }).catch(error => {
+
+            });
+        });
+
+        // GUARDAR PARTIDAS CUELLO
+        $("#btnsavepuno").click(function () {
+
+            saveTallasCantidad("punos").then(response => {
+                console.log(response);
+            }).catch(error => {
+
+            });
+
+        });
+
+        // GUARDAMOS TALLAS
+        async function saveTallasCantidad(tipo) {
+
+            let tbodycuello = document.getElementById(`tbody${tipo}`);
+            let childrens = tbodycuello.children;
+
+            for (let children of childrens) {
+                let tr = children;
+                let partida = tr.dataset.partida;
+                let tipocantidad = tr.dataset.tipo;
+
+                if (tipocantidad == "1") {
+
+                    let cant = 0;
+
+                    for (let td of tr.children) {
+
+                        if (cant > 0 && cant < tr.childElementCount - 1) {
+
+                            let input = td.children[0];
+                            let talla = input.dataset.talla;
+                            let cantidad = input.value.trim();
+                            let cantidadsegunda = document.getElementById(`${partida}_${talla}_segunda`).value.trim();
+
+                            cantidad        = cantidad == "" ? null : cantidad;
+                            cantidadsegunda = cantidadsegunda == "" ? null : cantidadsegunda;
+
+
+
+                            let response = await get("corte", "saveRectilineosAlmacen", {
+                                partida, tiporectilineo: tipo.toUpperCase(), talla, cantidad, tipocantidad,
+                                cantidadsegunda
+                            }, true);
+
+                            console.log(response);
+                        }
+
+                        cant++;
+                    }
+
+                }
+
+            }
+        }
+
+        // AGREGAMOS PARTIDAS
+        async function addPartidas(tipo) {
+
+            let partida = await getDatosPreguntar("Ingrese partida");
+
+            if (partida) {
+
+                partida = partida.toUpperCase();
+                if (tipo == "cuello") {
+                    partidas_cuello.push(partida);
+                }
+
+                if (tipo == "punos") {
+                    partidas_punos.push(partida);
+                }
+
+                let tr = `
+                        <tr data-partida='${partida}' data-tipo='1'>
+                            <td>${partida}</td>
+                            ${getTallas(partida, "primera")}
+                            <td id="total_${partida}_primeras"></td>
+                        </tr>
+                        <tr data-partida='${partida}' data-tipo='2'>
+                            <td>SEGUNDAS</td>
+                            ${getTallas(partida, "segunda")}
+                            <td id="total_${partida}_segundas"></td>
+                        </tr>
+                    `;
+
+                $(`#tbody${tipo}`).append(tr);
+
+            }
+        }
+
+    </script>
+
+
+}
+

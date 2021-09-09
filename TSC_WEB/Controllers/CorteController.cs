@@ -20,12 +20,16 @@ using System.Web.Script.Serialization;
 using Rotativa;
 using Rotativa.Options;
 using TSC_WEB.Models.Modelos.Sistema;
+using OfficeOpenXml;
+
 
 namespace TSC_WEB.Controllers
 {
     public class CorteController : Controller
     {
         #region INSTANCIAS
+        //private static ExcelWorksheet workSheet;
+
         FichasModelo objFichas = new FichasModelo();
         ReporteControlUsoModelo objControlUsoM = new ReporteControlUsoModelo();
         ReporteLiquidacionModelo objLiquidacionM = new ReporteLiquidacionModelo();
@@ -54,7 +58,6 @@ namespace TSC_WEB.Controllers
                 return Redirect("/");
             }
         }
-
         public ActionResult BuscarLiquidacion()
         {
             if (Session["usuario"] != null)
@@ -126,19 +129,22 @@ namespace TSC_WEB.Controllers
         }
 
         // REGISTRO DE RECTILINEOS
-        public ActionResult LiquidacionRectilineos(int? ficha)
+        public ActionResult LiquidacionRectilineos(int? ficha,string tipo)
         {
             if (Session["usuario"] != null)
             {
-                var datosficha      = objRectilineosM.getDatosFicha(1,ficha);
-                var fichastallas    = objRectilineosM.getTallasFicha(2, ficha);
+                var datosficha      = objRectilineosM.getDatosFicha(1,ficha,tipo);
+                var fichastallas    = objRectilineosM.getTallasFicha(2, ficha,tipo);
+                var segundastallas  = objRectilineosM.getTallasFichaSegundas(3, ficha, tipo);
+
 
 
                 return View(
                     new LiquidacionRectilineosEntidad
                     {
-                        FichaCabecera   = datosficha,
-                        FichaTallas     = fichastallas
+                        FichaCabecera       = datosficha,
+                        FichaTallas         = fichastallas,
+                        SegundasTallas      = segundastallas
                     }
                 );
             }
@@ -147,6 +153,7 @@ namespace TSC_WEB.Controllers
                 return Redirect("/");
             }
         }
+
 
         // REPORTE DE TRANSACCIONES POR CONFIRMAR
         public ActionResult ReporteTransaccionesConfirmar()
@@ -240,12 +247,18 @@ namespace TSC_WEB.Controllers
         }
 
         // REPORTE RECTILINEOS
-        public ActionResult getReporteRectilineos()
+        public ActionResult getReporteRectilineos(string fechai, string fechaf, string ficha, string partida, string tipo)
         {
             if (Session["usuario"] != null)
             {
-                var response = objRectilineosM.getReporte();
-                //return Json(response, JsonRequestBehavior.AllowGet);
+                List<ReporteEntidad> response = new List<ReporteEntidad>();
+
+                if (fechai != string.Empty || fechaf != string.Empty || ficha != string.Empty || partida != string.Empty || tipo != string.Empty)
+                {
+                    response = objRectilineosM.getReporte(fechai, fechaf, ficha, partida, tipo);
+                    Session["dato_reporte_rectilineos"] = response;
+                }
+
                 return View(response);
             }
             else
@@ -461,29 +474,16 @@ namespace TSC_WEB.Controllers
         #endregion
 
         #region REPORTELIQUIDACION
-        //[HttpGet]
-        //public FileResult ExportarReporteLiquidacion(string partida)
-        //{
-        //    var obj = objFichas.GenerarReporteLiquidacion(partida);
-
-        //    return File(objFichas.ExportarReporteLiquidacion(obj) , "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "ReporteLiquidacion" + DateTime.Now.ToString("yyyyMMdd") + ".xlsx");
-        //}
         [HttpGet]
         public JsonResult getReporteLiquidacion(string i_fechai, string i_fechaf, string i_partida, string i_turno, string i_programa, string i_cliente, int? i_ficha, int? i_combo, string i_estadotendido, string i_estadocorte)
         {
             var obj = objLiquidacionM.getReporteLiquidacion(i_fechai, i_fechaf, i_partida, i_turno, i_programa, i_cliente, i_ficha, i_combo, i_estadotendido, i_estadocorte);
 
             Session["datos_corte_liquidacion"] = obj;
-
-
-            // GUARDAMOS DATOS
-            //return Json(obj, JsonRequestBehavior.AllowGet);
-
             //Se crear una referencia a JavaScriptSerializer
             var serializer = new JavaScriptSerializer();
             //Se cambia el Length directo a nuestra referencia
             serializer.MaxJsonLength = 500000000;
-
 
             var json = Json(obj, JsonRequestBehavior.AllowGet);
             json.MaxJsonLength = 500000000;
@@ -801,39 +801,112 @@ namespace TSC_WEB.Controllers
         #region LIQUIDACION RECTILINEOS
             
             // CABECERA DE RECTILINEO
-            [HttpGet]
-            public JsonResult saveHeadRectilineo(string partida,int lote,decimal mermarecorte,decimal mermahilos)
+            [HttpPost]
+            public JsonResult saveHeadRectilineo(string partida,/*int lote,*/decimal mermarecorte,decimal mermahilos,string tipo)
             {
                 string mensaje = string.Empty;
-                var response = objRectilineosM.saveHead(partida, Session["usuario"].ToString() , lote, mermarecorte,mermahilos, out mensaje);
+                var response = objRectilineosM.saveHead(partida, Session["usuario"].ToString() /*, lote*/, mermarecorte,mermahilos,tipo, out mensaje);
                 return Json(new { success = response,mensaje = mensaje },JsonRequestBehavior.AllowGet);
             }
 
             // FICHAS DE RECTILINEO
             [HttpGet]
-            public JsonResult saveFichaRectilineo(int? idrectilineoficha, int? idrectilineohead, int ficha, string usuario, int pedido, string estilotsc, string estilocliente, string combo)
+            public JsonResult saveFichaRectilineo(int? idrectilineoficha, int? idrectilineohead, int ficha, string usuario, int pedido, string estilotsc, string estilocliente, string combo, string tipo)
             {
                 string mensaje = string.Empty;
-                var response = objRectilineosM.saveFichas(idrectilineoficha, idrectilineohead, ficha, Session["usuario"].ToString(),pedido,estilotsc,estilocliente,combo, out mensaje);
+                var response = objRectilineosM.saveFichas(idrectilineoficha, idrectilineohead, ficha, Session["usuario"].ToString(),pedido,estilotsc,estilocliente,combo,tipo, out mensaje);
                 return Json(new { success = response, mensaje = mensaje }, JsonRequestBehavior.AllowGet);
             }
 
             // TALLAS DE RECTILINEO
             [HttpGet]
-            public JsonResult saveTallasRectilineo(int? idrectilineoficha, string talla, int realprimera,decimal pesoneto,decimal programado,decimal pesoprogramado, int orden)
+            public JsonResult saveTallasRectilineo(int? idrectilineoficha, string talla, int realprimera,decimal pesoneto,decimal programado,decimal pesoprogramado, int orden,string tipo)
             {
                 string mensaje = string.Empty;
-                var response = objRectilineosM.saveTallas(idrectilineoficha, talla, realprimera, pesoneto, programado, orden, pesoprogramado, out mensaje);
+                var response = objRectilineosM.saveTallas(idrectilineoficha, talla, realprimera, pesoneto, programado, orden, pesoprogramado,tipo, out mensaje);
                 return Json(new { success = response, mensaje = mensaje }, JsonRequestBehavior.AllowGet);
             }
 
-            // REPORTE
-            //[HttpGet]
-            //public JsonResult getReporteRectilineo()
-            //{
-            //    var response = objRectilineosM.getReporte();
-            //    return Json(response,JsonRequestBehavior.AllowGet);
-            //}
+            // TALLAS DE RECTILINEO
+            [HttpGet]
+            public JsonResult saveTallasRectilineoSegundas(int? idrectilineo, string talla, int realsegunda, decimal pesonetosegunda, decimal programadosegunda, int orden)
+            {
+                string mensaje = string.Empty;
+                var response = objRectilineosM.saveTallasSegundas(idrectilineo,talla,realsegunda, pesonetosegunda,programadosegunda,orden, out mensaje);
+                return Json(new { success = response, mensaje = mensaje }, JsonRequestBehavior.AllowGet);
+            }
+            
+            // REGISTRO DE PARTIDA DE TELA
+            [HttpGet]
+            public JsonResult savePartidaTela(PartidaTelaEntidad objpartida)
+            {
+                string mensaje = string.Empty;
+                var response = objRectilineosM.savePartidaTela(objpartida, out mensaje);
+                return Json(new { success = response, mensaje = mensaje},JsonRequestBehavior.AllowGet);
+            }
+
+            // REGISTRO DE PARTIDA DE TELA RECTILINEOS
+            [HttpGet]
+            public JsonResult savePartidaTelaRectilineo(PartidaTelaRectilineoEntidad objpartidarec)
+            {
+                string mensaje = string.Empty;
+                var response = objRectilineosM.savePartidaTelaRectilineos(objpartidarec, out mensaje);
+                return Json(new { success = response, mensaje = mensaje }, JsonRequestBehavior.AllowGet);
+            }
+
+            // REGISTRO DE PARTIDA DE TELA RECTILINEOS TALLA
+            [HttpGet]
+            public JsonResult savePartidaTelaRectilineoTalla(PartidaRectilineoTallasEntidad objpartidarectalla)
+            {
+                string mensaje = string.Empty;
+                var response = objRectilineosM.savePartidaTelaRectilineos_Talla(objpartidarectalla, out mensaje);
+                return Json(new { success = response, mensaje = mensaje }, JsonRequestBehavior.AllowGet);
+            }
+
+            [HttpGet]
+            public JsonResult deletepartidarectilineos(int idpartidarectilineo)
+            {
+                string mensaje = string.Empty;
+                var response = objRectilineosM.deletepartidarectilineos(idpartidarectilineo, out mensaje);
+                return Json(new { success = response, mensaje = mensaje }, JsonRequestBehavior.AllowGet);
+            }
+
+            [HttpGet]
+            public JsonResult adddeletetallasrectilineos(int opcion, string partidatela, string talla)
+            {
+                string mensaje = string.Empty;
+                var response = objRectilineosM.adddeletetallasrectilineos(opcion, partidatela,talla, out mensaje);
+                return Json(new { success = response, mensaje = mensaje }, JsonRequestBehavior.AllowGet);
+            }
+
+        // INGRESO DE RECTILINEOS ALMACEN
+        [HttpGet]
+            public JsonResult saveRectilineosAlmacen(IngresoRectilineosEntidad obj)
+            {
+                string mensaje = string.Empty;
+                obj.usuario = Session["usuario"].ToString();
+                var response = objRectilineosM.saveRectilineoDespacho(obj,out mensaje);
+                return Json(new { success = response, mensaje = mensaje }, JsonRequestBehavior.AllowGet);
+            }
+
+            [HttpGet]
+            public FileResult getReporteRectilineosExcel()
+            {
+
+                var datos = (List<ReporteEntidad>)Session["dato_reporte_rectilineos"];
+                var file = objRectilineosM.getReporteExcel(datos);
+
+                return File(file, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "ReporteRectilineos" + DateTime.Now.ToString("yyyyMMdd") + ".xlsx");
+
+            }
+
+        // REPORTE
+        //[HttpGet]
+        //public JsonResult getReporteRectilineo()
+        //{
+        //    var response = objRectilineosM.getReporte();
+        //    return Json(response,JsonRequestBehavior.AllowGet);
+        //}
 
         #endregion
 

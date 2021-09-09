@@ -44,7 +44,7 @@
 }
 
 // SET DATATABLE SIMPLE
-function setDataTableSimple(tabla,scroolx = false,dato = false) {
+function setDataTableSimple(tabla,scroolx = false,dato = false,exportar = false) {
     var tbl = $(`#table${tabla}`).DataTable();
     tbl.destroy();
 
@@ -60,13 +60,17 @@ function setDataTableSimple(tabla,scroolx = false,dato = false) {
     //objeto.processing = true;
 
     //if (minimo) {
-        objeto.lengthMenu = [[5, 10, 20, -1], [5, 10, 20, 'Todos']];
+    //objeto.lengthMenu = [[5, 10, 20, -1], [5, 10, 20, 'Todos']];
     //}
 
-    //if (exportar) {
-    //    objeto.dom = 'Bfrtip';
-    //    objeto.buttons = ['excel', 'pdf', 'print'];
-    //}
+    if (exportar) {
+
+        //objeto.dom = 'Bfrtip';
+        //objeto.buttons = ['excel', 'pdf', 'print'];
+
+        objeto.dom = 'Bfrtip';
+        objeto.buttons = ['excel'];
+    }
 
     $(`#table${tabla}`).DataTable(objeto);
     

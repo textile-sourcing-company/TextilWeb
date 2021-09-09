@@ -10,11 +10,13 @@ namespace TSC_WEB.Models.Entidades.Corte.LiquidacionRectilineos
         public int? idrectilineoficha { get; set; }
         public int realprimera { get; set; }
         public decimal pesonetoreal { get; set; }
-        public decimal consumo { get; set; }
+        public decimal consumoprogramado { get; set; }
+        public decimal cantidadsegundadespachada { get; set; }
+
 
 
         public int ficha { get; set; }
-        public int cantidad { get; set; }
+        public decimal cantidadprimeraprogramada { get; set; }
 
         public int orden { get; set; }
         public string talla { get; set; }
@@ -23,11 +25,52 @@ namespace TSC_WEB.Models.Entidades.Corte.LiquidacionRectilineos
         public string estilocliente { get; set; }
         public string color { get; set; }
 
-        public int pendiente
+        public decimal pesodespachado { get; set; }
+        public decimal cantidadprimeradespachada { get; set; }
+        public decimal cantliquidada { get; set; }
+        public decimal consumodespachado
         {
             get
             {
-                return cantidad - realprimera;
+                return cantidadprimeradespachada > 0 ? pesodespachado / cantidadprimeradespachada : 0;
+            }                
+        }
+
+        public bool cantliquidadaestado
+        {
+            get;set;
+            //get
+            //{
+            //    if (cantliquidada > 0)
+            //    {
+            //        cantidad = cantliquidada;
+            //        return true;
+            //    }
+            //    else
+            //    {
+            //        return false;
+            //    }
+            //    //return cantliquidada > 0 ? true : false;
+            //}
+            //set
+            //{
+
+            //}
+        }
+
+        public decimal totalunidades
+        {
+            get
+            {
+                return cantidadprimeraprogramada + cantidadsegundadespachada;
+            }
+        }
+
+        public decimal pendiente
+        {
+            get
+            {
+                return cantidadprimeraprogramada - realprimera;
             }
         }
 
@@ -35,7 +78,7 @@ namespace TSC_WEB.Models.Entidades.Corte.LiquidacionRectilineos
         {
             get
             {
-                return cantidad * consumo;
+                return cantidadprimeraprogramada * consumoprogramado;
             }
         }
 
@@ -43,7 +86,7 @@ namespace TSC_WEB.Models.Entidades.Corte.LiquidacionRectilineos
         {
             get
             {
-                return realprimera * consumo;
+                return realprimera * consumoprogramado;
             }
         }
 

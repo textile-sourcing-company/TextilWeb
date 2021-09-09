@@ -24,6 +24,7 @@ namespace TSC_WEB.Controllers
                 if (Session["usuario"] == null)
                 {
                     return View(objEmpresasM.Listar());
+                    //return View();
                 }
                 else
                 {
