@@ -14,6 +14,7 @@ using TSC_WEB.Models.Modelos.Logistica;
 using System.IO;
 using TSC_WEB.Models.Entidades.Corte.LiquidacionRectilineos;
 using TSC_WEB.Models.Modelos.Corte.LiquidacionRectilineos;
+using TSC_WEB.Models.Modelos.Almacenes.Rectilineos;
 using OfficeOpenXml.Style;
 using OfficeOpenXml;
 using System.Drawing;
@@ -30,6 +31,7 @@ namespace TSC_WEB.Controllers
         ReporteStockFechaModelo objReporteStockFecha = new ReporteStockFechaModelo();
         ReporteStockFechaModelo ReporteModelo = new ReporteStockFechaModelo();
         LiquidacionRectilineosModelo objRectilineosM = new LiquidacionRectilineosModelo();
+        ReporteRectilineosModelo objReporteRectilineosAlmacenesM = new ReporteRectilineosModelo();
 
         public static List<ReporteStockFechaEntidad> listaRespaldoExportar = null;
 
@@ -65,21 +67,29 @@ namespace TSC_WEB.Controllers
             }
             else
             {
-                return View();
+                //return View();
+                return Redirect("/");
+
             }
         }
 
         // VISTA PARA REPORTE DE INGRESO DE RECTILINEOS
-        public ActionResult ReporteIngresoRectilineos()
+        public ActionResult ReporteIngresoRectilineos(
+                string i_fechai, string i_fechaf, string i_cliente, string i_programa, string i_partidatela
+            )
         {
             if (Session["usuario"] != null)
             {
-                var response = objRectilineosM.getReporteIngresoRectilineosAlmacen();
+                var response = objRectilineosM.getReporteIngresoRectilineosAlmacen(
+                        i_fechai,i_fechaf,i_cliente,i_programa, i_partidatela
+                );
+                // SESION
+                Session["dato_reporte_rectilineos_almacen"] = response;
                 return View(response);
             }
             else
             {
-                return View();
+                return Redirect("/");
             }
         }
 
@@ -108,13 +118,17 @@ namespace TSC_WEB.Controllers
                     partidatela.busqueda = false;
                 }
 
-
-                return View(new IngresoRectilineosCompletoEntidad {
+                var response = new IngresoRectilineosCompletoEntidad
+                {
                     Partida = partidatela,
                     PartidaRectilineos = partidarectilineo,
                     PartidaRectilineosTallas = partidarectilineotalla,
                     Tallas = tallas
-                });
+                };
+
+                
+
+                return View(response);
             }
             else
             {
@@ -131,8 +145,6 @@ namespace TSC_WEB.Controllers
         {
             return Json(objCentroCosto.ListarCentrosCosto(), JsonRequestBehavior.AllowGet);
         }
-
-
         //LISTA DE DATOS DE REPORTE DE STOCK FECHA
         public JsonResult ListarReporteStockFecha(string v_partida, string v_ubicacion, string v_tipotela, string v_centrocosto, string v_almacenes)
         {
@@ -148,8 +160,6 @@ namespace TSC_WEB.Controllers
             json.MaxJsonLength = 500000000;
             return json;
         }
-
-
         [HttpGet]
         public FileResult ExportarExcelReporteStockFecha()
         {
@@ -157,9 +167,6 @@ namespace TSC_WEB.Controllers
 
             return File(ReporteModelo.ExportarExcelReporteStockF(listaRespaldoExportar), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "ReporteStockFecha" + DateTime.Now.ToString("yyyyMMdd") + ".xlsx");
         }
-        #endregion
-
-
         public void Excel()
         {
             ExportReports export = new ExportReports();
@@ -173,7 +180,6 @@ namespace TSC_WEB.Controllers
             EntidadMovimientoPorPeriodo = ObjBSMovPeriodo.ListarMovimientoPorPeriodo(FECHAINI, FECHAFIN, LOTE, COD, CODALM, NIVEL, GRUPO, SUBGRUPO, ITEM);
             Excel();
         }
-
         [HttpGet]
         public JsonResult ListarMovimientoPeriodo(DateTime? FECHAINI, DateTime? FECHAFIN, string LOTE, string COD
                                            , string CODALM, string NIVEL, string GRUPO, string SUBGRUPO, string ITEM)
@@ -312,10 +318,6 @@ namespace TSC_WEB.Controllers
             return var_jason;
             //return Json(ObjBSMovPeriodo.ListarMovimientoPorPeriodo(FECHAINI,FECHAFIN,LOTE,COD, CODALM,NIVEL, GRUPO,SUBGRUPO,ITEM), JsonRequestBehavior.AllowGet);
         }
-
-
-
-
         [HttpGet]
         public JsonResult ListarAlmacen(int? CODALM)
         {
@@ -436,6 +438,23 @@ namespace TSC_WEB.Controllers
 
 
 
+        #endregion
 
+
+        #region RECTILINEOS
+
+            [HttpGet]
+            public FileResult getReporteRectilineosExcel()
+            {
+
+                var datos = (List<ReporteIngresoRectilineosAlmacenEntidad>)Session["dato_reporte_rectilineos_almacen"];
+            //var file = objRectilineosM.getReporteExcel(datos);
+                var file = objReporteRectilineosAlmacenesM.getReporteExcel(datos);
+
+                return File(file, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "ReporteRectilineos" + DateTime.Now.ToString("yyyyMMdd") + ".xlsx");
+
+            }
+
+        #endregion
     }
 }

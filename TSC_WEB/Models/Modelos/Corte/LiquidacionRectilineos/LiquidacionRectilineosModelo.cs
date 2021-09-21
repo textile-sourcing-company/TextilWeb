@@ -833,7 +833,9 @@ namespace TSC_WEB.Models.Modelos.Corte.LiquidacionRectilineos
 
 
         //REPORTE DE RECTILINEOS INGRESADOS POR EL ALMACEN
-        public List<ReporteIngresoRectilineosAlmacenEntidad> getReporteIngresoRectilineosAlmacen()
+        public List<ReporteIngresoRectilineosAlmacenEntidad> getReporteIngresoRectilineosAlmacen(
+                string i_fechai, string i_fechaf, string i_cliente, string i_programa,string i_partidatela
+            )
         {
             List<ReporteIngresoRectilineosAlmacenEntidad> objretornar = new List<ReporteIngresoRectilineosAlmacenEntidad>();
 
@@ -843,10 +845,11 @@ namespace TSC_WEB.Models.Modelos.Corte.LiquidacionRectilineos
                 comando.CommandType = CommandType.StoredProcedure;
                 conexion.Conectar();
 
-                //comando.Parameters.Add(new OracleParameter("i_opcion", 2));
-                //comando.Parameters.Add(new OracleParameter("i_partidatela", partidatela));
-                //comando.Parameters.Add(new OracleParameter("i_idpartidarectilineo", null));
-                //comando.Parameters.Add(new OracleParameter("i_tiporectilineo", null));
+                comando.Parameters.Add(new OracleParameter("i_fechai", i_fechai));
+                comando.Parameters.Add(new OracleParameter("i_fechaf", i_fechaf));
+                comando.Parameters.Add(new OracleParameter("i_cliente", i_cliente));
+                comando.Parameters.Add(new OracleParameter("i_programa", i_programa));
+                comando.Parameters.Add(new OracleParameter("i_partidatela", i_partidatela));
                 comando.Parameters.Add(new OracleParameter("o_cursor", OracleDbType.RefCursor)).Direction = ParameterDirection.Output;
 
 
@@ -887,7 +890,6 @@ namespace TSC_WEB.Models.Modelos.Corte.LiquidacionRectilineos
             }
             return objretornar;
         }
-
 
         // OBTENEMOS TALLAS
         public List<TallasEntidad> getTallasRegistro()
