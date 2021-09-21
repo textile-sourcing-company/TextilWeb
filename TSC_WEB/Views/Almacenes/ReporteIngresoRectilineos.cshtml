@@ -8,8 +8,9 @@
     Layout = "~/Views/Plantillas/_Layout.cshtml";
 
     int cantregistros = Model.Count;
-    // LISTA GENERAL
-    var lista = cantregistros > 0 ? Model.GroupBy(
+
+    // LISTA DE PARTIDAS DE RECTILINEOS CUELLO
+    var listacuello = cantregistros > 0 ? Model.GroupBy(
             grp => new
             {
                 grp.partidatela,
@@ -22,120 +23,474 @@
             partidarectilineo = sel.First().partidarectilineo,
             tiporectilineo = sel.First().tiporectilineo
 
-        }).ToList() : new List<ReporteIngresoRectilineosAlmacenEntidad>();
+        }).Where(obj => obj.tiporectilineo == "CUELLO").ToList() : new List<ReporteIngresoRectilineosAlmacenEntidad>();
 
-    lista = lista.Distinct().ToList();
+    listacuello = listacuello.Distinct().ToList();
+
+    // LISTA DE PARTIDAS DE RECTILINEOS PUÑO
+    var listapuno = cantregistros > 0 ? Model.GroupBy(
+            grp => new
+            {
+                grp.partidatela,
+                grp.partidarectilineo,
+                grp.tiporectilineo
+            }
+        ).Select(sel => new ReporteIngresoRectilineosAlmacenEntidad
+        {
+            partidatela = sel.First().partidatela,
+            partidarectilineo = sel.First().partidarectilineo,
+            tiporectilineo = sel.First().tiporectilineo
+
+        }).Where(obj => obj.tiporectilineo == "PUNO").ToList() : new List<ReporteIngresoRectilineosAlmacenEntidad>();
+
+    listacuello = listacuello.Distinct().ToList();
 
     // TALLAS
     var tallas = cantregistros > 0 ? Model.GroupBy(
-            grp => new
-            {
-                grp.orden,
-                grp.talla
-            }
-       )
-       .Select(cl => new ReporteIngresoRectilineosAlmacenEntidad
-       {
-           talla = cl.First().talla,
-           orden = cl.First().orden
-       }).OrderBy(or => or.orden).ToList() : new List<ReporteIngresoRectilineosAlmacenEntidad>();
+        grp => new
+        {
+            grp.orden,
+            grp.talla
+        }
+    )
+    .Select(cl => new ReporteIngresoRectilineosAlmacenEntidad
+    {
+        talla = cl.First().talla,
+        orden = cl.First().orden
+    }).OrderBy(or => or.orden).ToList() : new List<ReporteIngresoRectilineosAlmacenEntidad>();
+
+    // TOTALES
+    decimal? totalprimeras = 0;
+    decimal? totalsegundas = 0;
+
+    string i_fechai     = "";
+    string i_fechaf     = "";
+    string i_cliente    = "";
+    string i_programa   = "";
+    string i_partidatela = "";
+    string operacion    = "";
+
+
+    try
+    {
+        i_fechai = !string.IsNullOrEmpty(Request.Params["i_fechai"]) ? PageContext.Page.Request.Params["i_fechai"].ToString() : "";
+        i_fechaf = !string.IsNullOrEmpty(Request.Params["i_fechaf"]) ? PageContext.Page.Request.Params["i_fechaf"].ToString() : "";
+        i_cliente = !string.IsNullOrEmpty(Request.Params["i_cliente"]) ? PageContext.Page.Request.Params["i_cliente"].ToString() : "";
+        i_programa = !string.IsNullOrEmpty(Request.Params["i_programa"]) ? PageContext.Page.Request.Params["i_programa"].ToString() : "";
+        i_partidatela = !string.IsNullOrEmpty(Request.Params["i_partidatela"]) ? PageContext.Page.Request.Params["i_partidatela"].ToString() : "";
+        operacion = !string.IsNullOrEmpty(Request.Params["operacion"]) ? PageContext.Page.Request.Params["operacion"].ToString() : "";
+
+    }
+    catch
+    {
+        i_fechai = string.Empty;
+        i_fechaf = string.Empty;
+        i_cliente = string.Empty;
+        i_programa = string.Empty;
+        i_partidatela = string.Empty;
+        operacion = string.Empty;
+
+    }
+
 
 
 }
 
-<div class="card">
 
-    <div class="card-body">
+@* FILA *@
+<div class="row">
 
-        <table class="table table-bordered table-hover table-sm text-center" id="tablegeneral" style="width:100% !important">
-            <thead class="thead-light">
-                <tr>
-                    <th rowspan="2" class="border-table align-vertical">Partida Tela</th>
-                    <th rowspan="2" class="border-table align-vertical">Partida Rectilineo</th>
-                    <th rowspan="2" class="border-table align-vertical">Tipo Rectilineo</th>
-                    <th colspan="@tallas.Count" class="border-table">Primeras</th>
-                    <th colspan="@tallas.Count" class="border-table">Segundas</th>
-                </tr>   
-                <tr>
-                    @* PRIMERAS *@
-                    @foreach (var talla in tallas)
+    @*BUSQUEDAS*@
+    <div class="col-md-12">
+
+        <div class="card card-outline card-primary">
+            <div class="card-header">
+
+            </div>
+            <div class="card-body">
+
+                <form class="row">
+
+                    <input type="hidden" name="operacion" value="buscar">
+
+                    <div class="col-md-4">
+                        <label for="">Fecha I</label>
+                        <input type="date" class="form-control form-control-sm" name="i_fechai" value="@i_fechai">
+                    </div>
+                    <div class="col-md-4">
+                        <label for="">Fecha F</label>
+                        <input type="date" class="form-control form-control-sm" name="i_fechaf" value="@i_fechaf">
+                    </div>
+                    <div class="col-md-3 d-none">
+                        <label for="">Cliente</label>
+                        <select name="i_cliente" id="i_cliente" class="custom-select custom-select-sm select2" value="@i_cliente" style="width:100% !important"></select>
+                    </div>
+                    <div class="col-md-3 d-none">
+                        <label for="">Programa</label>
+                        <select name="i_programa" id="i_programa" class="custom-select custom-select-sm select2" value="@i_programa" style="width:100% !important"></select>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="">Partida Tela</label>
+                        <input type="text" class="form-control form-control-sm" name="i_partidatela" value="@i_partidatela">
+                    </div>
+                    @if (operacion != string.Empty)
                     {
-                        <th class="border-table text-center">@talla.talla</th>
+                        <div class="col-md-2">
+                            <label for="">&nbsp;</label>
+                            <button class="btn btn-sm btn-block btn-success" type="button" id="btnexportar">Exportar</button>
+                        </div>
                     }
-                    @*SEGUNDAS*@
-                    @foreach (var talla in tallas)
-                    {
-                        <th class="border-table text-center">@talla.talla</th>
-                    }
-                </tr>
-            </thead>
-            <tbody>
 
-                @foreach (var item in lista)
-                {
+                    <div class="col-md-2">
+                        <label for="">&nbsp;</label>
+                        <button class="btn btn-sm btn-block btn-primary" type="submit">Buscar</button>
+                    </div>
 
-                    <tr>
+                </form>
 
-                        <td>@item.partidatela  </td>
-                        <td>@item.partidarectilineo  </td>
-                        <td class="border-table-right">@item.tiporectilineo  </td>
-
-                        @*PRIMERAS*@
-                        @foreach (var talla in tallas)
-                        {
-
-
-                            var primeras = Model.Where(
-                                fil => fil.talla == talla.talla &&
-                                fil.partidatela == item.partidatela &&
-                                fil.partidarectilineo == item.partidarectilineo &&
-                                fil.tiporectilineo == item.tiporectilineo
-                            ).FirstOrDefault();
-
-                            <td class="">
-                                @primeras.cantidadprimera
-                            </td>
-                        }
-
-                        @*SEGUNDAS*@
-                        @foreach (var talla in tallas)
-                        {
-
-
-                            var segundas = Model.Where(
-                                fil => fil.talla == talla.talla &&
-                                fil.partidatela == item.partidatela &&
-                                fil.partidarectilineo == item.partidarectilineo &&
-                                fil.tiporectilineo == item.tiporectilineo
-                            ).FirstOrDefault();
-
-                            <td class="">
-                                @segundas.cantidadsegunda
-                            </td>
-                        }
-
-                    </tr>
-
-                }
-
-            </tbody>
-        </table>
-
+            </div>
+        </div>
 
     </div>
 
+
+    @if (operacion != string.Empty)
+    {
+
+        @* COLUMNA 1 *@
+        <div class="col-md-6">
+
+            <div class="card card-outline card-primary">
+                <div class="card-header text-center">
+                    <h1 class="card-title">Cuellos Rectilineos</h1>
+                </div>
+                <div class="card-body">
+
+                    <table class="table table-sm table-bordered text-center">
+
+                        @* THEAD *@
+                        <thead class="thead-light">
+                            <tr class="filafija">
+                                <th class="border-table partida">Par. Tela</th>
+                                <th class="border-table partida">Par. Rectilineo</th>
+                                @foreach (var item in tallas)
+                                {
+                                    <th class="border-table tallas">@item.talla</th>
+                                }
+                                @* TOTALES *@
+                                <th class="border-table tallas">
+                                    Q
+                                </th>
+                            </tr>
+                        </thead>
+
+                        @*CUERPO*@
+                        <tbody>
+                            @foreach (var item in listacuello)
+                            {
+                                totalprimeras = 0;
+                                totalsegundas = 0;
+
+                                <tr>
+                                    <td>@item.partidatela</td>
+                                    <td>@item.partidarectilineo</td>
+
+                                    @*PRIMERAS*@
+                                    @foreach (var talla in tallas)
+                                    {
+
+
+                                        var primeras = Model.Where(
+                                            fil => fil.talla == talla.talla &&
+                                            fil.partidatela == item.partidatela &&
+                                            fil.partidarectilineo == item.partidarectilineo &&
+                                            fil.tiporectilineo == item.tiporectilineo
+                                        ).FirstOrDefault();
+
+                                        totalprimeras += primeras.cantidadprimera == null ? 0 : primeras.cantidadprimera;
+
+                                        <td class="">
+                                            @primeras.cantidadprimera
+                                        </td>
+                                    }
+
+                                    <td>@totalprimeras</td>
+
+
+                                </tr>
+                                <tr class="bgsegundas">
+                                    @*<td>@item.partidatela</td>*@
+                                    <td colspan="2" class="colorsegundas">Segundas</td>
+
+
+                                    @*SEGUNDAS*@
+                                    @foreach (var talla in tallas)
+                                    {
+
+
+                                        var segundas = Model.Where(
+                                            fil => fil.talla == talla.talla &&
+                                            fil.partidatela == item.partidatela &&
+                                            fil.partidarectilineo == item.partidarectilineo &&
+                                            fil.tiporectilineo == item.tiporectilineo
+                                        ).FirstOrDefault();
+
+                                        totalsegundas += segundas.cantidadsegunda == null ? 0 : segundas.cantidadsegunda;
+
+
+                                        <td class="">
+                                            @segundas.cantidadsegunda
+                                        </td>
+                                    }
+
+                                    <td>@totalsegundas</td>
+                                </tr>
+                            }
+                        </tbody>
+
+                    </table>
+
+                </div>
+            </div>
+
+        </div>
+
+
+        @* COLUMNA 2 *@
+        <div class="col-md-6">
+
+            <div class="card card-outline card-primary">
+                <div class="card-header text-center">
+                    <h1 class="card-title">Cuellos Rectilineos</h1>
+                </div>
+                <div class="card-body">
+
+                    <table class="table table-sm table-bordered text-center">
+
+                        @* THEAD *@
+                        <thead class="thead-light">
+                            <tr class="filafija">
+                                <th class="border-table partida">Par. Tela</th>
+                                <th class="border-table partida">Par. Rectilineo</th>
+                                @foreach (var item in tallas)
+                                {
+                                    <th class="border-table tallas">@item.talla</th>
+                                }
+                                @* TOTALES *@
+                                <th class="border-table tallas">
+                                    Q
+                                </th>
+                            </tr>
+                        </thead>
+
+                        @*CUERPO*@
+                        <tbody>
+                            @foreach (var item in listapuno)
+                            {
+                                totalprimeras = 0;
+                                totalsegundas = 0;
+
+                                <tr>
+                                    <td>@item.partidatela</td>
+                                    <td>@item.partidarectilineo</td>
+
+                                    @*PRIMERAS*@
+                                    @foreach (var talla in tallas)
+                                    {
+
+
+                                        var primeras = Model.Where(
+                                            fil => fil.talla == talla.talla &&
+                                            fil.partidatela == item.partidatela &&
+                                            fil.partidarectilineo == item.partidarectilineo &&
+                                            fil.tiporectilineo == item.tiporectilineo
+                                        ).FirstOrDefault();
+
+                                        totalprimeras += primeras.cantidadprimera == null ? 0 : primeras.cantidadprimera;
+
+                                        <td class="">
+                                            @primeras.cantidadprimera
+                                        </td>
+                                    }
+
+                                    <td>@totalprimeras</td>
+
+
+                                </tr>
+                                <tr class="bgsegundas">
+                                    @*<td>@item.partidatela</td>*@
+                                    <td colspan="2" class="colorsegundas">Segundas</td>
+
+                                    @*SEGUNDAS*@
+                                    @foreach (var talla in tallas)
+                                    {
+
+
+                                        var segundas = Model.Where(
+                                            fil => fil.talla == talla.talla &&
+                                            fil.partidatela == item.partidatela &&
+                                            fil.partidarectilineo == item.partidarectilineo &&
+                                            fil.tiporectilineo == item.tiporectilineo
+                                        ).FirstOrDefault();
+
+                                        totalsegundas += segundas.cantidadsegunda == null ? 0 : segundas.cantidadsegunda;
+
+
+                                        <td class="">
+                                            @segundas.cantidadsegunda
+                                        </td>
+                                    }
+
+                                    <td>@totalsegundas</td>
+                                </tr>
+                            }
+                        </tbody>
+
+                    </table>
+
+                </div>
+            </div>
+
+        </div>
+
+
+    }
+
+
+
+
 </div>
 
+@*BUSQUEDA*@
+<form action="/Almacenes/getReporteRectilineosExcel/" class="d-none" id="frmexportar" method="get">
+    <input type="hidden" name="operacion" value="exportar" >
+</form>
 
 
-@section scripts{
+@section style{
 
-    <script>
+    <style>
 
-        setDataTableSimple("general",false,false,true);
+        table {
+            table-layout: fixed;
+        }
 
+        .filafija .partida {
+            width: 60px !important;
+            overflow: auto !important;
+            vertical-align: middle !important;
+        }
 
-    </script>
+        .filafija .tallas {
+            width: 30px !important;
+            overflow: auto !important;
+            vertical-align: middle !important;
+        }
+
+        .colorsegundas {
+            color: #ea5455 !important;
+        }
+
+        .bgsegundas{
+            background: #f0f0f0 !important;
+        }
+    </style>
 
 }
 
+
+@section scripts{
+    
+    <script>
+
+        let btnexportar = document.getElementById("btnexportar");
+        let frmexportar = document.getElementById("frmexportar");
+
+        window.addEventListener('load', () => {
+            //getClientes();
+        });
+
+        // EXPORTAR
+        btnexportar.addEventListener('click', () => {
+            frmexportar.submit();
+        });
+
+        // OPTIENE CLIENTES
+        function getClientes() {
+
+            get("operaciones", "ListarClientesFtec", {}, true)
+                .then(response => {
+
+                    let option = `
+                            <option
+                                    data-cli2='0' 
+                                    data-cli4='0'
+                                    data-cli9='0'
+                                    value='0'>
+                                [SELECCIONE]
+                            </option>
+                    `;
+
+                    for (let item of response) {
+                        option += `
+                            <option
+                                    data-cli2='${item.cliente2}' 
+                                    data-cli4='${item.cliente4}'
+                                    data-cli9='${item.cliente9}'
+                                    value='${item.cliente2}-${item.cliente4}-${item.cliente9}'>
+                                ${item.nombre_cliente}
+                            </option>
+                        `;
+                    }
+
+                    $("#i_cliente").html(option);
+
+                })
+                .catch(error => {
+                    console.log("errror",error);
+                });
+
+        }
+
+
+        // OPTIENE LOS PROGRMAS
+        function getProgramas(cliente2, cliente4, cliente9,programa = false) {
+
+            get("operaciones", "ListarProgramasClientesFtec", {
+                cliente2, cliente4, cliente9
+            }, true).then(response => {
+                //console.log(response);
+
+                let option = "";
+                for (let obj of response) {
+
+                    if (programa) {
+                        option += `<option selected value="${obj.programa}">${obj.programa}</option>`;
+                    } else {
+                        option += `<option value="${obj.programa}">${obj.programa}</option>`;
+                    }
+
+                }
+
+                $("#i_programa").html(option);
+
+
+            }).catch(error => {
+                console.error(error);
+            });
+        }
+
+        // OBTENEMOS PROGRAMAS
+        $("#i_cliente").on('change', function () {
+            let cliente9 = $(this).find(":selected").attr("data-cli9");
+            let cliente4 = $(this).find(":selected").attr("data-cli4");
+            let cliente2 = $(this).find(":selected").attr("data-cli2");
+
+            getProgramas(cliente2, cliente4, cliente9, false);
+
+        });
+
+
+    </script>    
+    
+}

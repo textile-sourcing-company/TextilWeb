@@ -808,6 +808,7 @@
     <Compile Include="Models\Entidades\Sistema\SistemaEntidad.cs" />
     <Compile Include="Models\Entidades\Sistema\UsuariosEntidad.cs" />
     <Compile Include="Models\Entidades\Sistema\Utilitarios.cs" />
+    <Compile Include="Models\Modelos\Almacenes\Rectilineos\ReporteRectilineosModelo.cs" />
     <Compile Include="Models\Modelos\Almacenes\ReporteStockFecha\CentroCostoModelo.cs" />
     <Compile Include="Models\Modelos\Almacenes\ReporteStockFecha\ReporteStockFechaModelo.cs" />
     <Compile Include="Models\Modelos\Comercial\Come002Modelo.cs" />
@@ -1026,6 +1027,7 @@
     <Content Include="Views\Almacenes\IngresoRectilineos.cshtml" />
     <Content Include="Views\Almacenes\IngresoRectilineos_old.cshtml" />
     <Content Include="Views\Almacenes\ReporteIngresoRectilineos.cshtml" />
+    <Content Include="Views\Almacenes\ReporteIngresoRectilineos_old.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
