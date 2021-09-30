@@ -207,6 +207,8 @@ namespace TSC_WEB.Models.Modelos.Corte.LiquidacionTela.reporteliquidacion
 
         private void cells(int fila, int columna, string valor, Color backcolor, Color fontcolor, bool negrita = true, bool bordes = true, bool porcentaje = false)
         {
+            
+
             decimal numero = 0;
             if (!decimal.TryParse(valor, out numero))
                 workSheet.Cells[fila, columna].Value = valor;

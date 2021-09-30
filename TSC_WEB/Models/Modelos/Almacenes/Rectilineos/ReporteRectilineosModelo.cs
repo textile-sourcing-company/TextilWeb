@@ -8,7 +8,7 @@ using System.Web;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
 using TSC_WEB.Config;
-using Oracle.ManagedDataAccess.Client;
+//using Oracle.ManagedDataAccess.Client;
 using TSC_WEB.Models.Entidades.Corte.LiquidacionRectilineos;
 
 
@@ -20,6 +20,7 @@ namespace TSC_WEB.Models.Modelos.Almacenes.Rectilineos
         private const string formatoporcentaje = "0.00%";
         private const string formatonumero = "0.00";
         public string[] LETRAS = new[] { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z" };
+
         string iniciocolumna    = "";
         string fincolumna       = "";
         string PARTIDATELA      = "";
@@ -469,7 +470,6 @@ namespace TSC_WEB.Models.Modelos.Almacenes.Rectilineos
 
         }
 
-
         private void cells(int fila, int columna, string valor, Color backcolor, Color fontcolor, bool negrita = true, bool bordes = true, bool porcentaje = false)
         {
             decimal numero = 0;
@@ -519,7 +519,6 @@ namespace TSC_WEB.Models.Modelos.Almacenes.Rectilineos
 
 
         }
-
 
         private void cells(int fila, int columna, double valor, Color backcolor, Color fontcolor, bool negrita = true, bool bordes = true, bool porcentaje = false, int decimales = 0)
         {

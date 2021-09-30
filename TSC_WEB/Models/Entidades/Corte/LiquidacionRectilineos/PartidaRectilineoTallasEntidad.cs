@@ -15,6 +15,23 @@ namespace TSC_WEB.Models.Entidades.Corte.LiquidacionRectilineos
         public decimal cantidadprimera{ get; set; }
         public decimal cantidadsegunda { get; set; }
 
+        // TOTAL DE CANTIDADES (PRIMERAS + SEGUNDAS)
+        public decimal totalcantidades {
+            get {
+                return cantidadprimera + cantidadsegunda;
+            }
+        }
+
+        public decimal consumokilos {get;set; }
+
+        public decimal kgportalla
+        {
+            get
+            {
+                return totalcantidades * consumokilos;
+            }
+        }
+
         //IDPARTRECTITALLA, IDPARTIDARECTILINEO, TALLA, CANTIDADPRIMERA, CANTIDADSEGUNDA
     }
 }

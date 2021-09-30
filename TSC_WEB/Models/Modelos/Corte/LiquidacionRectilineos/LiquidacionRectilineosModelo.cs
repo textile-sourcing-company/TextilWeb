@@ -452,7 +452,7 @@ namespace TSC_WEB.Models.Modelos.Corte.LiquidacionRectilineos
 
                     obj.usuariocrea = registros["usuariocrea"].ToString();
                     obj.tipo = registros["tipo"].ToString();
-                    obj.fechamod = Convert.ToDateTime(registros["fechamod"].ToString()).ToShortDateString();
+                    obj.fechamod = registros["fechamod"].ToString() != string.Empty ? Convert.ToDateTime(registros["fechamod"].ToString()).ToShortDateString() : "";
                     obj.ficha = Convert.ToInt32(registros["ficha"].ToString());
                     obj.partida = registros["partida"].ToString();
                     obj.pedido = Convert.ToInt32(registros["pedido"].ToString());
@@ -570,6 +570,8 @@ namespace TSC_WEB.Models.Modelos.Corte.LiquidacionRectilineos
                 comando.Parameters.Add(new OracleParameter("i_fechacarga", objpartidarec.fechacarga));
                 comando.Parameters.Add(new OracleParameter("i_usuario", objpartidarec.usuarioreg));
                 comando.Parameters.Add(new OracleParameter("i_observacion", objpartidarec.observacion));
+                comando.Parameters.Add(new OracleParameter("i_kilostotales", objpartidarec.kilostotales));
+
                 comando.Parameters.Add(new OracleParameter("o_cursor", OracleDbType.RefCursor)).Direction = ParameterDirection.Output;
 
 
@@ -759,6 +761,9 @@ namespace TSC_WEB.Models.Modelos.Corte.LiquidacionRectilineos
 
                     obj.observacion = registros["observacion"].ToString();
 
+                    obj.kilostotales = registros["kilostotales"].ToString() != "" ? Convert.ToDecimal(registros["kilostotales"].ToString()) : 0;
+
+
                     objretornar.Add(obj);
                 }
 
@@ -821,15 +826,7 @@ namespace TSC_WEB.Models.Modelos.Corte.LiquidacionRectilineos
             }
             return objretornar;
         }
-        // EXPORTAR EXCEL
-        public MemoryStream getReporteExcel(List<ReporteEntidad> listadatos)
-        {
 
-            cells(1, 1, "Usuario", Color.AliceBlue,Color.White);
-            int i = 3;
-
-            return getestream();
-        }
 
 
         //REPORTE DE RECTILINEOS INGRESADOS POR EL ALMACEN
@@ -871,8 +868,11 @@ namespace TSC_WEB.Models.Modelos.Corte.LiquidacionRectilineos
                     obj.cantidadprimera = Convert.ToDecimal(registros["cantidadprimera"].ToString());
                     obj.cantidadsegunda = Convert.ToDecimal(registros["cantidadsegunda"].ToString());
 
-                    obj.cantidadprimera = obj.cantidadprimera == 0 ? null : obj.cantidadprimera;
-                    obj.cantidadsegunda = obj.cantidadsegunda == 0 ? null : obj.cantidadsegunda;
+                    obj.kilostotales    = Convert.ToDecimal(registros["kilostotales"].ToString());
+
+
+                    //obj.cantidadprimera = obj.cantidadprimera == 0 ? null : obj.cantidadprimera;
+                    //obj.cantidadsegunda = obj.cantidadsegunda == 0 ? null : obj.cantidadsegunda;
 
 
                     objretornar.Add(obj);

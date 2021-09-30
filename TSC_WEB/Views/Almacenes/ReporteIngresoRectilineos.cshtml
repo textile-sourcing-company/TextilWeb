@@ -3,7 +3,7 @@
 
 
 @{
-    ViewBag.Title = "Reporte Ingreso de Rectilineos";
+    ViewBag.Title = "Reporte Ingreso de Rectilíneos";
     ViewBag.Modulo = "Almacenes";
     Layout = "~/Views/Plantillas/_Layout.cshtml";
 
@@ -15,13 +15,16 @@
             {
                 grp.partidatela,
                 grp.partidarectilineo,
-                grp.tiporectilineo
+                grp.tiporectilineo,
+                grp.kilostotales
             }
         ).Select(sel => new ReporteIngresoRectilineosAlmacenEntidad
         {
             partidatela = sel.First().partidatela,
             partidarectilineo = sel.First().partidarectilineo,
-            tiporectilineo = sel.First().tiporectilineo
+            tiporectilineo = sel.First().tiporectilineo,
+            kilostotales = sel.First().kilostotales,
+
 
         }).Where(obj => obj.tiporectilineo == "CUELLO").ToList() : new List<ReporteIngresoRectilineosAlmacenEntidad>();
 
@@ -33,13 +36,17 @@
             {
                 grp.partidatela,
                 grp.partidarectilineo,
-                grp.tiporectilineo
+                grp.tiporectilineo,
+                grp.kilostotales
+
             }
         ).Select(sel => new ReporteIngresoRectilineosAlmacenEntidad
         {
             partidatela = sel.First().partidatela,
             partidarectilineo = sel.First().partidarectilineo,
-            tiporectilineo = sel.First().tiporectilineo
+            tiporectilineo = sel.First().tiporectilineo,
+            kilostotales = sel.First().kilostotales,
+
 
         }).Where(obj => obj.tiporectilineo == "PUNO").ToList() : new List<ReporteIngresoRectilineosAlmacenEntidad>();
 
@@ -60,8 +67,11 @@
     }).OrderBy(or => or.orden).ToList() : new List<ReporteIngresoRectilineosAlmacenEntidad>();
 
     // TOTALES
-    decimal? totalprimeras = 0;
-    decimal? totalsegundas = 0;
+    decimal totalprimeras = 0;
+    decimal totalsegundas = 0;
+    decimal totalcantidad = 0;
+
+    
 
     string i_fechai     = "";
     string i_fechaf     = "";
@@ -162,7 +172,7 @@
 
             <div class="card card-outline card-primary">
                 <div class="card-header text-center">
-                    <h1 class="card-title">Cuellos Rectilineos</h1>
+                    <h1 class="card-title">Cuellos Rectilíneos</h1>
                 </div>
                 <div class="card-body">
 
@@ -181,72 +191,150 @@
                                 <th class="border-table tallas">
                                     Q
                                 </th>
+                                @* KILOS TOTALES *@
+                                <th class="border-table tallas">
+                                    Kilos
+                                </th>
                             </tr>
                         </thead>
 
                         @*CUERPO*@
                         <tbody>
-                            @foreach (var item in listacuello)
+                        @foreach (var item in listacuello)
+                        {
+                            totalprimeras = 0;
+                            totalsegundas = 0;
+                            totalcantidad = 0;
+
+
+                            //PRIMERAS
+                            <tr>
+                            <td>@item.partidatela</td>
+                            <td>@item.partidarectilineo</td>
+
+                            @*PRIMERAS*@
+                            @foreach (var talla in tallas)
                             {
-                                totalprimeras = 0;
-                                totalsegundas = 0;
-
-                                <tr>
-                                    <td>@item.partidatela</td>
-                                    <td>@item.partidarectilineo</td>
-
-                                    @*PRIMERAS*@
-                                    @foreach (var talla in tallas)
-                                    {
 
 
-                                        var primeras = Model.Where(
-                                            fil => fil.talla == talla.talla &&
-                                            fil.partidatela == item.partidatela &&
-                                            fil.partidarectilineo == item.partidarectilineo &&
-                                            fil.tiporectilineo == item.tiporectilineo
-                                        ).FirstOrDefault();
+                                var primeras = Model.Where(
+                                    fil => fil.talla == talla.talla &&
+                                    fil.partidatela == item.partidatela &&
+                                    fil.partidarectilineo == item.partidarectilineo &&
+                                    fil.tiporectilineo == item.tiporectilineo
+                                ).FirstOrDefault();
 
-                                        totalprimeras += primeras.cantidadprimera == null ? 0 : primeras.cantidadprimera;
+                                totalprimeras += primeras.cantidadprimera == null ? 0 : primeras.cantidadprimera;
 
-                                        <td class="">
-                                            @primeras.cantidadprimera
-                                        </td>
-                                    }
-
-                                    <td>@totalprimeras</td>
-
-
-                                </tr>
-                                <tr class="bgsegundas">
-                                    @*<td>@item.partidatela</td>*@
-                                    <td colspan="2" class="colorsegundas">Segundas</td>
-
-
-                                    @*SEGUNDAS*@
-                                    @foreach (var talla in tallas)
-                                    {
-
-
-                                        var segundas = Model.Where(
-                                            fil => fil.talla == talla.talla &&
-                                            fil.partidatela == item.partidatela &&
-                                            fil.partidarectilineo == item.partidarectilineo &&
-                                            fil.tiporectilineo == item.tiporectilineo
-                                        ).FirstOrDefault();
-
-                                        totalsegundas += segundas.cantidadsegunda == null ? 0 : segundas.cantidadsegunda;
-
-
-                                        <td class="">
-                                            @segundas.cantidadsegunda
-                                        </td>
-                                    }
-
-                                    <td>@totalsegundas</td>
-                                </tr>
+                                <td class="">
+                                    @primeras.cantidadprimera
+                                </td>
                             }
-                        </tbody>
+
+                            <td>@totalprimeras</td>
+                            <td rowspan="4" class="align-vertical">
+                                @item.kilostotales
+                            </td>
+
+
+                        </tr>
+
+                            //SEGUNDAS
+                            <tr class="bgsegundas">
+                                @*<td>@item.partidatela</td>*@
+                                <td colspan="2" class="colorsegundas">Segundas</td>
+
+
+                                @*SEGUNDAS*@
+                                @foreach (var talla in tallas)
+                                {
+
+
+                                    var segundas = Model.Where(
+                                        fil => fil.talla == talla.talla &&
+                                        fil.partidatela == item.partidatela &&
+                                        fil.partidarectilineo == item.partidarectilineo &&
+                                        fil.tiporectilineo == item.tiporectilineo
+                                    ).FirstOrDefault();
+
+                                    totalsegundas += segundas.cantidadsegunda == null ? 0 : segundas.cantidadsegunda;
+
+
+                                    <td class="">
+                                        @segundas.cantidadsegunda
+                                    </td>
+                                }
+
+                                <td>@totalsegundas</td>
+                            </tr>
+
+                            // TOTAL - PRIMERAS MAS SEGUNDAS
+                            <tr>
+                                <td colspan="2">TOTAL</td>
+
+
+                                @*SEGUNDAS*@
+                                @foreach (var talla in tallas)
+                                {
+
+
+                                    var totalpriseg = Model.Where(
+                                        fil => fil.talla == talla.talla &&
+                                        fil.partidatela == item.partidatela &&
+                                        fil.partidarectilineo == item.partidarectilineo &&
+                                        fil.tiporectilineo == item.tiporectilineo
+                                    ).FirstOrDefault();
+
+                                    totalcantidad += totalpriseg.totalcantidad;
+
+
+                                    <td class="">
+                                        @totalpriseg.totalcantidad
+                                    </td>
+                                }
+
+                                <td>@totalcantidad</td>
+                            </tr>
+
+
+                            item.totalcantidadfila = totalcantidad;
+
+
+                            // KG POR TALLA
+                    <tr>
+                        <td colspan="2">Kg por Tallas</td>
+
+
+                        @*PRIMERAS*@
+                        @foreach (var talla in tallas)
+                        {
+
+
+                            var kgportallas = Model.Where(
+                                fil => fil.talla == talla.talla &&
+                                fil.partidatela == item.partidatela &&
+                                fil.partidarectilineo == item.partidarectilineo &&
+                                fil.tiporectilineo == item.tiporectilineo
+                            ).FirstOrDefault();
+
+                            kgportallas.totalcantidadfila = item.totalcantidadfila;
+
+                           //totalprimeras += primeras.cantidadprimera == null ? 0 : primeras.cantidadprimera;
+
+                            <td class="">
+                                @Math.Round(kgportallas.kilosportalla,2)
+                            </td>
+                        }
+
+
+
+                            <td>@Math.Round(item.consumotalla,2)</td>
+
+
+                    </tr>
+
+                        }
+                    </tbody>
 
                     </table>
 
@@ -261,7 +349,7 @@
 
             <div class="card card-outline card-primary">
                 <div class="card-header text-center">
-                    <h1 class="card-title">Cuellos Rectilineos</h1>
+                    <h1 class="card-title">Puños Rectilíneos</h1>
                 </div>
                 <div class="card-body">
 
@@ -280,6 +368,10 @@
                                 <th class="border-table tallas">
                                     Q
                                 </th>
+                                @* KILOS TOTALES *@
+                                <th class="border-table tallas">
+                                    Kilos
+                                </th>
                             </tr>
                         </thead>
 
@@ -289,7 +381,10 @@
                             {
                                 totalprimeras = 0;
                                 totalsegundas = 0;
+                                totalcantidad = 0;
 
+
+                                //PRIMERAS
                                 <tr>
                                     <td>@item.partidatela</td>
                                     <td>@item.partidarectilineo</td>
@@ -314,12 +409,18 @@
                                     }
 
                                     <td>@totalprimeras</td>
+                                    <td rowspan="4" class="align-vertical">
+                                        @item.kilostotales
+                                    </td>
 
 
                                 </tr>
+
+                                //SEGUNDAS
                                 <tr class="bgsegundas">
                                     @*<td>@item.partidatela</td>*@
                                     <td colspan="2" class="colorsegundas">Segundas</td>
+
 
                                     @*SEGUNDAS*@
                                     @foreach (var talla in tallas)
@@ -343,8 +444,75 @@
 
                                     <td>@totalsegundas</td>
                                 </tr>
+
+                                // TOTAL - PRIMERAS MAS SEGUNDAS
+                                <tr>
+                                    <td colspan="2">TOTAL</td>
+
+
+                                    @*SEGUNDAS*@
+                                    @foreach (var talla in tallas)
+                                    {
+
+
+                                        var totalpriseg = Model.Where(
+                                            fil => fil.talla == talla.talla &&
+                                            fil.partidatela == item.partidatela &&
+                                            fil.partidarectilineo == item.partidarectilineo &&
+                                            fil.tiporectilineo == item.tiporectilineo
+                                        ).FirstOrDefault();
+
+                                        totalcantidad += totalpriseg.totalcantidad;
+
+
+                                        <td class="">
+                                            @totalpriseg.totalcantidad
+                                        </td>
+                                    }
+
+                                    <td>@totalcantidad</td>
+                                </tr>
+
+
+                                item.totalcantidadfila = totalcantidad;
+
+
+                                // KG POR TALLA
+                                <tr>
+                                    <td colspan="2">Kg por Tallas</td>
+
+
+                                    @*PRIMERAS*@
+                                    @foreach (var talla in tallas)
+                                    {
+
+
+                                        var kgportallas = Model.Where(
+                                            fil => fil.talla == talla.talla &&
+                                            fil.partidatela == item.partidatela &&
+                                            fil.partidarectilineo == item.partidarectilineo &&
+                                            fil.tiporectilineo == item.tiporectilineo
+                                        ).FirstOrDefault();
+
+                                        kgportallas.totalcantidadfila = item.totalcantidadfila;
+
+                                        //totalprimeras += primeras.cantidadprimera == null ? 0 : primeras.cantidadprimera;
+
+                                        <td class="">
+                                            @Math.Round(kgportallas.kilosportalla, 2)
+                                        </td>
+                                    }
+
+
+
+                                    <td>@Math.Round(item.consumotalla, 2)</td>
+
+
+                                </tr>
+
                             }
                         </tbody>
+
 
                     </table>
 

@@ -640,7 +640,7 @@
                                           obj.partida == item.partida && obj.tipo == item.tipo
                                     ).Sum(s => s.realprimera);
 
-                                    porcentajeficha = totalliquidado / sumatotal;
+                                    porcentajeficha = sumatotal > 0 ? totalliquidado / sumatotal : 0;
 
                                     item.mermarealrecorte = porcentajeficha * item.mermarecorte;
                                     item.mermarealhilo = porcentajeficha * item.mermahilos;

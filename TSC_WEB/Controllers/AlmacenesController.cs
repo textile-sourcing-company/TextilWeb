@@ -448,7 +448,6 @@ namespace TSC_WEB.Controllers
             {
 
                 var datos = (List<ReporteIngresoRectilineosAlmacenEntidad>)Session["dato_reporte_rectilineos_almacen"];
-            //var file = objRectilineosM.getReporteExcel(datos);
                 var file = objReporteRectilineosAlmacenesM.getReporteExcel(datos);
 
                 return File(file, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "ReporteRectilineos" + DateTime.Now.ToString("yyyyMMdd") + ".xlsx");

@@ -43,7 +43,9 @@ namespace TSC_WEB.Controllers
         AperturarFichaModelo objAperturarFichaNewM = new AperturarFichaModelo();
         RecursosModelo objRecursosModeloM = new RecursosModelo();
         LiquidacionRectilineosModelo objRectilineosM = new LiquidacionRectilineosModelo();
-        
+        LiquidacionRectilineosReporteModelo objRectilineosReporteM = new LiquidacionRectilineosReporteModelo();
+
+
         #endregion
 
         #region VISTAS
@@ -894,7 +896,7 @@ namespace TSC_WEB.Controllers
             {
 
                 var datos = (List<ReporteEntidad>)Session["dato_reporte_rectilineos"];
-                var file = objRectilineosM.getReporteExcel(datos);
+                var file = objRectilineosReporteM.getReporteExcel(datos);
 
                 return File(file, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "ReporteRectilineos" + DateTime.Now.ToString("yyyyMMdd") + ".xlsx");
 
