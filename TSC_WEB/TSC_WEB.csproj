@@ -546,6 +546,7 @@
     <Compile Include="Models\Entidades\Corte\LiquidacionRectilineos\IngresoRectilineosCompletoEntidad.cs" />
     <Compile Include="Models\Entidades\Corte\LiquidacionRectilineos\IngresoRectilineosEntidad.cs" />
     <Compile Include="Models\Entidades\Corte\LiquidacionRectilineos\LiquidacionRectilineosEntidad.cs" />
+    <Compile Include="Models\Entidades\Corte\LiquidacionRectilineos\LiquidacionRectilineosPCPEntidad.cs" />
     <Compile Include="Models\Entidades\Corte\LiquidacionRectilineos\PartidaRectilineoTallasEntidad.cs" />
     <Compile Include="Models\Entidades\Corte\LiquidacionRectilineos\PartidaTelaEntidad.cs" />
     <Compile Include="Models\Entidades\Corte\LiquidacionRectilineos\PartidaTelaRectilineoEntidad.cs" />
@@ -820,6 +821,7 @@
     <Compile Include="Models\Modelos\ControlInterno\ReporteStock\ReporteStock.cs" />
     <Compile Include="Models\Modelos\Corte\FichasModeloOld.cs" />
     <Compile Include="Models\Modelos\Corte\LiquidacionRectilineos\LiquidacionRectilineosModelo.cs" />
+    <Compile Include="Models\Modelos\Corte\LiquidacionRectilineos\LiquidacionRectilineosReporteModelo.cs" />
     <Compile Include="Models\Modelos\Corte\LiquidacionTela\aperturaficha\AperturarFichaModelo.cs" />
     <Compile Include="Models\Modelos\Corte\LiquidacionTela\AperturarFichasCorteModelo.cs" />
     <Compile Include="Models\Modelos\Corte\LiquidacionTela\AperturarFichasTendidoModelo.cs" />
@@ -1028,6 +1030,7 @@
     <Content Include="Views\Almacenes\IngresoRectilineos_old.cshtml" />
     <Content Include="Views\Almacenes\ReporteIngresoRectilineos.cshtml" />
     <Content Include="Views\Almacenes\ReporteIngresoRectilineos_old.cshtml" />
+    <Content Include="Views\Corte\getLiquidacionRectilineosPCP.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

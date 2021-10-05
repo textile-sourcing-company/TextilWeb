@@ -1,0 +1,222 @@
+﻿@model List<TSC_WEB.Models.Entidades.Corte.LiquidacionRectilineos.LiquidacionRectilineosPCPEntidad>
+
+@{
+    ViewBag.Title = "Liquidación Rectílineos PCP";
+    ViewBag.Modulo = "Corte";
+
+    Layout = "~/Views/Plantillas/_Layout.cshtml";
+
+    string fechai = string.Empty;
+    string fechaf = string.Empty;
+    string partida = string.Empty;
+    string estado = string.Empty;
+    string tipo = string.Empty;
+    string busqueda = string.Empty;
+
+    string[] TIPOS = new[] { "CUELLO", "PUÑO" };
+    string[] ESTADOS = new[] { "PENDIENTE", "APROBADO", "APERTURADO","PROCESO" };
+
+
+
+    try
+    {
+        fechai = !string.IsNullOrEmpty(Request.Params["fechai"]) ? PageContext.Page.Request.Params["fechai"].ToString() : "";
+        fechaf = !string.IsNullOrEmpty(Request.Params["fechaf"]) ? PageContext.Page.Request.Params["fechaf"].ToString() : "";
+        partida = !string.IsNullOrEmpty(Request.Params["partida"]) ? PageContext.Page.Request.Params["partida"].ToString() : "";
+        tipo = !string.IsNullOrEmpty(Request.Params["tipo"]) ? PageContext.Page.Request.Params["tipo"].ToString() : "";
+        estado = !string.IsNullOrEmpty(Request.Params["estado"]) ? PageContext.Page.Request.Params["estado"].ToString() : "";
+        busqueda = !string.IsNullOrEmpty(Request.Params["busqueda"]) ? PageContext.Page.Request.Params["busqueda"].ToString() : "";
+
+    }
+    catch
+    {
+        fechai = string.Empty;
+        fechaf = string.Empty;
+        partida = string.Empty;
+        tipo = string.Empty;
+        estado = string.Empty;
+        busqueda = string.Empty;
+
+    }
+
+}
+
+
+<div class="card card-outline card-primary">
+
+    <div class="card-header">
+
+    </div>
+    <div class="card-body">
+
+        <form action="" class="row" id="frmreporte" autocomplete="off" method="get">
+
+            <input type="hidden" name="busqueda" value="true">
+
+
+            <div class="col-md-2">
+                <label for="">Fecha I.</label>
+                <input type="date" class="form-control form-control-sm" name="fechai" value="@fechai">
+            </div>
+
+            <div class="col-md-2">
+                <label for="">Fecha F.</label>
+                <input type="date" class="form-control form-control-sm" name="fechaf" value="@fechaf">
+            </div>
+
+            <div class="col-md-2">
+                <label for="">Partida</label>
+                <input type="text" class="form-control form-control-sm" name="partida" value="@partida">
+            </div>
+
+            <div class="col-md-2">
+                <label for="">Tipo</label>
+                <select name="tipo" id="" class="custom-select custom-select-sm">
+                    <option value="">[SELECCIONE]</option>
+
+                    @foreach (var item in TIPOS)
+                    {
+                        if (item == tipo)
+                        {
+                            <option value="@item" selected>@item</option>
+                        }
+                        else
+                        {
+                            <option value="@item">@item</option>
+                        }
+                    }
+
+                </select>
+            </div>
+
+            <div class="col-md-2">
+                <label for="">Estado</label>
+                <select name="estado" id="" class="custom-select custom-select-sm">
+                    <option value="">[SELECCIONE]</option>
+
+                    @foreach (var item in ESTADOS)
+                    {
+                        if (item == estado)
+                        {
+                            <option value="@item" selected>@item</option>
+                        }
+                        else
+                        {
+                            <option value="@item">@item</option>
+                        }
+                    }
+                </select>
+            </div>
+
+            <div class="col-md-2">
+                <label for="">&nbsp;</label>
+                <button class="btn btn-sm btn-block btn-primary" type="submit">Buscar</button>
+            </div>
+
+        </form>
+    </div>
+
+</div>
+
+<div class="card card-outline card-primary">
+
+    <div class="card-header">
+
+    </div>
+
+    <div class="card-body p-0">
+
+        <table class="table table-bordered table-sm" id="tablereporte" style="width:100%">
+            <thead class="text-center thead-light">
+                <tr>
+                    <th class="border-table col-1">Tipo</th>
+                    <th class="border-table col-2">Partida</th>
+                    <th class="border-table col-4">Fichas</th>
+                    <th class="border-table col-1">Usuario Lib</th>
+                    <th class="border-table col-1">Fecha Lib</th>
+                    <th class="border-table col-1">Estado</th>
+                    <th class="border-table col-2"></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+
+                    <tr>
+                        <td>@item.tipo</td>
+                        <td>@item.partida</td>
+                        <td>@item.fichas</td>
+                        <td>@item.usuarioliquidacion</td>
+                        <td>@item.fechaliquidacion</td>
+
+                        <td class="text-center">
+                            <span data-id="@item.idrectilineohead"
+                                  class='badge @item.bgestado cursor-pointer estadorectilineo'
+                                  title='Estado Rectilíneos'>
+                                @item.estado
+                            </span>
+                        </td>
+
+                        <td class="text-center">
+
+                            @if (item.estado != "PROCESO")
+                            {
+
+                                <button class="btn btn-sm btn-success aprobarfichas" onclick="setEstado('APROBADO', @item.idrectilineohead )">Aprobar</button>
+                                <button class="btn btn-sm btn-info    aperturarfichas" onclick="setEstado('APERTURADO',@item.idrectilineohead)">Aperturar</button>
+
+                            }
+
+
+                        </td>
+
+                    </tr>
+
+                }
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+
+@section scripts {
+
+    <script>
+
+        const frmreporte = document.getElementById("frmreporte");
+
+       
+        // ASIGNAMOS ESTADO
+        function setEstado(estado = "",idrectilineo){
+
+            MostrarCarga();
+            
+            post("Corte", "setEstadoRectilineos", {
+                estado, idrectilineo
+            }, true)
+                .then(response => {
+                    //console.log(response);
+                    if (response.success) {
+                        Informar(response.mensaje, 1500, true);
+                    } else {
+                        Advertir(response.mensaje);
+                    }
+                })
+                .catch(error => {
+                    Advertir("Ocurrio un error");
+                    console.log(error);
+                });
+
+        }
+
+        frmreporte.addEventListener('submit', () => {
+            MostrarCarga("Cargando...");
+        });
+
+    </script>
+
+}

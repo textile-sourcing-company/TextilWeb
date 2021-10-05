@@ -82,9 +82,9 @@
             table-layout: fixed;
         }
 
-        .tablefixed th, .tablefixed td {
-            border: 1px solid #605e5e;
-        }
+            .tablefixed th, .tablefixed td {
+                border: 1px solid #605e5e;
+            }
 
         #theadtr th {
             width: 130px;
@@ -106,14 +106,13 @@
 
         .bg-yellow {
             background: #ffffbf !important;
-            color:#000 !important;
+            color: #000 !important;
         }
 
         .bg-green {
             background: #c0ffc0 !important;
             color: #000 !important;
         }
-
     </style>
 
 }
@@ -203,6 +202,15 @@
     <div class="card card-outline card-primary">
         <div class="card-header text-center">
             <label class="card-title">UNIDADES POR TALLA - PARTIDA #@Model.FichaCabecera.partidarectilineo</label>
+            <div class="card-tools">
+                <button type="button" class="btn btn-sm btn-success">
+                    Liquidadas
+                </button>
+                <button type="button" class="btn btn-sm btn-warning">
+                    Programadas
+                </button>
+
+            </div>
         </div>
         <div class="card-body">
             <table class="table table-bordered table-sm tablainput tablefixed">
@@ -264,14 +272,14 @@
                     </tr>
 
                     @*<tr>
-            <th>Consumo</th>
-            @foreach (var item in tallascantidadprimera)
-            {
-                <td> <input type="text" class="inputtabla" id="" value="@item.consumo" readonly> </td>
-            }
-            <td> <input type="text" class="inputtabla font-weight-bold" value="0" readonly></td>
+                            <th>Consumo</th>
+                            @foreach (var item in tallascantidadprimera)
+                            {
+                                <td> <input type="text" class="inputtabla" id="" value="@item.consumo" readonly> </td>
+                            }
+                            <td> <input type="text" class="inputtabla font-weight-bold" value="0" readonly></td>
 
-        </tr>*@
+                        </tr>*@
 
                     <tr>
                         <th>Unidades despachadas</th>
@@ -296,16 +304,16 @@
                     </tr>
 
                     @*<tr>
-                        <th>Peso Bruto Despachado</th>
-                        @foreach (var item in tallascantidadprimera)
-                        {
-                            totalpesodespachado += item.pesodespachado;
-                            <td> <input type="text" class="inputtabla bg-bloqueado" id="" value="@Math.Round(item.pesodespachado, 2)" readonly> </td>
+                            <th>Peso Bruto Despachado</th>
+                            @foreach (var item in tallascantidadprimera)
+                            {
+                                totalpesodespachado += item.pesodespachado;
+                                <td> <input type="text" class="inputtabla bg-bloqueado" id="" value="@Math.Round(item.pesodespachado, 2)" readonly> </td>
 
-                        }
-                        <td> <input type="text" class="inputtabla font-weight-bold bg-bloqueado" value="@Math.Round(totalpesodespachado, 2)" readonly></td>
+                            }
+                            <td> <input type="text" class="inputtabla font-weight-bold bg-bloqueado" value="@Math.Round(totalpesodespachado, 2)" readonly></td>
 
-                    </tr>*@
+                        </tr>*@
 
                 </tbody>
             </table>
@@ -330,7 +338,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @{ 
+                    @{
                         decimal ttpendienteprimera = 0;
                         decimal pesobrutottolapendiente = 0;
                     }
@@ -338,8 +346,8 @@
                         <th>Cantidad 1ra</th>
                         @foreach (var item in tallascantidadprimera)
                         {
-                                    ttpendienteprimera += item.pendiente;
-                                    <td> <input type="text" class="inputtabla" id="pendiente_talla_@item.talla" max="@item.cantidadprimeraprogramada" value="@item.pendiente" readonly> </td>
+                            ttpendienteprimera += item.pendiente;
+                            <td> <input type="text" class="inputtabla" id="pendiente_talla_@item.talla" max="@item.cantidadprimeraprogramada" value="@item.pendiente" readonly> </td>
                         }
                         <td class="text-center">@ttpendienteprimera</td>
                     </tr>
@@ -350,14 +358,14 @@
                             pesobrutottolapendiente += item.pesobrutorealtalla;
                             <td> <input type="text" class="inputtabla" id="pesototal_talla_@item.talla" value="@Math.Round(item.pesobrutorealtalla, 2)" readonly> </td>
                         }
-                        <td class="text-center">@Math.Round(pesobrutottolapendiente,2)</td>
+                        <td class="text-center">@Math.Round(pesobrutottolapendiente, 2)</td>
                     </tr>
                     <tr>
                         <th>Estado</th>
                         @foreach (var item in tallascantidadprimera)
                         {
-                                        if (item.pendiente > 0)
-                                        {
+                            if (item.pendiente > 0)
+                            {
                                 <td class="text-center" id="tdestadotalla_@item.talla">
                                     <span class="badge bg-warning" title="Quedan prendas por liquidar">
                                         PENDIENTE
@@ -384,8 +392,8 @@
 
 
     @* ARMAMOS FICHAS *@
-foreach (var fichas in fichastallas)
-{
+    foreach (var fichas in fichastallas)
+    {
 
         <form class="card card-outline card-primary formulariosfichas" autocomplete="off">
 
@@ -393,10 +401,14 @@ foreach (var fichas in fichastallas)
 
                 <label class="card-title">FICHA: @fichas.ficha - PEDIDO: @fichas.pedido</label>
                 <div class="card-tools">
-                    <button type="submit" class="btn btn-sm btn-primary">
-                        <i class="fas fa-save"></i>
-                        Guardar
-                    </button>
+
+                    @if (Model.FichaCabecera.estado == "PROCESO" || Model.FichaCabecera.estado == "APERTURADO")
+                    { 
+                        <button type="submit" class="btn btn-sm btn-primary">
+                            <i class="fas fa-save"></i>
+                            Guardar
+                        </button>
+                    }
 
                 </div>
             </div>
@@ -433,234 +445,237 @@ foreach (var fichas in fichastallas)
                         </tr>
                     </thead>
                     @*CUERPO*@
-                <tbody>
+                    <tbody>
 
 
-                    @{
-                        totales = 0;
-                        var tfichas = (
-
-                            from t in tallas
-                            join ft in Model.FichaTallas on t.talla equals ft.talla into lista
-                            from pc in lista.DefaultIfEmpty()
-                            select new
-                            {
-                                talla = pc.talla,
-                                ficha = pc.ficha,
-                                programado = pc.cantidadprimeraprogramada,
-                                real = pc.realprimera,
-                                pendiente = pc.pendiente,
-                                pesonetoreal = pc.pesonetoreal,
-                                pesobrutotalla = pc.pesobrutotalla,
-                                pesodespachado = pc.pesodespachado
-
-                            }
-                        ).Where(obj => obj.ficha == fichas.ficha).ToList();
-                    }
-
-
-                    @*PROGRAMADO*@
-                    <tr>
-                        <th>Programado</th>
-                        @foreach (var talla in tallas)
-                        {
-                            var response = tfichas.Where(obj =>
-                                obj.talla == talla.talla
-                            ).ToList();
-
-                            if (response.Count == 0)
-                            {
-                                <td> <input type="text" class="inputtabla bg-bloqueado" value="" readonly> </td>
-                            }
-                            else
-                            {
-                                totales += response[0].programado;
-                                var clase = "programado_" + fichas.ficha + "_" + talla.talla;
-
-                                <td> <input type="text" readonly class="bg-bloqueado inputtabla programado @clase font-weight-bold" data-orden="@talla.orden" data-talla="@talla.talla" data-ficha="@fichas.ficha" value="@response[0].programado"> </td>
-                            }
-
-                        }
-
-                        <td> <input type="text" class="inputtabla bg-bloqueado font-weight-bold" value="@totales" readonly> </td>
-                    </tr>
-
-                    @*MERMA PROGRAMADA*@
-                    @*<tr>
-            <th>Merma Programada</th>
-            @foreach (var item in tallas)
-            {
-                <td>
-                    @{
-                        var clase = "mermaprogramada" + fichas.ficha + "_" + item.talla;
-                    }
-                    <input type="number" class="inputtabla mermaprogramada bg-bloqueado @clase" value="0" data-orden="@item.orden" data-ficha="@fichas.ficha" data-talla="@item.talla" readonly>
-                </td>
-            }
-            <td>
-                <input type="number" class="inputtabla mermaprogramada bg-bloqueado" data-ficha="@fichas.ficha" value="0" readonly>
-            </td>
-        </tr>*@
-
-                    @*REAL PRIMERA*@
-                    <tr>
-                        <th>Real (1ra)</th>
                         @{
                             totales = 0;
-                        }
-                        @foreach (var talla in tallas)
-                        {
-                            var response = tfichas.Where(obj =>
-                                obj.talla == talla.talla
-                            ).ToList();
+                            var tfichas = (
 
-                            if (response.Count == 0)
-                            {
-                                <td> <input type="text" class="inputtabla" value="" readonly> </td>
-                            }
-                            else
-                            {
+                                from t in tallas
+                                join ft in Model.FichaTallas on t.talla equals ft.talla into lista
+                                from pc in lista.DefaultIfEmpty()
+                                select new
+                                {
+                                    talla = pc.talla,
+                                    ficha = pc.ficha,
+                                    programado = pc.cantidadprimeraprogramada,
+                                    real = pc.realprimera,
+                                    pendiente = pc.pendiente,
+                                    pesonetoreal = pc.pesonetoreal,
+                                    pesobrutotalla = pc.pesobrutotalla,
+                                    pesodespachado = pc.pesodespachado
 
-                                totales += response[0].real;
-                                var clase = "realesprimera_" + fichas.ficha;
-                                <td> <input type="number" class="inputtabla realesprimera @clase talla_@talla.talla" data-ficha="@fichas.ficha" data-pesoprogramado="@response[0].pesobrutotalla" data-programado="@response[0].programado" data-orden="@talla.orden" data-talla="@talla.talla" max="@response[0].programado" value="@response[0].real"> </td>
-                            }
-
-                        }
-
-
-                        <td>
-                            <input type="text" class="inputtabla " id="totalprimera_@fichas.ficha" value="@totales" readonly>
-                        </td>
-
-                    </tr>
-
-                    @*PENDIENTE*@
-                    <tr>
-                        <th>Pendiente</th>
-                        @{
-                            totales = 0;
+                                }
+                            ).Where(obj => obj.ficha == fichas.ficha).ToList();
                         }
 
-                        @foreach (var talla in tallas)
-                        {
-                            var response = tfichas.Where(obj =>
-                                obj.talla == talla.talla
-                            ).ToList();
 
-                            if (response.Count == 0)
+                        @*PROGRAMADO*@
+                        <tr>
+                            <th>Programado</th>
+                            @foreach (var talla in tallas)
                             {
-                                <td> <input type="text" class="inputtabla bg-bloqueado" value="" readonly> </td>
-                            }
-                            else
-                            {
+                                var response = tfichas.Where(obj =>
+                                    obj.talla == talla.talla
+                                ).ToList();
 
-                                totales += response[0].pendiente;
-                                var clase = "pendientes_" + fichas.ficha;
-                                var clase_new = "pendientes_" + fichas.ficha + "_" + talla.talla;
+                                if (response.Count == 0)
+                                {
+                                    <td> <input type="text" class="inputtabla bg-bloqueado" value="" readonly> </td>
+                                }
+                                else
+                                {
+                                    totales += response[0].programado;
+                                    var clase = "programado_" + fichas.ficha + "_" + talla.talla;
 
-                                <td> <input type="number" class="bg-bloqueado inputtabla pendientes @clase @clase_new" data-orden="@talla.orden" data-ficha="@fichas.ficha" data-talla="@talla.talla" readonly value="@response[0].pendiente"> </td>
-                            }
+                                    <td> <input type="text" readonly class="bg-bloqueado inputtabla programado @clase font-weight-bold" data-orden="@talla.orden" data-talla="@talla.talla" data-ficha="@fichas.ficha" value="@response[0].programado"> </td>
+                                }
 
-                        }
-                        <td>
-                            <input type="text" class="inputtabla bg-bloqueado" id="totalpendientes_@fichas.ficha" value="@totales" readonly>
-                        </td>
-
-                    </tr>
-
-                    @*PESO NETO PROGRAMADO*@
-                    <tr>
-                        <th>Peso Neto Prog.</th>
-                        @{
-                            decimal totalespnp = 0;
-                        }
-
-                        @foreach (var talla in tallas)
-                        {
-                            var response = tfichas.Where(obj =>
-                                obj.talla == talla.talla
-                            ).ToList();
-
-                            if (response.Count == 0)
-                            {
-                                <td> <input type="text" class="inputtabla" value="" readonly> </td>
-                            }
-                            else
-                            {
-
-                                totalespnp += response[0].pesodespachado;
-                                var clase = "pesoprogramado_" + fichas.ficha;
-                                var id = "pesoprogramado_" + fichas.ficha + "_" + talla.talla;
-
-                                <td> <input type="number" id="@id" class="inputtabla bg-bloqueado pesoprogramado @clase" data-ficha="@fichas.ficha" data-orden="@talla.orden" data-talla="@talla.talla" readonly value="@Math.Round(response[0].pesodespachado,3)"> </td>
                             }
 
-                        }
-                        <td>
-                            <input type="text" class="inputtabla bg-bloqueado" id="totalpesoprogramado_@fichas.ficha" value="@Math.Round(totalespnp,3)" readonly>
-                        </td>
-                    </tr>
+                            <td> <input type="text" class="inputtabla bg-bloqueado font-weight-bold" value="@totales" readonly> </td>
+                        </tr>
 
+                        @*MERMA PROGRAMADA*@
+                        @*<tr>
+                                <th>Merma Programada</th>
+                                @foreach (var item in tallas)
+                                {
+                                    <td>
+                                        @{
+                                            var clase = "mermaprogramada" + fichas.ficha + "_" + item.talla;
+                                        }
+                                        <input type="number" class="inputtabla mermaprogramada bg-bloqueado @clase" value="0" data-orden="@item.orden" data-ficha="@fichas.ficha" data-talla="@item.talla" readonly>
+                                    </td>
+                                }
+                                <td>
+                                    <input type="number" class="inputtabla mermaprogramada bg-bloqueado" data-ficha="@fichas.ficha" value="0" readonly>
+                                </td>
+                            </tr>*@
 
-                    @*PESO NETO TOTAL*@
-                    <tr>
-                        <th>Peso Neto total</th>
-                        @{
-                            decimal totalesd = 0;
-                        }
-
-                        @foreach (var talla in tallas)
-                        {
-                            var response = tfichas.Where(obj =>
-                                obj.talla == talla.talla
-                            ).ToList();
-
-                            if (response.Count == 0)
-                            {
-                                <td> <input type="text" class="inputtabla" value="" readonly> </td>
+                        @*REAL PRIMERA*@
+                        <tr>
+                            <th>Real (1ra)</th>
+                            @{
+                                totales = 0;
                             }
-                            else
+                            @foreach (var talla in tallas)
                             {
+                                var response = tfichas.Where(obj =>
+                                    obj.talla == talla.talla
+                                ).ToList();
 
-                                totalesd += response[0].pesonetoreal;
-                                var clase = "pesoneto_" + fichas.ficha;
-                                var id = "pesoneto_" + fichas.ficha + "_" + talla.talla;
+                                if (response.Count == 0)
+                                {
+                                    <td> <input type="text" class="inputtabla" value="" readonly> </td>
+                                }
+                                else
+                                {
 
-                                <td> <input type="number" id="@id" class="inputtabla pesoneto @clase" data-ficha="@fichas.ficha" data-orden="@talla.orden" data-talla="@talla.talla" step="0.01" value="@response[0].pesonetoreal"> </td>
+                                    totales += response[0].real;
+                                    var clase = "realesprimera_" + fichas.ficha;
+                                    <td> <input type="number" class="inputtabla realesprimera @clase talla_@talla.talla" data-ficha="@fichas.ficha" data-pesoprogramado="@response[0].pesobrutotalla" data-programado="@response[0].programado" data-orden="@talla.orden" data-talla="@talla.talla" max="@response[0].programado" value="@response[0].real"> </td>
+                                }
+
                             }
 
-                        }
-                        <td>
-                            <input type="text" class="inputtabla" id="totalpesoneto_@fichas.ficha" value="@totalesd" readonly>
-                        </td>
-                    </tr>
 
-                </tbody>
+                            <td>
+                                <input type="text" class="inputtabla " id="totalprimera_@fichas.ficha" value="@totales" readonly>
+                            </td>
+
+                        </tr>
+
+                        @*PENDIENTE*@
+                        <tr>
+                            <th>Pendiente</th>
+                            @{
+                                totales = 0;
+                            }
+
+                            @foreach (var talla in tallas)
+                            {
+                                var response = tfichas.Where(obj =>
+                                    obj.talla == talla.talla
+                                ).ToList();
+
+                                if (response.Count == 0)
+                                {
+                                    <td> <input type="text" class="inputtabla bg-bloqueado" value="" readonly> </td>
+                                }
+                                else
+                                {
+
+                                    totales += response[0].pendiente;
+                                    var clase = "pendientes_" + fichas.ficha;
+                                    var clase_new = "pendientes_" + fichas.ficha + "_" + talla.talla;
+
+                                    <td> <input type="number" class="bg-bloqueado inputtabla pendientes @clase @clase_new" data-orden="@talla.orden" data-ficha="@fichas.ficha" data-talla="@talla.talla" readonly value="@response[0].pendiente"> </td>
+                                }
+
+                            }
+                            <td>
+                                <input type="text" class="inputtabla bg-bloqueado" id="totalpendientes_@fichas.ficha" value="@totales" readonly>
+                            </td>
+
+                        </tr>
+
+                        @*PESO NETO PROGRAMADO*@
+                        <tr>
+                            <th>Peso Neto Prog.</th>
+                            @{
+                                decimal totalespnp = 0;
+                            }
+
+                            @foreach (var talla in tallas)
+                            {
+                                var response = tfichas.Where(obj =>
+                                    obj.talla == talla.talla
+                                ).ToList();
+
+                                if (response.Count == 0)
+                                {
+                                    <td> <input type="text" class="inputtabla" value="" readonly> </td>
+                                }
+                                else
+                                {
+
+                                    totalespnp += response[0].pesodespachado;
+                                    var clase = "pesoprogramado_" + fichas.ficha;
+                                    var id = "pesoprogramado_" + fichas.ficha + "_" + talla.talla;
+
+                                    <td> <input type="number" id="@id" class="inputtabla bg-bloqueado pesoprogramado @clase" data-ficha="@fichas.ficha" data-orden="@talla.orden" data-talla="@talla.talla" readonly value="@Math.Round(response[0].pesodespachado,3)"> </td>
+                                }
+
+                            }
+                            <td>
+                                <input type="text" class="inputtabla bg-bloqueado" id="totalpesoprogramado_@fichas.ficha" value="@Math.Round(totalespnp,3)" readonly>
+                            </td>
+                        </tr>
+
+
+                        @*PESO NETO TOTAL*@
+                        <tr>
+                            <th>Peso Neto total</th>
+                            @{
+                                decimal totalesd = 0;
+                            }
+
+                            @foreach (var talla in tallas)
+                            {
+                                var response = tfichas.Where(obj =>
+                                    obj.talla == talla.talla
+                                ).ToList();
+
+                                if (response.Count == 0)
+                                {
+                                    <td> <input type="text" class="inputtabla bg-bloqueado" value="" disabled> </td>
+                                }
+                                else
+                                {
+
+                                    totalesd += response[0].pesonetoreal;
+                                    var clase = "pesoneto_" + fichas.ficha;
+                                    var id = "pesoneto_" + fichas.ficha + "_" + talla.talla;
+
+                                    <td> <input type="number" id="@id" class="inputtabla bg-bloqueado pesoneto @clase" data-ficha="@fichas.ficha" data-orden="@talla.orden" data-talla="@talla.talla" step="0.01" value="@response[0].pesonetoreal" readonly> </td>
+                                }
+
+                            }
+                            <td>
+                                <input type="text" class="inputtabla" id="totalpesoneto_@fichas.ficha" value="@totalesd">
+                            </td>
+                        </tr>
+
+                    </tbody>
                 </table>
 
             </div>
 
         </form>
 
-                                }
+    }
 
-    //SEGUNDAS
+   //SEGUNDAS
 
     <form action="" class="card card-primary card-outline" id="frmsegundas" autocomplete="off">
 
         <div class="card-header text-center">
             <label class="card-title">Segundas</label>
             <div class="card-tools">
-                <button type="submit" class="btn btn-sm btn-primary">
-                    <i class="fas fa-save"></i>
-                    Guardar
-                </button>
+                @if (Model.FichaCabecera.estado == "PROCESO" || Model.FichaCabecera.estado == "APERTURADO")
+                {
+                    <button type="submit" class="btn btn-sm btn-primary">
+                        <i class="fas fa-save"></i>
+                        Guardar
+                    </button>
+                }
 
             </div>
         </div>
         <div class="card-body">
-                
+
             <table class="table table-bordered table-sm tablainput tablefixed">
                 @*CABECERA*@
                 <thead class="text-center bg-danger">
@@ -732,7 +747,7 @@ foreach (var fichas in fichastallas)
                                 else
                                 {
                                     totales += response[0].realsegunda;
-                                    <td> <input type="number" data-programadosegunda="@response[0].programadosegunda"  max="@response[0].programadosegunda" id="segundasingreso_talla_@talla.talla" class="inputtabla realessegunda talla_@talla.talla" data-orden="@talla.orden" data-talla="@talla.talla" value="@response[0].realsegunda"> </td>
+                                    <td> <input type="number" data-programadosegunda="@response[0].programadosegunda" max="@response[0].programadosegunda" id="segundasingreso_talla_@talla.talla" class="inputtabla realessegunda talla_@talla.talla" data-orden="@talla.orden" data-talla="@talla.talla" value="@response[0].realsegunda"> </td>
                                 }
                             }
                         }
@@ -791,7 +806,7 @@ foreach (var fichas in fichastallas)
 
                                 if (tallaprogramada.Count > 0)
                                 {
-                                    <td> <input type="number" step="0.01" id="pesonetosegundas_talla_@talla.talla" class="inputtabla pesonetosegundas talla_@talla.talla"  data-orden="@talla.orden" data-talla="@talla.talla"> </td>
+                                    <td> <input type="number" step="0.01" id="pesonetosegundas_talla_@talla.talla" class="inputtabla pesonetosegundas talla_@talla.talla" data-orden="@talla.orden" data-talla="@talla.talla"> </td>
                                 }
                                 else
                                 {
@@ -849,10 +864,15 @@ foreach (var fichas in fichastallas)
                             <input type="number" class="form-control form-control-sm" id="txtmermahilos" step="0.01" required value="@Model.FichaCabecera.mermahilos">
                         </div>
 
-                        <div class="col-md-4">
-                            <label for="">&nbsp;</label>
-                            <button class="btn btn-primary btn-sm btn-block" type="submit">Guardar</button>
-                        </div>
+                        @if (Model.FichaCabecera.estado == "PROCESO" || Model.FichaCabecera.estado == "APERTURADO")
+                        {
+                            <div class="col-md-4">
+                                <label for="">&nbsp;</label>
+                                <button class="btn btn-primary btn-sm btn-block" type="submit">Guardar</button>
+                            </div>
+                        }
+
+
 
                     </form>
 
@@ -888,41 +908,7 @@ foreach (var fichas in fichastallas)
 
         let formularioactivo = null;
 
-        //loaD
-        window.addEventListener('load', async () => {
-
-            // EVENTO PARA REGISTRAR LAS FICHAS (PRIMERAS)
-            for (let item of formulariosfichas) {
-
-                item.addEventListener('submit', async (e) => {
-                    e.preventDefault();
-                    await saveFichas(item);
-                });
-            }
-
-            // EVENTO PARA REGISTRAR LAS SEGUNDAS
-            frmsegundas.addEventListener('submit', async (e) => {
-                e.preventDefault();
-
-                MostrarCarga("Cargando...");
-
-                // REGISTRAMOS CABECERA
-                saveHead().then(async (response) => {
-                    let idrectilineohead = response;
-                    // REGISTRAMOS TALLAS (SEGUNDAS)
-                    await saveTallasSegundas(idrectilineohead);
-
-
-                    // OCULTAMOS CARGA
-                    OcultarCarga();
-
-                });
-
-                
-
-            });
-
-        });
+        
 
         frmbusqueda.addEventListener('submit', (e) => {
             MostrarCarga("Cargando...");
@@ -1074,7 +1060,7 @@ foreach (var fichas in fichastallas)
                     let tbody   = tabla.children[1];
 
                     // REGISTRAMOS TALLAS (PRIMERAS)
-                    await saveTallas(id, tbody);
+                    await saveTallas(id, tbody,ficha);
 
                     // OCULTAMOS CARGA
                     OcultarCarga();
@@ -1135,12 +1121,26 @@ foreach (var fichas in fichastallas)
 
 
         // FUNCION PARA REGISTRAR TALLAS POR FICHA
-        async function saveTallas(idrectilineoficha, tbody) {
+        async function saveTallas(idrectilineoficha, tbody,ficha) {
 
             formularioactivo    = tbody;
-            let realesprimera   = tbody.children[1];
+            let realesprimera = tbody.children[1];
 
-            console.log("guardando tallas", realesprimera);
+            // #########################
+            // ### TOTALES POR FICHA ###
+            // #########################
+
+            // PESO TOTAL
+            let pesototal           = parseFloat(document.getElementById(`totalpesoneto_${ficha}`).value);
+
+            // REALES PRIMERA
+            let totalprimerastallas = parseFloat(document.getElementById(`totalprimera_${ficha}`).value);
+
+            // CONSUMO
+            let consumogeneral = pesototal / totalprimerastallas;
+
+            //console.log(pesototal, totalprimerastallas);
+
 
             // RECORREMOS
             for (let item of realesprimera.querySelectorAll('.inputtabla')) {
@@ -1158,9 +1158,22 @@ foreach (var fichas in fichastallas)
                     let pesoprogramado = item.dataset.pesoprogramado;
 
 
+
+
+
                     let id = `pesoneto_${ficha}_${talla}`;
-                    //console.log(id);
-                    let pesoneto = document.getElementById(id).value;
+
+
+                    // OBTENEMOS INPUT DEL PESO NETO
+                    let pesonetoinput = document.getElementById(id);
+
+                    // CALCULAMOS PESO NETO
+                    let pesoneto = consumogeneral * parseFloat(realprimera);
+                    pesoneto = pesoneto.toFixed(2);
+
+                    // ASIGNAMOS VALOR AL INPUT
+                    pesonetoinput.value = pesoneto;
+
 
                     let response = await get("corte", "saveTallasRectilineo", {
                         talla, realprimera, idrectilineoficha, pesoneto, orden, programado, pesoprogramado, tipo: TIPO
@@ -1175,23 +1188,7 @@ foreach (var fichas in fichastallas)
         }
 
         // REGISTRAR CABECERA
-        frmregistro.addEventListener('submit', (e) => {
-            e.preventDefault();
-
-            MostrarCarga_new("Registrando");
-
-            saveHead().then(response => {
-                OcultarCarga();
-                console.log(response);
-            })
-            .catch(error => {
-                console.log(error);
-                Advertir("Ocurrio un error en el registro");
-            })
-        });
-
-        // REGISTRAR CABECERA
-        async function saveHead() {
+        async function saveHead(estado = null) {
 
             let mermarecorte    = document.getElementById("txtmermacorte").value;
             let mermahilos      = document.getElementById("txtmermahilos").value;
@@ -1200,7 +1197,7 @@ foreach (var fichas in fichastallas)
             // REGISTRA CABECERA
             //if (IDRECTILINEO == null) {
                 let response = await post("corte", "saveHeadRectilineo", {
-                    partida: PARTIDA, lote: LOTE, mermarecorte, mermahilos,tipo:TIPO
+                    partida: PARTIDA, lote: LOTE, mermarecorte, mermahilos, tipo: TIPO, estado
                 },true);
 
                 if (response.success) {
@@ -1288,5 +1285,93 @@ foreach (var fichas in fichastallas)
         }
 
     </script>
+
+
+    @* SI ES UN REGISTRO NUEVO O APERTURADO *@
+    @if (Model.FichaCabecera.estado == "PROCESO" || Model.FichaCabecera.estado == "APERTURADO")
+    {
+        <script>
+
+            // REGISTRAR CABECERA
+            frmregistro.addEventListener('submit', (e) => {
+                e.preventDefault();
+
+                MostrarCarga_new("Registrando");
+
+                saveHead("PENDIENTE").then(response => {
+                    if (response) {
+
+
+
+                        var form = document.createElement("form");
+                        // CONFIGURAMOS ATRIBUTOS DEL FORMULARIO
+                        form.method = "GET";
+                        //form.action = "pdfindicadortesting.report.php";
+                        //form.target = "_blank";
+                        // AGREGAMOS INPUT AL FORMULARIO
+                        document.body.appendChild(form);
+
+                        // ENVIAMOS FORMULARIO
+                        form.submit();
+
+                        // REMOVEMOS FORMULARIO
+                        document.body.removeChild(form);
+
+                        //OcultarCarga();
+                        Informar("Registrado correctamente", 1500, true);
+
+                    } else {
+                        Advertir("Ocurrio un error");
+                    }
+
+                    //console.log(response);
+                })
+                    .catch(error => {
+                        console.log(error);
+                        Advertir("Ocurrio un error en el registro");
+                })
+
+            });
+
+            //loaD
+            window.addEventListener('load', async () => {
+
+                // EVENTO PARA REGISTRAR LAS FICHAS (PRIMERAS)
+                for (let item of formulariosfichas) {
+
+                    item.addEventListener('submit', async (e) => {
+                        e.preventDefault();
+                        await saveFichas(item);
+                    });
+                }
+
+                // EVENTO PARA REGISTRAR LAS SEGUNDAS
+                frmsegundas.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+
+                    MostrarCarga("Cargando...");
+
+                    // REGISTRAMOS CABECERA
+                    saveHead().then(async (response) => {
+                        let idrectilineohead = response;
+                        // REGISTRAMOS TALLAS (SEGUNDAS)
+                        await saveTallasSegundas(idrectilineohead);
+
+
+                        // OCULTAMOS CARGA
+                        OcultarCarga();
+
+                    });
+
+
+
+                });
+
+            });
+
+        </script>
+
+    }
+
 
 }

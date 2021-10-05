@@ -43,7 +43,9 @@ namespace TSC_WEB.Controllers
         AperturarFichaModelo objAperturarFichaNewM = new AperturarFichaModelo();
         RecursosModelo objRecursosModeloM = new RecursosModelo();
         LiquidacionRectilineosModelo objRectilineosM = new LiquidacionRectilineosModelo();
-        
+        LiquidacionRectilineosReporteModelo objRectilineosReporteM = new LiquidacionRectilineosReporteModelo();
+
+
         #endregion
 
         #region VISTAS
@@ -266,6 +268,30 @@ namespace TSC_WEB.Controllers
                 return Redirect("/");
             }
         }
+
+        // LIQUIDACION RECTILINEOS PCP
+        [HttpGet]
+        public ActionResult getLiquidacionRectilineosPCP(string fechai,string fechaf,string partida,string estado, string tipo,string busqueda) 
+        {
+
+            if (Session["usuario"] != null)
+            {
+                List<LiquidacionRectilineosPCPEntidad> response = new List<LiquidacionRectilineosPCPEntidad>();
+
+                if(busqueda != "" && busqueda != null)
+                {
+                    response = objRectilineosM.getLiquidacionRectilineosPCP(fechai, fechaf, partida, estado, tipo);
+                    Session["dato_liquidacion_rectilineos_pcp"] = response;
+                }
+
+                return View(response);
+            }
+            else
+            {
+                return Redirect("/");
+            }
+        }
+
 
         #endregion
 
@@ -802,10 +828,10 @@ namespace TSC_WEB.Controllers
             
             // CABECERA DE RECTILINEO
             [HttpPost]
-            public JsonResult saveHeadRectilineo(string partida,/*int lote,*/decimal mermarecorte,decimal mermahilos,string tipo)
+            public JsonResult saveHeadRectilineo(string partida,/*int lote,*/decimal mermarecorte,decimal mermahilos,string tipo,string estado)
             {
                 string mensaje = string.Empty;
-                var response = objRectilineosM.saveHead(partida, Session["usuario"].ToString() /*, lote*/, mermarecorte,mermahilos,tipo, out mensaje);
+                var response = objRectilineosM.saveHead(partida, Session["usuario"].ToString() /*, lote*/, mermarecorte,mermahilos,tipo, estado,out mensaje);
                 return Json(new { success = response,mensaje = mensaje },JsonRequestBehavior.AllowGet);
             }
 
@@ -879,8 +905,8 @@ namespace TSC_WEB.Controllers
                 return Json(new { success = response, mensaje = mensaje }, JsonRequestBehavior.AllowGet);
             }
 
-        // INGRESO DE RECTILINEOS ALMACEN
-        [HttpGet]
+            // INGRESO DE RECTILINEOS ALMACEN
+            [HttpGet]
             public JsonResult saveRectilineosAlmacen(IngresoRectilineosEntidad obj)
             {
                 string mensaje = string.Empty;
@@ -894,10 +920,18 @@ namespace TSC_WEB.Controllers
             {
 
                 var datos = (List<ReporteEntidad>)Session["dato_reporte_rectilineos"];
-                var file = objRectilineosM.getReporteExcel(datos);
+                var file = objRectilineosReporteM.getReporteExcel(datos);
 
                 return File(file, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "ReporteRectilineos" + DateTime.Now.ToString("yyyyMMdd") + ".xlsx");
 
+            }
+
+            [HttpPost]
+            public JsonResult setEstadoRectilineos(string estado,int idrectilineo)
+            {
+                string mensaje = string.Empty;
+                var response = objRectilineosM.setEstadoRectilineos(estado,idrectilineo, out mensaje);
+                return Json(new { success = response, mensaje = mensaje });
             }
 
         // REPORTE

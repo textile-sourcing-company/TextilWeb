@@ -224,6 +224,9 @@ namespace TSC_WEB.Models.Modelos.Corte.LiquidacionRectilineos
 
                     obj.tipo = tipo;
 
+                    obj.estado = registros["estado"].ToString();
+
+
 
 
                 }
@@ -236,7 +239,7 @@ namespace TSC_WEB.Models.Modelos.Corte.LiquidacionRectilineos
         }
     
         // REGISTRAMOS CABECERA
-        public bool saveHead(string partida,string usuario/*,int lote*/, decimal mermarecorte, decimal mermahilos,string tipo, out string mensaje)
+        public bool saveHead(string partida,string usuario/*,int lote*/, decimal mermarecorte, decimal mermahilos,string tipo,string estado, out string mensaje)
         {
 
             //FichaDatos obj = new FichaDatos();
@@ -255,6 +258,8 @@ namespace TSC_WEB.Models.Modelos.Corte.LiquidacionRectilineos
                 comando.Parameters.Add(new OracleParameter("i_mermarecorte", mermarecorte));
                 comando.Parameters.Add(new OracleParameter("i_mermahilos", mermahilos));
                 comando.Parameters.Add(new OracleParameter("i_tipo", tipo));
+                comando.Parameters.Add(new OracleParameter("i_estado", estado));
+
 
 
                 comando.Parameters.Add(new OracleParameter("o_cursor", OracleDbType.RefCursor)).Direction = ParameterDirection.Output;
@@ -452,7 +457,7 @@ namespace TSC_WEB.Models.Modelos.Corte.LiquidacionRectilineos
 
                     obj.usuariocrea = registros["usuariocrea"].ToString();
                     obj.tipo = registros["tipo"].ToString();
-                    obj.fechamod = Convert.ToDateTime(registros["fechamod"].ToString()).ToShortDateString();
+                    obj.fechamod = registros["fechamod"].ToString() != string.Empty ? Convert.ToDateTime(registros["fechamod"].ToString()).ToShortDateString() : "";
                     obj.ficha = Convert.ToInt32(registros["ficha"].ToString());
                     obj.partida = registros["partida"].ToString();
                     obj.pedido = Convert.ToInt32(registros["pedido"].ToString());
@@ -570,6 +575,8 @@ namespace TSC_WEB.Models.Modelos.Corte.LiquidacionRectilineos
                 comando.Parameters.Add(new OracleParameter("i_fechacarga", objpartidarec.fechacarga));
                 comando.Parameters.Add(new OracleParameter("i_usuario", objpartidarec.usuarioreg));
                 comando.Parameters.Add(new OracleParameter("i_observacion", objpartidarec.observacion));
+                comando.Parameters.Add(new OracleParameter("i_kilostotales", objpartidarec.kilostotales));
+
                 comando.Parameters.Add(new OracleParameter("o_cursor", OracleDbType.RefCursor)).Direction = ParameterDirection.Output;
 
 
@@ -759,6 +766,9 @@ namespace TSC_WEB.Models.Modelos.Corte.LiquidacionRectilineos
 
                     obj.observacion = registros["observacion"].ToString();
 
+                    obj.kilostotales = registros["kilostotales"].ToString() != "" ? Convert.ToDecimal(registros["kilostotales"].ToString()) : 0;
+
+
                     objretornar.Add(obj);
                 }
 
@@ -821,15 +831,6 @@ namespace TSC_WEB.Models.Modelos.Corte.LiquidacionRectilineos
             }
             return objretornar;
         }
-        // EXPORTAR EXCEL
-        public MemoryStream getReporteExcel(List<ReporteEntidad> listadatos)
-        {
-
-            cells(1, 1, "Usuario", Color.AliceBlue,Color.White);
-            int i = 3;
-
-            return getestream();
-        }
 
 
         //REPORTE DE RECTILINEOS INGRESADOS POR EL ALMACEN
@@ -871,8 +872,11 @@ namespace TSC_WEB.Models.Modelos.Corte.LiquidacionRectilineos
                     obj.cantidadprimera = Convert.ToDecimal(registros["cantidadprimera"].ToString());
                     obj.cantidadsegunda = Convert.ToDecimal(registros["cantidadsegunda"].ToString());
 
-                    obj.cantidadprimera = obj.cantidadprimera == 0 ? null : obj.cantidadprimera;
-                    obj.cantidadsegunda = obj.cantidadsegunda == 0 ? null : obj.cantidadsegunda;
+                    obj.kilostotales    = Convert.ToDecimal(registros["kilostotales"].ToString());
+
+
+                    //obj.cantidadprimera = obj.cantidadprimera == 0 ? null : obj.cantidadprimera;
+                    //obj.cantidadsegunda = obj.cantidadsegunda == 0 ? null : obj.cantidadsegunda;
 
 
                     objretornar.Add(obj);
@@ -931,6 +935,91 @@ namespace TSC_WEB.Models.Modelos.Corte.LiquidacionRectilineos
                 conexion.Desconectar();
             }
             return objretornar;
+        }
+
+        // GET LIQUIDACION RECTILINEOS PCPC
+        public List<LiquidacionRectilineosPCPEntidad> getLiquidacionRectilineosPCP(string fechai, string fechaf, string partida, string estado, string tipo           )
+        {
+            List<LiquidacionRectilineosPCPEntidad> objretornar = new List<LiquidacionRectilineosPCPEntidad>();
+
+            try
+            {
+                OracleCommand comando = new OracleCommand("SYSTEXTILRPT.PQ_LIQUI_RECTILINEO.SPU_GETLIQUIRECTILINEOS_PCP", conexion.Acceder());
+                comando.CommandType = CommandType.StoredProcedure;
+                conexion.Conectar();
+
+                comando.Parameters.Add(new OracleParameter("i_fechai", fechai));
+                comando.Parameters.Add(new OracleParameter("i_fechaf", fechai));
+                comando.Parameters.Add(new OracleParameter("i_partida", partida));
+                comando.Parameters.Add(new OracleParameter("i_estado", estado));
+                comando.Parameters.Add(new OracleParameter("i_tipo", tipo));
+                comando.Parameters.Add(new OracleParameter("o_cursor", OracleDbType.RefCursor)).Direction = ParameterDirection.Output;
+
+
+                OracleDataReader registros = comando.ExecuteReader();
+
+                while (registros.Read())
+                {
+                    LiquidacionRectilineosPCPEntidad obj = new LiquidacionRectilineosPCPEntidad();
+
+                    obj.idrectilineohead    = Convert.ToInt32(registros["idrectilineohead"].ToString());
+                    obj.partida             = registros["partida"].ToString();
+                    obj.tipo      = registros["tipo"].ToString();
+                    obj.fichas = registros["fichas"].ToString();
+                    obj.estado = registros["estado"].ToString();
+
+                    obj.fechacrea =  Convert.ToDateTime( registros["fechacrea"].ToString()).ToShortDateString();
+                    obj.usuariocrea = registros["usuariocrea"].ToString();
+
+                    obj.fechaliquidacion = registros["fechaliquidacion"].ToString() != "" ? Convert.ToDateTime(registros["fechaliquidacion"].ToString()).ToShortDateString() : null;
+                    obj.usuarioliquidacion = registros["usuarioliquidacion"].ToString();
+
+                    objretornar.Add(obj);
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+
+            }
+            finally
+            {
+                conexion.Desconectar();
+            }
+            return objretornar;
+        }
+    
+            
+        // SET ESTADO REPORTE DE RECTILINEOS
+        public bool setEstadoRectilineos(string estado, int idrectilineo, out string mensaje)
+        {
+            bool retornar = false;
+            //string id = string.Empty;
+
+            try
+            {
+                OracleCommand comando = new OracleCommand("SYSTEXTILRPT.PQ_LIQUI_RECTILINEO.SPU_SETLIQUIRECTILINEOS_PCP", conexion.Acceder());
+                comando.CommandType = CommandType.StoredProcedure;
+                conexion.Conectar();
+
+                comando.Parameters.Add(new OracleParameter("i_estado", estado));
+                comando.Parameters.Add(new OracleParameter("i_idrectilineo", idrectilineo));
+
+
+                comando.ExecuteNonQuery();
+                retornar = true;
+                mensaje = "Asignado correctamente";
+            }
+            catch (Exception ex)
+            {
+                retornar = false;
+                mensaje = ex.Message;
+            }
+
+            conexion.Desconectar();
+            return retornar;
+
         }
 
     }

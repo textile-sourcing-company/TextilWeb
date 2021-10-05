@@ -18,6 +18,16 @@ namespace TSC_WEB.Models.Entidades.Corte.LiquidacionRectilineos
         public string fechamod { get; set; }
         public string observacion { get; set; }
 
+        public decimal kilostotales { get; set; }
+        public decimal totalprendas { get; set; }
+        public decimal consumototal {
+            get {
+                return totalprendas > 0 ? kilostotales / totalprendas : 0;
+            }
+        }
+
+
+
 
         //IDPARTIDARECTILINEO, PARTIDARECTILINEO, TIPORECTILINEO, PARTIDATELA,
         //FECHACARGA, FECHAREG, USUARIOREG, USUARIOMOD, FECHAMOD, OBSERVACION

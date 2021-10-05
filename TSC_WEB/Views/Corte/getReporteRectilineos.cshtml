@@ -122,11 +122,11 @@
 
 @section style{
     <style>
-        table {
+        /*table {
             table-layout: fixed;
-        }
+        }*/
 
-        #filafija .thcabeceras {
+        /*#filafija .thcabeceras {
             width: 263px !important;
             overflow: auto !important;
             vertical-align: middle !important;
@@ -160,7 +160,7 @@
             width: 120px !important;
             overflow: auto !important;
             vertical-align: middle !important;
-        }
+        }*/
 
         #tbodydatos td {
             vertical-align: middle;
@@ -249,8 +249,8 @@
         </form>
 
 
-        <form id="frmexportar" class="d-none" action="@Url.Action("getReporteRectilineosExcel", "Corte")" method="get" target="_blank" autocomplete="off" > 
-            <input type="hidden"/>
+        <form id="frmexportar" class="d-none" action="@Url.Action("getReporteRectilineosExcel", "Corte")" method="get" target="_blank" autocomplete="off">
+            <input type="hidden" />
         </form>
 
     </div>
@@ -268,7 +268,7 @@
 
             <div class="table-responsive">
 
-                <table class="table table-bordered table-sm table-hover text-center">
+                <table class="table table-bordered table-sm table-hover text-center nowrap" id="tablereporte" style="width:100%">
                     <thead class="thead-light " id="thead">
                         <tr id="filafija">
                             <th rowspan="2" style="vertical-align:middle" class="thcabecerasdatos border-table">Tipo</th>
@@ -338,15 +338,15 @@
                             }
 
                             @*<th class="border-table">Recorte</th>
-                            <th class="border-table">Hilo</th>*@
+                                <th class="border-table">Hilo</th>*@
 
                             <th class="border-table">Recorte</th>
                             <th class="border-table">Hilo</th>
 
                             @*<th class="border-table">Variación Merma de Recorte (Kg)</th>
-                            <th class="border-table">Variación Merma de Hilo (Kg)</th>
-                            <th class="border-table">Variación Merma de Recorte (%)</th>
-                            <th class="border-table">Variación Merma de Hilo (%)</th>*@
+                                <th class="border-table">Variación Merma de Hilo (Kg)</th>
+                                <th class="border-table">Variación Merma de Recorte (%)</th>
+                                <th class="border-table">Variación Merma de Hilo (%)</th>*@
 
                             <th class="border-table">Programado total (UN)</th>
                             <th class="border-table">Liquidado total (UN)</th>
@@ -640,7 +640,7 @@
                                           obj.partida == item.partida && obj.tipo == item.tipo
                                     ).Sum(s => s.realprimera);
 
-                                    porcentajeficha = totalliquidado / sumatotal;
+                                    porcentajeficha = sumatotal > 0 ? totalliquidado / sumatotal : 0;
 
                                     item.mermarealrecorte = porcentajeficha * item.mermarecorte;
                                     item.mermarealhilo = porcentajeficha * item.mermahilos;
@@ -664,9 +664,9 @@
 
                                 @* BALANCE DE MERMAS *@
                                 @*<td>@Math.Round(item.variacionmermaderecorte, 2)</td>
-                                <td>@Math.Round(item.variacionmermadehilo, 2)</td>
-                                <td>@Math.Round(item.variacionmermaderecortepor * 100)%</td>
-                                <td class="border-table-right">@Math.Round(item.variacionmermadehilopor * 100)%</td>*@
+                                    <td>@Math.Round(item.variacionmermadehilo, 2)</td>
+                                    <td>@Math.Round(item.variacionmermaderecortepor * 100)%</td>
+                                    <td class="border-table-right">@Math.Round(item.variacionmermadehilopor * 100)%</td>*@
 
                                 <td>@totalprogramado</td>
                                 <td>@totalliquidado</td>
@@ -712,16 +712,31 @@
     </div>
 
 
-   
+
 
 }
 
 @section scripts {
+
+
+    @if (busqueda != string.Empty)
+    {
+        <script>
+            window.addEventListener('load', (e) => {
+
+                setDataTableSimple("reporte");
+
+            });
+
+        </script>
+    }
+
     <script>
 
-        const   frmbusqueda = document.getElementById("frmbusqueda");
-        let     btnexportar = document.getElementById("btnexportar");
-        const   frmexportar = document.getElementById("frmexportar");
+        const frmbusqueda = document.getElementById("frmbusqueda");
+        let btnexportar = document.getElementById("btnexportar");
+        const frmexportar = document.getElementById("frmexportar");
+
         
 
 

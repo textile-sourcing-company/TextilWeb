@@ -59,9 +59,9 @@ function setDataTableSimple(tabla,scroolx = false,dato = false,exportar = false)
     objeto.scrollX = scroolx;
     //objeto.processing = true;
 
-    //if (minimo) {
-    //objeto.lengthMenu = [[5, 10, 20, -1], [5, 10, 20, 'Todos']];
-    //}
+    if (!scroolx) {
+        objeto.lengthMenu = [[5, 10, 20, -1], [5, 10, 20, 'Todos']];
+    }
 
     if (exportar) {
 
