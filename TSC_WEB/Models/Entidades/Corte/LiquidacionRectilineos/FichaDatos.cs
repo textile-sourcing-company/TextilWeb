@@ -26,6 +26,8 @@ namespace TSC_WEB.Models.Entidades.Corte.LiquidacionRectilineos
         public string pedidos { get; set; }
         public string estilocliente { get; set; }
         public string tipo { get; set; }
+        public string estado { get; set; }
+
 
     }
 }

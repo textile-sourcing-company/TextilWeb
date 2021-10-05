@@ -40,6 +40,11 @@
         .bg-totales {
             background: #ddd !important;
         }
+
+        .tbodyrectilineos{
+            font-size:11px !important;
+        }
+
     </style>
 }
 
@@ -165,7 +170,7 @@
                                 <th class="border-table tallas">Kilos</th>
                             </tr>
                         </thead>
-                        <tbody id="tbodycuello">
+                        <tbody id="tbodycuello" class="tbodyrectilineos">
 
                             @foreach (var item in partidacuello)
                             {
@@ -355,7 +360,7 @@
                                 <th class="border-table tallas">Kilos</th>
                             </tr>
                         </thead>
-                        <tbody id="tbodycuello">
+                        <tbody id="tbodycuello" class="tbodyrectilineos">
 
                             @foreach (var item in partidapuno)
                             {
@@ -603,7 +608,7 @@
 
             saveTallasCantidad(id,partida).then(response => {
 
-                //console.log(response);
+                location.reload();
 
             }).catch(error => {
                 console.log("error registro de tallas",error);
@@ -692,7 +697,7 @@
 
             }
 
-            OcultarCarga();
+            //OcultarCarga();
         }
 
         // AGREGAR PARTIDAS RECTILINEOS
