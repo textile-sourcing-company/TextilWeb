@@ -19,7 +19,8 @@ namespace TSC_WEB.Models.Entidades.Corte.LiquidacionRectilineos
 
         public string bgestado
         {
-            get {
+            get
+            {
                 string bg = string.Empty;
 
                 if (estado == "PENDIENTE")

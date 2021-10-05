@@ -1,0 +1,1273 @@
+﻿@{
+    ViewBag.Title = "Aprobación Final - Rendiciones";
+    ViewBag.Modulo = "Finanzas";
+    Layout = "~/Views/Plantillas/_Layout.cshtml";
+}
+
+<div id="solgasapf" class="container-fluid">
+
+
+    <div class="card p-1">
+
+        <div class="row header-controles">
+            <div class="col-12 col-sm-4 col-md-3 col-lg-2 col-xl-2 p-1">
+                <label for="dtFechaInicio">Fecha Desde: </label>
+                <input class="form-control form-control-sm" type="date" id="dtFechaInicio">
+            </div>
+
+            <div class="col-12 col-sm-4 col-md-3 col-lg-2 col-xl-2 p-1">
+                <label for="dtFechaFin">Fecha Hasta: </label>
+                <input class="form-control form-control-sm" type="date" id="dtFechaFin">
+            </div>
+
+            <div class="col-12 col-sm-4 col-md-3 col-lg-2 col-xl-2 p-1">
+                <label for="txtCodigo">Código de Solicitud</label>
+                <input class="form-control form-control-sm" type="text" id="txtCodigo" placeholder="" maxlength="10">
+            </div>
+
+            <div class="col-6 col-sm-3 col-md-3 col-lg-2 col-xl-2 p-1 d-flex flex-column-reverse">
+                <button id="btnBuscar" type="button" class="btn btn-primary btn-sm"><i class="fas fa-search"></i> Buscar</button>
+            </div>
+
+            <div class="col-6 col-sm-3 col-md-3 col-lg-2 col-xl-2 p-1 d-flex flex-column-reverse">
+                <button id="btnImprimirExcel" type="button" class="btn btn-success btn-sm"><i class="fas fa-file-excel"></i> Excel </button>
+            </div>
+        </div>
+
+    </div>
+
+
+    <div class="card p-1">
+        <table class="table table-sm table-bordered table-striped dt-responsive table-hover display nowrap" id="tblPendientes" style="width:100%;">
+            <thead class="thead-light">
+                <tr>
+                    <th class="all"></th>
+                    <th class="ocultar-columna">id</th>
+                    <th>Fecha</th>
+                    <th>Codigo</th>
+                    <th class="">Tipo</th>
+                    <th>Glosa / Desc. Solicitud</th>
+                    <th>Colaborador</th>
+                    <th>CeCo</th>
+                    <th>Estado</th>
+                    <th>Moneda</th>
+                    <th>Total Solicitado</th>
+                    <th class="all">Total Entregado</th>
+                    <th class="all">Total Rendido</th>
+                    <th>Comprobantes</th>
+                    <th>Detalle</th>
+                    <th class="all">Acciones</th>
+                </tr>
+            </thead>
+            <tbody id="tblPendientesContent"></tbody>
+        </table>
+    </div>
+
+
+
+
+    <div class="modal fade" id="modalDetalleSol" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Detalle de Solicitud</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+
+                        <div class="row">
+                            <div class="col-2">
+                                <label for="idmdcodigo">Codigo:</label>
+                                <span type="text" class="form-control form-control-sm" id="idmdcodigo"></span>
+                            </div>
+                            @*<div class="col-2">
+                                    <label for="idmdfecha">Fecha:</label>
+                                    <span type="text" class="form-control form-control-sm" id="idmdfecha"></span>
+                                </div>*@
+                            <div class="col-4">
+                                <label for="idmdestado">Estado:</label>
+                                <span type="text" class="form-control form-control-sm" id="idmdestado"></span>
+                            </div>
+                            <div class="col-6">
+                                <label for="idmdususol">Usuario Solicitante:</label>
+                                <span type="text" class="form-control form-control-sm" id="idmdususol"></span>
+                            </div>
+                        </div>
+
+                        <div class="row mt-2 mb-2">
+                            <div class="col-5">
+                                <label for="idmdcolaborador">Colaborador:</label>
+                                <span class="form-control form-control-sm" id="idmdcolaborador"></span>
+                            </div>
+                            <div class="col-6">
+                                <label for="idmdobs">Glosa:</label>
+                                <span class="form-control form-control-sm" id="idmdobs"></span>
+                            </div>
+                            <div class="col-1">
+                                <label for="idmdmoneda">Moneda:</label>
+                                <span class="form-control form-control-sm" id="idmdmoneda"></span>
+                            </div>
+                            @*<div class="col-1">
+                                    <label for="idmdtotal">Total:</label>
+                                    <span class="form-control form-control-sm" id="idmdtotal"></span>
+                                </div>*@
+                        </div>
+
+                        <div class="mt-1 mb-1">
+                            <hr />
+                        </div>
+
+                        <div class="container-fluid" style="width: 100%;">
+
+                            <table class="table table-sm table-bordered table-hover display nowrap" id="tblDetallePend" style="width: 100%;">
+                                <thead class="thead-light">
+                                    <tr>
+                                        @*<th>Fecha</th>*@
+                                        @*<th>Tipo</th>*@
+                                        <th style='max-width: 120px; overflow: hidden;'>Concepto</th>
+                                        <th>Detalle</th>
+                                        <th>Cant. Dias</th>
+
+                                        <th>Total Solicitado</th>
+                                        <th>Total Entregado</th>
+                                        <th>Total Rendido</th>
+
+                                        <th>Exceso / Devolucion</th>
+
+                                    </tr>
+                                </thead>
+                                <tbody id="tblDetallePendContent"></tbody>
+                            </table>
+
+                        </div>
+
+                    </form>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" data-dismiss="modal" class="btn btn-primary">OK</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+</div>
+
+
+
+<style>
+
+    #solgasapf label {
+        font-family: 'Roboto', sans-serif;
+    }
+
+
+    #solgasapf table .ocultar-columna {
+        display: none;
+    }
+
+    #solgasapf .header-controles {
+        margin-left: 4px;
+        margin-right: 4px;
+    }
+
+
+    #solgasapf table .row-aprob-det {
+        background-color: #D5F5E3;
+    }
+
+    #solgasapf table .row-recha-det {
+        background-color: #FADBD8;
+    }
+
+
+
+    #solgasapf input {
+        font-family: 'Roboto', sans-serif;
+    }
+
+
+    #solgasapf #tblResultado th {
+        font-family: 'Roboto', sans-serif !important;
+    }
+
+    #solgasapf #tblResultado td {
+        font-family: 'Roboto', sans-serif !important;
+    }
+
+    #solgasapf #tblDetallePend .monto-entregar {
+        width: 45px;
+    }
+
+
+    #solgasapf .cont-tblDetallePend {
+        overflow: hidden;
+    }
+
+
+    @@media (min-width: 320px) and (max-width: 479.98px) {
+    }
+
+    @@media (min-width: 480px) and (max-width: 767.98px) {
+    }
+
+    @@media (min-width: 768px) and (max-width: 991.98px) {
+    }
+
+    @@media (min-width: 992px) and (max-width: 1199.98px) {
+    }
+
+    @@media (min-width: 1200px) {
+    }
+</style>
+
+
+@section scripts {
+    <script>
+
+        const NIVEL_INTERFAZ = 60;
+        const USUARIO = "@Request.RequestContext.HttpContext.Session["usuario"]";
+        const USUARIO_COMPLETO = "@Request.RequestContext.HttpContext.Session["usuario"]" + " - " + "@Request.RequestContext.HttpContext.Session["nombre"]";
+
+        var vFechaIniPend = "";
+        var vFechaFinPend = "";
+        var vIdEstado = 0;
+        var tiposAnulacionCabArray = [];
+
+        $(document).ready(function () {
+
+            Inicializar();
+
+
+            function Inicializar() {
+                getEstados();
+
+
+                var now = new Date();
+                var month = (now.getMonth() + 1);
+                var day = now.getDate();
+                if (month < 10)
+                    month = "0" + month;
+                if (day < 10)
+                    day = "0" + day;
+                var today = now.getFullYear() + '-' + month + '-' + day;
+
+                $('#dtFechaInicio').val(today);
+                $('#dtFechaFin').val(today);
+
+                getTiposAnulacionCabecera();
+            }
+
+
+            function getTiposAnulacionCabecera() {
+                $.ajax({
+                    type: "GET",
+                    url: '/Finanzas/RG_TiposAnulacionCabecera',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (data) {
+                        tiposAnulacionCabArray = data.lista;
+
+                    },
+                    failure: function () {
+                        console.error('error al cargar tipos periodos');
+                    }
+                });
+            }
+
+
+
+            function getEstados() {
+                $.ajax({
+                    type: "GET",
+                    url: '/Finanzas/RG_EstadosSolcitud',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (data) {
+                        $("#idCbxEstado").empty();
+                        $.each(data.lista, function () {
+                            $("#idCbxEstado").append($("<option/>").val(this.idEstado).text(this.descripcion));
+                        });
+                        $("#idCbxEstado").val(0);
+                    },
+                    failure: function () {
+                        console.error('error al cargar tipos periodos');
+                    }
+                });
+            }
+
+
+            function formatoNumero(x) {
+                x = x.toFixed(2);
+                return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            }
+
+            function mensajePrincipal(estado, mensaje) {
+                if (estado == true) {
+
+                    const Toast = Swal.mixin({
+                        toast: true,
+                        position: 'top-end',
+                        showConfirmButton: false,
+                        timer: 2500,
+                        timerProgressBar: true,
+                        didOpen: (toast) => {
+                            toast.addEventListener('mouseenter', Swal.stopTimer)
+                            toast.addEventListener('mouseleave', Swal.resumeTimer)
+                        }
+                    })
+
+                    Toast.fire({
+                        icon: 'success',
+                        title: mensaje
+                    });
+
+                }
+                else if (estado == false) {
+
+                    const Toast = Swal.mixin({
+                        toast: true,
+                        position: 'top-end',
+                        showConfirmButton: false,
+                        timer: 2500,
+                        timerProgressBar: true,
+                        didOpen: (toast) => {
+                            toast.addEventListener('mouseenter', Swal.stopTimer)
+                            toast.addEventListener('mouseleave', Swal.resumeTimer)
+                        }
+                    })
+
+                    Toast.fire({
+                        icon: 'error',
+                        title: mensaje
+                    });
+
+                }
+            }
+
+
+
+            $("#btnBuscar").click(function () {
+
+                vFechaIniPend = $('#dtFechaInicio').val();
+                vFechaFinPend = $('#dtFechaFin').val();
+
+                if (vFechaIniPend == null ||
+                    vFechaFinPend == null ||
+                    typeof (vFechaIniPend) == "undefined" ||
+                    typeof (vFechaFinPend) == "undefined" ||
+                    vFechaIniPend.trim() == "" ||
+                    vFechaFinPend.trim() == "") {
+
+                    const Toast = Swal.mixin({
+                        toast: true,
+                        position: 'top-end',
+                        showConfirmButton: false,
+                        timer: 2500,
+                        timerProgressBar: true,
+                        didOpen: (toast) => {
+                            toast.addEventListener('mouseenter', Swal.stopTimer)
+                            toast.addEventListener('mouseleave', Swal.resumeTimer)
+                        }
+                    })
+
+                    Toast.fire({
+                        icon: 'warning',
+                        title: 'Seleccione la fecha, por favor'
+                    });
+                }
+                else {
+
+                    var datos =
+                    {
+                        'fechaInicio': vFechaIniPend,
+                        'fechaFin': vFechaFinPend,
+                        'nivelInterfaz': NIVEL_INTERFAZ,
+                        'codigo': $.trim($("#txtCodigo").val())
+                    }
+
+                    getLista(datos);
+                }
+
+            });
+
+
+            function getLista(datos) {
+
+                $.ajax({
+                    type: "GET",
+                    url: '/finanzas/RG_ListaRendicionFinal',
+                    contentType: "application/json; charset=utf-8",
+                    data: datos,
+                    dataType: "json",
+                    success: function (data) {
+
+                        let tabla = $("#tblPendientes").DataTable();
+
+                        tabla.destroy();
+                        var tr = "";
+                        var tr_btn_pdf = "";
+
+                        data.lista.forEach((obj) => {
+
+                            tr += "<tr> "
+                                + " <td> </td>"
+                                + " <td class='ocultar-columna'>" + obj.idSolicitud + "</td>"
+                                + " <td> " + obj.fecha + "</td>"
+                                + " <td> " + obj.codigo + "</td>"
+                                + " <td> " + obj.tipo + "</td>"
+                                + " <td> " + obj.observacion + "</td>"
+
+                                + " <td> " + obj.colaborador + "</td>"
+                                + " <td> " + obj.ceco + "</td>"
+                                + " <td> " + obj.estado + "</td>"
+
+                                + " <td> " + obj.moneda + "</td>"
+
+                                + " <td> " + formatoNumero(obj.totalsolicitado) + "</td>"
+                                + " <td> " + formatoNumero(obj.totalentregado) + "</td>"
+                                + " <td> " + formatoNumero(obj.totalrendido) + "</td>";
+
+
+                            if (obj.cant_rend > 0) {
+
+                                tr_btn_pdf = " <td class='text-center'>"
+                                    + " <button data-idsolicitud = " + obj.idSolicitud + " data-toggle='collapse' class='btn btn-sm btn-danger cImprimirPDF'> Comprobantes <i class='fas fa-file-pdf'></i></button>"
+                                    + " </td> ";
+                            }
+                            else {
+                                tr_btn_pdf = " <td class='text-center'></td> ";
+                            }
+
+                            tr = tr + tr_btn_pdf;
+
+                            tr = tr + " <td class='text-center'>"
+                                + "     <button data-idsolicitud='" + obj.idSolicitud + "' class='btn btn-sm btn-primary cDetalle '><i class='fas fa-eye'></i></button>"
+                                + "</td>"
+                                + " <td class='text-center'>"
+                                    // + "<button data-idsolicitud='" + obj.idSolicitud + "' data-toggle='collapse' data-target='#modalDetalleSol' class='btn btn-sm btn-primary cIdSolicitudDet'><i class='fas fa-eye'></i></button>"
+                                + "     <button data-idsolicitud=" + obj.idSolicitud + " data-toggle='collapse' class='btn btn-sm btn-success caprobar'><i class='fas fa-check'></i></button>"
+                                + "     <button data-idsolicitud=" + obj.idSolicitud + " data-toggle='collapse' class='btn btn-sm btn-danger crechazar ml-1'><i class='fas fa-ban'></i></button>"
+                                + "</td>"
+                                + "</tr>";
+
+                        });
+
+                        $("#tblPendientesContent").html(tr);
+
+
+                        $("#tblPendientes").DataTable(
+                            {
+                                "scrollX": true,
+                                "bSort": true,
+                                scrollY: '50vh',
+                                scrollCollapse: true,
+                                paging: true,
+                                'language': { 'url': '/libs/datatables/spanish.json' },
+                                lengthMenu: [[20, 30, 40, -1], [20, 30, 40, 'Todos']]
+                            });
+
+                    },
+                    failure: function () {
+                        console.error('error al cargar los periodos');
+                    }
+                });
+
+            }
+
+
+            function getListaDetAprob(idSolicitud) {
+
+                $.ajax({
+                    type: "GET",
+                    url: '/finanzas/RG_PendAprob30TablaDet',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    data: { idSolicitud: idSolicitud },
+                    success: function (data) {
+
+                        if (data.isRedirect) {
+                            window.location.href = data.redirectUrl;
+                        }
+                        else {
+
+                            let tabla = $("#tblDetallePend").DataTable();
+
+                            tabla.destroy();
+
+                            var tr = "";
+
+                            data.lista.forEach((obj) => {
+
+                                tr += "<tr style='background-color:" + obj.colorBgRow + "'>"
+                                    + " <td class='ocultar-columna'> " + obj.idSolicitud + "</td>"
+                                    + " <td> " + obj.codigo + "</td>"
+                                    + " <td style='with:20px'>" + obj.secuencia + "</td>"
+                                    + " <td> " + obj.fecha + "</td>"
+                                    + " <td> " + obj.ceco + "</td>"
+                                    + " <td> " + obj.estadoDet + "</td>"
+                                    + " <td> " + obj.conceptoDet + "</td>"
+                                    + " <td> " + obj.moneda + "</td>"
+                                    + " <td> " + formatoNumero(obj.valor) + "</td>"
+                                    + " <td style='with:30px'> <input type='number' id='cin" + obj.idSolicitud.toString() + "" + obj.secuencia.toString() + "' class='monto-entregar form-control form-control-sm' data-valor='" + obj.valor + "' data-idsolicitud='" + obj.idSolicitud + "' data-secuencia ='" + obj.secuencia + "'></input> </td>"
+                                    + " <td style='with:30px'> <span id='csaldo" + obj.idSolicitud.toString() + "" + obj.secuencia.toString() + "'></span> </td>"
+                                    + " <td style='with:65px'>"
+                                    + "     <span data-btnidsolicitud='" + obj.idSolicitud + "'  data-btnsecuencia ='" + obj.secuencia + "' style='cursor: pointer' class='btn btn-sm btn-success ml-1' id='btnAprobarSolItem'><i class='fas fa-check'></i></span>"
+                                    + "     <span data-btnidsolicitud='" + obj.idSolicitud + "'  data-btnsecuencia ='" + obj.secuencia + "' style='cursor: pointer' class='btn btn-sm btn-danger ml-1' id='btnRechazarSolItem'><i class='fas fa-ban'></i></span>"
+                                    + " </td>"
+                                    + "</tr>";
+                            });
+
+                            $("#tblDetallePendContent").html(tr);
+
+                            $("#tblDetallePend").DataTable(
+                                {
+                                    "scrollX": true,
+                                    "bSort": true,
+                                    scrollY: '50vh',
+                                    scrollCollapse: true,
+                                    paging: true,
+                                    'language': { 'url': '/libs/datatables/spanish.json' },
+                                    lengthMenu: [[5, 10, 20, -1], [5, 10, 20, 'Todos']]
+                                });
+
+                        }
+                    },
+                    failure: function () {
+                        console.error('error al cargar los periodos');
+
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error al mostrar datos',
+                            text: 'Textile Sourcing Company',
+                            showConfirmButton: false,
+                            timer: 2500,
+                        });
+
+                    }
+                });
+
+                $('#modalDetalleSol').modal('show');
+            }
+
+            $("#tblPendientes").on('click', '.cIdSolicitudDet', function () {
+
+                let idsolicitud = $(this).attr("data-idsolicitud");
+
+                $.ajax({
+                    type: "GET",
+                    url: '/finanzas/RG_RendGstsPendDetalle30',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    data: { idSolicitud: idsolicitud },
+                    success: function (data) {
+
+                        if (data.isRedirect) {
+                            window.location.href = data.redirectUrl;
+                        }
+                        else {
+
+                            $("#idmdfecha").text(data.entidad.fecha);
+                            $("#idmdcodigo").text(data.entidad.codigo);
+                            $("#idmdobs").text(data.entidad.observacion);
+                            $("#idmdestado").text(data.entidad.estado);
+                            $("#idmdmoneda").text(data.entidad.moneda);
+                            $("#idmdtotal").text(formatoNumero(data.entidad.total));
+                            $("#idmdususol").text(data.entidad.usuSolicitante);
+                            $("#idmdcolaborador").text(data.entidad.colaborador);
+
+
+                            let tabla = $("#tblDetallePend").DataTable();
+
+                            tabla.destroy();
+                            var tr = "";
+
+                            data.entidad.listaDetalle.forEach((obj) => {
+
+                                tr += "<tr>"
+                                    + " <td> " + obj.tipo + "</td>"
+                                    + " <td> " + obj.conceptoCab + "</td>"
+                                    + " <td> " + obj.moneda + "</td>"
+                                    + " <td> " + formatoNumero(obj.totalSolicitado) + "</td>"
+                                    + " <td> " + formatoNumero(obj.totalEntregado) + "</td>"
+                                    + " <td> " + formatoNumero(obj.totalRendido) + "</td>"
+                                    + "</tr>";
+                            });
+
+                            $("#tblDetallePendContent").html(tr);
+
+                            $("#tblDetallePend").DataTable(
+                                {
+                                    dom: 'Bfrtip',
+                                    buttons: [
+                                        'excel'
+                                    ],
+                                    'language': { 'url': '/libs/datatables/spanish.json' },
+                                    lengthMenu: [[5, 10, 20, -1], [5, 10, 20, 'Todos']]
+                                });
+
+
+                            $('#modalDetalleSol').modal('show');
+                        }
+                    },
+                    failure: function () {
+                        console.error('error al cargar los periodos');
+
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error al mostrar datos',
+                            text: 'Textile Sourcing Company',
+                            showConfirmButton: false,
+                            timer: 2500,
+                        });
+
+                    }
+                });
+
+            });
+
+            $("#tblPendientes").on('click', '.caprobar', function () {
+                let idsolicitud = $(this).attr("data-idsolicitud");
+               // let secuencia = $(this).attr("data-secuencia");
+
+                AprobarRechazar60(idsolicitud, 0, "¿Desea Aprobar la Solicitud?", 1);
+            });
+
+            $("#tblPendientes").on('click', '.crechazar', function () {
+                let idsolicitud = $(this).attr("data-idsolicitud");
+               // let secuencia = $(this).attr("data-secuencia");
+
+                Rechazar60(idsolicitud, 0, "¿Desea Rechazar la Solicitud?", 2);
+            });
+
+
+            function Rechazar60(idsolicitud, secuencia, pregunta, opcion) {
+
+                var options = {};
+                
+                $.map(tiposAnulacionCabArray,
+                    function (o) {
+                        options[o.id] = o.name;
+                    });
+
+                Swal.fire({
+                    title: 'Seleccione el motivo del rechazo de solicitud',
+                    icon: 'info',
+                    input: 'select',
+                    inputOptions: options,
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    cancelButtonText: 'Cancelar',
+                    confirmButtonText: 'Ok'
+
+                }).then((result) => {
+
+                    if (result.value) {
+
+                        let parametro = {
+                            'opcion': 4,
+                            'opcionTipoAprob': opcion,
+                            'idSolicitud': idsolicitud,
+                            'secuencia': secuencia,
+                            'valorEntrega': 0,
+                            'usuario': USUARIO,
+                            'nivelInterfaz': NIVEL_INTERFAZ,
+                            'idAnulado': parseInt(result.value),
+                            'idAnuladoDet': 0
+                        }
+
+
+                        $.ajax({
+                            url: "/finanzas/RG_AprobRendicionGastos40",
+                            type: "post",
+                            data: parametro,
+                            dataType: "json",
+                            success: function (resultado) {
+
+                                if (resultado.isRedirect) {
+                                    window.location.href = resultado.redirectUrl;
+                                }
+                                else {
+                                    if (resultado.status.idResponse > 0) {
+                                        mensajePrincipal(true, "Actualizando Lista");
+                                    }
+                                    else {
+                                        mensajePrincipal(false, "Ocurrio un problema");
+                                    }
+
+                                    var datos =
+                                    {
+                                        'fechaInicio': vFechaIniPend,
+                                        'fechaFin': vFechaFinPend,
+                                        'nivelInterfaz': NIVEL_INTERFAZ,
+                                        'codigo': $.trim($("#txtCodigo").val())
+                                    }
+
+                                    getLista(datos);
+                                }
+                            },
+                            error: function (xhr, ajaxOptions, thrownError) {
+
+                            }
+                        });
+
+
+                    }
+
+                });
+
+            }
+
+
+
+
+
+            function AprobarRechazar60(idsolicitud,secuencia, pregunta, opcion) {
+
+                Swal.fire({
+                    title: pregunta,
+                    text: "Textile Sourcing Company",
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Si',
+                    cancelButtonText: 'No'
+
+                }).then((result) => {
+
+                    if (result.value) {
+
+                        let parametro = {
+                            'opcion': 4,
+                            'opcionTipoAprob': opcion,
+                            'idSolicitud': idsolicitud,
+                            'secuencia': secuencia,
+                            'valorEntrega': 0
+                        }
+
+                        $.ajax({
+                            url: "/finanzas/RG_AprobRendicionGastos40",
+                            type: "post",
+                            data: parametro,
+                            dataType: "json",
+                            success: function (resultado) {
+
+                                if (resultado.isRedirect) {
+                                    window.location.href = resultado.redirectUrl;
+                                }
+                                else {
+                                    if (resultado.status.idResponse > 0) {
+                                        mensajePrincipal(true, "Actualizando Lista");
+                                    }
+                                    else {
+                                        mensajePrincipal(false, "Ocurrio un problema");
+                                    }
+
+                                    var datos =
+                                    {
+                                        'fechaInicio': vFechaIniPend,
+                                        'fechaFin': vFechaFinPend,
+                                        'nivelInterfaz': NIVEL_INTERFAZ,
+                                        'codigo': $.trim($("#txtCodigo").val())
+                                    }
+
+                                    getLista(datos);
+                                }
+                            },
+                            error: function (xhr, ajaxOptions, thrownError) {
+
+                            }
+                        });
+
+
+                    }
+                });
+            }
+
+
+            $("#tblDetallePend").on('keyup', '.monto-entregar', function () {
+
+                //debugger
+                let idsolicitud = $(this).attr("data-idsolicitud");
+                let secuencia = $(this).attr("data-secuencia");
+                let valorSaldo = 0;
+
+                let valor = $(this).attr("data-valor");
+                let valorIngresado = $("#cin" + idsolicitud.toString() + "" + secuencia.toString()).val();
+
+                if (valor.trim() == "") {
+                    valor = 0;
+                }
+
+                if (valorIngresado.trim() == "") {
+                    valorIngresado = 0;
+                }
+
+                valorSaldo = valor - valorIngresado;
+
+                $("#csaldo" + idsolicitud.toString() + "" + secuencia.toString()).text(formatoNumero(valorSaldo));
+
+            });
+
+            $("#tblDetallePend").on('click', '#btnAprobarSolItem', function () {
+
+                let idsolicitud = $(this).attr("data-btnidsolicitud");
+                let secuencia = $(this).attr("data-btnsecuencia");
+                let valorIngresado = $("#cin" + idsolicitud.toString() + "" + secuencia.toString()).val();
+
+                document.getElementById("cin" + idsolicitud + "" + secuencia + "").disabled = false;
+                document.getElementById("cin" + idsolicitud + "" + secuencia + "").focus();
+
+                if (valorIngresado.trim() == "") {
+                    valorIngresado = 0;
+                }
+
+                if (valorIngresado < 0) {
+                    const Toast = Swal.mixin({
+                        toast: true,
+                        position: 'top-end',
+                        showConfirmButton: false,
+                        timer: 2500,
+                        timerProgressBar: true,
+                        didOpen: (toast) => {
+                            toast.addEventListener('mouseenter', Swal.stopTimer)
+                            toast.addEventListener('mouseleave', Swal.resumeTimer)
+                        }
+                    })
+
+                    Toast.fire({
+                        icon: 'warning',
+                        title: 'Ingrese un monto valido'
+                    });
+                }
+                else {
+
+                    let parametro = {
+                        'opcion': 2,
+                        'opcionTipoAprob': 1,
+                        'idSolicitud': idsolicitud,
+                        'secuencia': secuencia,
+                        'valorEntrega': valorIngresado
+                    }
+
+                    $.ajax({
+                        url: "/finanzas/RG_AprobRech30",
+                        type: "post",
+                        data: parametro,
+                        dataType: "json",
+                        success: function (resultado) {
+                            console.log(resultado);
+
+                            if (resultado.isRedirect) {
+                                window.location.href = resultado.redirectUrl;
+                            }
+                            else {
+                                if (resultado.status.idResponse > 0) {
+                                    mensajePrincipal(true, "Detalle Aprobado");
+                                }
+                                else {
+                                    mensajePrincipal(false, "Ocurrio un problema");
+                                }
+
+                                getListaDetAprob(idsolicitud);
+
+
+                                var datos =
+                                {
+                                    'fechaInicio': vFechaIniPend,
+                                    'fechaFin': vFechaFinPend,
+                                    'nivelInterfaz': NIVEL_INTERFAZ,
+                                    'idEstado': vIdEstado,
+                                    'codigo': $.trim($("#txtCodigo").val())
+                                }
+
+                                getLista(datos);
+                            }
+                        },
+                        error: function (xhr, ajaxOptions, thrownError) {
+
+                        }
+                    });
+
+                }
+
+            });
+
+            $("#tblDetallePend").on('click', '#btnRechazarSolItem', function () {
+
+                let idsolicitud = $(this).attr("data-btnidsolicitud");
+                let secuencia = $(this).attr("data-btnsecuencia");
+
+                $("#cin" + idsolicitud + "" + secuencia + "").val(0);
+                document.getElementById("cin" + idsolicitud + "" + secuencia + "").disabled = true;
+
+
+                let parametro = {
+                    'opcion': 2,
+                    'opcionTipoAprob': 2,
+                    'idSolicitud': idsolicitud,
+                    'secuencia': secuencia,
+                    'valorEntrega': 0
+                }
+
+                $.ajax({
+                    url: "/finanzas/RG_AprobRech30",
+                    type: "post",
+                    data: parametro,
+                    dataType: "json",
+                    success: function (resultado) {
+                        console.log(resultado);
+
+                        if (resultado.isRedirect) {
+                            window.location.href = resultado.redirectUrl;
+                        }
+                        else {
+                            if (resultado.status.idResponse > 0) {
+
+                                $.ajax({
+                                    type: "GET",
+                                    url: '/finanzas/RG_PendAprob30Det',
+                                    contentType: "application/json; charset=utf-8",
+                                    dataType: "json",
+                                    data: { idSolicitud: idsolcitud },
+                                    success: function (data) {
+                                        getListaDetAprob(data);
+                                    },
+                                    error: function (xhr, ajaxOptions, thrownError) {
+
+                                    }
+                                });
+
+
+                                mensajePrincipal(true, "Item Denegado, Correctamente");
+                            }
+                            else {
+                                mensajePrincipal(false, "Ocurrio un problema");
+                            }
+
+                            var datos =
+                            {
+                                'fechaInicio': vFechaIniPend,
+                                'fechaFin': vFechaFinPend,
+                                'nivelInterfaz': NIVEL_INTERFAZ
+                            }
+
+                            getLista(datos);
+                        }
+                    },
+                    error: function (xhr, ajaxOptions, thrownError) {
+
+                    }
+                });
+            });
+
+            $("#idCbxEstado").change(function () {
+                var $option = $(this).find('option:selected');
+                vIdEstado = parseInt($option.val());
+            });
+
+
+
+
+            $("#btnImprimirPDF").click(function () {
+
+
+
+            });
+
+
+            $("#btnImprimirExcel").click(function () {
+
+                vFechaIniPend = $('#dtFechaInicio').val();
+                vFechaFinPend = $('#dtFechaFin').val();
+
+                if (vFechaIniPend == null ||
+                    vFechaFinPend == null ||
+                    typeof (vFechaIniPend) == "undefined" ||
+                    typeof (vFechaFinPend) == "undefined" ||
+                    vFechaIniPend.trim() == "" ||
+                    vFechaFinPend.trim() == "") {
+
+                    const Toast = Swal.mixin({
+                        toast: true,
+                        position: 'top-end',
+                        showConfirmButton: false,
+                        timer: 2500,
+                        timerProgressBar: true,
+                        didOpen: (toast) => {
+                            toast.addEventListener('mouseenter', Swal.stopTimer)
+                            toast.addEventListener('mouseleave', Swal.resumeTimer)
+                        }
+                    })
+
+                    Toast.fire({
+                        icon: 'warning',
+                        title: 'Seleccione la fecha, por favor'
+                    });
+                }
+                else {
+
+                    var datos =
+                    {
+                        'fechaInicio': FormatoFecha(vFechaIniPend,""),
+                        'fechaFin': FormatoFecha(vFechaFinPend,""),
+                        'nivelInterfaz': NIVEL_INTERFAZ,
+                        'codigo': $.trim($("#txtCodigo").val())
+                    }
+
+
+                    $.ajax({
+                        url: '@Url.Action("RG_ExcelRendicionFinal", "Finanzas")',
+                        contentType: 'application/json; charset=utf-8',
+                        datatype: 'json',
+                        type: "GET",
+                        data: datos,
+                        success: function () {
+
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Reporte Generado',
+                                text: "Textile Sourcing Company",
+                                allowEscapeKey: false,
+                                allowOutsideClick: false,
+                                onClose: () => {
+                                    window.location = "/Finanzas/RG_ExcelRendicionFinal?fechaInicio=" + FormatoFecha(vFechaIniPend,"") + "&fechaFin=" + FormatoFecha(vFechaFinPend,"") + "&nivelInterfaz=" + parseInt(NIVEL_INTERFAZ) + "&codigo=" + $.trim($("#txtCodigo").val());
+                                }
+                            });
+
+                        }
+                    });
+                }
+            });
+
+
+
+            function FormatoFecha(pFecha, separador) {
+                let fechaFormato = "";
+                //fechaFormato = fechaFormato.substring(0, 10);
+
+                fechaFormato = moment(pFecha).format("YYYY-MM-DD");
+
+
+                let fechaPre = fechaFormato.replace("-", "");
+                let fechaFinal = fechaPre.replace("-", "");
+
+                let anio_valor = fechaFinal.substr(0, 4);
+                let mes_valor = fechaFinal.substr(4, 2);
+                let dia_valor = fechaFinal.substr(6, 2);
+
+                return [anio_valor, mes_valor, dia_valor].join(separador);
+            }
+
+
+
+
+            $("#tblPendientesContent").on('click', '.cDetalle', function () {
+
+                let idsolcitud = $(this).attr("data-idsolicitud");
+                let valorTotal = 0;
+
+                $.ajax({
+                    type: "GET",
+                    url: '/finanzas/RG_AprobFinalfDetalleSol',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    data: { idSolicitud: idsolcitud },
+                    success: function (data) {
+
+                        if (data.isRedirect) {
+                            window.location.href = data.redirectUrl;
+                        }
+                        else {
+
+                            //$("#idmdfecha").text(data.entidad.fecha);
+                            $("#idmdcodigo").text(data.entidad.codigo);
+                            $("#idmdobs").text(data.entidad.observacion);
+                            $("#idmdcolaborador").text(data.entidad.colaborador);
+                            $("#idmdestado").text(data.entidad.estado);
+                            $("#idmdmoneda").text(data.entidad.moneda);
+                            $("#idmdususol").text(data.entidad.usuSolicitante);
+
+                            let tabla = $("#tblDetallePend").DataTable();
+
+                            tabla.destroy();
+                            var tr = "";
+
+                            data.entidad.listaDetalle.forEach((obj) => {
+
+                                tr += "<tr> "
+                                    //+ " <td> " + obj.fecha + "</td>"
+                                    //+ " <td> " + obj.ceco + "</td>"
+                                    //+ " <td> " + obj.tipo + "</td>"
+                                    + " <td style='max-width: 120px; overflow: hidden;'> " + obj.conceptoCab + "</td>"
+                                    + " <td> " + obj.conceptoDet + "</td>"
+
+                                    + " <td> " + obj.cantDias + "</td>"
+
+                                    + " <td> " + obj.simbolo + " " + formatoNumero(obj.totalsolicitado) + "</td>"
+                                    + " <td> " + obj.simbolo + " " + formatoNumero(obj.totalentregado) + "</td>"
+                                    + " <td> " + obj.simbolo + " " + formatoNumero(obj.totalrendido) + "</td>"
+
+                                    + " <td style='font-weight:bold;'> " + obj.simbolo + " " + formatoNumero(obj.totalsaldo) + "</td>"
+
+                                    + "</tr>";
+
+
+                            });
+
+                            $("#tblDetallePendContent").html(tr);
+
+                            $("#tblDetallePend").DataTable(
+                                {
+                                    'language': { 'url': '/libs/datatables/spanish.json' },
+                                    lengthMenu: [[-1], ['Todos']]
+                                });
+
+                            $('#modalDetalleSol').modal('show');
+                        }
+                    },
+                    failure: function () {
+                        console.error('error al cargar los periodos');
+
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error al mostrar datos',
+                            text: 'Textile Sourcing Company',
+                            showConfirmButton: false,
+                            timer: 2500,
+                        });
+
+                    }
+                });
+
+            });
+
+
+
+
+            $("#tblPendientesContent").on("click", ".cImprimirPDF", function () {
+
+                let idsolicitud = $(this).attr("data-idsolicitud");
+
+                $.ajax({
+                    url: "@Url.Action("RG_BuscarIdSolicitud", "Finanzas")",
+                    data: {
+                        idSolicitud: idsolicitud,
+                    },
+                    success: function (data) {
+                        window.location.href = '@Url.Action("MapearReporteCXSPDF", "Finanzas")'
+                    }
+                });
+
+            });
+
+
+            //$("#tblPendientesContent").on('click', '.cDetalle', function () {
+
+            //    let idsolcitud = $(this).attr("data-idsolicitud");
+
+            //    $.ajax({
+            //        type: "GET",
+            //        url: '/finanzas/RG_Pendientes30Det',
+            //        contentType: "application/json; charset=utf-8",
+            //        dataType: "json",
+            //        data: { idSolicitud: idsolcitud },
+            //        success: function (data) {
+
+            //            console.log(data);
+
+            //            if (data.isRedirect) {
+            //                window.location.href = data.redirectUrl;
+            //            }
+            //            else {
+
+            //                $("#idmdfecha").text(data.entidad.fecha);
+            //                //$("#idmdcodigo").text(data.entidad.codigo
+            //                $("#idmdobs").text(data.entidad.observacion);
+            //                $("#idmdcolaborador").text(data.entidad.colaborador);
+            //                $("#idmdestado").text(data.entidad.estado);
+            //                $("#idmdmoneda").text(data.entidad.moneda);
+            //                $("#idmdtotal").text(formatoNumero(data.entidad.total));
+            //                $("#idmdususol").text(data.entidad.usuSolicitante);
+            //                $("#idmdceco").text(data.entidad.ceco);
+
+            //                let tabla = $("#tblDetallePendiente").DataTable();
+
+            //                tabla.destroy();
+            //                var tr = "";
+
+            //                data.entidad.listaDetalle.forEach((obj) => {
+
+            //                    tr += "<tr>"
+            //                        + " <td class='ocultar-columna'> " + obj.idSolicitud + "</td>"
+            //                        + " <td> " + obj.fecha + "</td>"
+            //                        + " <td> " + obj.estadoDet + "</td>"
+            //                        + " <td> " + obj.tipo + "</td>"
+            //                        + " <td> " + obj.conceptoCab + "</td>"
+            //                        + " <td> " + obj.conceptoDet + "</td>"
+            //                        + " <td> " + obj.cantDias + "</td>"
+            //                        + " <td> " + formatoNumero(obj.valor) + "</td>"
+            //                        + " <td> " + obj.simbolo + " " + formatoNumero(obj.total) + "</td>"
+            //                        //+ " <td style='with:30px'>"
+            //                        //+ "     <input type='number' id='cin" + obj.idSolicitud.toString() + "" + obj.secuencia.toString() + "' class='monto-entregar form-control form-control-sm' data-valor='" + obj.total + "' data-idsolicitud='" + obj.idSolicitud + "' data-secuencia ='" + obj.secuencia + "' value='" + obj.total + "'></input></td>"
+            //                        //+ " <td style='with:30px'>" + "<span id='idsaldo" + obj.idSolicitud.toString() + "" + obj.secuencia.toString() + "'>0</span> </td>"
+            //                        //+ " <td style='with:60px'>"
+            //                        //+ "     <span data-btnidsolicitud='" + obj.idSolicitud + "'  data-btnsecuencia ='" + obj.secuencia + "' style='cursor: pointer' class='btn btn-sm btn-success ml-1' id='btnAprobarSolItem'><i class='fas fa-check'></i></span>"
+            //                        //+ "     <span data-btnidsolicitud='" + obj.idSolicitud + "'  data-btnsecuencia ='" + obj.secuencia + "' style='cursor: pointer' class='btn btn-sm btn-danger ml-1' id='btnRechazarSolItem'><i class='fas fa-ban'></i></span>"
+            //                        //+ " </td>"
+            //                        + "</tr>";
+            //                });
+
+            //                $("#tblDetallePendienteContent").html(tr);
+
+            //                $("#tblDetallePendiente").DataTable(
+            //                    {
+            //                        dom: 'Bfrtip',
+            //                        buttons: [
+            //                            'excel'
+            //                        ],
+            //                        'language': { 'url': '/libs/datatables/spanish.json' },
+            //                        lengthMenu: [[5, 10, 20, -1], [5, 10, 20, 'Todos']]
+            //                    });
+
+
+            //                $('#modalDetallePendiente').modal('show');
+            //            }
+            //        },
+            //        failure: function () {
+            //            console.error('error al cargar los periodos');
+
+            //            Swal.fire({
+            //                icon: 'error',
+            //                title: 'Error al mostrar datos',
+            //                text: 'Textile Sourcing Company',
+            //                showConfirmButton: false,
+            //                timer: 2500,
+            //            });
+
+            //        }
+            //    });
+
+            //});
+
+
+
+
+
+        });
+
+
+
+    </script>
+
+}
+

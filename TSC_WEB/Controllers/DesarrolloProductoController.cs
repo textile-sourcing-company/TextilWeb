@@ -102,8 +102,6 @@ namespace TSC_WEB.Controllers
         [HttpGet]
         public ActionResult VistaReporteFichaTecnica(string pedido, string etapa)
         {
-
-
             ReporteEntidad resultado = (ReporteEntidad)Session["datasetmaestrofichatecnica"];
             //ASIGNAMOS 
             resultado.op = Session["opfichatecnica"] == "true" ? true : false;
@@ -111,17 +109,15 @@ namespace TSC_WEB.Controllers
             string _headerUrl = Url.Action("HeaderDinamico", "DesarrolloProducto", resultado.objFichaEntidad, "http");
             string _footerUrl = Url.Action("FooterDinamico", "DesarrolloProducto", null, "http");
 
-
             return new ViewAsPdf("VistaReporteFichaTecnica", resultado)
             {
-
                 CustomSwitches = "--header-html " + _headerUrl + " --header-spacing 13 "
                 + "--footer-html " + _footerUrl + " --footer-spacing 0"
                 ,
                 PageMargins = { Top = 70, Bottom = 20 },
-
             };
         }
+
 
         [HttpGet]
         public ActionResult HeaderDinamico(FichaTecnicaEntidad objFichatecnica)
@@ -147,11 +143,9 @@ namespace TSC_WEB.Controllers
         [HttpGet]
         public FileContentResult getFile(string ruta)
         {
-
             var file = objArchivosM.getFile(ruta, "nombre");
             string extencion = Path.GetExtension(ruta);
-            return File(file, "image/"+extencion);
-            
+            return File(file, "image/"+extencion);    
         }
 
 
@@ -385,42 +379,6 @@ namespace TSC_WEB.Controllers
 
 
         }
-
-
-        //REGISTRA MOLDES
-        public async Task<JsonResult> PruebaSubida(string estilo,HttpPostedFileBase archivo)
-        {
-            try
-            {
-
-                //string usuario = Session["usuario"].ToString();
-                string rutaarchivo = @"C:/tmp_moldes/";
-                string extension = Path.GetExtension(archivo.FileName);
-                DateTime fecha = DateTime.Now;
-                string nombrearchivo =
-                    fecha.Day.ToString() +
-                    fecha.Month.ToString() +
-                    fecha.Year.ToString() +
-                    fecha.Hour.ToString() +
-                    fecha.Minute.ToString() +
-                    fecha.Second.ToString() +
-                    fecha.Millisecond.ToString() +
-                    extension;
-                var data = await objOneDrive2.SubirCompartirArchivo(rutaarchivo, "MoldesAuditex", nombrearchivo, archivo);
-
-                //REGISTRAMOS
-                //objRegistroM.Registrar(estilo, programa, pedidos, observacion, usuario, data.mensajesistema);
-                return Json(new { mensaje = data.mensajesistema, error = false });
-
-            }
-            catch (Exception ex)
-            {
-                return Json(new { mensaje = ex.Message, error = true });
-            }
-
-
-        }
-
 
 
 

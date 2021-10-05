@@ -8,6 +8,7 @@ namespace TSC_WEB.Models.Entidades.Finanzas.RendicionGastos
     public class SPA_ParametroAprob
     {
         public int idsolicitud { get; set; }
+        public int nivelInterfaz { get; set; }
         public IEnumerable<E_SolicitudAprobF> solicitudesArray { get; set; }
     }
 }

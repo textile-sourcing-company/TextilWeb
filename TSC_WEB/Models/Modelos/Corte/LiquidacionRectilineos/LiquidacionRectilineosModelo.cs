@@ -21,7 +21,7 @@ namespace TSC_WEB.Models.Modelos.Corte.LiquidacionRectilineos
 
 
         // BUSCAMOS FICHAS PARA APERTURAR
-        public List<FichasTallasEntidad> getTallasFicha(int opcion,int? ficha,string tipo)
+        public List<FichasTallasEntidad> getTallasFicha(int opcion, int? ficha, string tipo)
         {
             List<FichasTallasEntidad> objLista = new List<FichasTallasEntidad>();
 
@@ -115,7 +115,7 @@ namespace TSC_WEB.Models.Modelos.Corte.LiquidacionRectilineos
                 conexion.Desconectar();
             }
 
-          
+
             return objLista;
         }
 
@@ -168,7 +168,7 @@ namespace TSC_WEB.Models.Modelos.Corte.LiquidacionRectilineos
         }
 
         // BUSCAMOS DATOS DE LA FICHA (CABECERA)
-        public FichaDatos getDatosFicha(int opcion, int? ficha,string tipo)
+        public FichaDatos getDatosFicha(int opcion, int? ficha, string tipo)
         {
             FichaDatos obj = new FichaDatos();
 
@@ -190,7 +190,7 @@ namespace TSC_WEB.Models.Modelos.Corte.LiquidacionRectilineos
                 {
                     // DATOS TABLA
                     if (registros["idrectilineohead"].ToString() != string.Empty)
-                      obj.idrectilineohead = Convert.ToInt32(registros["idrectilineohead"].ToString());
+                        obj.idrectilineohead = Convert.ToInt32(registros["idrectilineohead"].ToString());
                     else
                         obj.idrectilineohead = null;
 
@@ -234,12 +234,12 @@ namespace TSC_WEB.Models.Modelos.Corte.LiquidacionRectilineos
                 conexion.Desconectar();
             }
 
-            
+
             return obj;
         }
-    
+
         // REGISTRAMOS CABECERA
-        public bool saveHead(string partida,string usuario/*,int lote*/, decimal mermarecorte, decimal mermahilos,string tipo,string estado, out string mensaje)
+        public bool saveHead(string partida, string usuario/*,int lote*/, decimal mermarecorte, decimal mermahilos, string tipo, string estado, out string mensaje)
         {
 
             //FichaDatos obj = new FichaDatos();
@@ -289,7 +289,7 @@ namespace TSC_WEB.Models.Modelos.Corte.LiquidacionRectilineos
         }
 
         // REGISTRAMOS FICHAS
-        public bool saveFichas(int? idrectilineoficha,int? idrectilineohead,int ficha, string usuario,int pedido,string estilotsc,string estilocliente,string combo,string tipo, out string mensaje)
+        public bool saveFichas(int? idrectilineoficha, int? idrectilineohead, int ficha, string usuario, int pedido, string estilotsc, string estilocliente, string combo, string tipo, out string mensaje)
         {
 
             //FichaDatos obj = new FichaDatos();
@@ -338,7 +338,7 @@ namespace TSC_WEB.Models.Modelos.Corte.LiquidacionRectilineos
         }
 
         // REGISTRO DE TALLAS
-        public bool saveTallas(int? idrectilineoficha, string talla, int realprimera,decimal pesoneto,decimal programado ,int orden ,decimal pesoprogramado,string tipo, out string mensaje)
+        public bool saveTallas(int? idrectilineoficha, string talla, int realprimera, decimal pesoneto, decimal programado, int orden, decimal pesoprogramado, string tipo, out string mensaje)
         {
 
             //FichaDatos obj = new FichaDatos();
@@ -389,7 +389,7 @@ namespace TSC_WEB.Models.Modelos.Corte.LiquidacionRectilineos
         }
 
         // REGISTRO DE TALLAS SEGUNDAS
-        public bool saveTallasSegundas(int? idrectilineo, string talla, int realsegunda, decimal pesonetosegunda, decimal programadosegunda, int orden,out string mensaje)
+        public bool saveTallasSegundas(int? idrectilineo, string talla, int realsegunda, decimal pesonetosegunda, decimal programadosegunda, int orden, out string mensaje)
         {
 
             //FichaDatos obj = new FichaDatos();
@@ -428,7 +428,7 @@ namespace TSC_WEB.Models.Modelos.Corte.LiquidacionRectilineos
         }
 
         // REPORTE
-        public List<ReporteEntidad> getReporte(string fechai,string fechaf,string ficha,string partida,string tipo)
+        public List<ReporteEntidad> getReporte(string fechai, string fechaf, string ficha, string partida, string tipo)
         {
             List<ReporteEntidad> objLista = new List<ReporteEntidad>();
 
@@ -486,7 +486,7 @@ namespace TSC_WEB.Models.Modelos.Corte.LiquidacionRectilineos
         }
 
         // REGISTRO DE RECTILINEOS DESPACHADOS
-        public bool saveRectilineoDespacho(IngresoRectilineosEntidad objeto , out string mensaje)
+        public bool saveRectilineoDespacho(IngresoRectilineosEntidad objeto, out string mensaje)
         {
 
             //FichaDatos obj = new FichaDatos();
@@ -526,7 +526,7 @@ namespace TSC_WEB.Models.Modelos.Corte.LiquidacionRectilineos
         }
 
         // REGISTRAMOS PARTIDA DE TELA
-        public bool savePartidaTela(PartidaTelaEntidad objpartida,out string mensaje)
+        public bool savePartidaTela(PartidaTelaEntidad objpartida, out string mensaje)
         {
             bool retornar = false;
             //string id = string.Empty;
@@ -633,7 +633,7 @@ namespace TSC_WEB.Models.Modelos.Corte.LiquidacionRectilineos
         }
 
         // REGISTRAMOS PARTIDA DE TELA RECTILINEOS - TALLAS
-        public bool adddeletetallasrectilineos(int opcion,string partidatela, string talla ,out string mensaje)
+        public bool adddeletetallasrectilineos(int opcion, string partidatela, string talla, out string mensaje)
         {
             bool retornar = false;
             string id = string.Empty;
@@ -694,9 +694,9 @@ namespace TSC_WEB.Models.Modelos.Corte.LiquidacionRectilineos
         public PartidaTelaEntidad getPartidaTela(string partidatela)
         {
             PartidaTelaEntidad objretornar = new PartidaTelaEntidad();
-            
+
             try
-            {                    
+            {
                 OracleCommand comando = new OracleCommand("SYSTEXTILRPT.PQ_LIQUI_RECTILINEO.SPU_GETPARTIDARECTILINEOS", conexion.Acceder());
                 comando.CommandType = CommandType.StoredProcedure;
                 conexion.Conectar();
@@ -719,8 +719,8 @@ namespace TSC_WEB.Models.Modelos.Corte.LiquidacionRectilineos
                     objretornar.usuarioregistro = registros["usuarioregistro"].ToString();
                     objretornar.observacion = registros["observacion"].ToString();
                 }
-                
-                
+
+
             }
             catch (Exception ex)
             {
@@ -835,7 +835,7 @@ namespace TSC_WEB.Models.Modelos.Corte.LiquidacionRectilineos
 
         //REPORTE DE RECTILINEOS INGRESADOS POR EL ALMACEN
         public List<ReporteIngresoRectilineosAlmacenEntidad> getReporteIngresoRectilineosAlmacen(
-                string i_fechai, string i_fechaf, string i_cliente, string i_programa,string i_partidatela
+                string i_fechai, string i_fechaf, string i_cliente, string i_programa, string i_partidatela
             )
         {
             List<ReporteIngresoRectilineosAlmacenEntidad> objretornar = new List<ReporteIngresoRectilineosAlmacenEntidad>();
@@ -860,19 +860,19 @@ namespace TSC_WEB.Models.Modelos.Corte.LiquidacionRectilineos
                 {
                     ReporteIngresoRectilineosAlmacenEntidad obj = new ReporteIngresoRectilineosAlmacenEntidad();
 
-                    obj.partidatela         = registros["partidatela"].ToString();
-                    obj.partidarectilineo   = registros["partidarectilineo"].ToString();
-                    obj.tiporectilineo      = registros["tiporectilineo"].ToString();
-                    obj.partidatela         = registros["partidatela"].ToString();
-                    obj.observacion         = registros["observacion"].ToString();
-                    obj.talla               = registros["talla"].ToString();
-                    obj.orden               = Convert.ToInt32(registros["orden"].ToString());
+                    obj.partidatela = registros["partidatela"].ToString();
+                    obj.partidarectilineo = registros["partidarectilineo"].ToString();
+                    obj.tiporectilineo = registros["tiporectilineo"].ToString();
+                    obj.partidatela = registros["partidatela"].ToString();
+                    obj.observacion = registros["observacion"].ToString();
+                    obj.talla = registros["talla"].ToString();
+                    obj.orden = Convert.ToInt32(registros["orden"].ToString());
 
 
                     obj.cantidadprimera = Convert.ToDecimal(registros["cantidadprimera"].ToString());
                     obj.cantidadsegunda = Convert.ToDecimal(registros["cantidadsegunda"].ToString());
 
-                    obj.kilostotales    = Convert.ToDecimal(registros["kilostotales"].ToString());
+                    obj.kilostotales = Convert.ToDecimal(registros["kilostotales"].ToString());
 
 
                     //obj.cantidadprimera = obj.cantidadprimera == 0 ? null : obj.cantidadprimera;
@@ -916,9 +916,9 @@ namespace TSC_WEB.Models.Modelos.Corte.LiquidacionRectilineos
                 {
                     TallasEntidad obj = new TallasEntidad();
 
-                    obj.tamanho_ref     = registros["tamanho_ref"].ToString();
-                    obj.descr_tamanho   = registros["descr_tamanho"].ToString();
-                    obj.ordem_tamanho   = Convert.ToInt32(registros["ordem_tamanho"].ToString());
+                    obj.tamanho_ref = registros["tamanho_ref"].ToString();
+                    obj.descr_tamanho = registros["descr_tamanho"].ToString();
+                    obj.ordem_tamanho = Convert.ToInt32(registros["ordem_tamanho"].ToString());
 
 
                     objretornar.Add(obj);
@@ -938,7 +938,7 @@ namespace TSC_WEB.Models.Modelos.Corte.LiquidacionRectilineos
         }
 
         // GET LIQUIDACION RECTILINEOS PCPC
-        public List<LiquidacionRectilineosPCPEntidad> getLiquidacionRectilineosPCP(string fechai, string fechaf, string partida, string estado, string tipo           )
+        public List<LiquidacionRectilineosPCPEntidad> getLiquidacionRectilineosPCP(string fechai, string fechaf, string partida, string estado, string tipo)
         {
             List<LiquidacionRectilineosPCPEntidad> objretornar = new List<LiquidacionRectilineosPCPEntidad>();
 
@@ -962,13 +962,13 @@ namespace TSC_WEB.Models.Modelos.Corte.LiquidacionRectilineos
                 {
                     LiquidacionRectilineosPCPEntidad obj = new LiquidacionRectilineosPCPEntidad();
 
-                    obj.idrectilineohead    = Convert.ToInt32(registros["idrectilineohead"].ToString());
-                    obj.partida             = registros["partida"].ToString();
-                    obj.tipo      = registros["tipo"].ToString();
+                    obj.idrectilineohead = Convert.ToInt32(registros["idrectilineohead"].ToString());
+                    obj.partida = registros["partida"].ToString();
+                    obj.tipo = registros["tipo"].ToString();
                     obj.fichas = registros["fichas"].ToString();
                     obj.estado = registros["estado"].ToString();
 
-                    obj.fechacrea =  Convert.ToDateTime( registros["fechacrea"].ToString()).ToShortDateString();
+                    obj.fechacrea = Convert.ToDateTime(registros["fechacrea"].ToString()).ToShortDateString();
                     obj.usuariocrea = registros["usuariocrea"].ToString();
 
                     obj.fechaliquidacion = registros["fechaliquidacion"].ToString() != "" ? Convert.ToDateTime(registros["fechaliquidacion"].ToString()).ToShortDateString() : null;
@@ -989,8 +989,8 @@ namespace TSC_WEB.Models.Modelos.Corte.LiquidacionRectilineos
             }
             return objretornar;
         }
-    
-            
+
+
         // SET ESTADO REPORTE DE RECTILINEOS
         public bool setEstadoRectilineos(string estado, int idrectilineo, out string mensaje)
         {

@@ -14,5 +14,12 @@ namespace TSC_WEB.Models.Entidades.Finanzas.RendicionGastos
         public int idEstado { get; set; }
         public string estado { get; set; }
         public int idTipoMod { get; set; }
+
+        public int codceco { get; set; }
+        public string ceco { get; set; }
+        public string ctpava_bnf { get; set; }
+        public string canvar_bnf { get; set; }
+        public string colaborador { get; set; }
+        public string simbolo { get; set; }
     }
 }

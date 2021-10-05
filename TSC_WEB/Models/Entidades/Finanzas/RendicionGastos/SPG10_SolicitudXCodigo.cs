@@ -20,6 +20,7 @@ namespace TSC_WEB.Models.Entidades.Finanzas.RendicionGastos
         public string ctpava_bnf { get; set; }
         public string canvar_bnf { get; set; }
         public string colaborador { get; set; }
+        public int idAnulado { get; set; }
 
         public List<SPG7_SolicitudDet> listaDetalle { get; set; }
     }

@@ -41,10 +41,9 @@
             background: #ddd !important;
         }
 
-        .tbodyrectilineos{
-            font-size:11px !important;
+        .tbodyrectilineos {
+            font-size: 11px !important;
         }
-
     </style>
 }
 
@@ -73,14 +72,13 @@
                     <input class="form-control form-control-sm" id="txtfechacargapartidatela" type="date" value="@Model.Partida.fechacarga" max="@DateTime.Now.ToString("yyyy-MM-dd")">
 
                     @*@if (Model.Partida.fechacarga != null)
-                {
-                    <input class="form-control form-control-sm" id="txtfechacargapartidatela" type="date" value="@Model.Partida.fechacarga" readonly>
-                }
-                else
-                {
-                    <input class="form-control form-control-sm" id="txtfechacargapartidatela" type="date" value="@Model.Partida.fechacarga">
-
-                }*@
+                        {
+                            <input class="form-control form-control-sm" id="txtfechacargapartidatela" type="date" value="@Model.Partida.fechacarga" readonly>
+                        }
+                        else
+                        {
+                            <input class="form-control form-control-sm" id="txtfechacargapartidatela" type="date" value="@Model.Partida.fechacarga">
+                        }*@
                 </div>
             }
 
@@ -100,26 +98,25 @@
                 </div>
 
                 @*<div class="col-md-2 form-group-sm">
-                    <label for="">Talla</label>
-                    <input type="text" class="form-control form-control-sm" id="txttalla">
-                </div>
-                <div class="col-md-2 form-group-sm">
-                    <label for="">&nbsp;</label>
-                    <button class="btn btn-sm btn-block btn-primary">Agregar Talla</button>
-                </div>
-                <div class="col-md-2 form-group-sm">
-                    <label for="">&nbsp;</label>
-                    <button class="btn btn-sm btn-block btn-danger">Eliminar Talla</button>
-                </div>
-
-                <div class="col-md-12 mt-2">
-                    <ul class="list-group list-group-horizontal-sm">
-                        <li class="list-group-item">XS</li>
-                        <li class="list-group-item">S</li>
-                        <li class="list-group-item">M</li>
-                        <li class="list-group-item">L</li>
-                    </ul>
-                </div>*@
+                        <label for="">Talla</label>
+                        <input type="text" class="form-control form-control-sm" id="txttalla">
+                    </div>
+                    <div class="col-md-2 form-group-sm">
+                        <label for="">&nbsp;</label>
+                        <button class="btn btn-sm btn-block btn-primary">Agregar Talla</button>
+                    </div>
+                    <div class="col-md-2 form-group-sm">
+                        <label for="">&nbsp;</label>
+                        <button class="btn btn-sm btn-block btn-danger">Eliminar Talla</button>
+                    </div>
+                    <div class="col-md-12 mt-2">
+                        <ul class="list-group list-group-horizontal-sm">
+                            <li class="list-group-item">XS</li>
+                            <li class="list-group-item">S</li>
+                            <li class="list-group-item">M</li>
+                            <li class="list-group-item">L</li>
+                        </ul>
+                    </div>*@
 
             }
 
@@ -137,392 +134,392 @@
 
 
 
-<div class="row">
+    <div class="row">
 
-    @*PARTIDA DE CUELLOS*@
-    <div class="col-md-6">
+        @*PARTIDA DE CUELLOS*@
+        <div class="col-md-6">
 
-        <div class="card card-outline card-primary">
-            <div class="card-header text-center">
-                <h1 class="card-title">Cuellos Rectilíneos</h1>
-                <div class="card-tools">
+            <div class="card card-outline card-primary">
+                <div class="card-header text-center">
+                    <h1 class="card-title">Cuellos Rectilíneos</h1>
+                    <div class="card-tools">
 
-                    <button type="button" class="btn btn-sm btn-primary" id="btnaddcuello">
-                        <i class="fas fa-plus"></i>
-                        Partida
-                    </button>
+                        <button type="button" class="btn btn-sm btn-primary" id="btnaddcuello">
+                            <i class="fas fa-plus"></i>
+                            Partida
+                        </button>
 
+                    </div>
                 </div>
-            </div>
-            <div class="card-body">
+                <div class="card-body">
 
-                <div class="table-responsive">
+                    <div class="table-responsive">
 
-                    <table class="table table-bordered table-sm text-center tablainput">
-                        <thead class="thead-light">
-                            <tr class="tr-thead filafija">
-                                <th class="border-table partida">Partida</th>
-                                @foreach (var talla in Model.Tallas)
+                        <table class="table table-bordered table-sm text-center tablainput">
+                            <thead class="thead-light">
+                                <tr class="tr-thead filafija">
+                                    <th class="border-table partida">Partida</th>
+                                    @foreach (var talla in Model.Tallas)
+                                    {
+                                        <th class="border-table tallas">@talla.descr_tamanho</th>
+                                    }
+                                    <th class="border-table tallas">Q</th>
+                                    <th class="border-table tallas">Kilos</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbodycuello" class="tbodyrectilineos">
+
+                                @foreach (var item in partidacuello)
                                 {
-                                    <th class="border-table tallas">@talla.descr_tamanho</th>
-                                }
-                                <th class="border-table tallas">Q</th>
-                                <th class="border-table tallas">Kilos</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tbodycuello" class="tbodyrectilineos">
-
-                            @foreach (var item in partidacuello)
-                            {
-                                decimal totalprimeras = 0;
-                                decimal totalsegundas = 0;
-                                decimal totalprimera_segundas = 0;
+                                    decimal totalprimeras = 0;
+                                    decimal totalsegundas = 0;
+                                    decimal totalprimera_segundas = 0;
 
 
-                                //PRIMERAS
-                                <tr>
-                                    <td>
+                                    //PRIMERAS
+                                    <tr>
+                                        <td>
 
-                                        <div class="btn-group" role="group">
-                                            <button id="" type="button" class="btn btn-info btn-sm btn-block dropdown-toggle p-0" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                @item.partidarectilineo
-                                            </button>
-                                            <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                                                <a data-id="@item.idpartidarectilineo" data-partida="@item.partidarectilineo" class="dropdown-item savetallas" href="#">Guardar Tallas</a>
-                                                <a data-tiporectilineo="CUELLO" data-kilostotales="@item.kilostotales"  data-observacion="@item.observacion" data-partida="@item.partidarectilineo" data-fecha="@item.fechacarga" class="dropdown-item addobservacion" href="#">Modificar Observación</a>
-                                                <a data-id="@item.idpartidarectilineo" data-partida="@item.partidarectilineo" class="dropdown-item deletepartida" href="#">Eliminar Partida</a>
+                                            <div class="btn-group" role="group">
+                                                <button id="" type="button" class="btn btn-info btn-sm btn-block dropdown-toggle p-0" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    @item.partidarectilineo
+                                                </button>
+                                                <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                                                    <a data-id="@item.idpartidarectilineo" data-partida="@item.partidarectilineo" class="dropdown-item savetallas" href="#">Guardar Tallas</a>
+                                                    <a data-tiporectilineo="CUELLO" data-kilostotales="@item.kilostotales" data-observacion="@item.observacion" data-partida="@item.partidarectilineo" data-fecha="@item.fechacarga" class="dropdown-item addobservacion" href="#">Modificar Observación</a>
+                                                    <a data-id="@item.idpartidarectilineo" data-partida="@item.partidarectilineo" class="dropdown-item deletepartida" href="#">Eliminar Partida</a>
+                                                </div>
                                             </div>
-                                        </div>
 
-                                    </td>
-                                    @foreach (var talla in Model.Tallas)
-                                    {
-                                        <td>
-                                            @{
-                                                var listacuelloprimeras = Model.PartidaRectilineosTallas.Where(
-                                                    obj => obj.idpartidarectilineo == item.idpartidarectilineo
-                                                    && obj.talla == talla.descr_tamanho
-                                                ).ToList();
-
-                                                decimal cantidadprimera = listacuelloprimeras.Count > 0 ? listacuelloprimeras[0].cantidadprimera : 0;
-                                                totalprimeras += cantidadprimera;
-                                                var id = item.partidarectilineo + "_" + talla + "_primeras";
-                                            }
-                                            @{
-                                                string cantidadprimera_s = cantidadprimera == 0 ? "" : cantidadprimera.ToString();
-                                            }
-                                            <input type='text' id="@id" class="tallaspartida_@item.partidarectilineo inputtabla numeros" data-partida="@item.partidarectilineo" data-orden="@talla.ordem_tamanho" data-talla="@talla.descr_tamanho" value="@cantidadprimera_s">
                                         </td>
-                                    }
-                                    <td>@totalprimeras</td>
+                                        @foreach (var talla in Model.Tallas)
+                                        {
+                                            <td>
+                                                @{
+                                                    var listacuelloprimeras = Model.PartidaRectilineosTallas.Where(
+                                                        obj => obj.idpartidarectilineo == item.idpartidarectilineo
+                                                        && obj.talla == talla.descr_tamanho
+                                                    ).ToList();
 
-                                    @*TOTAL DE KILOS*@
-                                    <td rowspan="4" class="align-vertical">
-                                        @item.kilostotales
-                                    </td>
+                                                    decimal cantidadprimera = listacuelloprimeras.Count > 0 ? listacuelloprimeras[0].cantidadprimera : 0;
+                                                    totalprimeras += cantidadprimera;
+                                                    var id = item.partidarectilineo + "_" + talla + "_primeras";
+                                                }
+                                                @{
+                                                    string cantidadprimera_s = cantidadprimera == 0 ? "" : cantidadprimera.ToString();
+                                                }
+                                                <input type='text' id="@id" class="tallaspartida_@item.partidarectilineo inputtabla numeros" data-partida="@item.partidarectilineo" data-orden="@talla.ordem_tamanho" data-talla="@talla.descr_tamanho" value="@cantidadprimera_s">
+                                            </td>
+                                        }
+                                        <td>@totalprimeras</td>
 
-                                </tr>
-
-                                //SEGUNDAS
-                                <tr>
-                                    <td>Segundas</td>
-                                    @foreach (var talla in Model.Tallas)
-                                    {
-                                        <td>
-                                            @{
-
-                                                var listacuellosegundas = Model.PartidaRectilineosTallas.Where(
-                                                    obj => obj.idpartidarectilineo == item.idpartidarectilineo
-                                                    && obj.talla == talla.descr_tamanho
-                                                ).ToList();
-
-                                                decimal cantidadsegunda = listacuellosegundas.Count > 0 ? listacuellosegundas[0].cantidadsegunda : 0;
-                                                totalsegundas += cantidadsegunda;
-                                                var id = item.partidarectilineo + "_" + talla.descr_tamanho + "_segundas";
-                                            }
-                                            @{
-                                                string cantidadsegunda_s = cantidadsegunda == 0 ? "" : cantidadsegunda.ToString();
-                                            }
-                                            <input type='text' id="@id" class="inputtabla numeros" data-partida="@item.partidarectilineo" data-talla="@talla" value="@cantidadsegunda_s">
+                                        @*TOTAL DE KILOS*@
+                                        <td rowspan="4" class="align-vertical">
+                                            @item.kilostotales
                                         </td>
-                                    }
-                                    <td>@totalsegundas</td>
-                                </tr>
 
-                                //TOTALES PRIMERAS + SEGUNDAS
-                                <tr class="bg-totales">
-                                    <td>TOTAL</td>
-                                    @foreach (var talla in Model.Tallas)
-                                    {
-                                        <td>
-                                            @{
+                                    </tr>
 
-                                                var listacuellototales = Model.PartidaRectilineosTallas.Where(
-                                                    obj => obj.idpartidarectilineo == item.idpartidarectilineo
-                                                    && obj.talla == talla.descr_tamanho
-                                                ).ToList();
+                                    //SEGUNDAS
+                                    <tr>
+                                        <td>Segundas</td>
+                                        @foreach (var talla in Model.Tallas)
+                                        {
+                                            <td>
+                                                @{
 
-                                                decimal cantidadprimera = listacuellototales.Count > 0 ? listacuellototales[0].cantidadprimera : 0;
-                                                decimal cantidadsegunda = listacuellototales.Count > 0 ? listacuellototales[0].cantidadsegunda : 0;
-                                                //totalsegundas += cantidadsegunda;
-                                                //var id = item.partidarectilineo + "_" + talla.descr_tamanho + "_segundas";
-                                            }
-                                            @{
-                                                decimal tt = cantidadprimera + cantidadsegunda;
-                                                totalprimera_segundas += tt;
-                                                string cantidadtotalps = tt.ToString();
-                                            }
-                                            <input type='text' class="inputtabla bg-totales" readonly value="@cantidadtotalps">
-                                        </td>
-                                    }
-                                    <td>@totalprimera_segundas</td>
+                                                    var listacuellosegundas = Model.PartidaRectilineosTallas.Where(
+                                                        obj => obj.idpartidarectilineo == item.idpartidarectilineo
+                                                        && obj.talla == talla.descr_tamanho
+                                                    ).ToList();
 
-                                    @{
-                                        // ASIGNAMOS TOTALES DE PRENDAS
-                                        item.totalprendas = totalprimera_segundas;
+                                                    decimal cantidadsegunda = listacuellosegundas.Count > 0 ? listacuellosegundas[0].cantidadsegunda : 0;
+                                                    totalsegundas += cantidadsegunda;
+                                                    var id = item.partidarectilineo + "_" + talla.descr_tamanho + "_segundas";
+                                                }
+                                                @{
+                                                    string cantidadsegunda_s = cantidadsegunda == 0 ? "" : cantidadsegunda.ToString();
+                                                }
+                                                <input type='text' id="@id" class="inputtabla numeros" data-partida="@item.partidarectilineo" data-talla="@talla" value="@cantidadsegunda_s">
+                                            </td>
+                                        }
+                                        <td>@totalsegundas</td>
+                                    </tr>
 
-                                    }
-                                </tr>
+                                    //TOTALES PRIMERAS + SEGUNDAS
+                                    <tr class="bg-totales">
+                                        <td>TOTAL</td>
+                                        @foreach (var talla in Model.Tallas)
+                                        {
+                                            <td>
+                                                @{
 
+                                                    var listacuellototales = Model.PartidaRectilineosTallas.Where(
+                                                        obj => obj.idpartidarectilineo == item.idpartidarectilineo
+                                                        && obj.talla == talla.descr_tamanho
+                                                    ).ToList();
 
+                                                    decimal cantidadprimera = listacuellototales.Count > 0 ? listacuellototales[0].cantidadprimera : 0;
+                                                    decimal cantidadsegunda = listacuellototales.Count > 0 ? listacuellototales[0].cantidadsegunda : 0;
+                                                    //totalsegundas += cantidadsegunda;
+                                                    //var id = item.partidarectilineo + "_" + talla.descr_tamanho + "_segundas";
+                                                }
+                                                @{
+                                                    decimal tt = cantidadprimera + cantidadsegunda;
+                                                    totalprimera_segundas += tt;
+                                                    string cantidadtotalps = tt.ToString();
+                                                }
+                                                <input type='text' class="inputtabla bg-totales" readonly value="@cantidadtotalps">
+                                            </td>
+                                        }
+                                        <td>@totalprimera_segundas</td>
 
-                                // KILOS POR TALLAS
-                                <tr class="bg-totales">
-                                    <td>KG por Talla</td>
-                                    @foreach (var talla in Model.Tallas)
-                                    {
-                                        <td>
-                                            @{
+                                        @{
+                                            // ASIGNAMOS TOTALES DE PRENDAS
+                                            item.totalprendas = totalprimera_segundas;
 
-                                                var listacuellototaleskilos = Model.PartidaRectilineosTallas.Where(
-                                                    obj => obj.idpartidarectilineo == item.idpartidarectilineo
-                                                    && obj.talla == talla.descr_tamanho
-                                                ).ToList();
-
-                                                decimal tot = listacuellototaleskilos.Count > 0 ? listacuellototaleskilos[0].totalcantidades : 0;
-                                                //totalsegundas += cantidadsegunda;
-                                                //var id = item.partidarectilineo + "_" + talla.descr_tamanho + "_segundas";
-                                            }
-                                            @{
-                                                decimal tt = tot * item.consumototal;
-                                                //totalprimera_segundas += tt;
-                                                //string cantidadtotalps = tt.ToString();
-                                            }
-                                            <input type='text' class="inputtabla bg-totales" readonly value="@Math.Round(tt,2)">
-                                        </td>
-                                    }
-                                    <td>@Math.Round(item.consumototal, 2)</td>
-                                </tr>
+                                        }
+                                    </tr>
 
 
-                            }
 
-                        </tbody>
-                    </table>
+                                    // KILOS POR TALLAS
+                                    <tr class="bg-totales">
+                                        <td>KG por Talla</td>
+                                        @foreach (var talla in Model.Tallas)
+                                        {
+                                            <td>
+                                                @{
+
+                                                    var listacuellototaleskilos = Model.PartidaRectilineosTallas.Where(
+                                                        obj => obj.idpartidarectilineo == item.idpartidarectilineo
+                                                        && obj.talla == talla.descr_tamanho
+                                                    ).ToList();
+
+                                                    decimal tot = listacuellototaleskilos.Count > 0 ? listacuellototaleskilos[0].totalcantidades : 0;
+                                                    //totalsegundas += cantidadsegunda;
+                                                    //var id = item.partidarectilineo + "_" + talla.descr_tamanho + "_segundas";
+                                                }
+                                                @{
+                                                    decimal tt = tot * item.consumototal;
+                                                    //totalprimera_segundas += tt;
+                                                    //string cantidadtotalps = tt.ToString();
+                                                }
+                                                <input type='text' class="inputtabla bg-totales" readonly value="@Math.Round(tt,2)">
+                                            </td>
+                                        }
+                                        <td>@Math.Round(item.consumototal, 2)</td>
+                                    </tr>
+
+
+                                }
+
+                            </tbody>
+                        </table>
+
+                    </div>
 
                 </div>
-
             </div>
+
         </div>
 
-    </div>
 
+        @*PARTIDA DE PUÑOS*@
 
-    @*PARTIDA DE PUÑOS*@
+        <div class="col-md-6">
 
-    <div class="col-md-6">
+            <div class="card card-outline card-primary">
+                <div class="card-header text-center">
+                    <h1 class="card-title">Puños Rectilíneos</h1>
+                    <div class="card-tools">
 
-        <div class="card card-outline card-primary">
-            <div class="card-header text-center">
-                <h1 class="card-title">Puños Rectilíneos</h1>
-                <div class="card-tools">
+                        <button type="button" class="btn btn-sm btn-primary" id="btnaddpuno">
+                            <i class="fas fa-plus"></i>
+                            Partida
+                        </button>
 
-                    <button type="button" class="btn btn-sm btn-primary" id="btnaddpuno">
-                        <i class="fas fa-plus"></i>
-                        Partida
-                    </button>
-
+                    </div>
                 </div>
-            </div>
-            <div class="card-body">
+                <div class="card-body">
 
-                <div class="table-responsive">
+                    <div class="table-responsive">
 
-                    <table class="table table-bordered table-sm text-center tablainput">
-                        <thead class="thead-light">
-                            <tr class="tr-thead filafija">
-                                <th class="border-table partida">Partida</th>
-                                @foreach (var talla in Model.Tallas)
+                        <table class="table table-bordered table-sm text-center tablainput">
+                            <thead class="thead-light">
+                                <tr class="tr-thead filafija">
+                                    <th class="border-table partida">Partida</th>
+                                    @foreach (var talla in Model.Tallas)
+                                    {
+                                        <th class="border-table tallas">@talla.descr_tamanho</th>
+                                    }
+                                    <th class="border-table tallas">Q</th>
+                                    <th class="border-table tallas">Kilos</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbodycuello" class="tbodyrectilineos">
+
+                                @foreach (var item in partidapuno)
                                 {
-                                    <th class="border-table tallas">@talla.descr_tamanho</th>
-                                }
-                                <th class="border-table tallas">Q</th>
-                                <th class="border-table tallas">Kilos</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tbodycuello" class="tbodyrectilineos">
-
-                            @foreach (var item in partidapuno)
-                            {
-                                decimal totalprimeras = 0;
-                                decimal totalsegundas = 0;
-                                decimal totalprimera_segundas = 0;
+                                    decimal totalprimeras = 0;
+                                    decimal totalsegundas = 0;
+                                    decimal totalprimera_segundas = 0;
 
 
-                                //PRIMERAS
-                                <tr>
-                                    <td>
+                                    //PRIMERAS
+                                    <tr>
+                                        <td>
 
-                                        <div class="btn-group" role="group">
-                                            <button id="" type="button" class="btn btn-info btn-sm btn-block dropdown-toggle p-0" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                @item.partidarectilineo
-                                            </button>
-                                            <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                                                <a data-id="@item.idpartidarectilineo" data-partida="@item.partidarectilineo" class="dropdown-item savetallas" href="#">Guardar Tallas</a>
-                                                <a data-tiporectilineo="PUNO" data-kilostotales="@item.kilostotales" data-observacion="@item.observacion" data-partida="@item.partidarectilineo" data-fecha="@item.fechacarga" class="dropdown-item addobservacion" href="#">Modificar Observación</a>
-                                                <a data-id="@item.idpartidarectilineo" data-partida="@item.partidarectilineo" class="dropdown-item deletepartida" href="#">Eliminar Partida</a>
+                                            <div class="btn-group" role="group">
+                                                <button id="" type="button" class="btn btn-info btn-sm btn-block dropdown-toggle p-0" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    @item.partidarectilineo
+                                                </button>
+                                                <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                                                    <a data-id="@item.idpartidarectilineo" data-partida="@item.partidarectilineo" class="dropdown-item savetallas" href="#">Guardar Tallas</a>
+                                                    <a data-tiporectilineo="PUNO" data-kilostotales="@item.kilostotales" data-observacion="@item.observacion" data-partida="@item.partidarectilineo" data-fecha="@item.fechacarga" class="dropdown-item addobservacion" href="#">Modificar Observación</a>
+                                                    <a data-id="@item.idpartidarectilineo" data-partida="@item.partidarectilineo" class="dropdown-item deletepartida" href="#">Eliminar Partida</a>
+                                                </div>
                                             </div>
-                                        </div>
 
-                                    </td>
-                                    @foreach (var talla in Model.Tallas)
-                                    {
-                                        <td>
-                                            @{
-                                                var listacuelloprimeras = Model.PartidaRectilineosTallas.Where(
-                                                    obj => obj.idpartidarectilineo == item.idpartidarectilineo
-                                                    && obj.talla == talla.descr_tamanho
-                                                ).ToList();
-
-                                                decimal cantidadprimera = listacuelloprimeras.Count > 0 ? listacuelloprimeras[0].cantidadprimera : 0;
-                                                totalprimeras += cantidadprimera;
-                                                var id = item.partidarectilineo + "_" + talla + "_primeras";
-                                            }
-                                            @{
-                                                string cantidadprimera_s = cantidadprimera == 0 ? "" : cantidadprimera.ToString();
-                                            }
-                                            <input type='text' id="@id" class="tallaspartida_@item.partidarectilineo inputtabla numeros" data-partida="@item.partidarectilineo" data-orden="@talla.ordem_tamanho" data-talla="@talla.descr_tamanho" value="@cantidadprimera_s">
                                         </td>
-                                    }
-                                    <td>@totalprimeras</td>
+                                        @foreach (var talla in Model.Tallas)
+                                        {
+                                            <td>
+                                                @{
+                                                    var listacuelloprimeras = Model.PartidaRectilineosTallas.Where(
+                                                        obj => obj.idpartidarectilineo == item.idpartidarectilineo
+                                                        && obj.talla == talla.descr_tamanho
+                                                    ).ToList();
 
-                                    @*TOTAL DE KILOS*@
-                                    <td rowspan="4" class="align-vertical">
-                                        @item.kilostotales
-                                    </td>
+                                                    decimal cantidadprimera = listacuelloprimeras.Count > 0 ? listacuelloprimeras[0].cantidadprimera : 0;
+                                                    totalprimeras += cantidadprimera;
+                                                    var id = item.partidarectilineo + "_" + talla + "_primeras";
+                                                }
+                                                @{
+                                                    string cantidadprimera_s = cantidadprimera == 0 ? "" : cantidadprimera.ToString();
+                                                }
+                                                <input type='text' id="@id" class="tallaspartida_@item.partidarectilineo inputtabla numeros" data-partida="@item.partidarectilineo" data-orden="@talla.ordem_tamanho" data-talla="@talla.descr_tamanho" value="@cantidadprimera_s">
+                                            </td>
+                                        }
+                                        <td>@totalprimeras</td>
 
-                                </tr>
-
-                                //SEGUNDAS
-                                <tr>
-                                    <td>Segundas</td>
-                                    @foreach (var talla in Model.Tallas)
-                                    {
-                                        <td>
-                                            @{
-
-                                                var listacuellosegundas = Model.PartidaRectilineosTallas.Where(
-                                                    obj => obj.idpartidarectilineo == item.idpartidarectilineo
-                                                    && obj.talla == talla.descr_tamanho
-                                                ).ToList();
-
-                                                decimal cantidadsegunda = listacuellosegundas.Count > 0 ? listacuellosegundas[0].cantidadsegunda : 0;
-                                                totalsegundas += cantidadsegunda;
-                                                var id = item.partidarectilineo + "_" + talla.descr_tamanho + "_segundas";
-                                            }
-                                            @{
-                                                string cantidadsegunda_s = cantidadsegunda == 0 ? "" : cantidadsegunda.ToString();
-                                            }
-                                            <input type='text' id="@id" class="inputtabla numeros" data-partida="@item.partidarectilineo" data-talla="@talla" value="@cantidadsegunda_s">
+                                        @*TOTAL DE KILOS*@
+                                        <td rowspan="4" class="align-vertical">
+                                            @item.kilostotales
                                         </td>
-                                    }
-                                    <td>@totalsegundas</td>
-                                </tr>
 
-                                //TOTALES PRIMERAS + SEGUNDAS
-                                <tr class="bg-totales">
-                                    <td>TOTAL</td>
-                                    @foreach (var talla in Model.Tallas)
-                                    {
-                                        <td>
-                                            @{
+                                    </tr>
 
-                                                var listacuellototales = Model.PartidaRectilineosTallas.Where(
-                                                    obj => obj.idpartidarectilineo == item.idpartidarectilineo
-                                                    && obj.talla == talla.descr_tamanho
-                                                ).ToList();
+                                    //SEGUNDAS
+                                    <tr>
+                                        <td>Segundas</td>
+                                        @foreach (var talla in Model.Tallas)
+                                        {
+                                            <td>
+                                                @{
 
-                                                decimal cantidadprimera = listacuellototales.Count > 0 ? listacuellototales[0].cantidadprimera : 0;
-                                                decimal cantidadsegunda = listacuellototales.Count > 0 ? listacuellototales[0].cantidadsegunda : 0;
-                                                //totalsegundas += cantidadsegunda;
-                                                //var id = item.partidarectilineo + "_" + talla.descr_tamanho + "_segundas";
-                                            }
-                                            @{
-                                                decimal tt = cantidadprimera + cantidadsegunda;
-                                                totalprimera_segundas += tt;
-                                                string cantidadtotalps = tt.ToString();
-                                            }
-                                            <input type='text' class="inputtabla bg-totales" readonly value="@cantidadtotalps">
-                                        </td>
-                                    }
-                                    <td>@totalprimera_segundas</td>
+                                                    var listacuellosegundas = Model.PartidaRectilineosTallas.Where(
+                                                        obj => obj.idpartidarectilineo == item.idpartidarectilineo
+                                                        && obj.talla == talla.descr_tamanho
+                                                    ).ToList();
 
-                                    @{
-                                        // ASIGNAMOS TOTALES DE PRENDAS
-                                        item.totalprendas = totalprimera_segundas;
+                                                    decimal cantidadsegunda = listacuellosegundas.Count > 0 ? listacuellosegundas[0].cantidadsegunda : 0;
+                                                    totalsegundas += cantidadsegunda;
+                                                    var id = item.partidarectilineo + "_" + talla.descr_tamanho + "_segundas";
+                                                }
+                                                @{
+                                                    string cantidadsegunda_s = cantidadsegunda == 0 ? "" : cantidadsegunda.ToString();
+                                                }
+                                                <input type='text' id="@id" class="inputtabla numeros" data-partida="@item.partidarectilineo" data-talla="@talla" value="@cantidadsegunda_s">
+                                            </td>
+                                        }
+                                        <td>@totalsegundas</td>
+                                    </tr>
 
-                                    }
-                                </tr>
+                                    //TOTALES PRIMERAS + SEGUNDAS
+                                    <tr class="bg-totales">
+                                        <td>TOTAL</td>
+                                        @foreach (var talla in Model.Tallas)
+                                        {
+                                            <td>
+                                                @{
 
+                                                    var listacuellototales = Model.PartidaRectilineosTallas.Where(
+                                                        obj => obj.idpartidarectilineo == item.idpartidarectilineo
+                                                        && obj.talla == talla.descr_tamanho
+                                                    ).ToList();
 
+                                                    decimal cantidadprimera = listacuellototales.Count > 0 ? listacuellototales[0].cantidadprimera : 0;
+                                                    decimal cantidadsegunda = listacuellototales.Count > 0 ? listacuellototales[0].cantidadsegunda : 0;
+                                                    //totalsegundas += cantidadsegunda;
+                                                    //var id = item.partidarectilineo + "_" + talla.descr_tamanho + "_segundas";
+                                                }
+                                                @{
+                                                    decimal tt = cantidadprimera + cantidadsegunda;
+                                                    totalprimera_segundas += tt;
+                                                    string cantidadtotalps = tt.ToString();
+                                                }
+                                                <input type='text' class="inputtabla bg-totales" readonly value="@cantidadtotalps">
+                                            </td>
+                                        }
+                                        <td>@totalprimera_segundas</td>
 
-                                // KILOS POR TALLAS
-                                <tr class="bg-totales">
-                                    <td>KG por Talla</td>
-                                    @foreach (var talla in Model.Tallas)
-                                    {
-                                        <td>
-                                            @{
+                                        @{
+                                            // ASIGNAMOS TOTALES DE PRENDAS
+                                            item.totalprendas = totalprimera_segundas;
 
-                                                var listacuellototaleskilos = Model.PartidaRectilineosTallas.Where(
-                                                    obj => obj.idpartidarectilineo == item.idpartidarectilineo
-                                                    && obj.talla == talla.descr_tamanho
-                                                ).ToList();
-
-                                                decimal tot = listacuellototaleskilos.Count > 0 ? listacuellototaleskilos[0].totalcantidades : 0;
-                                                //totalsegundas += cantidadsegunda;
-                                                //var id = item.partidarectilineo + "_" + talla.descr_tamanho + "_segundas";
-                                            }
-                                            @{
-                                                decimal tt = tot * item.consumototal;
-                                                //totalprimera_segundas += tt;
-                                                //string cantidadtotalps = tt.ToString();
-                                            }
-                                            <input type='text' class="inputtabla bg-totales" readonly value="@Math.Round(tt,2)">
-                                        </td>
-                                    }
-                                    <td>@Math.Round(item.consumototal, 2)</td>
-                                </tr>
+                                        }
+                                    </tr>
 
 
-                            }
 
-                        </tbody>
-                    </table>
+                                    // KILOS POR TALLAS
+                                    <tr class="bg-totales">
+                                        <td>KG por Talla</td>
+                                        @foreach (var talla in Model.Tallas)
+                                        {
+                                            <td>
+                                                @{
+
+                                                    var listacuellototaleskilos = Model.PartidaRectilineosTallas.Where(
+                                                        obj => obj.idpartidarectilineo == item.idpartidarectilineo
+                                                        && obj.talla == talla.descr_tamanho
+                                                    ).ToList();
+
+                                                    decimal tot = listacuellototaleskilos.Count > 0 ? listacuellototaleskilos[0].totalcantidades : 0;
+                                                    //totalsegundas += cantidadsegunda;
+                                                    //var id = item.partidarectilineo + "_" + talla.descr_tamanho + "_segundas";
+                                                }
+                                                @{
+                                                    decimal tt = tot * item.consumototal;
+                                                    //totalprimera_segundas += tt;
+                                                    //string cantidadtotalps = tt.ToString();
+                                                }
+                                                <input type='text' class="inputtabla bg-totales" readonly value="@Math.Round(tt,2)">
+                                            </td>
+                                        }
+                                        <td>@Math.Round(item.consumototal, 2)</td>
+                                    </tr>
+
+
+                                }
+
+                            </tbody>
+                        </table>
+
+                    </div>
 
                 </div>
-
             </div>
+
         </div>
 
+
     </div>
-
-
-</div>
 
 
     <!-- MODAL PARA INGRESO DE PARTIDAs -->
-    <div class="modal fade" id="modalingresopartidarectilineos" >
+    <div class="modal fade" id="modalingresopartidarectilineos">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -573,24 +570,19 @@
 @section scripts {
 
     <script>
-
         let partidas_cuello = [];
         let partidas_punos  = [];
         let control;
         let frmpartidasrectilineos = document.getElementById("frmpartidasrectilineos");
         let TIPOPARTIDARECTILINEO = null;
-
         // AGREGAR PARTIDA CUELLO
         $("#btnaddcuello").click(function () {
             frmpartidasrectilineos.reset();
             TIPOPARTIDARECTILINEO = "CUELLO";
-
             $("#txtpartidarectilineo").removeAttr("readonly")
             //$("#txtfechacargarectilineo").removeAttr("readonly");
-
             $("#modalingresopartidarectilineos").modal("show");
         });
-
         // AGREGAR PARTIDA PUÑO
         $("#btnaddpuno").click(function () {
             frmpartidasrectilineos.reset();
@@ -599,61 +591,40 @@
             //$("#txtfechacargarectilineo").removeAttr("readonly");
             $("#modalingresopartidarectilineos").modal("show");
         });
-
         // EVENTO PARA REGISTRAS TALLAS
         $(".savetallas").click(function () {
-
             let partida = $(this).data("partida");
             let id      = $(this).data("id");
-
             saveTallasCantidad(id,partida).then(response => {
-
                 location.reload();
-
             }).catch(error => {
                 console.log("error registro de tallas",error);
             });
         });
-
         // PARA MODIFICAR OBSERVACION
         $(".addobservacion").click(function () {
-
-
             TIPOPARTIDARECTILINEO = $(this).data("tiporectilineo")
-
             // ASIGNAMOS DATOS
-
             // PARTIDA RECTILINEO
             $("#txtpartidarectilineo").val($(this).data("partida"));
             $("#txtpartidarectilineo").attr("readonly",true);
-
             // FECHA
             $("#txtfechacargarectilineo").val($(this).data("fecha"));
             $("#txtfechacargarectilineo").attr("readonly", true);
-
             // KILOS TOTALES
             $("#txtkilosrectilineo").val($(this).data("kilostotales"));
-
-
             // OBSERVACION
             $("#txtobservacionrectilineo").val($(this).data("observacion"));
-
             $("#modalingresopartidarectilineos").modal("show");
         });
-
         // ELIMINAMOS PARTIDA
         $(".deletepartida").click(async function () {
-
             let idpartidarectilineo = $(this).data("id");
             let partida = $(this).data("partida");
-
             let response = await Preguntar("Confirme para eliminar Partida: " + partida);
-
             // ELIMINAMOS SI ACEPTA
             if (response.value) {
-
                 MostrarCarga();
-
                 get("corte", "deletepartidarectilineos", {
                     idpartidarectilineo
                 }, true).then(response => {
@@ -669,87 +640,58 @@
                     Advertir("Ocurrio un error");
                     console.log("error", error);
                 });
-
             }
-
         });
-
         // GUARDAMOS TALLAS
         async function saveTallasCantidad(idpartidarectilineo, partida) {
-
             MostrarCarga();
             let inputprimera = $(".tallaspartida_" + partida);
-
             for (let item of inputprimera) {
-
                 let talla           = item.dataset.talla;
                 let orden           = item.dataset.orden;
-
                 let cantidadprimera = item.value.trim();
                 let cantidadsegunda = $("#" + partida + "_" + talla + "_segundas").val().trim();
-
-
-
                 let response = await get("corte", "savePartidaTelaRectilineoTalla", {
                     idpartidarectilineo, talla, cantidadprimera, cantidadsegunda, orden
                 }, true);
                 console.log("response tallas",response);
-
             }
-
             //OcultarCarga();
         }
-
         // AGREGAR PARTIDAS RECTILINEOS
         frmpartidasrectilineos.addEventListener('submit', (e) => {
             e.preventDefault();
-
             savePartidaRectilineo(TIPOPARTIDARECTILINEO)
                 .then(response => {
-
                 }).catch(error => {
                     Advertir("Error al registrar");
                 });
-
         })
-
         // REGISTRAMOS PARTIDA DE TELA
         async function savePartidaTela() {
-
             let fechacarga  = $("#txtfechacargapartidatela").val();
             let observacion = $("#txtobservacionpartidatela").val().trim();
-
             if (fechacarga != "") {
                 let response = await get("corte", "savePartidaTela", {
                     partidatela: '@Model.Partida.partidatela', codtela:'',
                     usuarioregistro: "@Session["usuario"].ToString()", observacion, fechacarga
                 }, true);
-
                 console.log("Registro de partida de tela",response);
                 return true;
-
             } else {
                 return false;
             }
-
-
         }
-
         // REGISTRAMOS PARTIDA DE RECTILINEO
         async function savePartidaRectilineo(tiporectilineo) {
-
             MostrarCarga();
-
             // REGISTRAMOS PARTIDA DE TELA
             let responsepartida = await savePartidaTela();
-
             if (responsepartida) {
-
                 let partidarectilineo   = $("#txtpartidarectilineo").val().trim().toUpperCase();
                 let kilostotales        = $("#txtkilosrectilineo").val().trim();
                 let observacion         = $("#txtobservacionrectilineo").val().trim().toUpperCase();
                 let fechacarga          = $("#txtfechacargarectilineo").val();
-
                 get("corte", "savePartidaTelaRectilineo", {
                     partidarectilineo, tiporectilineo, partidatela: '@Model.Partida.partidatela',
                     usuarioreg: "@Session["usuario"].ToString()", observacion, fechacarga, kilostotales
@@ -764,17 +706,11 @@
                 }).catch(error => {
                     console.log("error", error);
                 });
-
-
             } else {
                 Advertir("Ingrese la fecha de carga de la Partida de Tela");
             }
-
-
         }
-
     </script>
 
 
 }
-

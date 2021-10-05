@@ -51,16 +51,23 @@
             <table class="table table-sm table-bordered table-hover display nowrap" id="tblHistorial">
                 <thead class="thead-light">
                     <tr>
-                        <th class="ocultar-columna">idSolicitud</th>
-                        <th>Fecha</th>
+                        <th>Tipo Sustento</th>
+                        <th>Fecha Solicitud</th>
+                        <th>Fecha Aprob. Finanza</th>
+                        <th>Fecha Ultima Rendición</th>
                         <th>Codigo</th>
+                        <th>Usuario Solicitante</th>
                         <th>CeCo</th>
                         <th>Glosa / Desc. Solicitud</th>
-                        <th class="">Estado</th>
-                        <th class="">Tipo</th>
+                        <th>Estado</th>
+                        <th>Tipo</th>
                         <th>Nivel Aprobacion</th>
-                        <th class="">Moneda</th>
-                        <th>Total</th>
+                        <th>Moneda</th>
+                        <th>Total Solicitado</th>
+                        <th>Total Entregado</th>
+                        <th>Total Rendido</th>
+                        <th>Impresión Liq.</th>
+
                     </tr>
                 </thead>
                 <tbody id="tblHistorialContent"></tbody>
@@ -157,7 +164,7 @@
             function Inicializar() {
 
                 var now = new Date();
-                var month = (now.getMonth() + 1);
+                var month = (now.getMonth());
                 var day = now.getDate();
                 if (month < 10)
                     month = "0" + month;
@@ -196,7 +203,7 @@
 
                     $.ajax({
                         type: "GET",
-                        url: '/finanzas/RG_Historial30',
+                        url: '/finanzas/RG_HistorialRendiciones',
                         contentType: "application/json; charset=utf-8",
                         data: datos,
                         dataType: "json",
@@ -206,21 +213,39 @@
 
                             tabla.destroy();
                             var tr = "";
+                            var tr_btn_pdf = "";
 
                             data.lista.forEach((obj) => {
 
                                 tr += "<tr> "
-                                    + " <td class='ocultar-columna'>" + obj.idSolicitud + "</td>"
+                                    + " <td> " + obj.tipoSustento + "</td>"
                                     + " <td> " + obj.fecha + "</td>"
+                                    + " <td> " + obj.fechaFinanza + "</td>"
+                                    + " <td> " + obj.fechaRend + "</td>"
                                     + " <td> " + obj.codigo + "</td>"
-                                    + " <td> " + obj.codCeCo + "</td>"
+                                    + " <td> " + obj.usuSolicitante + "</td>"
+                                    + " <td> " + obj.ceco + "</td>"
                                     + " <td> " + obj.observacion + "</td>"
                                     + " <td> " + obj.estado + "</td>"
                                     + " <td> " + obj.tipo + "</td>"
                                     + " <td> " + obj.nivelAprobacion + "</td>"
                                     + " <td> " + obj.moneda + "</td>"
-                                    + " <td> " + formatoNumero(obj.total) + "</td>"
-                                    + "</tr>";
+                                    + " <td> " + formatoNumero(obj.totalsolicitud) + "</td>"
+                                    + " <td> " + formatoNumero(obj.totalentregado) + "</td>"
+                                    + " <td> " + formatoNumero(obj.totalrendido) + "</td>";
+
+                                if (obj.cant_rend > 0) {
+
+                                    tr_btn_pdf = " <td class='text-center'>"
+                                        + " <button data-idsolicitud = " + obj.idSolicitud + " data-toggle='collapse' class='btn btn-sm btn-danger cImprimirPDF'> Comprobantes <i class='fas fa-file-pdf'></i></button>"
+                                        + " </td> ";
+                                }
+                                else {
+                                    tr_btn_pdf = " <td class='text-center'></td> ";
+                                }
+
+                                tr = tr + tr_btn_pdf + "</tr>";
+
                             });
 
                             $("#tblHistorialContent").html(tr);
@@ -228,10 +253,14 @@
 
                             $("#tblHistorial").DataTable(
                                 {
-                                    dom: 'Bfrtip',
+                                    "scrollX": true,
+                                    "bSort": true,
                                     buttons: [
                                         'excel', 'pdf', 'print'
                                     ],
+                                    scrollY: '50vh',
+                                    scrollCollapse: true,
+                                    paging: true,
                                     'language': { 'url': '/libs/datatables/spanish.json' },
                                     lengthMenu: [[5, 10, 20, -1], [5, 10, 20, 'Todos']]
                                 });
@@ -252,6 +281,26 @@
                 x = x.toFixed(2);
                 return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
             }
+
+
+            $("#tblHistorialContent").on("click", ".cImprimirPDF", function () {
+
+                let idsolicitud = $(this).attr("data-idsolicitud");
+
+                $.ajax({
+                    url: "@Url.Action("RG_BuscarIdSolicitud", "Finanzas")",
+                    data: {
+                        idSolicitud: idsolicitud,
+                    },
+                    success: function (data) {
+                        window.location.href = '@Url.Action("MapearReporteCXSPDF", "Finanzas")'
+                    }
+                });
+
+            });
+
+
+
 
 
         });

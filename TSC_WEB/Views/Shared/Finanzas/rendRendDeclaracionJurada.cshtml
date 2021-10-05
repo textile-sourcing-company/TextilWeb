@@ -1,0 +1,146 @@
+﻿@{
+    Layout = null;
+}
+
+    <div class="row m-2">
+
+        <div class="col-12 col-sm-12 col-md-12 col-lg-3 col-xl-3 p-1">
+            <label for="zcbxTipoCpbteCompModal3">Tipo Comprobante:</label>
+            <select class="form-control form-control-sm" id="zcbxTipoCpbteCompModal3" disabled></select>
+        </div>
+        <div class="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-5 p-1">
+            <label for="ztxtEmpresaModal3">Empresa:</label>
+            <input id="ztxtEmpresaModal3" class="form-control form-control-sm" type="text" placeholder="" value="Textile Sourcing Company SAC" disabled>
+        </div>
+        <div class="col-12 col-sm-6 col-md-4 col-lg-2 col-xl-2 p-1">
+            <label for="ztxtFechaModal3">Fecha Emisión:</label>
+            <input id="ztxtFechaModal3" class="form-control form-control-sm cfecha" type="date" disabled>
+        </div>
+        <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 card kpi-modal-monto1 p-1">
+            <label for="zkpiMontoSeleecionadoModal3">Monto por Rendir</label>
+            <h6 id="zkpiMontoSeleecionadoModal3">0</h6>
+        </div>
+
+
+        <div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-2 p-1">
+            <label for="zcbxPeriodoModal3">Periodo:</label>
+            <select class="form-control form-control-sm" id="zcbxPeriodoModal3"></select>
+        </div>
+        <div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-2 p-1">
+            <label for="ztxtCodigoModal3">Codigo Correlativo:</label>
+            <input id="ztxtCodigoModal3" class="form-control form-control-sm" type="text" maxlength="15" disabled>
+        </div>
+        <div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-1 p-1">
+            <label for="zcbxMonedaModal3">Moneda:</label>
+            <select class="form-control form-control-sm" id="zcbxMonedaModal3" disabled></select>
+        </div>
+
+
+        <div class="col-12 col-sm-4 col-md-4 col-lg-2 col-xl-2 p-1">
+            <label for="ztxtDNIModal3">DNI:</label>
+            <input id="ztxtDNIModal3" class="form-control form-control-sm" type="text" placeholder="Buscar por DNI" maxlength="12" disabled>
+        </div>
+        <div class="col-12 col-sm-8 col-md-4 col-lg-5 col-xl-5 p-1">
+            <label for="ztxtApeNomModal3">Apellidos y Nombres:</label>
+            <input id="ztxtApeNomModal3" class="form-control form-control-sm" type="text" disabled>
+        </div>
+
+
+        <div class="col-12 col-sm-12 col-md-4 col-lg-5 col-xl-12 p-1">
+            <label for="ztxtCeCoModal3">Centro de Costo:</label>
+            <input id="ztxtCeCoModal3" class="form-control form-control-sm" type="text" maxlength="200" disabled>
+        </div>
+
+
+        <div class="col-12 col-sm-6 col-md-6 col-lg-3 col-xl-3 p-1">
+            <label for="ztxtCiudadModal3">Ciudad:</label>
+            <input id="ztxtCiudadModal3" class="form-control form-control-sm" type="text" placeholder="Ingrese el nombre de la Ciudad" maxlength="100">
+        </div>
+        <div class="col-12 col-sm-6 col-md-6 col-lg-3 col-xl-3 p-1">
+            <label for="ztxtPaisModal3">País:</label>
+            <input id="ztxtPaisModal3" class="form-control form-control-sm" placeholder="Ingrese el nombre del País" type="text">
+        </div>
+        <div class="col-12 col-sm-6 col-md-6 col-lg-3 col-xl-3 p-1">
+            <label for="ztxtFechaDesdeModal3">Fecha Desde:</label>
+            <input id="ztxtFechaDesdeModal3" class="form-control form-control-sm cfecha" type="date">
+        </div>
+        <div class="col-12 col-sm-6 col-md-6 col-lg-3 col-xl-3 p-1">
+            <label for="ztxtFechaHastaModal3">Fecha Hasta:</label>
+            <input id="ztxtFechaHastaModal3" class="form-control form-control-sm cfecha" type="date">
+        </div>
+
+
+
+
+        <div class="card container-fluid mt-2" style="background-color: #F2F4F4">
+            <h6> 1. Gastos de Alimentación y Relacionados (**)</h6>
+            <div class="row">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-5 col-xl-5 p-1">
+                    <label for="ztxtFechaModalDet3_1">Fecha:</label>
+                    <input id="ztxtFechaModalDet3_1" class="form-control form-control-sm cfecha" type="date">
+                </div>
+                <div class="col-12 col-sm-12 col-md-12 col-lg-5 col-xl-5 p-1">
+                    <label for="ztxtMontoDet3_1">Monto:</label>
+                    <input id="ztxtMontoDet3_1" class="form-control form-control-sm" type="number">
+                </div>
+                <div class="col-12 col-sm-4 col-md-4 col-lg-2 col-xl-2 p-1">
+                    <label for="zbtnAgregarMotivo3_1">Agregar:</label>
+                    <button type="button" style="width: 100%" class="btn btn-primary btn-sm" id="zbtnAgregarMotivo3_1">Agregar</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="container-fluid">
+
+            <table class="table table-sm table-bordered table-striped dt-responsive table-hover display nowrap mt-3" id="ztblDeclaracionJurada3_1" style="width: 100%">
+                <thead class="thead-light">
+                    <tr>
+                        <th class="all"></th>
+                        <th>Fecha</th>
+                        <th>Moneda</th>
+                        <th class="all">Monto</th>
+                        <th class="all" style="text-align: center">Eliminar</th>
+                    </tr>
+                </thead>
+                <tbody id="ztblDeclaracionJuradaContent3_1"></tbody>
+            </table>
+
+        </div>
+
+        <hr />
+
+        <div class="card container-fluid mt-2" style="background-color: #F2F4F4">
+            <h6> 2. Gastos de Movilidad (**)</h6>
+            <div class="row">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-5 col-xl-5 p-1">
+                    <label for="ztxtFechaModalDet3_2">Fecha:</label>
+                    <input id="ztxtFechaModalDet3_2" class="form-control form-control-sm cfecha" type="date">
+                </div>
+                <div class="col-12 col-sm-12 col-md-12 col-lg-5 col-xl-5 p-1">
+                    <label for="ztxtMontoDet3_2">Monto:</label>
+                    <input id="ztxtMontoDet3_2" class="form-control form-control-sm" type="number">
+                </div>
+                <div class="col-12 col-sm-4 col-md-4 col-lg-2 col-xl-2 p-1">
+                    <label for="zbtnAgregarMotivo3_2">Agregar:</label>
+                    <button type="button" style="width: 100%" class="btn btn-primary btn-sm" id="zbtnAgregarMotivo3_2">Agregar</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="container-fluid">
+            <table class="table table-sm table-bordered table-striped dt-responsive table-hover display nowrap mt-3" id="ztblDeclaracionJurada3_2" style="width: 100%">
+                <thead class="thead-light">
+                    <tr>
+                        <th class="all"></th>
+                        <th>Fecha</th>
+                        <th>Moneda</th>
+                        <th class="all">Monto</th>
+                        <th class="all" style="text-align: center">Eliminar</th>
+                    </tr>
+                </thead>
+                <tbody id="ztblDeclaracionJuradaContent3_2"></tbody>
+            </table>
+        </div>
+
+
+    </div>

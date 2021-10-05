@@ -1,0 +1,146 @@
+﻿@{
+    Layout = null;
+}
+
+
+    <div class="row m-2">
+
+        <div class="col-2 p-1">
+            <label for="cbxTipoCpbteCompModal1">Tipo Comprobante:</label>
+            <select class="form-control form-control-sm" id="cbxTipoCpbteCompModal1"></select>
+        </div>
+
+        @*<div class="col-3 p-1">
+            <label for="txtSerieNumCompModal1">N° Comprobante:</label>
+            <input id="txtSerieNumCompModal1" class="form-control form-control-sm" type="text" placeholder="N° Comprobante">
+        </div>*@
+
+        <div class="col-1 p-1">
+            <label for="txtSerieModal1">Serie:</label>
+            <input id="txtSerieModal1" class="form-control form-control-sm" type="text" placeholder="Serie">
+        </div>
+
+        <div class="col-2 p-1">
+            <label for="txtNumeroModal1">Número:</label>
+            <input id="txtNumeroModal1" class="form-control form-control-sm" type="number" placeholder="Número">
+        </div>
+
+
+
+        <div class="col-2 p-1">
+            <label for="txtFechaModal1">Fecha Emisión:</label>
+            <input class="form-control form-control-sm cfecha" type="date" id="txtFechaModal1">
+        </div>
+        <div class="col-2 p-1">
+            <label for="cbxMonedaModal1">Moneda:</label>
+            <select class="form-control form-control-sm" id="cbxMonedaModal1" disabled></select>
+        </div>
+
+        <div class="col-3 p-1 card kpi-modal-monto1">
+            <label for="kpiMontoSeleecionadoModal1">Monto por Rendir</label>
+            <h6 id="kpiMontoSeleecionadoModal1">0</h6>
+        </div>
+
+
+        <div class="col-2 p-1">
+            <label for="cbxPeriodoModal1">Periodo Sofya:</label>
+            <select class="form-control form-control-sm" id="cbxPeriodoModal1"></select>
+        </div>
+
+        <div class="col-3 p-1">
+            <label for="txtRucCompModal1">RUC / N° DNI:</label>
+            <input id="txtRucCompModal1" class="form-control form-control-sm" type="text" maxlength="11" placeholder="Buscar N° RUC <Enter>">
+        </div>
+
+        <div class="col-5 p-1">
+            <label for="txtRSCompModal1">Razon Social:</label>
+            <input id="txtRSCompModal1" class="form-control form-control-sm" type="text" placeholder="Razon Social" disabled>
+        </div>
+
+        <div class="col-2 p-1">
+            <label for="txtCodSofyaPCModal1">Código Sofya</label>
+            <input id="txtCodSofyaPCModal1" class="form-control form-control-sm" type="text" placeholder="" disabled>
+        </div>
+
+
+
+
+        <div class="col-7 p-1">
+            <label for="txtObsCompModal1">Glosa:</label>
+            <input id="txtObsCompModal1" class="form-control form-control-sm" type="text">
+        </div>
+        <div class="col-5 p-1">
+            <label for="txtCeCoModal1">Centro de Costo:</label>
+            <input id="txtCeCoModal1" class="form-control form-control-sm" type="text" disabled>
+        </div>
+
+
+        <div class="card container-fluid mt-2" style="background-color: #F2F4F4">
+            <div class="row">
+
+                <div class="col-2 p-1">
+                    <label for="cbxUM1">UM:</label>
+                    <select class="form-control form-control-sm" id="cbxUM1"></select>
+                </div>
+                <div class="col-4 p-1">
+                    <label for="txtDescripcion1">Descripción:</label>
+                    <input id="txtDescripcion1" class="form-control form-control-sm" type="text" maxlength="60" placeholder="">
+                </div>
+                <div class="col-2 p-1">
+                    <label for="txtCantidad1">Cantidad:</label>
+                    <input id="txtCantidad1" class="form-control form-control-sm" type="number">
+                </div>
+                <div class="col-2 p-1">
+                    <label for="txtValorUnitarioTotal1">Importe:</label>
+                    <input id="txtValorUnitarioTotal1" class="form-control form-control-sm" type="number">
+                </div>
+
+                <div class="col-2 p-1">
+                    <label for="btnAgregarMotivo1">Agregar:</label>
+                    <button type="button" style="width: 100%" class="btn btn-primary btn-sm" id="btnAgregarMotivo1">Agregar</button>
+                </div>
+
+            </div>
+        </div>
+
+
+        <div class="container-fluid">
+
+            <table class="table table-sm table-bordered table-hover display nowrap mt-3" id="tblFacturaBoleta" style="width: 100%">
+                <thead class="thead-light">
+                    <tr>
+                        <th>UM</th>
+                        <th>Descripción</th>
+                        <th>Cantidad</th>
+                        <th>Precio Unit.</th>
+                        <th>Total</th>
+                        <th style="text-align: center">Eliminar</th>
+                    </tr>
+                </thead>
+                <tbody id="tblFacturaBoletaContent"></tbody>
+            </table>
+
+        </div>
+
+        <div class="card p-2 mt-2" style="width: 100%">
+            <div class="form-inline d-flex justify-content-around">
+                <div class="form-group">
+                    <label for="idimportetotal1">Importe Total: </label>
+                    <input class="form-control form-control-sm ml-1" type="number" id="idimportetotal1" disabled>
+                </div>
+
+                <div class="form-group ml-4">
+                    <label for="idigv1">IGV: </label>
+                    <input class="form-control form-control-sm ml-1" type="number" id="idigv1" disabled>
+                </div>
+
+                <div class="form-group ml-4">
+                    <label for="idtotal1">Total: </label>
+                    <input class="form-control form-control-sm ml-1" type="number" id="idtotal1" disabled>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+

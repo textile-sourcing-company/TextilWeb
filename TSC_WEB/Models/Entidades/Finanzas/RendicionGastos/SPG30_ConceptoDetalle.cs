@@ -20,6 +20,8 @@ namespace TSC_WEB.Models.Entidades.Finanzas.RendicionGastos
         public decimal montoMaximoS { get; set; }
         public decimal montoMaximoD { get; set; }
 
+        public string obligatorio { get; set; }
+        public string tieneDias { get; set; }
 
     }
 }

@@ -9,5 +9,7 @@ namespace TSC_WEB.Models.Entidades.Finanzas.RendicionGastos
     {
         public int idTipoComp { get; set; }
         public string tipoComprobante { get; set; }
+        public decimal maximoSoles { get; set; }
+        public decimal maximoDolar { get; set; }
     }
 }

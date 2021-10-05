@@ -1,0 +1,144 @@
+﻿@{
+    Layout = null;
+}
+
+
+<div class="row m-2">
+
+
+    <div class="col-12 p-2 m-1" style="background-color: #F2F4F4; border-radius: 4px">
+
+        <div class="row">
+            <div class="col-2 p-1">
+                <label for="cbxConcepCabModal2">Concepto:</label>
+                <select class="form-control form-control-sm" id="cbxConcepCabModal2"></select>
+            </div>
+
+            <div class="col-3 p-1">
+                <label for="cbxConcepDetModal2">Detalle:</label>
+                <select class="form-control form-control-sm" id="cbxConcepDetModal2"></select>
+            </div>
+
+            <div class="col-7 p-1">
+                <label for="txtConsideracionModal2">Consideración:</label>
+                <input id="txtConsideracionModal2" class="form-control form-control-sm" type="text" disabled>
+            </div>
+
+            @*<div class="col-2 p-1">
+                    <label for="cbxCantDias">Cantidad Días:</label>
+                    <select class="form-control form-control-sm" id="cbxCantDias"></select>
+                </div>*@
+
+            <div class="col-9 p-1">
+                <label for="txtObservacionModal2">Observación:</label>
+                <input id="txtObservacionModal2" class="form-control form-control-sm" type="text">
+            </div>
+
+            <div class="col-3 p-1">
+                <div style="color:#000000; font-weight: 600;text-align: center">
+                    <label for="idMontoSolicitadoModal2">Monto máximo:</label>
+                </div>
+                <div class="form-control form-control-sm card" style="color:#000000; font-size: 16px; padding: 4px; font-weight: 600;text-align: center">
+                    <span id="idMontoSolicitadoModal2">0.00</span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+
+    <div class="col-4 p-1">
+        <label for="cbxTipoCpbteCompModal2">Tipo Comprobante:</label>
+        <select class="form-control form-control-sm" id="cbxTipoCpbteCompModal2" disabled></select>
+    </div>
+    <div class="col-5 p-1">
+        <label for="txtEmpresaModal2">Empresa:</label>
+        <input id="txtEmpresaModal2" class="form-control form-control-sm" type="text" placeholder="" value="Textile Sourcing Company SAC" disabled>
+    </div>
+    <div class="col-3 p-1">
+        <label for="txtFechaModal2">Fecha Emisión:</label>
+        <input class="form-control form-control-sm cfecha" type="date" id="txtFechaModal2">
+    </div>
+    @*<div class="col-3 p-1 card kpi-modal-monto2">
+        <label for="kpiMontoSeleecionadoModal2">Monto por Rendir</label>
+        <h6 id="kpiMontoSeleecionadoModal2">0</h6>
+    </div>*@
+
+
+    <div class="col-4 p-1">
+        <label for="cbxPeriodoModal2">Periodo:</label>
+        <select class="form-control form-control-sm" id="cbxPeriodoModal2"></select>
+    </div>
+    <div class="col-4 p-1">
+        <label for="txtNumPlanillaModal2">N° Planilla:</label>
+        <input id="txtNumPlanillaModal2" class="form-control form-control-sm" type="text" maxlength="11" disabled>
+    </div>
+    <div class="col-4 p-1">
+        <label for="cbxMonedaModal2">Moneda:</label>
+        <select class="form-control form-control-sm" id="cbxMonedaModal2" disabled></select>
+    </div>
+
+
+
+    <div class="col-2 p-1">
+        <label for="txtDNIModal2">DNI:</label>
+        <input id="txtDNIModal2" class="form-control form-control-sm" type="text" placeholder="Buscar por DNI" maxlength="12" disabled>
+    </div>
+    <div class="col-5 p-1">
+        <label for="txtApeNomModal2">Apellidos y Nombres:</label>
+        <input id="txtApeNomModal2" class="form-control form-control-sm" type="text" disabled>
+    </div>
+    <div class="col-5 p-1">
+        <label for="txtCeCoModal2">Centro de Costo:</label>
+        <input id="txtCeCoModal2" class="form-control form-control-sm" type="text" maxlength="200" disabled>
+    </div>
+
+
+
+
+    <div class="card container-fluid mt-2" style="background-color: #F2F4F4">
+        <div class="row">
+            <div class="col-2 p-1">
+                <label for="txtFechaModalDet2">Fecha Traslado:</label>
+                <input id="txtFechaModalDet2" class="form-control form-control-sm cfecha" type="date">
+            </div>
+            <div class="col-4 p-1">
+                <label for="txtOrgDstModal2">Origen / Destino:</label>
+                <input id="txtOrgDstModal2" class="form-control form-control-sm" type="text" maxlength="120" placeholder="">
+            </div>
+            <div class="col-3 p-1">
+                <label for="txtMotivoModal2">Motivo:</label>
+                <input id="txtMotivoModal2" class="form-control form-control-sm" type="text" maxlength="120" placeholder="">
+            </div>
+            <div class="col-1 p-1">
+                <label for="txtImporteModal2">Importe:</label>
+                <input id="txtImporteModal2" class="form-control form-control-sm" type="number" maxlength="120" placeholder="">
+            </div>
+
+            <div class="col-2 p-1">
+                <label for="btnAgregarMotivo2">Agregar:</label>
+                <button type="button" style="width: 100%" class="btn btn-primary btn-sm" id="btnAgregarMotivo2">Agregar</button>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="container-fluid">
+
+        <table class="table table-sm table-bordered table-hover display nowrap mt-3" id="tblPlanillaMovilidad" style="width: 100%">
+            <thead class="thead-light">
+                <tr>
+                    <th>Fecha Traslado</th>
+                    <th>Origen / Destino:</th>
+                    <th>Motivo</th>
+                    <th>Importe</th>
+                    <th style="text-align: center">Eliminar</th>
+                </tr>
+            </thead>
+            <tbody id="tblPlanillaMovilidadContent"></tbody>
+        </table>
+
+    </div>
+
+</div>

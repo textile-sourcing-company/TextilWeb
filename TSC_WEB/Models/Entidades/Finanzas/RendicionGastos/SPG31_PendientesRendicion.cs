@@ -12,5 +12,6 @@ namespace TSC_WEB.Models.Entidades.Finanzas.RendicionGastos
         public string codigo { get; set; }
         public string glosa { get; set; }
         public string total { get; set; }
+        public string colaborador { get; set; }
     }
 }

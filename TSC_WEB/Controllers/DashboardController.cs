@@ -8,6 +8,8 @@ using TSC_WEB.Models.Modelos.Sistema;
 //ENTIDADES
 using TSC_WEB.Models.Entidades.Sistema;
 using TSC_WEB.Util.Sistema;
+using System.Text.RegularExpressions;
+using System.Text;
 
 namespace TSC_WEB.Controllers
 {
@@ -76,7 +78,7 @@ namespace TSC_WEB.Controllers
                 if (objUsuariosELogin.usuario != null)
                 {
                     Session["usuario"] = objUsuariosELogin.usuario;
-                    Session["nombre"] = objUsuariosELogin.nombre;
+                    Session["nombre"] = Regex.Replace(objUsuariosELogin.nombre.Normalize(NormalizationForm.FormD), @"[^a-zA-z0-9 ]+", "");
                     Session["cod_funcionario"] = objUsuariosELogin.cod_funcionario.ToString();
                     Session["codigo_cargo"] = objUsuariosELogin.codigo_cargo.ToString();
                     Session["empresa"] = idempresa;

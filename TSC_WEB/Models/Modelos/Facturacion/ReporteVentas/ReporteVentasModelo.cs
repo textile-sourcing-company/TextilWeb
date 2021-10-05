@@ -161,7 +161,6 @@ namespace TSC_WEB.Models.Modelos.Facturacion.ReporteVentas
 
                 foreach (var item in listado)
                 {
-
                     workSheet.Row(i).Style.Font.Size = 8;
 
                     workSheet.Cells[i, 1].Value = item.FECHA;
@@ -185,7 +184,7 @@ namespace TSC_WEB.Models.Modelos.Facturacion.ReporteVentas
 
                     i++;
                 }
-
+                    
                 package.Save();
             }
 

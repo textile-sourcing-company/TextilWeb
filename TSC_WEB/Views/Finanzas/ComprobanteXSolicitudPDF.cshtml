@@ -1,0 +1,316 @@
+﻿@model TSC_WEB.Models.Entidades.Finanzas.RendicionGastos.ReportePDFViewModel
+@{
+    Layout = null;
+}
+
+
+<style>
+    .tabla {
+        /*border: 1px solid #000000;*/
+        border-collapse: collapse;
+    }
+
+        .tabla tr {
+            border: 1px solid #000000;
+            padding: 3px;
+            font-size: 12px;
+        }
+
+            .tabla tr td {
+                border: 1px solid #000000;
+                padding: 3px;
+                font-size: 12px;
+            }
+
+            .tabla tr th {
+                border: 1px solid #000000;
+                padding: 3px;
+                font-size: 13px;
+            }
+
+    table.tblinfo td {
+        font-size: 13px;
+    }
+
+    table.tbltotales td {
+        padding: 4px;
+        font-size: 13px;
+    }
+
+    .header-rpte {
+        width: 100%;
+    }
+
+    tr {
+        page-break-inside: avoid;
+    }
+
+    div.firma-formato-liq {
+        text-align: center;
+        border: none !important;
+    }
+</style>
+
+<div class="rpte-cmptexsol" style="padding-top: 0px; padding-bottom: 20px;">
+
+    <table class="tblinfo" style="width: 100%; margin-top: 40px;">
+        <tr>
+            <td colspan="1" style="font-weight: bold"> Código</td>
+            <td colspan="3" style="text-align: left; border-bottom: 1px solid #000000;">: @Model.cabecera.codigo </td>
+        </tr>
+        <tr>
+            <td colspan="1" style="font-weight: bold"> Tipo: </td>
+            <td colspan="3" style="text-align: left; border-bottom: 1px solid #000000;">: @Model.cabecera.tipo </td>
+        </tr>
+        <tr>
+            <td colspan="1" style="font-weight: bold"> Gerencia</td>
+            <td colspan="3" style="text-align: left; border-bottom: 1px solid #000000;">: @Model.cabecera.gerencia </td>
+        </tr>
+        <tr>
+            <td colspan="1" style="font-weight: bold"> Centro de Costos </td>
+            <td colspan="1" style="text-align: left; border-bottom: 1px solid #000000;">: @Model.cabecera.ceco </td>
+            <td colspan="1">Codigo de CeCo</td>
+            <td colspan="1" style="text-align: left; border-bottom: 1px solid #000000;">: @Model.cabecera.codceco</td>
+        </tr>
+        <tr>
+            <td colspan="1" style="font-weight: bold"> Trabajador </td>
+            <td colspan="3" style="text-align: left; border-bottom: 1px solid #000000;">: @Model.cabecera.nom_ape_trabajador </td>
+        </tr>
+        <tr>
+            <td colspan="1" style="font-weight: bold"> Cargo </td>
+            <td colspan="3" style="text-align: left; border-bottom: 1px solid #000000;">: @Model.cabecera.cargo </td>
+        </tr>
+        <tr>
+            <td colspan="1" style="font-weight: bold"> Fecha de emisión</td>
+            <td colspan="3" style="text-align: left; border-bottom: 1px solid #000000;">: @Model.cabecera.fecha </td>
+        </tr>
+
+        <tr>
+            <td colspan="1" style="font-weight: bold"> Periodo: </td>
+            <td colspan="3" style="text-align: left; border-bottom: 1px solid #000000;">: @Model.cabecera.periodo </td>
+        </tr>
+        <tr>
+            <td colspan="1" style="font-weight: bold"> Estado Solicitud: </td>
+            <td colspan="3" style="text-align: left; border-bottom: 1px solid #000000;">: @Model.cabecera.estado </td>
+        </tr>
+
+    </table>
+
+    <table class="tabla" style="width: 100%; margin-top: 35px; padding: 0px; border-collapse: collapse;" cellspacing="0" cellpadding="0">
+        <thead>
+            <tr>
+                <th style="text-align: center; background-color: #D5D8DC;" rowspan="2"> N° </th>
+                <th style="text-align: center; background-color: #D5D8DC;" rowspan="2"> Fecha </th>
+                <th style="text-align: center; background-color: #D5D8DC;" rowspan="2"> Tipo de documento </th>
+
+                <th style="text-align: center; background-color: #D5D8DC;" rowspan="2"> Documento </th>
+                <th style="text-align: center; background-color: #D5D8DC;" rowspan="2"> Concepto Solicitado </th>
+                <th style="text-align: center; background-color: #D5D8DC;" rowspan="2"> Proveedor </th>
+                <th style="text-align: center; background-color: #D5D8DC;" rowspan="2"> Glosa </th>
+                <th style="text-align: center; background-color: #D5D8DC;" scope="colgroup" colspan="2"> Monto </th>
+            </tr>
+            <tr>
+                <th scope="colgroup" style="text-align: center; background-color: #D5D8DC;"> Soles </th>
+                <th scope="colgroup" style="text-align: center; background-color: #D5D8DC;"> Dólares </th>
+            </tr>
+        </thead>
+        <tbody>
+
+
+
+
+            @foreach (var item in Model.detalle)
+            {
+
+                <tr scope="row" style="margin: 0px;">
+
+                    <td> @item.contador </td>
+                    <td> @item.fechaEmision </td>
+                    <td> @item.tipoComprobante </td>
+                    <td> @item.serieNumero </td>
+                    <td> @item.conceptoDet </td>
+                    <td> @item.rs </td>
+                    <td> @item.obs </td>
+
+                    @if (item.idTipoMod == 1)
+                    {
+                        <td style="text-align: center; "> @item.totalCmpbnte </td>
+                        <td style="text-align: center; "> 0 </td>
+                    }
+                    else
+                    {
+                        <td style="text-align: center; "> 0 </td>
+                        <td style="text-align: center; "> @item.totalCmpbnte </td>
+                    }
+
+                </tr>
+            }
+
+
+        </tbody>
+
+    </table>
+
+
+    <div style="width: 100%; padding-top: 20px; display: block; ">
+
+        <div style="width: 40%; float: right;">
+
+            <table class="tbltotales" style="border-collapse: collapse; float: right;" cellspacing="0" cellpadding="0">
+                <tr style="border: 0px; background-color: #ffffff">
+                    <td style="border: 0px; background-color: #ffffff"></td>
+                </tr>
+                <tr style="border: 0px; background-color: #ffffff">
+                    <th style="border: 0px; background-color: #ffffff"></th>
+                    <th style="border: 0px; background-color: #ffffff"></th>
+                    <th style="border: 0px; background-color: #ffffff"></th>
+                    <th style="border: 0px; background-color: #ffffff"></th>
+                    <th style="border: 0px; background-color: #ffffff"></th>
+                    <th style="border: 0px; background-color: #ffffff"></th>
+                    <th style="min-width:140px; border: 0px; background-color: #ffffff"></th>
+                    <th style="border: 1px solid #000000; min-width: 100px; background-color: #D5D8DC; font-size: 12px;" colspan="2"> Total </th>
+                </tr>
+                <tr style="border: 0px; background-color: #ffffff">
+                    <th style="border: 0px; background-color: #ffffff"></th>
+                    <th style="border: 0px; background-color: #ffffff"></th>
+                    <th style="border: 0px; background-color: #ffffff"></th>
+                    <th style="border: 0px; background-color: #ffffff"></th>
+                    <th style="border: 0px; background-color: #ffffff"></th>
+                    <th style="border: 0px; background-color: #ffffff"></th>
+                    <th style="min-width:90px; border: 0px; background-color: #ffffff"></th>
+                    <th style="border: 1px solid #000000; min-width: 80px; background-color: #D5D8DC; font-size: 12px;"> Soles </th>
+                    <th style="border: 1px solid #000000; min-width: 80px; background-color: #D5D8DC; font-size: 12px;"> Dólares </th>
+                </tr>
+
+                <tr style="border: 0px; background-color: #ffffff">
+                    <th style="border: 0px; background-color: #ffffff"></th>
+                    <th style="border: 0px; background-color: #ffffff"></th>
+                    <th style="border: 0px; background-color: #ffffff"></th>
+                    <th style="border: 0px; background-color: #ffffff"></th>
+                    <th style="border: 0px; background-color: #ffffff"></th>
+                    <th style="border: 0px; background-color: #ffffff"></th>
+
+
+                    <td style="border: 1px solid #000000; min-width:140px; font-weight: bold; background-color: #D5D8DC;"> Total Entregado </td>
+
+                    @if (Model.cabecera.idTipoMod == 1)
+                    {
+                        <td style="border: 1px solid #000000; min-width:80px; text-align: right;"> @Model.cabecera.totalentregado </td>
+                        <td style="border: 1px solid #000000; min-width: 80px; text-align: right;"> 0 </td>
+                    }
+                    else if (Model.cabecera.idTipoMod == 2)
+                    {
+                        <td style="border: 1px solid #000000; min-width: 80px; text-align: right;"> 0 </td>
+                        <td style="border: 1px solid #000000; min-width:80px; text-align: right;"> @Model.cabecera.totalentregado </td>
+                    }
+
+
+                </tr>
+                <tr style="border: 0px; background-color: #ffffff">
+                    <th style="border: 0px; background-color: #ffffff"></th>
+                    <th style="border: 0px; background-color: #ffffff"></th>
+                    <th style="border: 0px; background-color: #ffffff"></th>
+                    <th style="border: 0px; background-color: #ffffff"></th>
+                    <th style="border: 0px; background-color: #ffffff"></th>
+                    <th style="border: 0px; background-color: #ffffff"></th>
+
+                    <td style="border: 1px solid #000000; min-width:140px; font-weight: bold; background-color: #D5D8DC;"> Total Rendido </td>
+
+                    @if (Model.cabecera.idTipoMod == 1)
+                    {
+                        <td style="border: 1px solid #000000; min-width:80px; text-align: right;"> @Model.cabecera.totalrendido </td>
+                        <td style="border: 1px solid #000000; min-width: 80px; text-align: right;"> 0 </td>
+                    }
+                    else if (Model.cabecera.idTipoMod == 2)
+                    {
+                        <td style="border: 1px solid #000000; min-width: 80px; text-align: right;"> 0 </td>
+                        <td style="border: 1px solid #000000; min-width:80px; text-align: right;"> @Model.cabecera.totalrendido </td>
+                    }
+
+
+
+                </tr>
+                <tr style="border: 0px; background-color: #ffffff">
+                    <th style="border: 0px; background-color: #ffffff"></th>
+                    <th style="border: 0px; background-color: #ffffff"></th>
+                    <th style="border: 0px; background-color: #ffffff"></th>
+                    <th style="border: 0px; background-color: #ffffff"></th>
+                    <th style="border: 0px; background-color: #ffffff"></th>
+                    <th style="border: 0px; background-color: #ffffff"></th>
+
+
+
+                    <td style="border: 1px solid #000000; min-width: 140px; font-weight: bold; background-color: #D5D8DC;"> Total Restante </td>
+
+                    @if (Model.cabecera.idTipoMod == 1)
+                    {
+                        <td style="border: 1px solid #000000; min-width:80px; text-align: right;"> @Model.cabecera.totalsaldo </td>
+                        <td style="border: 1px solid #000000; min-width: 80px; text-align: right;"> 0 </td>
+                    }
+                    else if (Model.cabecera.idTipoMod == 2)
+                    {
+                        <td style="border: 1px solid #000000; min-width: 80px; text-align: right;"> 0 </td>
+                        <td style="border: 1px solid #000000; min-width:80px; text-align: right;"> @Model.cabecera.totalsaldo </td>
+                    }
+
+                </tr>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+
+    <div style="width: 100%; margin-top: 100px; margin-bottom: 10px; padding-top: 40px; padding-bottom: 30px;">
+        <div style="width: 95%; margin: auto; display: block; ">
+
+            <table style="width: 48%;min-width: 160px; padding-top: 40px; display: inline-block;" cellspacing="0" cellpadding="0">
+                <thead style="border: 0;">
+                    <tr style="border: 0;">
+                        <th style="border: 0;">
+                            <div class="firma-formato-liq">
+                                <img src="@Model.cabecera.firma_usuario" alt="imagen" width="150" height="110" />
+                            </div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr style="padding-top: 3px">
+                        <td style="text-align:center; border-top: 2px solid #000000;font-size: 12px;"><span style="font-weight: bold">Trabajador: </span>@Model.cabecera.nom_ape_trabajador  </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align:center;font-size: 12px;"><span style="font-weight: bold;">DNI: </span>@Model.cabecera.dni_trabajador </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <table style="width: 48%; min-width:160px; padding-top: 40px; display: inline-block;" cellspacing="0" cellpadding="0">
+                <thead style="border: 0;">
+                    <tr style="border: 0;">
+                        <th style="border: 0;">
+                            <div class="firma-formato-liq">
+                                <img src="@Model.cabecera.firma_jefe" alt="imagen" width="150" height="110" />
+                            </div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr style="padding-top: 3px">
+                        <td style="text-align: center; border-top: 2px solid #000000; font-size: 12px;"><span style="font-weight: bold">Jefatura: </span> @Model.cabecera.nom_ape_jefe </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: center;font-size: 12px;"> <span style="font-weight: bold">DNI:  </span>@Model.cabecera.dni_jefe </td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+
+
+
+</div>
+
+

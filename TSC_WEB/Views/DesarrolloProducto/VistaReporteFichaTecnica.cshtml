@@ -481,15 +481,15 @@
             <table class="table w-100">
                 <thead>
                     <tr>
-                        <th>TIPO DE TELA</th>
-                        <th>TITULO</th>
-                        <th>DENSIDAD</th>
-                        <th>ANCHO DE TELA</th>
-                        <th>GALGA</th>
-                        <th>INCLINACIÓN</th>
-                        <th>ENC. L.</th>
-                        <th>ENC. A.</th>
-                        <th>T. P.</th>
+                        <th style="font-size:10px !important">TIPO DE TELA</th>
+                        <th style="font-size:10px !important">TITULO</th>
+                        <th style="font-size:10px !important">DENSIDAD</th>
+                        <th style="font-size:10px !important">ANCHO DE TELA</th>
+                        <th style="font-size:10px !important">GALGA</th>
+                        <th style="font-size:10px !important">INCLINACIÓN</th>
+                        <th style="font-size:10px !important">ENC. L.</th>
+                        <th style="font-size:10px !important">ENC. A.</th>
+                        <th style="font-size:10px !important">T. P.</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -520,12 +520,12 @@
                 <table class="table w-100 text-center">
                     <thead>
                         <tr>
-                            <th>CÓDIGO</th>
-                            <th>DESCRIPCIÓN TELAS</th>
-                            <th>UBICACIÓN</th>
-                            <th>% DEF</th>
-                            <th>TALLA</th>
-                            <th>CONSUMO</th>
+                            <th style="font-size:10px !important">CÓDIGO</th>
+                            <th style="font-size:10px !important">DESCRIPCIÓN TELAS</th>
+                            <th style="font-size:10px !important">UBICACIÓN</th>
+                            <th style="font-size:10px !important">% DEF</th>
+                            <th style="font-size:10px !important">TALLA</th>
+                            <th style="font-size:10px !important">CONSUMO</th>
                             @{
                                 contador = x * 8;
                                 contador2 = 0;
@@ -535,7 +535,7 @@
                                 contador2++;
                                 if ((contador2 <= contador) && (contador2 > (contador - 8)))
                                 {
-                                    <th>@obj.DESCR_COMBINACAO @obj.COMBINACAO_ITEM</th>
+                                    <th style="font-size:10px !important">@obj.DESCR_COMBINACAO @obj.COMBINACAO_ITEM</th>
                                 }
                             }
                         </tr>
@@ -569,7 +569,7 @@
                                                 {
                                                     if (obj3.DESCR_COMBINACAO == obj2.DESCR_COMBINACAO)
                                                     {
-                                                        <td>@obj2.descricao_15</td>
+                                                        <td style="font-size:9px !important">@obj2.descricao_15</td>
                                                     }
                                                     else
                                                     {
@@ -605,13 +605,13 @@
                             <td class="td-encabezado">CORTE 1</td>
                         </tr>
                         <tr>
-                            <th>TIPO DE AVIO</th>
-                            <th>TALLA</th>
-                            <th>CÓDIGO</th>
-                            <th>DESCRIPCIÓN_DE_AVIO</th>
-                            <th>OBSERVACIÓN</th>
-                            <th>U.M</th>
-                            <th>CONSUMO</th>
+                            <th style="font-size:10px !important">TIPO DE AVIO</th>
+                            <th style="font-size:10px !important">TALLA</th>
+                            <th style="font-size:10px !important">CÓDIGO</th>
+                            <th style="font-size:10px !important">DESCRIPCIÓN_DE_AVIO</th>
+                            <th style="font-size:10px !important">OBSERVACIÓN</th>
+                            <th style="font-size:10px !important">U.M</th>
+                            <th style="font-size:10px !important">CONSUMO</th>
                             @{
                                 CONTADORGENERAL1 = x * 8;
                                 CONTADORGENERAL2 = 0;
@@ -622,7 +622,7 @@
                                 CONTADORGENERAL2++;
                                 if ((CONTADORGENERAL2 <= CONTADORGENERAL1) && (CONTADORGENERAL2 > (CONTADORGENERAL1 - 8)))
                                 {
-                                    <th>@obj.DESCR_COMBINACAO</th>
+                                    <th style="font-size:9px !important">@obj.DESCR_COMBINACAO</th>
                                 }
                             }
                         </tr>
@@ -633,11 +633,11 @@
                         {
                             CONTADORGENERAL3++;
                             <tr id="ContenidoTablaCorte1_@CONTADORGENERAL3">
-                                <td style="font-size:9px !important">@obj.NARRATIVA</td>
+                                <td style="font-size:8px !important">@obj.NARRATIVA</td>
                                 <td style="font-size:9px !important">@obj.TALLA_A</td>
                                 <td style="font-size:9px !important">@obj.CODIGO2</td>
                                 <td style="font-size:8px !important">@obj.DESCRICAO_01</td>
-                                <td style="font-size:9px !important">@obj.OBSERVACION</td>
+                                <td style="font-size:8px !important">@obj.OBSERVACION</td>
                                 <td style="font-size:9px !important">@obj.UNIDADE_MEDIDA</td>
                                 <td style="font-size:9px !important">@obj.CONSUMO</td>
 
@@ -651,7 +651,7 @@
                                     CONTADORGENERAL2++;
                                     if ((CONTADORGENERAL2 <= CONTADORGENERAL1) && (CONTADORGENERAL2 > (CONTADORGENERAL1 - 8)))
                                     {
-                                        <td>
+                                        <td style="font-size:9px !important">
                                             @foreach (var obj3 in CORTE1DISTINCT)
                                             {
                                                 if (obj.CODIGO2 == obj3.CODIGO2 && obj.TALLA_A == obj3.TALLA_A && obj2.DESCR_COMBINACAO == obj3.DESCR_COMBINACAO /*AGREGADO*/ && obj.NARRATIVA == obj3.NARRATIVA)
@@ -704,13 +704,13 @@
                             <td class="td-encabezado">COSTURA</td>
                         </tr>
                         <tr>
-                            <th>TIPO DE AVIO</th>
-                            <th>TALLA</th>
-                            <th>CÓDIGO</th>
-                            <th>DESCRIPCIÓN_DE_AVIO</th>
-                            <th>OBSERVACIÓN</th>
-                            <th>U.M</th>
-                            <th>CONSUMO</th>
+                            <th style="font-size:10px !important">TIPO DE AVIO</th>
+                            <th style="font-size:10px !important">TALLA</th>
+                            <th style="font-size:10px !important">CÓDIGO</th>
+                            <th style="font-size:10px !important">DESCRIPCIÓN_DE_AVIO</th>
+                            <th style="font-size:10px !important">OBSERVACIÓN</th>
+                            <th style="font-size:10px !important">U.M</th>
+                            <th style="font-size:10px !important">CONSUMO</th>
                             @{
                                 CONTADORGENERAL1 = x * 5;
                                 CONTADORGENERAL2 = 0;
@@ -721,7 +721,7 @@
                                 CONTADORGENERAL2++;
                                 if ((CONTADORGENERAL2 <= CONTADORGENERAL1) && (CONTADORGENERAL2 > (CONTADORGENERAL1 - 5)))
                                 {
-                                    <th>@obj.DESCR_COMBINACAO</th>
+                                    <th style="font-size:10px !important">@obj.DESCR_COMBINACAO</th>
                                 }
                             }
                         </tr>
@@ -732,11 +732,11 @@
                         {
                             CONTADORGENERAL3++;
                             <tr id="ContenidoTablaCostura_@CONTADORGENERAL3">
-                                <td style="font-size:9px !important">@obj.NARRATIVA</td>
+                                <td style="font-size:8px !important">@obj.NARRATIVA</td>
                                 <td style="font-size:9px !important">@obj.TALLA_A</td>
                                 <td style="font-size:9px !important">@obj.CODIGO2</td>
                                 <td style="font-size:8px !important">@obj.DESCRICAO_01</td>
-                                <td style="font-size:9px !important">@obj.OBSERVACION</td>
+                                <td style="font-size:8px !important">@obj.OBSERVACION</td>
                                 <td style="font-size:9px !important">@obj.UNIDADE_MEDIDA</td>
                                 <td style="font-size:9px !important">@obj.CONSUMO</td>
 
@@ -750,7 +750,7 @@
                                     CONTADORGENERAL2++;
                                     if ((CONTADORGENERAL2 <= CONTADORGENERAL1) && (CONTADORGENERAL2 > (CONTADORGENERAL1 - 5)))
                                     {
-                                        <td>
+                                        <td style="font-size:9px !important">
                                             @foreach (var obj3 in COSTURADISTINCT)
                                             {
                                                 if (obj.CODIGO2 == obj3.CODIGO2 && obj.TALLA_A == obj3.TALLA_A && obj2.DESCR_COMBINACAO == obj3.DESCR_COMBINACAO /*AGREGADO*/ && obj.NARRATIVA == obj3.NARRATIVA)
@@ -804,13 +804,13 @@
                             <td class="td-encabezado">ACABADOS</td>
                         </tr>
                         <tr>
-                            <th>TIPO DE AVIO</th>
-                            <th>TALLA</th>
-                            <th>CÓDIGO</th>
-                            <th>DESCRIPCIÓN_DE_AVIO</th>
-                            <th>OBSERVACIÓN</th>
-                            <th>U.M</th>
-                            <th>CONSUMO</th>
+                            <th style="font-size:10px !important">TIPO DE AVIO</th>
+                            <th style="font-size:10px !important">TALLA</th>
+                            <th style="font-size:10px !important">CÓDIGO</th>
+                            <th style="font-size:10px !important">DESCRIPCIÓN_DE_AVIO</th>
+                            <th style="font-size:10px !important">OBSERVACIÓN</th>
+                            <th style="font-size:10px !important">U.M</th>
+                            <th style="font-size:10px !important">CONSUMO</th>
                             @{
                                 CONTADORGENERAL1 = x * 5;
                                 CONTADORGENERAL2 = 0;
@@ -821,7 +821,7 @@
                                 CONTADORGENERAL2++;
                                 if ((CONTADORGENERAL2 <= CONTADORGENERAL1) && (CONTADORGENERAL2 > (CONTADORGENERAL1 - 5)))
                                 {
-                                    <th>@obj.DESCR_COMBINACAO</th>
+                                    <th style="font-size:10px !important">@obj.DESCR_COMBINACAO</th>
                                 }
                             }
                         </tr>
@@ -832,11 +832,11 @@
                         {
                             CONTADORGENERAL3++;
                             <tr id="ContenidoTablaAcabados_@CONTADORGENERAL3">
-                                <td >@obj.NARRATIVA</td>
-                                <td >@obj.TALLA_A</td>
+                                <td style="font-size:8px !important">@obj.NARRATIVA</td>
+                                <td style="font-size:9px !important">@obj.TALLA_A</td>
                                 <td style="font-size:9px !important">@obj.CODIGO2</td>
                                 <td style="font-size:9px !important">@obj.DESCRICAO_01</td>
-                                <td style="font-size:9px !important">@obj.OBSERVACION</td>
+                                <td style="font-size:8px !important">@obj.OBSERVACION</td>
                                 <td style="font-size:9px !important">@obj.UNIDADE_MEDIDA</td>
                                 <td style="font-size:9px !important">@obj.CONSUMO</td>
 
@@ -849,7 +849,7 @@
                                     CONTADORGENERAL2++;
                                     if ((CONTADORGENERAL2 <= CONTADORGENERAL1) && (CONTADORGENERAL2 > (CONTADORGENERAL1 - 5)))
                                     {
-                                        <td>
+                                        <td style="font-size:9px !important">
                                             @foreach (var obj3 in ACABADOSDISTINCT)
                                             {
                                                 if (obj.CODIGO2 == obj3.CODIGO2 && obj.TALLA_A == obj3.TALLA_A && obj2.DESCR_COMBINACAO == obj3.DESCR_COMBINACAO /*AGREGADO*/ && obj.NARRATIVA == obj3.NARRATIVA)
@@ -904,13 +904,14 @@
                             <td class="td-encabezado">TRANSFER EN PRENDA</td>
                         </tr>
                         <tr>
-                            <th>TIPO DE AVIO</th>
-                            <th>TALLA</th>
-                            <th>CÓDIGO</th>
-                            <th>DESCRIPCIÓN_DE_AVIO</th>
-                            <th>OBSERVACIÓN</th>
-                            <th>U.M</th>
-                            <th>CONSUMO</th>
+                            <th style="font-size:10px !important">TIPO DE AVIO</th>
+                            <th style="font-size:10px !important">TALLA</th>
+                            <th style="font-size:10px !important">CÓDIGO</th>
+                            <th style="font-size:10px !important">DESCRIPCIÓN_DE_AVIO</th>
+                            <th style="font-size:10px !important">OBSERVACIÓN</th>
+                            <th style="font-size:10px !important">U.M</th>
+
+                            <th style="font-size:10px !important">CONSUMO</th>
                             @{
                                 CONTADORGENERAL1 = x * 5;
                                 CONTADORGENERAL2 = 0;
@@ -921,7 +922,7 @@
                                 CONTADORGENERAL2++;
                                 if ((CONTADORGENERAL2 <= CONTADORGENERAL1) && (CONTADORGENERAL2 > (CONTADORGENERAL1 - 5)))
                                 {
-                                    <th>@obj.DESCR_COMBINACAO</th>
+                                    <th style="font-size:10px !important">@obj.DESCR_COMBINACAO</th>
                                 }
                             }
                         </tr>
@@ -932,11 +933,11 @@
                         {
                             CONTADORGENERAL3++;
                             <tr id="ContenidoTablaTranfer_@CONTADORGENERAL3">
-                                <td style="font-size:9px !important">@obj.NARRATIVA</td>
+                                <td style="font-size:8px !important">@obj.NARRATIVA</td>
                                 <td style="font-size:9px !important">@obj.TALLA_A</td>
                                 <td style="font-size:9px !important">@obj.CODIGO2</td>
                                 <td style="font-size:8px !important">@obj.DESCRICAO_01</td>
-                                <td style="font-size:9px !important">@obj.OBSERVACION</td>
+                                <td style="font-size:8px !important">@obj.OBSERVACION</td>
                                 <td style="font-size:9px !important">@obj.UNIDADE_MEDIDA</td>
                                 <td style="font-size:9px !important">@obj.CONSUMO</td>
 
@@ -947,7 +948,7 @@
                                     CONTADORGENERAL2++;
                                     if ((CONTADORGENERAL2 <= CONTADORGENERAL1) && (CONTADORGENERAL2 > (CONTADORGENERAL1 - 5)))
                                     {
-                                        <td>
+                                        <td style="font-size:9px !important">
                                             @foreach (var obj3 in TRANFERDISTINCT)
                                             {
                                                 if (obj.CODIGO2 == obj3.CODIGO2 && obj.TALLA_A == obj3.TALLA_A && obj2.DESCR_COMBINACAO == obj3.DESCR_COMBINACAO /*AGREGADO*/ && obj.NARRATIVA == obj3.NARRATIVA)
@@ -1001,13 +1002,13 @@
                             <td class="td-encabezado">TRANSFER EN PZA</td>
                         </tr>
                         <tr>
-                            <th>TIPO DE AVIO</th>
-                            <th>TALLA</th>
-                            <th>CÓDIGO</th>
-                            <th>DESCRIPCIÓN_DE_AVIO</th>
-                            <th>OBSERVACIÓN</th>
-                            <th>U.M</th>
-                            <th>CONSUMO</th>
+                            <th style="font-size:10px !important">TIPO DE AVIO</th>
+                            <th style="font-size:10px !important">TALLA</th>
+                            <th style="font-size:10px !important">CÓDIGO</th>
+                            <th style="font-size:10px !important">DESCRIPCIÓN_DE_AVIO</th>
+                            <th style="font-size:10px !important">OBSERVACIÓN</th>
+                            <th style="font-size:10px !important">U.M</th>
+                            <th style="font-size:10px !important">CONSUMO</th>
                             @{
                                 CONTADORGENERAL1 = x * 5;
                                 CONTADORGENERAL2 = 0;
@@ -1018,7 +1019,7 @@
                                 CONTADORGENERAL2++;
                                 if ((CONTADORGENERAL2 <= CONTADORGENERAL1) && (CONTADORGENERAL2 > (CONTADORGENERAL1 - 5)))
                                 {
-                                    <th>@obj.DESCR_COMBINACAO</th>
+                                    <th style="font-size:10px !important">@obj.DESCR_COMBINACAO</th>
 
                                 }
                             }
@@ -1031,11 +1032,11 @@
                             CONTADORGENERAL3++;
 
                             <tr id="ContenidoTablaTranferprenda_@CONTADORGENERAL3">
-                                <td style="font-size:9px !important">@obj.NARRATIVA</td>
+                                <td style="font-size:8px !important">@obj.NARRATIVA</td>
                                 <td style="font-size:9px !important">@obj.TALLA_A</td>
                                 <td style="font-size:9px !important">@obj.CODIGO2</td>
                                 <td style="font-size:8px !important">@obj.DESCRICAO_01</td>
-                                <td style="font-size:9px !important">@obj.OBSERVACION</td>
+                                <td style="font-size:8px !important">@obj.OBSERVACION</td>
                                 <td style="font-size:9px !important">@obj.UNIDADE_MEDIDA</td>
                                 <td style="font-size:9px !important">@obj.CONSUMO</td>
 
@@ -1046,7 +1047,7 @@
                                     CONTADORGENERAL2++;
                                     if ((CONTADORGENERAL2 <= CONTADORGENERAL1) && (CONTADORGENERAL2 > (CONTADORGENERAL1 - 5)))
                                     {
-                                        <td>
+                                        <td style="font-size:9px !important">
                                             @foreach (var obj3 in TRANFERPZADISTINCT)
                                             {
                                                 if (obj.CODIGO2 == obj3.CODIGO2 && obj.TALLA_A == obj3.TALLA_A && obj2.DESCR_COMBINACAO == obj3.DESCR_COMBINACAO /*AGREGADO*/ && obj.NARRATIVA == obj3.NARRATIVA)
@@ -1089,28 +1090,28 @@
                 <table class="table w-100 text-center">
                     <thead>
                         <tr>
-                            <th>SEQ. OPERACIÓN</th>
-                            <th>COD. OPERACIÓN</th>
-                            <th>DESCRIPCIÓN OPERACIÓN</th>
-                            <th>COD. MAQUINA</th>
-                            <th>TIEMPO. HOMBRES</th>
-                            <th>ETAPA. OPERACIÓN</th>
-                            <th>COD_PARTE PRENDA</th>
-                            <th>PARTE PRENDA</th>
+                            <th style="font-size:10px !important">SEQ. OPERACIÓN</th>
+                            <th style="font-size:10px !important">COD. OPERACIÓN</th>
+                            <th style="font-size:10px !important">DESCRIPCIÓN OPERACIÓN</th>
+                            <th style="font-size:10px !important">COD. MAQUINA</th>
+                            <th style="font-size:10px !important">TIEMPO. HOMBRES</th>
+                            <th style="font-size:10px !important">ETAPA. OPERACIÓN</th>
+                            <th style="font-size:10px !important">COD_PARTE PRENDA</th>
+                            <th style="font-size:10px !important">PARTE PRENDA</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach (var obj in Model.objSecuenciaOperacionesLista)
                         {
                             <tr>
-                                <td>@obj.seq_operacao</td>
-                                <td>@obj.codigo_operacao</td>
-                                <td>@obj.nome_operacao</td>
-                                <td>@obj.observacao1</td>
-                                <td>@obj.minutos</td>
-                                <td>@obj.descricao</td>
-                                <td>@obj.codigo_parte_peca</td>
-                                <td>@obj.desc_parte_peca</td>
+                                <td style="font-size:9px !important">@obj.seq_operacao</td>
+                                <td style="font-size:9px !important">@obj.codigo_operacao</td>
+                                <td style="font-size:9px !important">@obj.nome_operacao</td>
+                                <td style="font-size:9px !important">@obj.observacao1</td>
+                                <td style="font-size:9px !important">@obj.minutos</td>
+                                <td style="font-size:9px !important">@obj.descricao</td>
+                                <td style="font-size:9px !important">@obj.codigo_parte_peca</td>
+                                <td style="font-size:9px !important">@obj.desc_parte_peca</td>
                             </tr>
 
                             //SUMA TODO

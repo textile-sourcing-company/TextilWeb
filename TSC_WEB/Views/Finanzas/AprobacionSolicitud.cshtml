@@ -4,48 +4,25 @@
     Layout = "~/Views/Plantillas/_Layout.cshtml";
 }
 
-<div id="solgasaps" class="container-fluid">
-
-    @*<ul class="nav nav-tabs nav-justified md-tabs indigo" id="myTabJust" role="tablist">
-
-            <li class="nav-item">
-                <a class="nav-link active" id="firma-tab-just" data-toggle="tab" href="#firma-just" role="tab" aria-controls="firma-just"
-                   aria-selected="true">Pendientes</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" id="aprobados-tab-just" data-toggle="tab" href="#aprobadas-just" role="tab" aria-controls="aprobadas-just"
-                   aria-selected="false">Historial</a>
-            </li>
-
-        </ul>
-
-
-
-        <div class="tab-content card pt-1" id="myTabContentJust">*@
-
-
-    @*<div class="tab-pane fade show active" id="firma-just" role="tabpanel" aria-labelledby="firma-tab-just">
-
-        <div class="container-fluid">*@
+<div id="asolgasaps" class="container-fluid">
 
     <div class="card">
 
-
         <div class="row m-2 d-flex justify-content-end">
-            <button id="btnAprobar" type="button" class="btn btn-success btn-sm">Aprobar</button>
-            <button id="btnRechazar" type="button" class="btn btn-danger btn-sm ml-1">Rechazar</button>
+            <button id="abtnAprobar" type="button" class="btn btn-success btn-sm">Aprobar</button>
+            <button id="abtnRechazar" type="button" class="btn btn-danger btn-sm ml-1">Rechazar</button>
         </div>
 
         <hr />
 
         <div class="m-2">
-            <table class="table table-sm table-bordered table-hover display nowrap" id="tblPendientes" style="width: 100%;">
+            <table class="table table-sm table-bordered table-hover display nowrap" id="atblPendientes" style="width: 100%;">
                 <thead class="thead-light">
                     <tr>
                         <th class="ocultar-columna">idSolicitud</th>
                         <th>Fecha</th>
                         <th>Codigo</th>
-                        <th>Usuario Solicitante</th>
+                        <th>Colaborador</th>
                         <th>Glosa / Desc. Solicitud</th>
                         <th class="">Estado</th>
                         <th class="">Tipo</th>
@@ -55,66 +32,13 @@
                         <th>Acciones</th>
                     </tr>
                 </thead>
-                <tbody id="tblPendientesContent"></tbody>
+                <tbody id="atblPendientesContent"></tbody>
             </table>
         </div>
 
-
     </div>
 
-    @*</div>
-
-        </div>*@
-
-
-
-    @*<div class="tab-pane fade seccion-ap-rech" id="aprobadas-just" role="tabpanel" aria-labelledby="aprobadas-tab-just">
-
-            <div class="container-fluid m-2">
-
-                <div class="row m-2">
-                    <div class="col-3 p-1">
-                        <label for="idfechaIniHist">Fecha Desde: </label>
-                        <input class="form-control form-control-sm" type="date" id="idfechaIniHist">
-                    </div>
-
-                    <div class="col-3 p-1">
-                        <label for="idfechaFinHist">Fecha Hasta: </label>
-                        <input class="form-control form-control-sm" type="date" id="idfechaFinHist">
-                    </div>
-                    <div class="col-4 p-1 form-group">
-                        <div> &nbsp; &nbsp;</div>
-                        <button id="btnBuscarHistorial" type="button" class="btn btn-primary btn-sm pt-2">Buscar</button>
-                    </div>
-                </div>
-
-
-                <div class="card m-2">
-                    <table class="table table-sm table-bordered table-hover display nowrap" id="tblHistorial">
-                        <thead class="thead-light">
-                            <tr>
-                                <th class="ocultar-columna">idSolicitud</th>
-                                <th>Fecha</th>
-                                <th>Codigo</th>
-                                <th>Glosa / Desc. Solicitud</th>
-                                <th class="">Estado</th>
-                                <th class="">Tipo</th>
-                                <th>Nivel Aprobacion</th>
-                                <th class="">Moneda</th>
-                                <th>Total</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tblHistorialContent"></tbody>
-                    </table>
-                </div>
-
-            </div>
-
-        </div>*@
-    @*</div>*@
-
-
-    <div class="modal fade" id="modalDetalleSol" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="amodalDetalleSol" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -128,39 +52,39 @@
 
                         <div class="row">
                             <div class="col-2">
-                                <label for="idmdcodigo">Codigo:</label>
-                                <span type="text" class="form-control form-control-sm" id="idmdcodigo"></span>
+                                <label for="aidmdcodigo">Codigo:</label>
+                                <span type="text" class="form-control form-control-sm" id="aidmdcodigo"></span>
                             </div>
                             <div class="col-2">
-                                <label for="idmdfecha">Fecha:</label>
-                                <span type="text" class="form-control form-control-sm" id="idmdfecha"></span>
+                                <label for="aidmdfecha">Fecha:</label>
+                                <span type="text" class="form-control form-control-sm" id="aidmdfecha"></span>
                             </div>
                             <div class="col-2">
-                                <label for="idmdestado">Estado:</label>
-                                <span type="text" class="form-control form-control-sm" id="idmdestado"></span>
+                                <label for="aidmdestado">Estado:</label>
+                                <span type="text" class="form-control form-control-sm" id="aidmdestado"></span>
                             </div>
                             <div class="col-6">
-                                <label for="idmdususol">Usuario Solicitante:</label>
-                                <span type="text" class="form-control form-control-sm" id="idmdususol"></span>
+                                <label for="aidmdususol">Usuario Solicitante:</label>
+                                <span type="text" class="form-control form-control-sm" id="aidmdususol"></span>
                             </div>
                         </div>
 
                         <div class="row mt-2 mb-2">
                             <div class="col-5">
-                                <label for="idmdcolaborador">Colaborador:</label>
-                                <span class="form-control form-control-sm" id="idmdcolaborador"></span>
+                                <label for="aidmdcolaborador">Colaborador:</label>
+                                <span class="form-control form-control-sm" id="aidmdcolaborador"></span>
                             </div>
                             <div class="col-5">
-                                <label for="idmdobs">Glosa:</label>
-                                <span class="form-control form-control-sm" id="idmdobs"></span>
+                                <label for="aidmdobs">Glosa:</label>
+                                <span class="form-control form-control-sm" id="aidmdobs"></span>
                             </div>
                             <div class="col-1">
-                                <label for="idmdmoneda">Moneda:</label>
-                                <span class="form-control form-control-sm" id="idmdmoneda"></span>
+                                <label for="aidmdmoneda">Moneda:</label>
+                                <span class="form-control form-control-sm" id="aidmdmoneda"></span>
                             </div>
                             <div class="col-1">
-                                <label for="idmdtotal">Total:</label>
-                                <span class="form-control form-control-sm" id="idmdtotal"></span>
+                                <label for="aidmdtotal">Total:</label>
+                                <span class="form-control form-control-sm" id="aidmdtotal"></span>
                             </div>
                         </div>
 
@@ -169,7 +93,7 @@
                         </div>
 
                         <div class="contenedor-detalle">
-                            <table class="table table-sm table-bordered table-hover display nowrap" id="tblDetallePend" style="width: 100%">
+                            <table class="table table-sm table-bordered table-hover display nowrap" id="atblDetallePend" style="width: 100%">
                                 <thead class="thead-light">
                                     <tr>
                                         <th>Fecha</th>
@@ -181,7 +105,7 @@
                                         <th>Total</th>
                                     </tr>
                                 </thead>
-                                <tbody id="tblDetallePendContent"></tbody>
+                                <tbody id="atblDetallePendContent"></tbody>
                             </table>
                         </div>
 
@@ -195,45 +119,36 @@
         </div>
     </div>
 
-
-
-
-
 </div>
-
-
-
-
-
 
 
 
 
 <style>
 
-    #solgasaps label {
+    #asolgasaps label {
         font-family: 'Roboto', sans-serif;
     }
 
 
-    #solgasaps table .ocultar-columna {
+    #asolgasaps table .ocultar-columna {
         display: none;
     }
 
-    #solgasaps input {
+    #asolgasaps input {
         font-family: 'Roboto', sans-serif;
     }
 
 
-    #solgasaps #tblResultado th {
+    #asolgasaps #tblResultado th {
         font-family: 'Roboto', sans-serif !important;
     }
 
-    #solgasaps #tblResultado td {
+    #asolgasaps #tblResultado td {
         font-family: 'Roboto', sans-serif !important;
     }
 
-    #solgasaps .contenedor-detalle {
+    #asolgasaps .contenedor-detalle {
         overflow: hidden;
         width: 100%;
     }
@@ -257,16 +172,19 @@
 
 
 @section scripts {
+
+    <script src="~/Admin/js/Finanzas/Rendiciones/moment.js"></script>
+
     <script>
 
-        const NIVEL_INTERFAZ = 20;
         const USUARIO = "@Request.RequestContext.HttpContext.Session["usuario"]";
         const USUARIO_COMPLETO = "@Request.RequestContext.HttpContext.Session["usuario"]" + " - " + "@Request.RequestContext.HttpContext.Session["nombre"]";
 
-        var solicitudesArray = [];
+        const aNIVEL_INTERFAZ = 20;
+        var asolicitudesArray = [];
 
-        var vFechaIniPend = "";
-        var vFechaFinPend = "";
+        var avFechaIniPend = "";
+        var avFechaFinPend = "";
 
         $(document).ready(function () {
 
@@ -284,11 +202,11 @@
                     day = "0" + day;
                 var today = now.getFullYear() + '-' + month + '-' + day;
 
-                $('#idfechaIniHist').val(today);
-                $('#idfechaFinHist').val(today);
+                $('#aidfechaIniHist').val(today);
+                $('#aidfechaFinHist').val(today);
 
 
-                getLista(NIVEL_INTERFAZ);
+                agetLista(aNIVEL_INTERFAZ);
             }
 
             function formatoNumero(x) {
@@ -340,7 +258,7 @@
             }
 
 
-            function getLista(nivelInterfaz) {
+            function agetLista(nivelInterfaz) {
 
                 $.ajax({
                     type: "GET",
@@ -350,7 +268,7 @@
                     dataType: "json",
                     success: function (data) {
 
-                        let tabla = $("#tblPendientes").DataTable();
+                        let tabla = $("#atblPendientes").DataTable();
 
                         tabla.destroy();
                         var tr = "";
@@ -361,7 +279,7 @@
                                 + " <td class='ocultar-columna'>" + obj.idSolicitud + "</td>"
                                 + " <td> " + obj.fecha + "</td>"
                                 + " <td> " + obj.codigo + "</td>"
-                                + " <td> " + obj.usuSolicitante + "</td>"
+                                + " <td> " + obj.colaborador + "</td>"
                                 + " <td> " + obj.observacion + "</td>"
                                 + " <td> " + obj.estado + "</td>"
                                 + " <td> " + obj.tipo + "</td>"
@@ -370,22 +288,23 @@
                                 + " <td> " + formatoNumero(obj.total) + "</td>"
 
                                 + " <td class='text-center'>"
-                                + "     <button data-idsolicitud='" + obj.idSolicitud + "' data-toggle='collapse' data-target='#modalDetalleSol' class='btn btn-sm btn-primary cIdSolicitudDet'> <i class='fas fa-eye'></i></button>"
+                                + "     <button data-idsolicitud='" + obj.idSolicitud + "' data-toggle='collapse' data-target='#amodalDetalleSol' class='btn btn-sm btn-primary cIdSolicitudDet'> <i class='fas fa-eye'></i></button>"
                                 + "     <input type='checkbox' data-idsolicitud='" + obj.idSolicitud + "' class='seleccion ml-2'>"
                                 + "</td>"
 
                                 + "</tr>";
                         });
 
-                        $("#tblPendientesContent").html(tr);
+                        $("#atblPendientesContent").html(tr);
 
 
-                        $("#tblPendientes").DataTable(
+                        $("#atblPendientes").DataTable(
                             {
-                                //dom: 'Bfrtip',
-                                //buttons: [
-                                //    'copy', 'excel', 'pdf', 'print'
-                                //],
+                                searching: true,
+                                paging: false,
+                                info: false,
+                                "scrollY": "430px",
+                                "scrollCollapse": true,
                                 'language': { 'url': '/libs/datatables/spanish.json' },
                                 lengthMenu: [[5, 10, 20, -1], [5, 10, 20, 'Todos']]
                             });
@@ -398,30 +317,30 @@
 
             }
 
-            $("#tblPendientes").on('click', '.seleccion', function () {
+            $("#atblPendientes").on('click', '.seleccion', function () {
                 let idsolicitud = $(this).attr("data-idsolicitud");
 
                 //AGREGANDO AL ARRAY
                 if ($(this).prop("checked")) {
 
-                    solicitudesArray.push({ idsolicitud: idsolicitud });
+                    asolicitudesArray.push({ idsolicitud: idsolicitud });
 
                 } else {//QUITA DEL ARRAY
 
-                    for (var i = 0; i < solicitudesArray.length; i++) {
+                    for (var i = 0; i < asolicitudesArray.length; i++) {
 
-                        if (solicitudesArray[i].idsolicitud == idsolicitud) {
+                        if (asolicitudesArray[i].idsolicitud == idsolicitud) {
 
-                            solicitudesArray.splice(i, 1);
+                            asolicitudesArray.splice(i, 1);
                         }
                     }
                 }
             });
 
-            $("#btnAprobar").click(function () {
-                if (solicitudesArray.length > 0) {
-                    // 4: Opcion Aprobacion
-                    AprobarRechazar(4);
+            $("#abtnAprobar").click(function () {
+                if (asolicitudesArray.length > 0) {
+                    // Aprobacion
+                    aAprobarRechazar(1, 1);
                 }
                 else {
                     Swal.fire({
@@ -435,13 +354,12 @@
                 }
             });
 
-            $("#btnRechazar").click(function () {
-                if (solicitudesArray.length > 0) {
-                    // 5: Opcion Rechazar
-                    AprobarRechazar(5);
+            $("#abtnRechazar").click(function () {
+                if (asolicitudesArray.length > 0) {
+                    // Rechazar
+                    aAprobarRechazar(1, 2);
                 }
                 else {
-                    
                     Swal.fire({
                         title: 'Seleccione las solicitudes que desea rechazar',
                         text: "Textile Sourcing Company",
@@ -450,25 +368,25 @@
                         confirmButtonColor: '#3085d6',
                         confirmButtonText: 'Ok'
                     });
-
                 }
             });
 
-            function AprobarRechazar(opcion) {
+            function aAprobarRechazar(opcion, opcionTipoAprob) {
 
                 let parametro = {};
 
                 parametro = {
                     'opcion': opcion,
-                    'solicitudesArray': solicitudesArray,
+                    'opcionTipoAprob': opcionTipoAprob,
+                    'asolicitudesArray': asolicitudesArray,
                     'usuario': USUARIO,
-                    'nivelInterfaz': NIVEL_INTERFAZ
+                    'nivelInterfaz': aNIVEL_INTERFAZ
                 };
 
                 MostrarCarga("Cargando...");
 
                 $.ajax({
-                    url: "/finanzas/RG_AprobRech20",
+                    url: "/finanzas/RG_AprobacionSolicitud20",
                     type: "post",
                     data: parametro,
                     dataType: "json",
@@ -485,8 +403,8 @@
                                 mensajePrincipal(false, "Ocurrio un problema");
                             }
 
-                            solicitudesArray = [];
-                            getLista(NIVEL_INTERFAZ);
+                            asolicitudesArray = [];
+                            agetLista(aNIVEL_INTERFAZ);
                         }
                     },
                     error: function (xhr, ajaxOptions, thrownError) {
@@ -495,9 +413,7 @@
                 });
             }
 
-
-
-            $("#tblPendientes").on('click', '.cIdSolicitudDet', function () {
+            $("#atblPendientes").on('click', '.cIdSolicitudDet', function () {
 
                 let idsolcitud = $(this).attr("data-idsolicitud");
                 let valorTotal = 0;
@@ -515,15 +431,15 @@
                         }
                         else {
 
-                            $("#idmdfecha").text(data.entidad.fecha);
-                            $("#idmdcodigo").text(data.entidad.codigo);
-                            $("#idmdobs").text(data.entidad.observacion);
-                            $("#idmdcolaborador").text(data.entidad.colaborador);
-                            $("#idmdestado").text(data.entidad.estado);
-                            $("#idmdmoneda").text(data.entidad.moneda);
-                            $("#idmdususol").text(data.entidad.usuSolicitante);
+                            $("#aidmdfecha").text(data.entidad.fecha);
+                            $("#aidmdcodigo").text(data.entidad.codigo);
+                            $("#aidmdobs").text(data.entidad.observacion);
+                            $("#aidmdcolaborador").text(data.entidad.colaborador);
+                            $("#aidmdestado").text(data.entidad.estado);
+                            $("#aidmdmoneda").text(data.entidad.moneda);
+                            $("#aidmdususol").text(data.entidad.usuSolicitante);
 
-                            let tabla = $("#tblDetallePend").DataTable();
+                            let tabla = $("#atblDetallePend").DataTable();
 
                             tabla.destroy();
                             var tr = "";
@@ -547,20 +463,22 @@
 
                             });
 
-                            $("#tblDetallePendContent").html(tr);
+                            $("#atblDetallePendContent").html(tr);
 
-                            $("#tblDetallePend").DataTable(
+                            $("#atblDetallePend").DataTable(
                                 {
-                                    //dom: 'Bfrtip',
-                                    //buttons: [
-                                    //    'excel'
-                                    //],
+                                    searching: false,
+                                    paging: false,
+                                    info: false,
+                                    //"scrollY": "300px",
+                                    //"scrollCollapse": true,
+
                                     'language': { 'url': '/libs/datatables/spanish.json' },
-                                    lengthMenu: [[5, 10, 20, -1], [5, 10, 20, 'Todos']]
+                                    lengthMenu: [[-1], ['Todos']]
                                 });
 
-                            $("#idmdtotal").text(formatoNumero(valorTotal));
-                            $('#modalDetalleSol').modal('show');
+                            $("#aidmdtotal").text(formatoNumero(valorTotal));
+                            $('#amodalDetalleSol').modal('show');
                         }
                     },
                     failure: function () {
@@ -579,19 +497,17 @@
 
             });
 
-            $("#tblPendientes").on('click', '.cAprobar', function () {
+            $("#atblPendientes").on('click', '.cAprobar', function () {
                 let idsolicitud = $(this).attr("data-idsolicitud");
-                AprobarRechazar20(idsolicitud, "¿Desea Aprobar la Solicitud?", 4);
+                aAprobarRechazar20(idsolicitud, "¿Desea Aprobar la Solicitud?", 1);
             });
 
-            $("#tblPendientes").on('click', '.cRechazar', function () {
+            $("#atblPendientes").on('click', '.cRechazar', function () {
                 let idsolicitud = $(this).attr("data-idsolicitud");
-                AprobarRechazar20(idsolicitud, "¿Desea Rechazar la Solicitud?", 5);
+                aAprobarRechazar20(idsolicitud, "¿Desea Rechazar la Solicitud?", 2);
             });
 
-
-
-            function AprobarRechazar20(idsolicitud, pregunta, opcion) {
+            function aAprobarRechazar20(idsolicitud, pregunta, opcion) {
 
                 Swal.fire({
                     title: pregunta,
@@ -607,25 +523,14 @@
 
                     if (result.value) {
 
-                        let parametro = {
-                            'opcion': opcion,
-                            'idSolicitud': idsolicitud,
-                            'codigo': 0,
-                            'idEmpresa': 0,
-                            'idEstado': 0,
-                            'idAnulado': 0,
-                            'idTipoMod': 0,
-                            'observacion': '',
 
-                            'codCeCo': 0,
-                            'codMotivo': 0,
-                            'valor': 0,
-                            'nota': '',
+                        let parametro = {
+                            'opcionTipoAprob': opcion,
+                            'idSolicitud': idsolicitud,
                             'secuencia': 0,
-                            'usuario': USUARIO,
-                            'usuarioCompleto': "",
-                            'nivelInterfaz': NIVEL_INTERFAZ
+                            'valorEntrega': 0
                         }
+
 
                         $.ajax({
                             url: "/finanzas/RG_AprobRech20",
@@ -647,12 +552,12 @@
 
                                     //var datos =
                                     //{
-                                    //    'fechaInicio': vFechaIniPend,
-                                    //    'fechaFin': vFechaFinPend,
-                                    //    'nivelInterfaz': NIVEL_INTERFAZ
+                                    //    'fechaInicio': avFechaIniPend,
+                                    //    'fechaFin': avFechaFinPend,
+                                    //    'nivelInterfaz': aNIVEL_INTERFAZ
                                     //}
 
-                                    getLista(NIVEL_INTERFAZ);
+                                    agetLista(aNIVEL_INTERFAZ);
                                 }
                             },
                             error: function (xhr, ajaxOptions, thrownError) {
@@ -665,84 +570,6 @@
                 })
 
             }
-
-
-            $("#btnBuscarHistorial").click(function () {
-
-                let fechaInicio = $('#idfechaIniHist').val();
-                let fechaFin = $('#idfechaFinHist').val();
-
-
-                if (fechaInicio == null ||
-                    fechaFin == null ||
-                    typeof (fechaInicio) == "undefined" ||
-                    typeof (fechaFin) == "undefined" ||
-                    fechaInicio.trim() == "" ||
-                    fechaFin.trim() == "") {
-
-                    Swal.fire('Seleccione la fecha, por favor');
-                }
-                else {
-                    var datos =
-                    {
-                        'fechaInicio': fechaInicio,
-                        'fechaFin': fechaFin,
-                        'usuario' : USUARIO
-                    }
-
-
-                    $.ajax({
-                        type: "GET",
-                        url: '/finanzas/RG_Historial20',
-                        contentType: "application/json; charset=utf-8",
-                        data: datos,
-                        dataType: "json",
-                        success: function (data) {
-
-                            let tabla = $("#tblHistorial").DataTable();
-
-                            tabla.destroy();
-                            var tr = "";
-
-                            data.lista.forEach((obj) => {
-
-                                tr += "<tr> "
-                                    + " <td class='ocultar-columna'>" + obj.idSolicitud + "</td>"
-                                    + " <td> " + obj.fecha + "</td>"
-                                    + " <td> " + obj.codigo + "</td>"
-                                    + " <td> " + obj.observacion + "</td>"
-                                    + " <td> " + obj.estado + "</td>"
-                                    + " <td> " + obj.tipo + "</td>"
-                                    + " <td> " + obj.nivelAprobacion + "</td>"
-                                    + " <td> " + obj.moneda + "</td>"
-                                    + " <td> " + formatoNumero(obj.total) + "</td>"
-                                    + "</tr>";
-                            });
-
-                            $("#tblHistorialContent").html(tr);
-
-
-                            $("#tblHistorial").DataTable(
-                                {
-                                    dom: 'Bfrtip',
-                                    buttons: [
-                                        'excel', 'pdf', 'print'
-                                    ],
-                                    'language': { 'url': '/libs/datatables/spanish.json' },
-                                    lengthMenu: [[5, 10, 20, -1], [5, 10, 20, 'Todos']]
-                                });
-
-                        },
-                        failure: function () {
-                            console.error('error al cargar los periodos');
-                        }
-                    });
-
-
-                }
-
-            });
-
 
 
         });

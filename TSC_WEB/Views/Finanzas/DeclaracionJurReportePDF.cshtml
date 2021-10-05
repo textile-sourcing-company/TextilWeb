@@ -1,0 +1,180 @@
+﻿@model TSC_WEB.Models.Entidades.Finanzas.RendicionGastos.ReporteDJPDFViewModel
+@{
+    Layout = null;
+}
+
+<div class="rpte-dj">
+
+    <div class="container-fluid">
+
+        <div class="card" style="border: 2px solid #000000; padding: 10px;">
+
+
+            <div class="row" style="width: 100%; padding: 2px">
+                <div class="col-xs-12" style="text-align: center; font-size: 21px; font-weight: bold">
+                    Declaración Jurada
+                </div>
+            </div>
+
+            <div class="row" style="width: 100%; padding: 2px; font-size: 16px; margin-top: 5px; font-weight: 600">
+                <div class="col-xs-12" style="text-align: center">
+                    Sustento de gastos por viaje al Exterior o a nivel Nacional (*)
+                </div>
+            </div>
+
+
+
+            <div class="row" style="width: 100%; padding: 2px; margin-top: 20px;">
+                <div class="col-xs-12" style="text-align: left">
+                    Base legal: Inciso r) del artículo 37° de TUO de la Ley del impuesto a la Renta y el inciso n) del artículo 21° de su Reglamento.
+                </div>
+            </div>
+
+
+            <div class="row" style="width: 100%; padding: 2px; margin-top: 25px;">
+                <div class="col-xs-12" style="text-align: left">
+
+                    @Model.declaracionJuradaCab.parrafo1
+
+                </div>
+            </div>
+
+
+            <div class="row" style="width: 100%; padding: 2px; margin-top: 15px; font-weight: bold; font-size: 16px;">
+                <div class="col-xs-12" style="text-align: left">
+                    1. Gastos de alimentación y relacionados (**)
+                </div>
+            </div>
+
+
+            <table style="width: 100%; margin-top: 10px; border: 1px solid #000000">
+                <thead>
+                    <tr style="background-color: #000000">
+                        <th style="color: #ffffff"> Fecha (dd-mm-aaaa) </th>
+                        <th style="color: #ffffff"> Moneda </th>
+                        <th style="color: #ffffff"> Monto </th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @foreach (var item in Model.declaracionJuradaDet_1)
+                    {
+                        <tr>
+                            <td style="text-align: center;"> @item.fecha </td>
+                            <td style="text-align: center;"> @item.moneda </td>
+                            <td style="text-align: center;"> @item.monto </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+
+
+            <div class="row" style="width: 100%; padding: 2px; margin-top: 15px; font-weight: bold; font-size: 16px;">
+                <div class="col-xs-12" style="text-align: left">
+                    2. Gastos de Movilidad (**)
+                </div>
+            </div>
+
+            <table style="width: 100%; margin-top: 10px; border: 1px solid #000000">
+                <thead>
+                    <tr style="background-color: #000000">
+                        <th style="color: #ffffff"> Fecha (dd-mm-aaaa) </th>
+                        <th style="color: #ffffff"> Moneda </th>
+                        <th style="color: #ffffff"> Monto </th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @foreach (var item in Model.declaracionJuradaDet_2)
+                    {
+                        <tr>
+                            <td style="text-align: center;"> @item.fecha </td>
+                            <td style="text-align: center;"> @item.moneda </td>
+                            <td style="text-align: center;"> @item.monto </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+
+            <div class="row" style="width: 100%; padding: 2px; margin-top: 30px;">
+                <div class="col-xs-12" style="text-align: left">
+                    Los desembolsos anteriormente señalados han sido necesarios para la realización de la labor encomendada a mi persona.
+                </div>
+            </div>
+
+            <div class="row" style="width: 100%; padding: 2px; margin-top: 15px;">
+                <div class="col-xs-12" style="text-align: left">
+
+                    @Model.declaracionJuradaCab.parrafo2
+
+                </div>
+            </div>
+
+
+            <div style="width: 95%; margin: auto; padding: 30px; display: block;">
+
+                <div style="width: 48%; display: inline-block; text-align: center;">
+                    <table style="width: 100%; padding-top: 20px; " cellspacing="0" cellpadding="0">
+                        <thead style="border: 0;">
+                            <tr style="border: 0;">
+                                <th style="border: 0;">
+                                    <div class="firma-formato-liq">
+                                        <img src="@Model.declaracionJuradaCab.firma_usuario" alt="imagen" width="150" height="110" />
+                                    </div>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="text-align: center; padding-top:5px;">
+                                <td style="border-top: 1px solid #000000; text-align: center;font-size: 11px;"> <span style="font-weight: bold;">Trabajador: </span> @Model.declaracionJuradaCab.nomapellidos </td>
+                            </tr>
+                            <tr style="text-align: center;">
+                                <td style="text-align: center">DNI: @Model.declaracionJuradaCab.dni </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div style="width: 48%; display: inline-block; text-align: center;">
+                    <table style="width: 100%; padding-top: 20px;" cellspacing="0" cellpadding="0">
+                        <thead style="border: 0;">
+                            <tr style="border: 0;">
+                                <th style="border: 0;">
+                                    <div class="firma-formato-liq">
+                                        <img src="@Model.declaracionJuradaCab.firma_jefe" alt="imagen" width="150" height="110" />
+                                    </div>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="text-align: center; padding-top:5px;">
+                                <td style="border-top: 1px solid #000000; text-align: center; font-size: 11px;"> <span style="font-weight: bold;">Jefatura: </span> @Model.declaracionJuradaCab.nom_ape_jefe </td>
+                            </tr>
+                            <tr style="text-align: center;">
+                                <td style="text-align: center">DNI: @Model.declaracionJuradaCab.dni_jefe </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+
+            </div>
+
+
+            <div class="row" style="width: 100%; margin-top: 120px;">
+                <div style="text-align: left; font-size: 11px">
+                    (*) Correspondiente únicamente a los gastos de viáticos por alimentación y movilidad.
+                    (**) La falta de algunos de los datos señalados en los puntos 1 y 2 solo inhabilitada la sustentación del gasto por movilidad o alimentación según corresponda.
+                </div>
+            </div>
+
+
+
+        </div>
+
+    </div>
+
+
+</div>
