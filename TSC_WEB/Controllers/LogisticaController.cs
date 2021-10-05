@@ -320,11 +320,10 @@ namespace TSC_WEB.Controllers
             return View();
         }
 
+
         [HttpGet]
         public ActionResult ImpresionOC()
         {
-
-
             if (Session["usuario"] != null)
             {
                 ImpresionOC resultado = (ImpresionOC)Session["imprimiroc"];
@@ -342,16 +341,12 @@ namespace TSC_WEB.Controllers
                     + "--footer-html " + _footerUrl + " --footer-spacing 0"
                     ,
                     PageMargins = { Top = 50, Bottom = 40 },
-
                 };
             }
             else
             {
                 return Redirect("/");
             }
-
-
-            
         }
 
         /// FIN DE VISUALISAR OC 
@@ -553,8 +548,6 @@ namespace TSC_WEB.Controllers
             {
                 for (int x = 0; x < ordenes.Length; x++)
                 {
-
-
                     var obj = objAprobacionOcM.LiberarOc(ordenes[x],
                                                          Session["usuario"].ToString(),
                                                          Convert.ToInt32(Session["empresa"].ToString()));

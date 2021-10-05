@@ -12,5 +12,9 @@ namespace TSC_WEB.Models.Entidades.Finanzas.RendicionGastos
         public int idSolicitud { get; set; }
         public int secuencia { get; set; }
         public decimal valorEntrega { get; set; }
+        public string usuario { get; set; }
+        public int nivelInterfaz { get; set; }
+        public int idAnulado { get; set; }
+        public int idAnuladoDet { get; set; }
     }
 }

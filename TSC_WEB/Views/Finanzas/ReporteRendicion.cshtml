@@ -1,0 +1,868 @@
+﻿@{
+    ViewBag.Title = "Reportes";
+    ViewBag.Modulo = "Finanzas";
+    Layout = "~/Views/Plantillas/_Layout.cshtml";
+}
+
+<div id="solgasapf" class="container-fluid">
+
+
+    <ul class="nav nav-tabs nav-justified md-tabs indigo" id="myTabJust" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" id="hist-tab-just" data-toggle="tab" href="#hist-just" role="tab" aria-controls="hist-just"
+               aria-selected="true">Historial Rendición</a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link" id="pendrend-tab-just" data-toggle="tab" href="#pendrend-just" role="tab" aria-controls="pendrend-just"
+               aria-selected="false">Pendientes Rendición</a>
+        </li>
+    </ul>
+
+
+    <div class="tab-content card pt-1" id="myTabContentJust">
+
+        <div class="tab-pane fade show active" id="hist-just" role="tabpanel" aria-labelledby="hist-tab-just">
+
+            <div class="container-fluid m-1">
+
+                <div class="card p-2">
+
+                    <div class="row">
+                        <div class="col-12 col-sm-4 col-md-3 col-lg-2 col-xl-2 p-1">
+                            <label for="idfechaIniHist">Fecha Desde: </label>
+                            <input class="form-control form-control-sm" type="date" id="idfechaIniHist">
+                        </div>
+
+                        <div class="col-12 col-sm-4 col-md-3 col-lg-2 col-xl-2 p-1">
+                            <label for="idfechaFinHist">Fecha Hasta: </label>
+                            <input class="form-control form-control-sm" type="date" id="idfechaFinHist">
+                        </div>
+
+                        <div class="col-6 col-sm-3 col-md-3 col-lg-2 col-xl-2 p-1 d-flex flex-column-reverse">
+                            <button id="btnBuscarHistorial" type="button" class="btn btn-primary btn-sm"><i class="fas fa-search"></i> Buscar</button>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="card mt-1 p-1">
+                    <table class="table table-sm table-bordered dt-responsive table-hover display nowrap" id="tblHistorial" style="width: 100%;">
+                        <thead class="thead-light">
+                            <tr>
+                                <th class="all"></th>
+                                <th>Tipo Sustento</th>
+                                <th>Fecha Solicitud</th>
+                                <th>Fecha Aprob. Finanza</th>
+                                <th>Fecha Ultima Rendición</th>
+                                <th>Codigo</th>
+                                <th>Usuario Solicitante</th>
+                                <th class="all">Colaborador</th>
+                                <th>CeCo</th>
+                                <th class="all">Glosa / Desc. Solicitud</th>
+                                <th class="all">Estado</th>
+                                <th class="all">Tipo</th>
+                                <th class="all">Nivel Aprobacion</th>
+                                <th class="all">Moneda</th>
+                                <th class="all">Total Solicitado</th>
+                                <th class="all">Total Entregado</th>
+                                <th class="all">Total Rendido</th>
+                                <th>Comprobantes</th>
+                                <th>Liquidación de Gastos</th>
+
+                            </tr>
+                        </thead>
+                        <tbody id="tblHistorialContent"></tbody>
+                    </table>
+                </div>
+
+            </div>
+
+
+            <div class="modal fade" id="comprobantesModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Comprobante Registrados</h5>
+                        </div>
+                        <div class="modal-body">
+                            <div class="container-fluid">
+
+                                <table class="table table-sm table-bordered" id="tblCptesRegistrados" style="width: 100%">
+                                    <thead class="thead-light">
+                                        <tr>
+                                            <th>Serie Numero</th>
+                                            <th>Proveedor</th>
+                                            <th>Total</th>
+                                            <th>Impresión</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tblCptesRegistradosCont"></tbody>
+                                </table>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+        <div class="tab-pane fade" id="pendrend-just" role="tabpanel" aria-labelledby="pendrend-tab-just">
+
+            <div id="psolgasapf" class="container-fluid">
+
+                <div class="container-fluid m-1">
+
+                    <div class="card p-2">
+                        <div class="row">
+                            <div class="col-12 col-sm-4 col-md-3 col-lg-2 col-xl-2 p-1">
+                                <label for="pidfechaIni">Fecha Desde: </label>
+                                <input class="form-control form-control-sm" type="date" id="pidfechaIni">
+                            </div>
+
+                            <div class="col-12 col-sm-4 col-md-3 col-lg-2 col-xl-2 p-1">
+                                <label for="pidfechaFin">Fecha Hasta: </label>
+                                <input class="form-control form-control-sm" type="date" id="pidfechaFin">
+                            </div>
+
+                            <div class="col-6 col-sm-3 col-md-3 col-lg-2 col-xl-2 p-1 d-flex flex-column-reverse">
+                                <button id="pbtnBuscar" type="button" class="btn btn-primary btn-sm"><i class="fas fa-search"></i> Buscar</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card mt-1 p-1">
+                        <table class="table table-sm table-bordered table-hover table-striped dt-responsive nowrap" id="ptblListadoPrincipal" style="width:100%;">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th class="all"></th>
+                                    <th class="ocultar-columna">id</th>
+                                    <th>Fecha</th>
+                                    <th>Codigo</th>
+                                    <th class="">Tipo</th>
+                                    <th class="all">Glosa / Desc. Solicitud</th>
+                                    <th>Colaborador</th>
+                                    <th>CeCo</th>
+                                    <th>Estado</th>
+                                    <th>Moneda</th>
+                                    <th>Total Solicitado</th>
+                                    <th class="all">Total Entregado</th>
+                                    <th>Total Rendido</th>
+                                    @*<th>Impresión</th>*@
+                                    <th class="all">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="ptblListadoPrincipalContent"></tbody>
+                        </table>
+                    </div>
+
+                </div>
+
+
+
+                <div class="modal fade" id="pmodalDetallePendiente" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-lg" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Detalle de Solicitud</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+
+                                <div class="row">
+                                    <div class="col-2">
+                                        <label for="pidmdfecha">Fecha:</label>
+                                        <span type="text" class="form-control form-control-sm" id="pidmdfecha"></span>
+                                    </div>
+                                    <div class="col-5">
+                                        <label for="pidmdceco">Centro de Costo:</label>
+                                        <span type="text" class="form-control form-control-sm" id="pidmdceco"></span>
+                                    </div>
+                                    <div class="col-5">
+                                        <label for="pidmdususol">Usuario Solicitante:</label>
+                                        <span type="text" class="form-control form-control-sm" id="pidmdususol"></span>
+                                    </div>
+                                </div>
+
+                                <div class="row mt-2 mb-2">
+                                    <div class="col-5">
+                                        <label for="pidmdcolaborador">Colaborador:</label>
+                                        <span class="form-control form-control-sm" id="pidmdcolaborador"></span>
+                                    </div>
+                                    <div class="col-5">
+                                        <label for="pidmdobs">Glosa:</label>
+                                        <span class="form-control form-control-sm" id="pidmdobs"></span>
+                                    </div>
+                                    <div class="col-1">
+                                        <label for="pidmdmoneda">Moneda:</label>
+                                        <span class="form-control form-control-sm" id="pidmdmoneda"></span>
+                                    </div>
+                                    <div class="col-1">
+                                        <label for="pidmdtotal">Total:</label>
+                                        <span class="form-control form-control-sm" id="pidmdtotal"></span>
+                                    </div>
+                                </div>
+
+                                <div class="mt-1 mb-1">
+                                    <hr />
+                                </div>
+
+                                <div class="cont-tblDetallePend">
+                                    <table class="table table-sm table-bordered table-hover display" id="ptblDetallePendiente" style="width: 100%">
+                                        <thead class="thead-light">
+                                            <tr>
+                                                <th class="ocultar-columna">ID Sol.</th>
+                                                <th>Fecha</th>
+                                                <th>Estado</th>
+                                                <th style="min-width:125px">Tipo</th>
+                                                <th style="max-width:100px">Concepto</th>
+                                                <th class="all">Detalle</th>
+                                                <th style="max-width:30px">Cant. Días</th>
+                                                <th>Monto por Día</th>
+                                                <th>Total Solicitado</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="ptblDetallePendienteContent"></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+</div>
+
+
+
+<style>
+
+    #solgasapf label {
+        font-family: 'Roboto', sans-serif;
+    }
+
+
+    #solgasapf table .ocultar-columna {
+        display: none;
+    }
+
+    #modalDetalleSol table .ocultar-columna {
+        display: none;
+    }
+
+
+    #solgasapf table .row-aprob-det {
+        background-color: #D5F5E3;
+    }
+
+    #solgasapf table .row-recha-det {
+        background-color: #FADBD8;
+    }
+
+
+
+    #solgasapf input {
+        font-family: 'Roboto', sans-serif;
+    }
+
+
+    #solgasapf #tblResultado th {
+        font-family: 'Roboto', sans-serif !important;
+    }
+
+    #solgasapf #tblResultado td {
+        font-family: 'Roboto', sans-serif !important;
+    }
+
+    #solgasapf #tblDetallePend .monto-entregar {
+        width: 45px;
+    }
+
+
+    #solgasapf .cont-tblDetallePend {
+        overflow: hidden;
+    }
+
+
+
+    #psolgasapf label {
+        font-family: 'Roboto', sans-serif;
+    }
+
+
+    #psolgasapf table .ocultar-columna {
+        display: none;
+    }
+
+    #modalDetalleSol table .ocultar-columna {
+        display: none;
+    }
+
+
+    #psolgasapf table .row-aprob-det {
+        background-color: #D5F5E3;
+    }
+
+    #psolgasapf table .row-recha-det {
+        background-color: #FADBD8;
+    }
+
+    #psolgasapf input {
+        font-family: 'Roboto', sans-serif;
+    }
+
+
+    #psolgasapf #tblResultado th {
+        font-family: 'Roboto', sans-serif !important;
+    }
+
+    #psolgasapf #tblResultado td {
+        font-family: 'Roboto', sans-serif !important;
+    }
+
+    #psolgasapf #tblDetallePend .monto-entregar {
+        width: 45px;
+    }
+
+
+    #psolgasapf .cont-tblDetallePend {
+        overflow: hidden;
+    }
+
+
+    #psolgasapf #tblAprobados {
+        max-width: 170px;
+        overflow: hidden;
+    }
+
+    #pmodalDetallePendiente table .ocultar-columna {
+        display: none;
+    }
+
+
+
+
+    @@media (min-width: 320px) and (max-width: 479.98px) {
+    }
+
+    @@media (min-width: 480px) and (max-width: 767.98px) {
+    }
+
+    @@media (min-width: 768px) and (max-width: 991.98px) {
+    }
+
+    @@media (min-width: 992px) and (max-width: 1199.98px) {
+    }
+
+    @@media (min-width: 1200px) {
+    }
+</style>
+
+
+@section scripts {
+
+    <script src="~/Admin/js/Finanzas/Rendiciones/moment.js"></script>
+
+    <script>
+
+        const NIVEL_INTERFAZ = 30;
+        const pNIVEL_INTERFAZ = 30;
+
+        const USUARIO = "@Request.RequestContext.HttpContext.Session["usuario"]";
+        const USUARIO_COMPLETO = "@Request.RequestContext.HttpContext.Session["usuario"]" + " - " + "@Request.RequestContext.HttpContext.Session["nombre"]";
+
+        var vFechaIniPend = "";
+        var vFechaFinPend = "";
+        var vIdEstado = 0;
+        var solicitudesArray = [];
+
+        // Pendiente de Rendicion
+        var pvFechaIniPend = "";
+        var pvFechaFinPend = "";
+        var pvIdEstado = 0;
+        var psolicitudesArray = [];
+
+
+
+        $(document).ready(function () {
+
+            Inicializar();
+
+
+            function Inicializar() {
+
+                var now = new Date();
+                var month = (now.getMonth() + 1);
+                var day = now.getDate();
+                if (month < 10)
+                    month = "0" + month;
+                if (day < 10)
+                    day = "0" + day;
+                var today = now.getFullYear() + '-' + month + '-' + day;
+
+                $('#idfechaIniHist').val(today);
+                $('#idfechaFinHist').val(today);
+
+                $('#pidfechaIni').val(today);
+                $('#pidfechaFin').val(today);
+            }
+
+            function FormatoFecha(pFecha, separador) {
+                //let fechaFormato = new Date(pFecha + 'Z').toISOString();
+                //fechaFormato = fechaFormato.substring(0, 10);
+
+                let fechaFormato = "";
+                //fechaFormato = fechaFormato.substring(0, 10);
+
+                fechaFormato = moment(pFecha).format("YYYY-MM-DD");
+
+
+                let fechaPre = fechaFormato.replace("-", "");
+                let fechaFinal = fechaPre.replace("-", "");
+
+                let anio_valor = fechaFinal.substr(0, 4);
+                let mes_valor = fechaFinal.substr(4, 2);
+                let dia_valor = fechaFinal.substr(6, 2);
+
+                return [anio_valor, mes_valor, dia_valor].join(separador);
+            }
+
+            $("#btnBuscarHistorial").click(function () {
+
+                let fechaInicio = $('#idfechaIniHist').val();
+                let fechaFin = $('#idfechaFinHist').val();
+
+
+                if (fechaInicio == null ||
+                    fechaFin == null ||
+                    typeof (fechaInicio) == "undefined" ||
+                    typeof (fechaFin) == "undefined" ||
+                    fechaInicio.trim() == "" ||
+                    fechaFin.trim() == "") {
+
+                    Swal.fire('Seleccione la fecha, por favor');
+                }
+                else {
+                    var datos =
+                    {
+                        'fechaInicio': FormatoFecha(fechaInicio,""),
+                        'fechaFin': FormatoFecha(fechaFin,""),
+                        'usuario': USUARIO
+                    }
+
+
+                    $.ajax({
+                        type: "GET",
+                        url: '/finanzas/RG_HistorialRendiciones',
+                        contentType: "application/json; charset=utf-8",
+                        data: datos,
+                        dataType: "json",
+                        success: function (data) {
+                            console.log(data.lista);
+                            let tabla = $("#tblHistorial").DataTable();
+
+                            tabla.destroy();
+                            var tr = "";
+                            var tr_btn_pdf = "";
+
+                            data.lista.forEach((obj) => {
+
+                                tr += "<tr> "
+                                    + " <td></td>"
+                                    + " <td> " + obj.tipoSustento + "</td>"
+                                    + " <td> " + obj.fecha + "</td>"
+                                    + " <td> " + obj.fechaFinanza + "</td>"
+                                    + " <td> " + obj.fechaRend + "</td>"
+                                    + " <td> " + obj.codigo + "</td>"
+                                    + " <td> " + obj.usuSolicitante + "</td>"
+                                    + " <td> " + obj.colaborador + "</td>"
+                                    + " <td> " + obj.ceco + "</td>"
+                                    + " <td> " + obj.observacion + "</td>"
+                                    + " <td> " + obj.estado + "</td>"
+                                    + " <td> " + obj.tipo + "</td>"
+                                    + " <td> " + obj.nivelAprobacion + "</td>"
+                                    + " <td> " + obj.moneda + "</td>"
+                                    + " <td> " + formatoNumero(obj.totalsolicitud) + "</td>"
+                                    + " <td> " + formatoNumero(obj.totalentregado) + "</td>"
+                                    + " <td> " + formatoNumero(obj.totalrendido) + "</td>"
+                                    + " <td> <button data-idsolicitud=" + obj.idSolicitud + " class='btn btn-sm btn-primary cDetalleComprobante'><i class='fas fa-eye'></i> Comprobantes</button> </td>"
+
+                                    // Formato de Liquidacion
+                                    if (obj.countCpte > 0) {
+
+                                        tr_btn_pdf = " <td class='text-center'>"
+                                            + " <button data-idsolicitud = " + obj.idSolicitud + " data-toggle='collapse' class='btn btn-sm btn-danger cImprimirPDF'>Liquidación Gastos<i class='fas fa-file-pdf'></i></button>"
+                                            + " </td> ";
+                                    }
+                                    else {
+                                        tr_btn_pdf = " <td class='text-center'></td> ";
+                                    }
+
+                                tr = tr + tr_btn_pdf + "</tr>";
+
+                            });
+
+                            $("#tblHistorialContent").html(tr);
+
+
+                            $("#tblHistorial").DataTable(
+                                {
+                                    dom: 'Bfrtip',
+                                    buttons: [
+                                        'excel'
+                                    ],
+                                    "scrollX": true,
+                                    "bSort": true,
+                                    scrollY: '50vh',
+                                    scrollCollapse: true,
+                                    paging: true,
+                                    'language': { 'url': '/libs/datatables/spanish.json' },
+                                    lengthMenu: [[10, 20, 30, -1], [10, 20, 30, 'Todos']]
+                                });
+
+
+                            //$('#tblHistorial').DataTable().columns.adjust().draw();
+                        },
+                        failure: function () {
+                            console.error('error al cargar los periodos');
+                        }
+                    });
+
+
+                }
+
+            });
+
+
+            function formatoNumero(x) {
+                x = x.toFixed(2);
+                return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            }
+
+
+
+            $("#tblHistorialContent").on("click", ".cDetalleComprobante", function () {
+
+                let idsolicitud = $(this).attr("data-idsolicitud");
+
+                $.ajax({
+                    url: "/finanzas/RG_DetalleComprobantes",
+                    type: "GET",
+                    data: { idSolicitud: idsolicitud },
+                    dataType: "json",
+                    success: function (resultado) {
+
+
+                        let tabla = $("#tblCptesRegistrados").DataTable();
+
+                        tabla.destroy();
+                        var tr = "";
+                        var tr_btn_pdf = "";
+
+
+                        resultado.lista.forEach((obj) => {
+
+                            tr += "<tr> "
+                                + " <td> " + obj.numserie + "</td>"
+                                + " <td> " + obj.rs + "</td>"
+                                + " <td> " + obj.simbolo + " " + formatoNumero(obj.total) + "</td>";
+
+
+                            if (obj.idTipoComp == 3 || obj.idTipoComp == 4) {
+                                tr_btn_pdf =
+                                    " <td class='text-center'>"
+                                + "     <button data-idtipocomp = " + obj.idTipoComp + " data-idrendcompte=" + obj.idRendCompte + " data-toggle='collapse' class='btn btn-sm btn-danger cImprimirPDF' " + (obj.idRendCompte == 0 ? " disabled " : " ") + "><i class='fas fa-file-pdf'></i></button>"
+                                    + " </td> ";
+                            }
+                            else {
+                                tr_btn_pdf = " <td class='text-center'></td> ";
+                            }
+
+                            tr = tr + tr_btn_pdf + "</tr>";
+                        });
+
+
+                        $("#tblCptesRegistradosCont").html(tr);
+
+                        $("#tblCptesRegistrados").DataTable(
+                            {
+                                searching: false,
+                                paging: false,
+                                info: false,
+                                'language': { 'url': '/libs/datatables/spanish.json' }
+                            });
+
+
+                        $("#comprobantesModal").modal("show");
+
+
+                    },
+                    error: function (xhr, ajaxOptions, thrownError) {
+                    }
+                });
+            });
+
+
+            $("#tblCptesRegistradosCont").on("click", ".cImprimirPDF", function () {
+
+                let idTipoComp = $(this).attr("data-idtipocomp");
+                let idRendCompte = $(this).attr("data-idrendcompte");
+
+                $.ajax({
+                    url: "@Url.Action("RG_BuscarIdCompte", "Finanzas")",
+                    data: {
+                        idTipoComp: idTipoComp,
+                        idRendCompte: idRendCompte
+                    },
+                    success: function (data) {
+
+                        if (idTipoComp == 3) {
+                            // Planilla de Movilidad
+                            window.location.href = '@Url.Action("MapearReportePLPDF", "Finanzas")'
+                        }
+                        else if (idTipoComp == 4) {
+                            // Declaración Jurada
+                            window.location.href = '@Url.Action("MapearReporteDJPDF", "Finanzas")'
+                        }
+
+                    }
+                });
+
+            });
+
+
+
+            $("#tblHistorialContent").on("click", ".cImprimirPDF", function () {
+
+                let idsolicitud = $(this).attr("data-idsolicitud");
+
+                $.ajax({
+                    url: "@Url.Action("RG_BuscarIdSolicitud", "Finanzas")",
+                    data: {
+                        idSolicitud: idsolicitud,
+                    },
+                    success: function (data) {
+                        window.location.href = '@Url.Action("MapearReporteCXSPDF", "Finanzas")'
+                    }
+                });
+
+            });
+
+
+            // Pendientes de Rendicion.
+
+            $("#pbtnBuscar").click(function () {
+
+                let fechaInicio = $('#pidfechaIni').val();
+                let fechaFin = $('#pidfechaFin').val();
+
+
+                if (fechaInicio == null ||
+                    fechaFin == null ||
+                    typeof (fechaInicio) == "undefined" ||
+                    typeof (fechaFin) == "undefined" ||
+                    fechaInicio.trim() == "" ||
+                    fechaFin.trim() == "") {
+
+                    Swal.fire('Seleccione la fecha, por favor');
+                }
+                else {
+                    var datos =
+                    {
+                        'fechaInicio': FormatoFecha(fechaInicio,""),
+                        'fechaFin': FormatoFecha(fechaFin,""),
+                        'nivelInterfaz': pNIVEL_INTERFAZ
+                    }
+
+
+                    $.ajax({
+                        type: "GET",
+                        url: '/finanzas/RG_ListaPendienteCierre',
+                        contentType: "application/json; charset=utf-8",
+                        data: datos,
+                        dataType: "json",
+                        success: function (data) {
+
+                            let tabla = $("#ptblListadoPrincipal").DataTable();
+
+                            tabla.destroy();
+                            var tr = "";
+
+                            data.lista.forEach((obj) => {
+
+                                tr += "<tr> "
+                                    + " <td></td>"
+                                    + " <td class='ocultar-columna'>" + obj.idSolicitud + "</td>"
+                                    + " <td> " + obj.fecha + "</td>"
+                                    + " <td> " + obj.codigo + "</td>"
+                                    + " <td> " + obj.tipo + "</td>"
+                                    + " <td> " + obj.observacion + "</td>"
+
+                                    + " <td> " + obj.colaborador + "</td>"
+                                    + " <td> " + obj.ceco + "</td>"
+                                    + " <td> " + obj.estado + "</td>"
+
+                                    + " <td> " + obj.moneda + "</td>"
+
+                                    + " <td> " + formatoNumero(obj.totalsolicitado) + "</td>"
+                                    + " <td> " + formatoNumero(obj.totalentregado) + "</td>"
+                                    + " <td> " + formatoNumero(obj.totalrendido) + "</td>"
+
+                                    //+ " <td class='text-center'>"
+                                    //+ "     <button data-idtipocomp = " + obj.idTipoComp + "  data-idrendcompte=" + obj.idRendCompte + " data-toggle='collapse' class='btn btn-sm btn-danger cImprimirPDF' " + ((obj.idRendCompte > 0 && (obj.idTipoComp == 3 || obj.idTipoComp == 4)) ? " " : " disabled ") + "><i class='fas fa-file-pdf'></i></button>"
+                                    //+ "</td>"
+
+                                    + " <td class='text-center'>"
+                                    + "     <button data-idsolicitud='" + obj.idSolicitud + "' class='btn btn-sm btn-primary cDetalle '><i class='fas fa-eye'></i></button>"
+                                    + "</td>"
+                                    + "</tr>";
+
+                            });
+
+                            $("#ptblListadoPrincipalContent").html(tr);
+
+
+                            $("#ptblListadoPrincipal").DataTable(
+                                {
+                                    dom: 'Bfrtip',
+                                    buttons: [
+                                        'excel'
+                                    ],
+                                    "scrollX": true,
+                                    "bSort": true,
+                                    scrollY: '50vh',
+                                    scrollCollapse: true,
+                                    paging: true,
+                                    'language': { 'url': '/libs/datatables/spanish.json' },
+                                    lengthMenu: [[5, 10, 20, -1], [5, 10, 20, 'Todos']]
+                                });
+
+
+                            $('#ptblListadoPrincipal').DataTable().columns.adjust().draw();
+                        },
+                        failure: function () {
+                            console.error('error al cargar los periodos');
+                        }
+                    });
+
+
+                }
+
+            });
+
+
+            $("#ptblListadoPrincipalContent").on('click', '.cDetalle', function () {
+
+                let idsolcitud = $(this).attr("data-idsolicitud");
+
+                $.ajax({
+                    type: "GET",
+                    url: '/finanzas/RG_Pendientes30Det',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    data: { idSolicitud: idsolcitud },
+                    success: function (data) {
+
+                        if (data.isRedirect) {
+                            window.location.href = data.redirectUrl;
+                        }
+                        else {
+
+                            $("#pidmdfecha").text(data.entidad.fecha);
+                            //$("#idmdcodigo").text(data.entidad.codigo);
+                            $("#pidmdobs").text(data.entidad.observacion);
+                            $("#pidmdcolaborador").text(data.entidad.colaborador);
+                            $("#idmdestado").text(data.entidad.estado);
+                            $("#pidmdmoneda").text(data.entidad.moneda);
+                            $("#pidmdtotal").text(formatoNumero(data.entidad.total));
+                            $("#pidmdususol").text(data.entidad.usuSolicitante);
+                            $("#pidmdceco").text(data.entidad.ceco);
+
+                            let tabla = $("#ptblDetallePendiente").DataTable();
+
+                            tabla.destroy();
+                            var tr = "";
+
+                            data.entidad.listaDetalle.forEach((obj) => {
+
+                                tr += "<tr>"
+                                    + " <td></td>"
+                                    + " <td class='ocultar-columna'> " + obj.idSolicitud + "</td>"
+                                    + " <td> " + obj.fecha + "</td>"
+                                    + " <td> " + obj.estadoDet + "</td>"
+                                    + " <td> " + obj.tipo + "</td>"
+                                    + " <td> " + obj.conceptoCab + "</td>"
+                                    + " <td> " + obj.conceptoDet + "</td>"
+                                    + " <td> " + obj.cantDias + "</td>"
+                                    + " <td> " + formatoNumero(obj.valor) + "</td>"
+                                    + " <td> " + obj.simbolo + " " + formatoNumero(obj.total) + "</td>"
+                                    //+ " <td style='with:30px'>"
+                                    //+ "     <input type='number' id='cin" + obj.idSolicitud.toString() + "" + obj.secuencia.toString() + "' class='monto-entregar form-control form-control-sm' data-valor='" + obj.total + "' data-idsolicitud='" + obj.idSolicitud + "' data-secuencia ='" + obj.secuencia + "' value='" + obj.total + "'></input></td>"
+                                    //+ " <td style='with:30px'>" + "<span id='idsaldo" + obj.idSolicitud.toString() + "" + obj.secuencia.toString() + "'>0</span> </td>"
+                                    //+ " <td style='with:60px'>"
+                                    //+ "     <span data-btnidsolicitud='" + obj.idSolicitud + "'  data-btnsecuencia ='" + obj.secuencia + "' style='cursor: pointer' class='btn btn-sm btn-success ml-1' id='btnAprobarSolItem'><i class='fas fa-check'></i></span>"
+                                    //+ "     <span data-btnidsolicitud='" + obj.idSolicitud + "'  data-btnsecuencia ='" + obj.secuencia + "' style='cursor: pointer' class='btn btn-sm btn-danger ml-1' id='btnRechazarSolItem'><i class='fas fa-ban'></i></span>"
+                                    //+ " </td>"
+                                    + "</tr>";
+                            });
+
+                            $("#ptblDetallePendienteContent").html(tr);
+
+                            $("#ptblDetallePendiente").DataTable(
+                                {
+                                    dom: 'Bfrtip',
+                                    buttons: [
+                                        'excel'
+                                    ],
+                                    "scrollX": true,
+                                    "bSort": true,
+                                    scrollY: '50vh',
+                                    scrollCollapse: true,
+                                    paging: true,
+                                    'language': { 'url': '/libs/datatables/spanish.json' },
+                                    lengthMenu: [[5, 10, 20, -1], [5, 10, 20, 'Todos']]
+                                });
+
+
+                            $('#pmodalDetallePendiente').modal('show');
+                        }
+                    },
+                    failure: function () {
+                        console.error('error al cargar los periodos');
+
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error al mostrar datos',
+                            text: 'Textile Sourcing Company',
+                            showConfirmButton: false,
+                            timer: 2500,
+                        });
+
+                    }
+                });
+
+            });
+
+
+
+        });
+
+
+
+    </script>
+
+}
+

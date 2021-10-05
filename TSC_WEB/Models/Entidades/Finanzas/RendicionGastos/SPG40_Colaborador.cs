@@ -11,5 +11,6 @@ namespace TSC_WEB.Models.Entidades.Finanzas.RendicionGastos
         public string colaborador { get; set; }
         public string ctpava { get; set; }
         public string canvar { get; set; }
+        public int codceco { get; set; }
     }
 }

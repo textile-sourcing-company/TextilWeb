@@ -6,54 +6,83 @@
 
 <div id="solgasapf" class="container-fluid">
 
-    <div class="tab-content card pt-1" id="myTabContentJust">
 
-        <div class="row m-2">
+    <ul class="nav nav-tabs nav-justified md-tabs indigo" id="myTabJust" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" id="pendientes-tab-just" data-toggle="tab" href="#pendientes-just" role="tab" aria-controls="pendientes-just"
+               aria-selected="true">Pendientes</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="aprobados-tab-just" data-toggle="tab" href="#aprobadas-just" role="tab" aria-controls="aprobadas-just"
+               aria-selected="false">Aprobados</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="rechazadas-tab-just" data-toggle="tab" href="#rechazadas-just" role="tab" aria-controls="rechazadas-just"
+               aria-selected="false">Rechazados</a>
+        </li>
+    </ul>
 
-            <div class="col-2 p-1">
-                <label for="dtFechaInicio">Fecha Desde: </label>
-                <input class="form-control form-control-sm" type="date" id="dtFechaInicio">
+
+
+
+    <div class="tab-content card pt-1" id="TabContenidos">
+
+        <div class="tab-pane fade show active" id="pendientes-just" role="tabpanel" aria-labelledby="pendientes-tab-just">
+
+            <div class="row m-2">
+                <div class="col-2 p-1">
+                    <label for="dtFechaInicio">Fecha Desde: </label>
+                    <input class="form-control form-control-sm" type="date" id="dtFechaInicio">
+                </div>
+
+                <div class="col-2 p-1">
+                    <label for="dtFechaFin">Fecha Hasta: </label>
+                    <input class="form-control form-control-sm" type="date" id="dtFechaFin">
+                </div>
+
+                <div class="col-2 p-1">
+                    <label for="txtCodigo">Código de Solicitud</label>
+                    <input class="form-control form-control-sm" type="text" id="txtCodigo" placeholder="" maxlength="10">
+                </div>
+
+                <div class="col-2 p-1 form-group">
+                    <div> &nbsp; &nbsp;</div>
+                    <button id="btnBuscar" type="button" class="btn btn-primary btn-sm pt-2">Buscar</button>
+                </div>
             </div>
 
-            <div class="col-2 p-1">
-                <label for="dtFechaFin">Fecha Hasta: </label>
-                <input class="form-control form-control-sm" type="date" id="dtFechaFin">
-            </div>
-
-            <div class="col-2 p-1">
-                <label for="txtCodigo">Código de Solicitud</label>
-                <input class="form-control form-control-sm" type="text" id="txtCodigo" placeholder="" maxlength="10">
-            </div>
-
-            <div class="col-2 p-1 form-group">
-                <div> &nbsp; &nbsp;</div>
-                <button id="btnBuscar" type="button" class="btn btn-primary btn-sm pt-2">Buscar</button>
+            <div class="card m-2">
+                <table class="table table-sm table-bordered table-hover display nowrap" id="tblPendientes">
+                    <thead class="thead-light">
+                        <tr>
+                            <th class="ocultar-columna">idSolicitud</th>
+                            <th>Fecha</th>
+                            <th>Codigo</th>
+                            <th>Glosa / Desc. Solicitud</th>
+                            <th class="">Estado</th>
+                            <th class="">Tipo</th>
+                            <th>Nivel Aprobacion</th>
+                            <th class="">Moneda</th>
+                            <th>Valor</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tblPendientesContent"></tbody>
+                </table>
             </div>
 
         </div>
 
+        <div class="tab-pane fade" id="aprobadas-just" role="tabpanel" aria-labelledby="aprobadas-tab-just">
 
-        <div class="card m-2">
-            <table class="table table-sm table-bordered table-hover display nowrap" id="tblPendientes">
-                <thead class="thead-light">
-                    <tr>
-                        <th class="ocultar-columna">idSolicitud</th>
-                        <th>Fecha</th>
-                        <th>Codigo</th>
-                        <th>Glosa / Desc. Solicitud</th>
-                        <th class="">Estado</th>
-                        <th class="">Tipo</th>
-                        <th>Nivel Aprobacion</th>
-                        <th class="">Moneda</th>
-                        <th>Valor</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody id="tblPendientesContent"></tbody>
-            </table>
+        </div>
+        <div class="tab-pane fade" id="rechazadas-just" role="tabpanel" aria-labelledby="rechazadas-tab-just">
+
         </div>
 
     </div>
+
+
 
 
     <div class="modal fade" id="modalDetalleSol" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">

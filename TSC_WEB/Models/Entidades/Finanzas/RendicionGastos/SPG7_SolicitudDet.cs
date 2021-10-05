@@ -17,5 +17,6 @@ namespace TSC_WEB.Models.Entidades.Finanzas.RendicionGastos
         public string conceptoCab { get; set; }
         public decimal valor { get; set; }
         public string tipo { get; set; }
+        public string disabledhtml { get; set; }
     }
 }

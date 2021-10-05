@@ -18,5 +18,7 @@ namespace TSC_WEB.Models.Entidades.Finanzas.RendicionGastos
         public decimal total { get; set; }
         public string usuSolicitante { get; set; }
         public string htmlDisabledBtn { get; set; }
+        public int idTipoMod { get; set; }
+        public string colaborador { get; set; }
     }
 }

@@ -1,4 +1,4 @@
-﻿function ArmarDataTable(tabla,exportar = false,minimo = true,scrool = false) {
+﻿function ArmarDataTable(tabla, exportar = false, minimo = true, scrool = false) {
 
     if (!scrool) {
         var objeto = {};
@@ -39,12 +39,12 @@
             });
     }
 
-    
+
 
 }
 
 // SET DATATABLE SIMPLE
-function setDataTableSimple(tabla,scroolx = false,dato = false,exportar = false) {
+function setDataTableSimple(tabla, scroolx = false, dato = false, exportar = false) {
     var tbl = $(`#table${tabla}`).DataTable();
     tbl.destroy();
 
@@ -73,7 +73,7 @@ function setDataTableSimple(tabla,scroolx = false,dato = false,exportar = false)
     }
 
     $(`#table${tabla}`).DataTable(objeto);
-    
+
 
 
 }

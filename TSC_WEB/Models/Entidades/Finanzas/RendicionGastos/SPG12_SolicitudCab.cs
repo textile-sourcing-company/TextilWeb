@@ -17,6 +17,7 @@ namespace TSC_WEB.Models.Entidades.Finanzas.RendicionGastos
         public decimal total { get; set; }
         public string usuSolicitante { get; set; }
         public string colaborador { get; set; }
+        public string tipo { get; set; }
 
         public List<SPG13_SolicitudDet> listaDetalle { get; set; }
     }

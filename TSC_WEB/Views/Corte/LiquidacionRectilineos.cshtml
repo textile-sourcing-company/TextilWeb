@@ -403,7 +403,7 @@
                 <div class="card-tools">
 
                     @if (Model.FichaCabecera.estado == "PROCESO" || Model.FichaCabecera.estado == "APERTURADO")
-                    { 
+                    {
                         <button type="submit" class="btn btn-sm btn-primary">
                             <i class="fas fa-save"></i>
                             Guardar
@@ -657,7 +657,7 @@
 
     }
 
-   //SEGUNDAS
+    //SEGUNDAS
 
     <form action="" class="card card-primary card-outline" id="frmsegundas" autocomplete="off">
 
@@ -908,7 +908,7 @@
 
         let formularioactivo = null;
 
-        
+
 
         frmbusqueda.addEventListener('submit', (e) => {
             MostrarCarga("Cargando...");
@@ -1329,7 +1329,7 @@
                     .catch(error => {
                         console.log(error);
                         Advertir("Ocurrio un error en el registro");
-                })
+                    })
 
             });
 

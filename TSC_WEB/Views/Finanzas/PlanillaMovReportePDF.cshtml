@@ -1,0 +1,333 @@
+﻿@model TSC_WEB.Models.Entidades.Finanzas.RendicionGastos.ReportePMPDFViewModel
+@{
+    Layout = null;
+}
+
+<div class="rpte-pm">
+
+    <div class="container-fluid">
+
+        <div class="card">
+
+            <div class="primerDIV" style="border: 1px solid #000000; padding: 8px">
+
+                <div class="col-xs-12">
+                    <img src="~/Public/logooriginal.png" alt="Logo" height="50" />
+                </div>
+
+
+                <table style="width: 100%">
+                    <thead>
+                        <tr>
+                            <th style="text-align: center; background-color: #D5D8DC; width: 100%" colspan="4">Planilla de Gastos de Movilidad</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td colspan="1"> Empresa: </td>
+                            <td colspan="3" style="text-align: left; border-bottom: 1px solid #000000"> @Model.planillaMovilidadCab.nombreEmpresa </td>
+                        </tr>
+                        <tr>
+                            <td colspan="1"> RUC: </td>
+                            <td colspan="3" style="text-align: left; border-bottom: 1px solid #000000"> @Model.planillaMovilidadCab.rucEmpresa </td>
+                        </tr>
+                        <tr>
+                            <td colspan="1"> Planilla N°: </td>
+                            <td colspan="3" style="text-align: left; border-bottom: 1px solid #000000"> @Model.planillaMovilidadCab.serieNumero </td>
+                        </tr>
+                        <tr>
+                            <td colspan="1"> Periodo: </td>
+                            <td colspan="3" style="text-align: left; border-bottom: 1px solid #000000"> @Model.planillaMovilidadCab.periodo </td>
+                        </tr>
+                        <tr>
+                            <td colspan="1"> Fecha de emisión: </td>
+                            <td colspan="3" style="text-align: left; border-bottom: 1px solid #000000"> @Model.planillaMovilidadCab.fechaEmision </td>
+                        </tr>
+
+                    </tbody>
+                </table>
+
+
+
+                <table style="width: 100%; margin-top: 15px;">
+                    <thead>
+                        <tr>
+                            <th style="text-align: center; background-color: #D5D8DC; width: 100%" colspan="4"> Datos del Trabajador</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td colspan="1"> Apellidos y Nombres: </td>
+                            <td colspan="3" style="text-align: left; border-bottom: 1px solid #000000"> @Model.planillaMovilidadCab.rs </td>
+                        </tr>
+                        <tr>
+                            <td colspan="1"> DNI </td>
+                            <td colspan="3" style="text-align: left; border-bottom: 1px solid #000000"> @Model.planillaMovilidadCab.rucDNI </td>
+                        </tr>
+                        <tr>
+                            <td> Centro de costos: </td>
+                            <td style="border-bottom: 1px solid #000000"> @Model.planillaMovilidadCab.ceco </td>
+                            <td> Código de CeCo </td>
+                            <td style="border-bottom: 1px solid #000000"> @Model.planillaMovilidadCab.codceco </td>
+                        </tr>
+                        <tr>
+                            <td colspan="1"> Cargo </td>
+                            <td colspan="3" style="text-align: left; border-bottom: 1px solid #000000"> @Model.planillaMovilidadCab.cargo </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+
+
+                <table style="width: 100%; margin-top: 10px; border: 1px solid #000000">
+                    <thead>
+                        <tr>
+                            <th style="text-align: center; background-color: #D5D8DC;"> Fecha (dd/mm/aaaa) </th>
+                            <th style="text-align: center; background-color: #D5D8DC;"> Motivo </th>
+                            <th style="text-align: center; background-color: #D5D8DC;"> Destino </th>
+                            <th style="text-align: center; background-color: #D5D8DC;"> Importe S/ </th>
+                        </tr>
+                    </thead>
+                    <tbody style="border: 1px solid #000000; margin: 0; padding: 0;">
+                        @foreach (var item in Model.planillaMovilidadDet)
+                        {
+                            <tr>
+                                <td style="text-align: left;"> @item.fecha </td>
+                                <td style="text-align: left;"> @item.detalle2 </td>
+                                <td style="text-align: left;"> @item.detalle1 </td>
+                                <td style="text-align: right;">  @Math.Round(item.valorunit, 2) </td>
+                            </tr>
+                        }
+                    </tbody>
+                    <tfoot>
+                        <tr style="border: 1px solid #000000; margin: 0; padding: 0;">
+                            <td></td>
+                            <td></td>
+                            <td style="font-size: 16px; font-weight: bold; text-align: right;">TOTAL</td>
+                            <td style="font-size: 16px; font-weight: bold; text-align: right;">@Model.planillaMovilidadCab.totalCmpbnte</td>
+                        </tr>
+                    </tfoot>
+                </table>
+
+
+                <div style="width: 100%; margin-top: 15px; margin-bottom: 10px; display: block;">
+
+                    <div class="item-firma1" style="display: inline-block; width: 49%; margin: auto; text-align: center;">
+                        <table style="width: 100%; margin-top: 10px; margin-bottom: 10px;">
+                            <thead style="border: 0;">
+                                <tr style="border: 0;">
+                                    <th style="border: 0;">
+                                        <div class="firma-formato-liq">
+                                            <img src="@Model.planillaMovilidadCab.firma_usuario" alt="firma usuario" width="150" height="110" />
+                                        </div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr style="text-align: center;">
+                                    <td style="border-top: 1px solid #000000; text-align: center;"> Firma del Trabajador </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="item-firma2" style="display: inline-block; width: 49%; margin: auto; text-align: center">
+                        <table style="width: 100%; margin-top: 10px; margin-bottom: 10px;">
+                            <thead style="border: 0;">
+                                <tr style="border: 0;">
+                                    <th style="border: 0;">
+                                        <div class="firma-formato-liq" style="text-align: center;">
+                                            <img src="@Model.planillaMovilidadCab.firma_jefe" alt="firma jefe" width="150" height="110" />
+                                        </div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr style="text-align: center;">
+                                    <td style="border-top: 1px solid #000000; text-align: center;"> Jefe inmediato superior </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+
+
+
+                <div class="row" style="width: 100%; border: 1px solid #000000; padding: 2px; font-size: 13px;font-style: italic;">
+                    <div class="col-xs-12">
+                        Base Legal:  Inciso a1) del artículo 37 del TUO del IR e inciso v) del artículo 21 del reglamento del TUO del IR
+                    </div>
+                    <div class="col-xs-12">
+                        Nota: la falta de cualquier campo descrito en la Planilla de gasto de Movilidad invalidad la sustentacion de gasto del mismo por lo que es obligatorio completar todos los campos.
+                    </div>
+                </div>
+
+            </div>
+
+
+
+
+            <div class="segundoDIV" style="border: 1px solid #000000; padding: 8px; display: block; page-break-before: always;">
+
+                <div class="col-xs-12">
+                    <img src="~/Public/logooriginal.png" alt="Logo" height="50" />
+                </div>
+
+
+                <table style="width: 100%">
+                    <thead>
+                        <tr>
+                            <th style="text-align: center; background-color: #D5D8DC; width: 100%" colspan="4">Planilla de Gastos de Movilidad</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td colspan="1"> Empresa: </td>
+                            <td colspan="3" style="text-align: left; border-bottom: 1px solid #000000"> @Model.planillaMovilidadCab.nombreEmpresa </td>
+                        </tr>
+                        <tr>
+                            <td colspan="1"> RUC: </td>
+                            <td colspan="3" style="text-align: left; border-bottom: 1px solid #000000"> @Model.planillaMovilidadCab.rucEmpresa </td>
+                        </tr>
+                        <tr>
+                            <td colspan="1"> Planilla N°: </td>
+                            <td colspan="3" style="text-align: left; border-bottom: 1px solid #000000"> @Model.planillaMovilidadCab.serieNumero </td>
+                        </tr>
+                        <tr>
+                            <td colspan="1"> Periodo: </td>
+                            <td colspan="3" style="text-align: left; border-bottom: 1px solid #000000"> @Model.planillaMovilidadCab.periodo </td>
+                        </tr>
+                        <tr>
+                            <td colspan="1"> Fecha de emisión: </td>
+                            <td colspan="3" style="text-align: left; border-bottom: 1px solid #000000"> @Model.planillaMovilidadCab.fechaEmision </td>
+                        </tr>
+
+                    </tbody>
+                </table>
+
+
+
+                <table style="width: 100%; margin-top: 15px;">
+                    <thead>
+                        <tr>
+                            <th style="text-align: center; background-color: #D5D8DC; width: 100%" colspan="4"> Datos del Trabajador</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td colspan="1"> Apellidos y Nombres: </td>
+                            <td colspan="3" style="text-align: left; border-bottom: 1px solid #000000"> @Model.planillaMovilidadCab.rs </td>
+                        </tr>
+                        <tr>
+                            <td colspan="1"> DNI </td>
+                            <td colspan="3" style="text-align: left; border-bottom: 1px solid #000000"> @Model.planillaMovilidadCab.rucDNI </td>
+                        </tr>
+                        <tr>
+                            <td> Centro de costos: </td>
+                            <td style="border-bottom: 1px solid #000000"> @Model.planillaMovilidadCab.ceco </td>
+                            <td> Código de CeCo </td>
+                            <td style="border-bottom: 1px solid #000000"> @Model.planillaMovilidadCab.codceco </td>
+                        </tr>
+                        <tr>
+                            <td colspan="1"> Cargo </td>
+                            <td colspan="3" style="text-align: left; border-bottom: 1px solid #000000"> @Model.planillaMovilidadCab.cargo </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+
+
+                <table style="width: 100%; margin-top: 10px; border: 1px solid #000000">
+                    <thead>
+                        <tr>
+                            <th style="text-align: center; background-color: #D5D8DC;"> Fecha (dd/mm/aaaa) </th>
+                            <th style="text-align: center; background-color: #D5D8DC;"> Motivo </th>
+                            <th style="text-align: center; background-color: #D5D8DC;"> Destino </th>
+                            <th style="text-align: center; background-color: #D5D8DC;"> Importe S/ </th>
+                        </tr>
+                    </thead>
+                    <tbody style="border: 1px solid #000000; margin: 0; padding: 0;">
+                        @foreach (var item in Model.planillaMovilidadDet)
+                        {
+                            <tr>
+                                <td style="text-align: left;"> @item.fecha </td>
+                                <td style="text-align: left;"> @item.detalle2 </td>
+                                <td style="text-align: left;"> @item.detalle1 </td>
+                                <td style="text-align: right;"> @Math.Round(@item.valorunit, 2) </td>
+                            </tr>
+                        }
+                    </tbody>
+                    <tfoot>
+                        <tr style="border: 1px solid #000000; margin: 0; padding: 0;">
+                            <td></td>
+                            <td></td>
+                            <td style="font-size: 16px; font-weight: bold; text-align: right;">TOTAL</td>
+                            <td style="font-size: 16px; font-weight: bold; text-align: right;">@Model.planillaMovilidadCab.totalCmpbnte</td>
+                        </tr>
+                    </tfoot>
+                </table>
+
+
+
+                <div style="width: 100%; margin-top: 15px; margin-bottom: 10px; display: block;">
+
+                    <div class="item-firma1" style="display: inline-block; width: 49%; margin: auto; text-align: center;">
+                        <table style="width: 100%; margin-top: 10px; margin-bottom: 10px;">
+                            <thead style="border: 0;">
+                                <tr style="border: 0;">
+                                    <th style="border: 0;">
+                                        <div class="firma-formato-liq">
+                                            <img src="@Model.planillaMovilidadCab.firma_usuario" alt="firma usuario" width="150" height="110" />
+                                        </div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr style="text-align: center;">
+                                    <td style="border-top: 1px solid #000000; text-align: center;"> Firma del Trabajador </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="item-firma2" style="display: inline-block; width: 49%; margin: auto; text-align: center">
+                        <table style="width: 100%; margin-top: 10px; margin-bottom: 10px;">
+                            <thead style="border: 0;">
+                                <tr style="border: 0;">
+                                    <th style="border: 0;">
+                                        <div class="firma-formato-liq" style="text-align: center;">
+                                            <img src="@Model.planillaMovilidadCab.firma_jefe" alt="firma jefe" width="150" height="110" />
+                                        </div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr style="text-align: center;">
+                                    <td style="border-top: 1px solid #000000; text-align: center;"> Jefe inmediato superior </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+
+                <div class="row" style="width: 100%; border: 1px solid #000000; padding: 2px; font-size: 13px;font-style: italic;">
+                    <div class="col-xs-12">
+                        Base Legal:  Inciso a1) del artículo 37 del TUO del IR e inciso v) del artículo 21 del reglamento del TUO del IR
+                    </div>
+                    <div class="col-xs-12">
+                        Nota: la falta de cualquier campo descrito en la Planilla de gasto de Movilidad invalidad la sustentacion de gasto del mismo por lo que es obligatorio completar todos los campos.
+                    </div>
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+</div>

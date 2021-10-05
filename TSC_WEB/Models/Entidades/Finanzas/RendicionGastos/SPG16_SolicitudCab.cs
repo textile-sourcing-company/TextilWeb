@@ -18,6 +18,8 @@ namespace TSC_WEB.Models.Entidades.Finanzas.RendicionGastos
         public string usuSolicitante { get; set; }
         public string ceco { get; set; }
         public string colaborador { get; set; }
+        public int idEstado { get; set; }
+        public string simbolo { get; set; }
 
         public List<SPG17_SolicitudDet> listaDetalle { get; set; }
 

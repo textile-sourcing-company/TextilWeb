@@ -23,6 +23,7 @@ namespace TSC_WEB.Models.Entidades.Finanzas.RendicionGastos
         public string colaborador { get; set; }
         public string ctpava_bnf { get; set; }
         public string canvar_bnf { get; set; }
+        public string codSede { get; set; }
 
         public IEnumerable<SPG32_DetalleSolicitud> listaDetalle { get; set; }
     }

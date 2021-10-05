@@ -1,0 +1,116 @@
+﻿@{
+    Layout = null;
+}
+
+
+    <div class="row m-2">
+
+
+        <div class="col-12 col-sm-12 col-md-6 col-lg-3 col-xl-3 p-1">
+            <label for="zcbxTipoCpbteCompModal2">Tipo Comprobante:</label>
+            <select class="form-control form-control-sm" id="zcbxTipoCpbteCompModal2" disabled></select>
+        </div>
+        <div class="col-12 col-sm-6 col-md-6 col-lg-3 col-xl-4 p-1">
+            <label for="ztxtEmpresaModal2">Empresa:</label>
+            <input id="ztxtEmpresaModal2" class="form-control form-control-sm" type="text" placeholder="" value="Textile Sourcing Company SAC" disabled>
+        </div>
+        <div class="col-12 col-sm-6 col-md-6 col-lg-2 col-xl-2 p-1">
+            <label for="ztxtFechaModal2">Fecha Emisión:</label>
+            <input class="form-control form-control-sm cfecha" type="date" id="ztxtFechaModal2" disabled>
+        </div>
+        <div class="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-3 p-1 card kpi-modal-monto2">
+            <label for="zkpiMontoSeleecionadoModal2">Monto por Rendir</label>
+            <h6 id="zkpiMontoSeleecionadoModal2">0</h6>
+        </div>
+
+
+
+
+
+        <div class="col-12 col-sm-4 col-md-4 col-lg-4 col-xl-2 p-1">
+            <label for="zcbxPeriodoModal2">Periodo:</label>
+            <select class="form-control form-control-sm" id="zcbxPeriodoModal2"></select>
+        </div>
+        <div class="col-12 col-sm-4 col-md-4 col-lg-4 col-xl-2 p-1">
+            <label for="ztxtNumPlanillaModal2">N° Planilla:</label>
+            <input id="ztxtNumPlanillaModal2" class="form-control form-control-sm" type="text" maxlength="11" disabled>
+        </div>
+        <div class="col-12 col-sm-4 col-md-4 col-lg-4 col-xl-2 p-1">
+            <label for="zcbxMonedaModal2">Moneda:</label>
+            <select class="form-control form-control-sm" id="zcbxMonedaModal2" disabled></select>
+        </div>
+
+
+
+        <div class="col-12 col-sm-4 col-md-4 col-lg-2 col-xl-2 p-1">
+            <label for="ztxtDNIModal2">DNI:</label>
+            <input id="ztxtDNIModal2" class="form-control form-control-sm" type="text" placeholder="Buscar por DNI" maxlength="12" disabled>
+        </div>
+        <div class="col-12 col-sm-8 col-md-8 col-lg-5 col-xl-4 p-1">
+            <label for="ztxtApeNomModal2">Apellidos y Nombres:</label>
+            <input id="ztxtApeNomModal2" class="form-control form-control-sm" type="text" disabled>
+        </div>
+        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 p-1">
+            <label for="ztxtCeCoModal2">Centro de Costo:</label>
+            <input id="ztxtCeCoModal2" class="form-control form-control-sm" type="text" maxlength="200" disabled>
+        </div>
+
+
+
+
+        <div class="card container-fluid mt-2" style="background-color: #F2F4F4">
+            <div class="row">
+                <div class="col-12 col-sm-4 col-md-4 col-lg-2 col-xl-2 p-1">
+                    <label for="ztxtFechaModalDet2">Fecha Traslado:</label>
+                    <input id="ztxtFechaModalDet2" class="form-control form-control-sm cfecha" type="date">
+                </div>
+                <div class="col-12 col-sm-8 col-md-8 col-lg-4 col-xl-4 p-1">
+                    <label for="ztxtOrgDstModal2">Origen / Destino:</label>
+                    <input id="ztxtOrgDstModal2" class="form-control form-control-sm" type="text" maxlength="120" placeholder="">
+                </div>
+                <div class="col-12 col-sm-8 col-md-6 col-lg-3 col-xl-3 p-1">
+                    <label for="ztxtMotivoModal2">Motivo:</label>
+                    <input id="ztxtMotivoModal2" class="form-control form-control-sm" type="text" maxlength="120" placeholder="">
+                </div>
+                <div class="col-12 col-sm-4 col-md-3 col-lg-1 col-xl-1 p-1">
+                    <label for="ztxtImporteModal2">Importe:</label>
+                    <input id="ztxtImporteModal2" class="form-control form-control-sm" type="number" maxlength="120" placeholder="">
+                </div>
+
+                <div class="col-12 col-sm-4 col-md-3 col-lg-2 col-xl-2 p-1">
+                    <label for="zbtnAgregarMotivo2">Agregar:</label>
+                    <button type="button" style="width: 100%" class="btn btn-primary btn-sm" id="zbtnAgregarMotivo2">Agregar</button>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="container-fluid">
+
+            <table class="table table-sm table-bordered table-striped dt-responsive table-hover display nowrap mt-3" id="ztblPlanillaMovilidad" style="width: 100%">
+                <thead class="thead-light">
+                    <tr>
+                        <th class="all"></th>
+                        <th>Fecha Traslado</th>
+                        <th>Origen / Destino:</th>
+                        <th>Motivo</th>
+                        <th class="all">Importe</th>
+                        <th class="all" style="text-align: center">Eliminar</th>
+                    </tr>
+                </thead>
+                <tbody id="ztblPlanillaMovilidadContent"></tbody>
+            </table>
+
+        </div>
+
+
+        <div class="container-fluid">
+            <div class="card row mt-2">
+                <div class="col-12 d-flex flex-row-reverse p-2 pr-1">
+                    <h6 id="zrendsumtotal"></h6>
+                </div>
+            </div>
+        </div>
+
+
+    </div>

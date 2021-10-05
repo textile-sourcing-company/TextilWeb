@@ -14,7 +14,7 @@
     string busqueda = string.Empty;
 
     string[] TIPOS = new[] { "CUELLO", "PUÑO" };
-    string[] ESTADOS = new[] { "PENDIENTE", "APROBADO", "APERTURADO","PROCESO" };
+    string[] ESTADOS = new[] { "PENDIENTE", "APROBADO", "APERTURADO", "PROCESO" };
 
 
 
@@ -189,12 +189,12 @@
 
         const frmreporte = document.getElementById("frmreporte");
 
-       
+
         // ASIGNAMOS ESTADO
         function setEstado(estado = "",idrectilineo){
 
             MostrarCarga();
-            
+
             post("Corte", "setEstadoRectilineos", {
                 estado, idrectilineo
             }, true)

@@ -1,0 +1,180 @@
+﻿@{
+    Layout = null;
+}
+<div class="row m-2">
+
+
+
+    <div class="col-12 p-2 m-1" style="background-color: #F2F4F4; border-radius: 4px">
+
+        <div class="row">
+            <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 p-1">
+                <label for="rcbxConcepCabModal3">Concepto:</label>
+                <select class="form-control form-control-sm" id="rcbxConcepCabModal3"></select>
+            </div>
+
+            <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 p-1">
+                <label for="rcbxConcepDetModal3">Detalle:</label>
+                <select class="form-control form-control-sm" id="rcbxConcepDetModal3"></select>
+            </div>
+
+            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 p-1">
+                <label for="rtxtConsideracionModal3">Consideración:</label>
+                <textarea id="rtxtConsideracionModal3" class="form-control form-control-sm" type="text" disabled></textarea>
+            </div>
+
+            @*<div class="col-2 p-1">
+                    <label for="cbxCantDias">Cantidad Días:</label>
+                    <select class="form-control form-control-sm" id="cbxCantDias"></select>
+                </div>*@
+
+            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 p-1">
+                <label for="rtxtObservacionModal3">Observación:</label>
+                <input id="rtxtObservacionModal3" class="form-control form-control-sm" type="text">
+            </div>
+
+            @*<div class="col-3 p-1">
+                    <div style="color:#000000; font-weight: 600;text-align: center">
+                        <label for="ridMontoSolicitadoModal3">Monto máximo</label>
+                    </div>
+                    <div class="form-control form-control-sm card" style="color:#000000; font-size: 16px; padding: 4px; font-weight: 600;text-align: center">
+                        <span id="ridMontoSolicitadoModal3">0.00</span>
+                    </div>
+                </div>*@
+
+        </div>
+    </div>
+
+
+    <div class="col-12 col-sm-12 col-md-4 col-lg-6 col-xl-6 p-1">
+        <label for="rcbxTipoCpbteCompModal3">Tipo Comprobante:</label>
+        <select class="form-control form-control-sm" id="rcbxTipoCpbteCompModal3" disabled></select>
+    </div>
+    <div class="col-12 col-sm-6 col-md-4 col-lg-6 col-xl-6 p-1">
+        <label for="rtxtEmpresaModal3">Empresa:</label>
+        <input id="rtxtEmpresaModal3" class="form-control form-control-sm" type="text" placeholder="" value="Textile Sourcing Company SAC" disabled>
+    </div>
+    <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3 p-1">
+        <label for="rtxtFechaModal3">Fecha Emisión:</label>
+        <input id="rtxtFechaModal3" class="form-control form-control-sm cfecha" type="date" disabled>
+    </div>
+
+
+    <div class="col-12 col-sm-12 col-md-4 col-lg-3 col-xl-3 p-1">
+        <label for="rcbxPeriodoModal3">Periodo:</label>
+        <select class="form-control form-control-sm" id="rcbxPeriodoModal3"></select>
+    </div>
+    <div class="col-12 col-sm-12 col-md-4 col-lg-3 col-xl-3 p-1">
+        <label for="rtxtCodigoModal3">Codigo Correlativo:</label>
+        <input id="rtxtCodigoModal3" class="form-control form-control-sm" type="text" maxlength="15" disabled>
+    </div>
+    <div class="col-12 col-sm-12 col-md-4 col-lg-3 col-xl-3 p-1">
+        <label for="rcbxMonedaModal3">Moneda:</label>
+        <select class="form-control form-control-sm" id="rcbxMonedaModal3" disabled></select>
+    </div>
+
+
+    <div class="col-12 col-sm-4 col-md-4 col-lg-2 col-xl-2 p-1">
+        <label for="rtxtDNIModal3">DNI:</label>
+        <input id="rtxtDNIModal3" class="form-control form-control-sm" type="text" placeholder="Buscar por DNI" maxlength="12" disabled>
+    </div>
+    <div class="col-12 col-sm-8 col-md-4 col-lg-5 col-xl-5 p-1">
+        <label for="rtxtApeNomModal3">Apellidos y Nombres:</label>
+        <input id="rtxtApeNomModal3" class="form-control form-control-sm" type="text" disabled>
+    </div>
+    <div class="col-12 col-sm-12 col-md-4 col-lg-5 col-xl-5 p-1">
+        <label for="rtxtCeCoModal3">Centro de Costo:</label>
+        <input id="rtxtCeCoModal3" class="form-control form-control-sm" type="text" maxlength="200" disabled>
+    </div>
+
+
+    <div class="col-12 col-sm-6 col-md-6 col-lg-3 col-xl-3 p-1">
+        <label for="rtxtCiudadModal3">Ciudad:</label>
+        <input id="rtxtCiudadModal3" class="form-control form-control-sm" type="text" placeholder="Ingrese el nombre de la Ciudad" maxlength="100">
+    </div>
+    <div class="col-12 col-sm-6 col-md-6 col-lg-3 col-xl-3 p-1">
+        <label for="rtxtPaisModal3">País:</label>
+        <input id="rtxtPaisModal3" class="form-control form-control-sm" placeholder="Ingrese el nombre del País" type="text">
+    </div>
+    <div class="col-12 col-sm-6 col-md-6 col-lg-3 col-xl-3 p-1">
+        <label for="rtxtFechaDesdeModal3">Fecha Desde:</label>
+        <input id="rtxtFechaDesdeModal3" class="form-control form-control-sm cfecha" type="date">
+    </div>
+    <div class="col-12 col-sm-6 col-md-6 col-lg-3 col-xl-3 p-1">
+        <label for="rtxtFechaHastaModal3">Fecha Hasta:</label>
+        <input id="rtxtFechaHastaModal3" class="form-control form-control-sm cfecha" type="date">
+    </div>
+
+
+    <div class="card container-fluid mt-2" style="background-color: #F2F4F4">
+        <h6> 1. Gastos de Alimentación y Relacionados (**)</h6>
+        <div class="row">
+            <div class="col-12 col-sm-12 col-md-12 col-lg-5 col-xl-5 p-1">
+                <label for="rtxtFechaModalDet3_1">Fecha:</label>
+                <input id="rtxtFechaModalDet3_1" class="form-control form-control-sm cfecha" type="date">
+            </div>
+            <div class="col-12 col-sm-12 col-md-12 col-lg-5 col-xl-5 p-1">
+                <label for="rtxtMontoDet3_1">Monto:</label>
+                <input id="rtxtMontoDet3_1" class="form-control form-control-sm" type="number">
+            </div>
+            <div class="col-12 col-sm-4 col-md-4 col-lg-2 col-xl-2 p-1">
+                <label for="rbtnAgregarMotivo3_1">Agregar:</label>
+                <button type="button" style="width: 100%" class="btn btn-primary btn-sm" id="rbtnAgregarMotivo3_1">Agregar</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid">
+
+        <table class="table table-sm table-bordered table-striped dt-responsive table-hover nowrap mt-3" id="rtblDeclaracionJurada3_1" style="width: 100%">
+            <thead class="thead-light">
+                <tr>
+                    <th class="all"></th>
+                    <th>Fecha</th>
+                    <th>Moneda</th>
+                    <th class="all">Monto</th>
+                    <th class="all" style="text-align: center">Eliminar</th>
+                </tr>
+            </thead>
+            <tbody id="rtblDeclaracionJuradaContent3_1"></tbody>
+        </table>
+
+    </div>
+
+    <hr />
+
+    <div class="card container-fluid mt-2" style="background-color: #F2F4F4">
+        <h6> 2. Gastos de Movilidad (**)</h6>
+        <div class="row">
+            <div class="col-12 col-sm-12 col-md-12 col-lg-5 col-xl-5 p-1">
+                <label for="rtxtFechaModalDet3_2">Fecha:</label>
+                <input id="rtxtFechaModalDet3_2" class="form-control form-control-sm cfecha" type="date">
+            </div>
+            <div class="col-12 col-sm-12 col-md-12 col-lg-5 col-xl-5 p-1">
+                <label for="rtxtMontoDet3_2">Monto:</label>
+                <input id="rtxtMontoDet3_2" class="form-control form-control-sm" type="number">
+            </div>
+            <div class="col-12 col-sm-4 col-md-4 col-lg-2 col-xl-2 p-1">
+                <label for="rbtnAgregarMotivo3_2">Agregar:</label>
+                <button type="button" style="width: 100%" class="btn btn-primary btn-sm" id="rbtnAgregarMotivo3_2">Agregar</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid">
+        <table class="table table-sm table-bordered table-striped dt-responsive table-hover nowrap mt-3" id="rtblDeclaracionJurada3_2" style="width: 100%">
+            <thead class="thead-light">
+                <tr>
+                    <th class="all"></th>
+                    <th>Fecha</th>
+                    <th>Moneda</th>
+                    <th class="all">Monto</th>
+                    <th class="all" style="text-align: center">Eliminar</th>
+                </tr>
+            </thead>
+            <tbody id="rtblDeclaracionJuradaContent3_2"></tbody>
+        </table>
+    </div>
+
+
+</div>

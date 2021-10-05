@@ -1,33 +1,59 @@
 ﻿@{
-    ViewBag.Title = "Aprobación de Gastos";
+    ViewBag.Title = "Aprobación de Rendición de Gastos";
     ViewBag.Modulo = "Finanzas";
     Layout = "~/Views/Plantillas/_Layout.cshtml";
 }
 
-<div id="solgasap" class="container-fluid">
+<div id="solgasap" class="container-fluid p-2">
 
-    <div class="card container-fluid p-2">
+    <div class="container-fluid card p-2">
 
-        <div class="container-fluid">
-            <table class="table table-sm table-bordered table-hover display nowrap" id="tblPendientes">
+        <div class="row header-controles">
+            <div class="col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4 p-1">
+                <label for="cbxTipoAprobacion">Tipo Aprobación: </label>
+                <select class="form-control form-control-sm ml-1" id="cbxTipoAprobacion">
+                </select>
+            </div>
+
+            <div class="col-6 col-sm-3 col-md-3 col-lg-2 col-xl-2 p-1 d-flex flex-column-reverse">
+                <button id="btnAprobar" type="button" class="btn btn-success btn-sm"><i class="fas fa-check"></i> Aprobar</button>
+            </div>
+
+            <div class="col-6 col-sm-3 col-md-3 col-lg-2 col-xl-2 p-1 d-flex flex-column-reverse">
+                <button id="btnRechazar" type="button" class="btn btn-danger btn-sm"><i class="fas fa-ban"></i> Rechazar </button>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="card container-fluid">
+
+        <div class="m-2">
+            <table class="table table-sm table-bordered table-hover table-striped dt-responsive display nowrap" id="tblPendientes" style="width: 100%">
                 <thead class="thead-light">
                     <tr>
+                        <th class="all"></th>
                         <th class="ocultar-columna">idSolicitud</th>
-                        <th>Fecha</th>
+                        <th>Fecha Emisión</th>
                         <th>Codigo</th>
+                        <th class="all">Colaborador</th>
                         <th>Glosa / Desc. Solicitud</th>
-                        <th class="">Estado</th>
                         <th class="">Tipo</th>
-                        <th class="">Moneda</th>
-                        <th>Total Solicitud</th>
-                        <th>Total Rendido</th>
-                        <th>Acciones</th>
+
+                        <th class="all">Total Solicitado</th>
+                        <th class="all">Total Entregado</th>
+                        <th class="all">Total Rendido</th>
+                        <th class="all">Exceso / Devolución</th>
+
+                        <th class="all">Acciones</th>
                     </tr>
                 </thead>
                 <tbody id="tblPendientesContent"></tbody>
             </table>
         </div>
     </div>
+
+
 </div>
 
 
@@ -44,67 +70,80 @@
                 <form>
 
                     <div class="row">
-                        <div class="col-2">
+
+                        <div class="col-12 col-sm-6 col-md-3 col-lg-2 col-xl-2 p-1">
                             <label for="idmdcodigo">Codigo:</label>
                             <span type="text" class="form-control form-control-sm" id="idmdcodigo"></span>
                         </div>
-                        <div class="col-2">
-                            <label for="idmdfecha">Fecha:</label>
-                            <span type="text" class="form-control form-control-sm" id="idmdfecha"></span>
-                        </div>
-                        <div class="col-3">
+
+                        <div class="col-12 col-sm-6 col-md-3 col-lg-3 col-xl-3 p-1">
                             <label for="idmdestado">Estado:</label>
                             <span type="text" class="form-control form-control-sm" id="idmdestado"></span>
                         </div>
-                        <div class="col-5">
-                            <label for="idmdceco">Centro de Costo:</label>
-                            <span type="text" class="form-control form-control-sm" id="idmdceco"></span>
+
+                        <div class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4 p-1">
+                            <label for="idmdususol">Usuario Solicitante:</label>
+                            <span type="text" class="form-control form-control-sm" id="idmdususol"></span>
                         </div>
+
+                        <div class="col-12 col-sm-12 col-md-12 col-lg-3 col-xl-3 p-1">
+                            <label for="idmdfaplicacion">Fecha Aplicación:</label>
+                            <span type="text" class="form-control form-control-sm" id="idmdfaplicacion"></span>
+                        </div>
+
                     </div>
 
+
+
                     <div class="row mt-2 mb-2">
-                        <div class="col-10">
-                            <label for="idmdobs">Observaciones:</label>
+                        <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 p-1">
+                            <label for="idmdcolaborador">Colaborador:</label>
+                            <span class="form-control form-control-sm" id="idmdcolaborador"></span>
+                        </div>
+                        <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 p-1">
+                            <label for="idmdobs">Glosa:</label>
                             <span class="form-control form-control-sm" id="idmdobs"></span>
                         </div>
-                        <div class="col-2">
-                            <label for="idmdmoneda">Moneda:</label>
-                            <span class="form-control form-control-sm" id="idmdmoneda"></span>
-                        </div>
+
+
+                        @*<div class="col-12 col-sm-1 col-md-4 col-lg-4 col-xl-2 p-1">
+                                <label for="idmdmoneda">Moneda:</label>
+                                <span class="form-control form-control-sm" id="idmdmoneda"></span>
+                            </div>*@
                     </div>
 
                     <div class="mt-1 mb-1">
                         <hr />
                     </div>
 
-                    <table class="table table-sm table-bordered table-hover display nowrap" id="tblDetallePend" style="width: 100%">
-                        <thead class="thead-light">
-                            <tr>
-                                <th>Tipo</th>
-                                <th>Concepto</th>
-                                <th>Moneda</th>
-                                <th>Total Solicitado</th>
-                                <th>Total Entregado</th>
-                                <th>Total Rendido</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tblDetallePendContent"></tbody>
-                    </table>
+                    <div class="container-fluid" style="width: 100%;">
+                        <table class="table table-sm nowrap" id="tblDetallePend" style="width:100%;">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th style='min-width: 120px;'>Concepto</th>
+                                    <th style='min-width: 130px;'>Detalle Solicitud</th>
+                                    <th>Cant. Dias</th>
+
+                                    <th>Total Solicitado</th>
+                                    <th>Total Entregado</th>
+                                    <th>Total Rendido</th>
+
+                                    <th>Exceso / Devolucion</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tblDetallePendContent"></tbody>
+                        </table>
+                    </div>
 
                 </form>
 
             </div>
             <div class="modal-footer">
-                <button id="btnCancelar" type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                <button id="btnGuardarDetalle" type="button" class="btn btn-primary">Guardar</button>
+                <button type="button" data-dismiss="modal" class="btn btn-primary">OK</button>
             </div>
         </div>
     </div>
 </div>
-
-
-
-
 
 
 
@@ -134,6 +173,34 @@
     }
 
 
+    #asolgasaps table .ocultar-columna {
+        display: none;
+    }
+
+    #asolgasaps input {
+        font-family: 'Roboto', sans-serif;
+    }
+
+
+    #asolgasaps #tblResultado th {
+        font-family: 'Roboto', sans-serif !important;
+    }
+
+    #asolgasaps #tblResultado td {
+        font-family: 'Roboto', sans-serif !important;
+    }
+
+    /*  #asolgasaps .contenedor-detalle {
+        overflow: hidden;
+        width: 100%;
+    }*/
+
+    #solgasap .contenedor-det-table {
+        overflow: hidden;
+        width: 100%;
+    }
+
+
 
     @@media (min-width: 320px) and (max-width: 479.98px) {
     }
@@ -142,6 +209,10 @@
     }
 
     @@media (min-width: 768px) and (max-width: 991.98px) {
+        #solgasap .btn-tipos-aprob {
+            display: flex;
+            flex-direction: column-reverse;
+        }
     }
 
     @@media (min-width: 992px) and (max-width: 1199.98px) {
@@ -153,14 +224,21 @@
 
 
 @section scripts {
+
+    <script src="~/Admin/js/Finanzas/Rendiciones/moment.js"></script>
+
     <script>
 
-        const NIVEL_INTERFAZ = 20;
         const USUARIO = "@Request.RequestContext.HttpContext.Session["usuario"]";
         const USUARIO_COMPLETO = "@Request.RequestContext.HttpContext.Session["usuario"]" + " - " + "@Request.RequestContext.HttpContext.Session["nombre"]";
 
+        const NIVEL_INTERFAZ = 40;
+
         var vFechaIniPend = "";
         var vFechaFinPend = "";
+        var nivelAprobacion = 0;
+        var solicitudesArray = [];
+
 
         $(document).ready(function () {
 
@@ -168,8 +246,68 @@
 
 
             function Inicializar() {
-                getLista();
+                getTipoAprobacion();
+                getTiposAnulacionCabecera();
             }
+
+
+            function getTiposAnulacionCabecera() {
+                $.ajax({
+                    type: "GET",
+                    url: '/Finanzas/RG_TiposAnulacionCabecera',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (data) {
+                        tiposAnulacionCabArray = data.lista;
+
+                    },
+                    failure: function () {
+                        console.error('error al cargar tipos periodos');
+                    }
+                });
+            }
+
+
+            function getTipoAprobacion() {
+                $.ajax({
+                    type: "GET",
+                    url: '/Finanzas/RG_TipoAprobacionGeneral',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (data) {
+                        let primerValorBool = true;
+                        let primerValor = 0;
+
+                        $("#cbxTipoAprobacion").empty();
+
+                        $.each(data.lista, function () {
+
+                            if (primerValorBool) {
+                                primerValor = this.idNivelAprob;
+                                primerValorBool = false;
+                            }
+
+                            $("#cbxTipoAprobacion").append($("<option/>").val(this.idNivelAprob).text(this.nivelAprob));
+                        });
+
+                        // Primer filtro como jefatura
+                        nivelAprobacion = primerValor;
+                        $("#cbxTipoAprobacion").val(nivelAprobacion);
+                        getLista(nivelAprobacion);
+
+                    },
+                    failure: function () {
+                        console.error('error al cargar tipos periodos');
+                    }
+                });
+            }
+
+            $('#cbxTipoAprobacion').change(function () {
+                var $option = $(this).find('option:selected');
+                nivelAprobacion = parseInt($option.val());
+
+                getLista(nivelAprobacion);
+            });
 
             function formatoNumero(x) {
                 x = x.toFixed(2);
@@ -219,64 +357,85 @@
                 }
             }
 
+            function getLista(nivelAprobacion) {
 
-            function getLista() {
+                if (nivelAprobacion == 0 || nivelAprobacion == null || typeof (nivelAprobacion) == "undefined") {
 
-                $.ajax({
-                    type: "GET",
-                    url: '/finanzas/RG_PendientesAprobRendGastos',
-                    contentType: "application/json; charset=utf-8",
-                    data: { nivelInterfaz: NIVEL_INTERFAZ },
-                    dataType: "json",
-                    success: function (data) {
+                    Swal.fire({
+                        title: 'Seleccione el nivel de Aprobación para Listar Datos',
+                        text: "Textile Sourcing Company",
+                        icon: 'warning',
+                        showConfirmButton: true,
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'Ok'
+                    });
 
-                        let tabla = $("#tblPendientes").DataTable();
+                }
+                else {
 
-                        tabla.destroy();
-                        var tr = "";
+                    $.ajax({
+                        type: "GET",
+                        url: '/finanzas/RG_PendientesAprobacionGeneral',
+                        contentType: "application/json; charset=utf-8",
 
-                        data.lista.forEach((obj) => {
+                        data: { nivelAprobacion: nivelAprobacion },
 
-                            tr += "<tr> "
-                                + " <td class='ocultar-columna'>" + obj.idSolicitud + "</td>"
-                                + " <td> " + obj.fecha + "</td>"
-                                + " <td> " + obj.codigo + "</td>"
-                                + " <td> " + obj.observacion + "</td>"
-                                + " <td> " + obj.estado + "</td>"
-                                + " <td> " + obj.tipo + "</td>"
-                                + " <td> " + obj.moneda + "</td>"
-                                + " <td> " + formatoNumero(obj.total) + "</td>"
-                                + " <td> " + formatoNumero(obj.totalRend) + "</td>"
+                        dataType: "json",
+                        success: function (data) {
 
-                                + " <td class='text-center'>"
-                                + "     <button data-idsolicitud='" + obj.idSolicitud + "' data-toggle='collapse' data-target='#modalDetalleSol' class='btn btn-sm btn-primary cIdSolicitudDet'><i class='fas fa-eye'></i></button>"
-                                + "     <button data-idsolicitud='" + obj.idSolicitud + "' data-toggle='collapse' class='btn btn-sm btn-success ml-1 cAprobar'><i class='fas fa-check'></i></button>"
-                                + "     <button data-idsolicitud='" + obj.idSolicitud + "' data-toggle='collapse' class='btn btn-sm btn-danger ml-1 cRechazar'><i class='fas fa-ban'></i></button>"
-                                + "</td>"
+                            let tabla = $("#tblPendientes").DataTable();
 
-                                + "</tr>";
-                        });
+                            tabla.destroy();
+                            var tr = "";
 
-                        $("#tblPendientesContent").html(tr);
+                            data.lista.forEach((obj) => {
 
-                        $("#tblPendientes").DataTable(
-                            {
-                                dom: 'Bfrtip',
-                                buttons: [
-                                    'excel'
-                                ],
-                                'language': { 'url': '/libs/datatables/spanish.json' },
-                                lengthMenu: [[5, 10, 20, -1], [5, 10, 20, 'Todos']]
+                                tr += "<tr> "
+                                    + " <td> </td>"
+                                    + " <td class='ocultar-columna'>" + obj.idSolicitud + "</td>"
+                                    + " <td> " + obj.fecha + "</td>"
+                                    + " <td> " + obj.codigo + "</td>"
+                                    + " <td> " + obj.colaborador + "</td>"
+                                    + " <td> " + obj.observacion + "</td>"
+                                    + " <td> " + obj.tipo + "</td>"
+
+                                    //+ " <td> " + obj.conceptoCab + "</td>"
+                                    //+ " <td> " + obj.conceptoDet + "</td>"
+
+                                    + " <td> " + obj.simbolo + " " + formatoNumero(obj.totalsolicitado) + "</td>"
+                                    + " <td> " + obj.simbolo + " " + formatoNumero(obj.totalentregado) + "</td>"
+                                    + " <td> " + obj.simbolo + " " + formatoNumero(obj.totalrendido) + "</td>"
+
+                                    + " <td style='font-weight: bold; " + ((obj.totalsaldo < 0) ? " color: red " : " ") + "'> " + obj.simbolo + " " + formatoNumero(obj.totalsaldo) + "</td>"
+                                    + " <td class='text-center'>"
+                                    + "     <button data-idsolicitud='" + obj.idSolicitud + "' data-toggle='collapse' data-target='#modalDetalleSol' class='btn btn-sm btn-primary cIdSolicitudDet'><i class='fas fa-eye'></i></button>"
+                                    + "     <input type='checkbox' data-idsolicitud='" + obj.idSolicitud + "' class='seleccion ml-2'>"
+                                    + "</td>"
+
+                                    + "</tr>";
                             });
 
-                    },
-                    failure: function () {
-                        console.error('error al cargar los periodos');
-                    }
-                });
+                            $("#tblPendientesContent").html(tr);
 
+                            $("#tblPendientes").DataTable(
+                                {
+                                    "scrollX": true,
+                                    "bSort": true,
+                                    scrollY: '50vh',
+                                    scrollCollapse: true,
+                                    paging: true,
+                                    'language': { 'url': '/libs/datatables/spanish.json' },
+                                    lengthMenu: [[10, 20, 30, -1], [10, 20, 30, 'Todos']]
+                                });
+
+                        },
+                        failure: function () {
+                            console.error('error al cargar los periodos');
+                        }
+                    });
+
+                }
             }
-
 
             $("#tblPendientes").on('click', '.cIdSolicitudDet', function () {
 
@@ -285,7 +444,7 @@
 
                 $.ajax({
                     type: "GET",
-                    url: '/finanzas/RG_PendientesAprobRendGastosDet',
+                    url: '/finanzas/RG_AprobJefDetalleSol',
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
                     data: { idSolicitud: idsolcitud },
@@ -301,7 +460,12 @@
                             $("#idmdobs").text(data.entidad.observacion);
                             $("#idmdestado").text(data.entidad.estado);
                             $("#idmdmoneda").text(data.entidad.moneda);
-                            $("#idmdceco").text(data.entidad.ceco);
+                            $("#idmdtotal").text(formatoNumero(data.entidad.total));
+                            $("#idmdususol").text(data.entidad.usuSolicitante);
+                            $("#idmdcolaborador").text(data.entidad.colaborador);
+                            $("#idmdfaplicacion").text(data.entidad.fechaAplicacion);
+
+
 
                             let tabla = $("#tblDetallePend").DataTable();
 
@@ -311,15 +475,22 @@
                             data.entidad.listaDetalle.forEach((obj) => {
 
                                 tr += "<tr> "
-                                    + " <td> " + obj.tipo + "</td>"
-                                    + " <td> " + obj.conceptoCab + "</td>"
-                                    + " <td> " + obj.moneda + "</td>"
-                                    + " <td> " + formatoNumero(obj.totalSolicitado) + "</td>"
-                                    + " <td> " + formatoNumero(obj.totalEntregado) + "</td>"
-                                    + " <td> " + formatoNumero(obj.totalRendido) + "</td>"
+                                    //+ " <td> " + obj.fecha + "</td>"
+                                    //+ " <td> " + obj.ceco + "</td>"
+                                    //+ " <td> " + obj.tipo + "</td>"
+                                    + " <td style='max-width: 120px; overflow: hidden;'> " + obj.conceptoCab + "</td>"
+                                    + " <td> " + obj.conceptoDet + "</td>"
+
+                                    + " <td> " + obj.cantDias + "</td>"
+
+                                    + " <td> " + obj.simbolo + " " + formatoNumero(obj.totalsolicitado) + "</td>"
+                                    + " <td> " + obj.simbolo + " " + formatoNumero(obj.totalentregado) + "</td>"
+                                    + " <td> " + obj.simbolo + " " + formatoNumero(obj.totalrendido) + "</td>"
+
+                                    + " <td style='font-weight:bold; " + ((obj.totalsaldo < 0) ? " color: red " : " ") + "'> " + obj.simbolo + " " + formatoNumero(obj.totalsaldo) + "</td>"
+
                                     + "</tr>";
 
-                                valorTotal = valorTotal + obj.totalSolicitado;
 
                             });
 
@@ -327,12 +498,18 @@
 
                             $("#tblDetallePend").DataTable(
                                 {
-                                    dom: 'Bfrtip',
-                                    buttons: [
-                                        'excel'
-                                    ],
+                                    searching: true,
+                                    paging: false,
+                                    info: false,
+                                    "scrollY": "350px",
+                                    "scrollCollapse": true,
+                                    "scrollX": true,
+                                    "bSort": true,
+                                    scrollY: '50vh',
+                                    scrollCollapse: true,
+
                                     'language': { 'url': '/libs/datatables/spanish.json' },
-                                    lengthMenu: [[5, 10, 20, -1], [5, 10, 20, 'Todos']]
+                                    lengthMenu: [[20, -1], [20, 'Todos']]
                                 });
 
                             $('#modalDetalleSol').modal('show');
@@ -353,6 +530,11 @@
                 });
 
             });
+
+            $('#modalDetalleSol').on('shown.bs.modal', function (e) {
+                $('#tblDetallePend').DataTable().columns.adjust();
+            });
+
 
 
             $("#tblPendientes").on('click', '.cAprobar', function () {
@@ -386,7 +568,8 @@
                             'opcionTipoAprob': opcion,
                             'idSolicitud': idsolicitud,
                             'secuencia': 0,
-                            'valorEntrega':0
+                            'valorEntrega': 0,
+                            'nivelInterfaz': parseInt($("#cbxTipoAprobacion").val())
                         }
 
                         $.ajax({
@@ -400,6 +583,7 @@
                                     window.location.href = resultado.redirectUrl;
                                 }
                                 else {
+
                                     if (resultado.status.idResponse > 0) {
                                         mensajePrincipal(true, "Actualizando Lista");
                                     }
@@ -407,7 +591,7 @@
                                         mensajePrincipal(false, "Ocurrio un problema");
                                     }
 
-                                    getLista();
+                                    getLista(NIVEL_INTERFAZ);
                                 }
                             },
                             error: function (xhr, ajaxOptions, thrownError) {
@@ -419,6 +603,244 @@
                     }
                 })
             }
+
+
+            $("#atblPendientes").on('click', '.seleccion', function () {
+                let idsolicitud = $(this).attr("data-idsolicitud");
+
+                //AGREGANDO AL ARRAY
+                if ($(this).prop("checked")) {
+
+                    solicitudesArray.push({ idsolicitud: idsolicitud });
+
+                } else {//QUITA DEL ARRAY
+
+                    for (var i = 0; i < solicitudesArray.length; i++) {
+
+                        if (solicitudesArray[i].idsolicitud == idsolicitud) {
+
+                            solicitudesArray.splice(i, 1);
+                        }
+                    }
+                }
+            });
+
+            $("#btnAprobar").click(function () {
+
+                let opcion = 0;
+                let opcionAprobRechazo = 1;
+                let parametro = {};
+
+                if (validarDatos()) {
+
+                    opcion = $("#cbxTipoAprobacion").val();
+
+                    if (opcion.toString() == "20") {
+                        // 20: Jefatura - Aprobación Solicitud
+                        opcion = 1;
+                    }
+                    else if (opcion.toString() == "40") {
+                        // 40: Jefatura - Aprobación Rendición
+                        opcion = 3;
+                    }
+                    else if (opcion.toString() == "50") {
+                        // 50: Gerencia - Aprobación Rendición
+                        opcion = 3;
+                    }
+
+                    parametro = {
+                        'opcion': opcion,
+                        'opcionTipoAprob': opcionAprobRechazo,
+                        'solicitudesArray': solicitudesArray,
+                        'usuario': USUARIO,
+                        'nivelInterfaz': nivelAprobacion,
+                        'idAnulado': 0
+                    };
+
+
+                    $.ajax({
+                        url: "/finanzas/RG_AprobarSolicitudGeneral",
+                        type: "post",
+                        data: parametro,
+                        dataType: "json",
+                        success: function (resultado) {
+
+                            if (resultado.isRedirect) {
+                                window.location.href = resultado.redirectUrl;
+                            }
+                            else {
+                                if (resultado.status.idResponse > 0) {
+                                    mensajePrincipal(true, "Actualizando Lista");
+                                }
+                                else {
+                                    mensajePrincipal(false, "Ocurrio un problema");
+                                }
+
+                                solicitudesArray = [];
+                                getLista(nivelAprobacion);
+                            }
+                        },
+                        error: function (xhr, ajaxOptions, thrownError) {
+
+                        }
+                    });
+                }
+
+            });
+
+
+
+
+
+            $("#btnRechazar").click(function () {
+
+                var options = {};
+
+                $.map(tiposAnulacionCabArray,
+                    function (o) {
+                        options[o.id] = o.name;
+                    });
+
+                Swal.fire({
+                    title: 'Seleccione el motivo del rechazo de solicitud',
+                    icon: 'info',
+                    input: 'select',
+                    inputOptions: options,
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    cancelButtonText: 'Cancelar',
+                    confirmButtonText: 'Ok'
+
+                }).then((result) => {
+
+                    if (result.value) {
+
+                        let opcion = 0;
+                        let opcionAprobRechazo = 2;
+                        let parametro = {};
+
+                        if (validarDatos()) {
+
+                            opcion = $("#cbxTipoAprobacion").val();
+
+                            if (opcion.toString() == "20") {
+                                // 20: Jefatura - Aprobación Solicitud
+                                opcion = 1;
+                            }
+                            else if (opcion.toString() == "40") {
+                                // 40: Jefatura - Aprobación Rendición
+                                opcion = 3;
+                            }
+                            else if (opcion.toString() == "50") {
+                                // 50: Gerencia - Aprobación Rendición
+                                opcion = 3;
+                            }
+
+                            parametro = {
+                                'opcion': opcion,
+                                'opcionTipoAprob': opcionAprobRechazo,
+                                'solicitudesArray': solicitudesArray,
+                                'usuario': USUARIO,
+                                'nivelInterfaz': nivelAprobacion,
+                                'idAnulado': parseInt(result.value)
+                            };
+
+
+                            $.ajax({
+                                url: "/finanzas/RG_AprobarSolicitudGeneral",
+                                type: "post",
+                                data: parametro,
+                                dataType: "json",
+                                success: function (resultado) {
+
+                                    if (resultado.isRedirect) {
+                                        window.location.href = resultado.redirectUrl;
+                                    }
+                                    else {
+                                        if (resultado.status.idResponse > 0) {
+                                            mensajePrincipal(true, "Actualizando Lista");
+                                        }
+                                        else {
+                                            mensajePrincipal(false, "Ocurrio un problema");
+                                        }
+
+                                        solicitudesArray = [];
+                                        getLista(nivelAprobacion);
+                                    }
+                                },
+                                error: function (xhr, ajaxOptions, thrownError) {
+
+                                }
+                            });
+                        }
+                    }
+
+                });
+
+            });
+
+
+            function validarDatos() {
+                var respuesta = false;
+
+                if (solicitudesArray.length == 0) {
+                    respuesta = false;
+
+                    Swal.fire({
+                        title: 'Seleccione las solicitudes',
+                        text: "Textile Sourcing Company",
+                        icon: 'warning',
+                        showConfirmButton: true,
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'Ok'
+                    });
+                }
+                else if (nivelAprobacion == null || nivelAprobacion == 0 || typeof (nivelAprobacion) == "undefined") {
+                    respuesta = false;
+
+                    Swal.fire({
+                        title: 'Seleccione el tipo de Aprobación',
+                        text: "Textile Sourcing Company",
+                        icon: 'warning',
+                        showConfirmButton: true,
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'Ok'
+                    });
+                }
+                else {
+
+                    respuesta = true;
+                }
+
+                return respuesta;
+            }
+
+
+
+            // GENERALES
+
+            $("#tblPendientesContent").on('click', '.seleccion', function () {
+                let idsolicitud = $(this).attr("data-idsolicitud");
+
+                //AGREGANDO AL ARRAY
+                if ($(this).prop("checked")) {
+
+                    solicitudesArray.push({ idsolicitud: idsolicitud });
+
+                } else {//QUITA DEL ARRAY
+
+                    for (var i = 0; i < solicitudesArray.length; i++) {
+
+                        if (solicitudesArray[i].idsolicitud == idsolicitud) {
+                            solicitudesArray.splice(i, 1);
+                        }
+                    }
+                }
+            });
+
+
+
 
         });
 

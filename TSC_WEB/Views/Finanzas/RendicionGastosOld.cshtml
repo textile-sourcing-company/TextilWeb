@@ -1,0 +1,4374 @@
+﻿@{
+    ViewBag.Title = "Rendición de Gastos con Solicitud";
+    ViewBag.Modulo = "Finanzas";
+    Layout = "~/Views/Plantillas/_Layout.cshtml";
+}
+
+
+<div class="rendgas container-fluid">
+
+    <div class="container-fluid card">
+
+        <div class=" mt-3 ml-2 d-flex flex-row justify-content-between">
+            <div>
+                <button type="button" id="btnBuscarPendiente" class="btn btn-warning btn-sm">Buscar Pendientes</button>
+            </div>
+            <div class="indicador">
+                <div class="row d-flex flex-row">
+                    <div id="estado-icon"></div>
+                    <h5 id="estado-desc"></h5>
+                </div>
+            </div>
+        </div>
+
+        <hr />
+
+        <div class="row m-1">
+
+            <div class="col-1 p-1">
+                <label for="txtCodigo">Código:</label>
+                <input class="form-control form-control-sm" id="txtCodigo" disabled>
+            </div>
+            <div class="col-1 p-1">
+                <label for="txtFecha">Fecha</label>
+                <input class="form-control form-control-sm" type="text" id="txtFecha" disabled>
+            </div>
+            <div class="col-3 p-1">
+                <label for="txtUsuario">Usuario:</label>
+                <input class="form-control form-control-sm" id="txtUsuario" disabled>
+            </div>
+            <div class="col-2 p-1">
+                <label for="txtTipo">Tipo:</label>
+                <input class="form-control form-control-sm" id="txtTipo" disabled>
+            </div>
+            <div class="col-5 p-1">
+                <label for="txtCeCo">Centro de Costo:</label>
+                <input class="form-control form-control-sm" id="txtCeCo" disabled>
+            </div>
+
+
+            <div class="col-5 p-1">
+                <label for="txtColaborador">Colaborador</label>
+                <input class="form-control form-control-sm" type="text" id="txtColaborador" disabled>
+            </div>
+            <div class="col-5 p-1">
+                <label for="txtGlosa">Glosa Solicitud</label>
+                <input class="form-control form-control-sm" type="text" id="txtGlosa" disabled>
+            </div>
+
+            <div class="col-2 p-1">
+                <label for="txtTotalSol">Total:</label>
+                <input class="form-control form-control-sm" type="text" id="txtTotalSol" disabled>
+            </div>
+        </div>
+
+
+        <div>
+            <hr />
+        </div>
+
+        <div class="container-fluid mt-2">
+            <table class="table table-sm table-bordered table-hover display nowrap" id="tblSolicitud">
+                <thead class="thead-light">
+                    <tr>
+                        <th class="ocultar-columna">idSolicitud</th>
+                        <th class="ocultar-columna">Secuencia</th>
+                        <th>Serie Número</th>
+                        <th>Tipo</th>
+                        <th>Concepto</th>
+                        <th>Detallle</th>
+
+                        <th>Cant. Dias</th>
+                        <th>Valor Unitario</th>
+                        <th>Total Solicitado</th>
+                        <th>Total Entregado</th>
+                        <th>Total Rendido</th>
+                        <th>Exceso / Devolución</th>
+
+                        @*<th style="text-align: center">Eliminar cpte</th>*@
+                        @*<th style="text-align: center">EDITAR</th>*@
+                        @*<th style="text-align: center">PDF</th>*@
+                        <th style="text-align: center">REGISTRO</th>
+
+                    </tr>
+                </thead>
+                <tbody id="tblSolicitudContent"></tbody>
+            </table>
+        </div>
+
+        <div>
+            <hr />
+        </div>
+
+        <div class="container-fluid mb-2">
+            <div class="row d-flex justify-content-lg-between">
+                @*<div>*@
+                <button type="button" id="btnVerRegistrados" class="btn btn-primary btn-sm"><i class='fas fa-eye'></i>  Ver Registrados</button>
+                @*</div>
+                    <div>
+                        <button type="button" id="btnRegistrarcomprobante" class="btn btn-success btn-sm"><i class='fas fa-save'></i>  Registrar Comprobante</button>
+                    </div>*@
+            </div>
+        </div>
+
+
+    </div>
+
+</div>
+
+
+<div class="modal fade" id="proveedorModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Registro de Proveedor</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-6">
+                                <label for="txtTipoPersonaModal">Tipo Persona</label>
+                                <select class="form-control form-control-sm" id="txtTipoPersonaModal" disabled>
+                                    <option value="J" selected>Jurídica</option>
+                                </select>
+                            </div>
+
+                            <div class="col-6">
+                                <label for="txtPaisModal">Pais:</label>
+                                <input type="text" class="form-control form-control-sm" id="txtPaisModal" value="Perú" readonly>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="txtRUCModal" class="col-form-label">RUC:</label>
+                        <input type="text" class="form-control" id="txtRUCModal" maxlength="15">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="txtRSModal" class="col-form-label">Razon Social:</label>
+                        <input type="text" class="form-control" id="txtRSModal" maxlength="140">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="txtDireccionModal" class="col-form-label">Dirección:</label>
+                        <textarea class="form-control" id="txtDireccionModal" maxlength="340"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" id="btnRegistrarProveedor">Registrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="modalSolicitudesPendientes" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Solicitudes Pendientes de Rendición</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="contenedor-detalle">
+                    <table class="table table-sm table-bordered table-hover display nowrap" id="tblDetallePendiente" style="width: 100%">
+                        <thead class="thead-light">
+                            <tr>
+                                <th class="ocultar-columna">IdSolicitud</th>
+                                <th>Fecha</th>
+                                <th>Codigo</th>
+                                <th>Glosa</th>
+                                <th>Total</th>
+                                <th style="text-align: center">Seleccionar</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tblDetallePendienteContent"></tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn btn-primary">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="regComprobModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Registro de Comprobante</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <ul class="nav nav-tabs nav-justified md-tabs indigo" id="tabRendicionGastos" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active ctabRegComp" data-id="1" id="facturaboleta-tab" data-toggle="tab" href="#sg-facturaboleta" role="tab" aria-controls="firma-just"
+                           aria-selected="true">Factura / Boleta</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link ctabRegComp" data-id="2" id="planillamovilidad-tab" data-toggle="tab" href="#sg-planillamovilidad" role="tab" aria-controls="aprobadas-just"
+                           aria-selected="false">Planilla de Movilidad</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link ctabRegComp" data-id="3" id="declaracionjur-tab" data-toggle="tab" href="#sg-declaracionjur" role="tab" aria-controls="aprobadas-just"
+                           aria-selected="false">Declaración Jurada</a>
+                    </li>
+                </ul>
+
+                <div class="tab-content card pt-1">
+
+                    <div class="tab-pane fade show active" id="sg-facturaboleta" role="tabpanel" aria-labelledby="facturaboleta-tab">
+                        @Html.Partial("Finanzas/RendFacturaBoleta")
+                    </div>
+                    <div class="tab-pane fade" id="sg-planillamovilidad" role="tabpanel" aria-labelledby="planillamovilidad-tab">
+                        @Html.Partial("Finanzas/RendPlanillaMovilidad")
+                    </div>
+                    <div class="tab-pane fade" id="sg-declaracionjur" role="tabpanel" aria-labelledby="declaracionjur-tab">
+                        @Html.Partial("Finanzas/RendDeclaracionJurada")
+                    </div>
+
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-sm btn-primary" id="btnGuardarComprobante">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- #region name -->
+@*<div class="modal fade" id="editComprobModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl" role="document">
+            <div class="modal-content">
+
+                <div class="container-fluid" id="contenido-editar">
+
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Editar Comprobantes Registrados</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+
+                        <ul class="nav nav-tabs nav-justified md-tabs indigo" id="etabRendicionGastos" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active ectabRegComp" data-id="1" id="efacturaboleta-tab" data-toggle="tab" href="#esg-facturaboleta" role="tab"
+                                   aria-selected="true">Factura / Boleta</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link ectabRegComp" data-id="2" id="eplanillamovilidad-tab" data-toggle="tab" href="#esg-planillamovilidad" role="tab"
+                                   aria-selected="false">Planilla de Movilidad</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link ectabRegComp" data-id="3" id="edeclaracionjur-tab" data-toggle="tab" href="#esg-declaracionjur" role="tab"
+                                   aria-selected="false">Declaración Jurada</a>
+                            </li>
+                        </ul>
+
+                        <div class="tab-content card pt-1">
+
+                            <div class="tab-pane fade show active" id="esg-facturaboleta" role="tabpanel" aria-labelledby="efacturaboleta-tab">
+                                @Html.Partial("Finanzas/eRendFacturaBoleta")
+                            </div>
+                            <div class="tab-pane fade" id="esg-planillamovilidad" role="tabpanel" aria-labelledby="eplanillamovilidad-tab">
+                                @Html.Partial("Finanzas/eRendPlanillaMovilidad")
+                            </div>
+                            <div class="tab-pane fade" id="esg-declaracionjur" role="tabpanel" aria-labelledby="edeclaracionjur-tab">
+                                @Html.Partial("Finanzas/eRendDeclaracionJurada")
+                            </div>
+
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <div>
+                            <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Cancelar</button>
+                            <button type="button" class="btn btn-sm btn-primary" id="btnEditarComprobante">Guardar</button>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>*@
+<!-- #endregion -->
+
+
+<div class="modal fade" id="registrarDevModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Monto Devolución</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-12">
+                            <input type="email" class="form-control" id="txtMontoDevolucion" placeholder="Ingrese monto de devolución">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-sm btn-primary" id="btnGuardarDevolucion">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<div class="modal fade" id="detComprobantesModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Comprobante Registrados</h5>
+            </div>
+            <div class="modal-body">
+                <div class="container-fluid">
+
+                    <table class="table table-sm table-bordered" id="tblCptesRegistrados" style="width: 100%">
+                        <thead class="thead-light">
+                            <tr>
+                                <th>Serie Numero</th>
+                                <th>Proveedor</th>
+                                <th>Total</th>
+                                <th>Impresión</th>
+                                <th>Editar</th>
+                                <th>Eliminar</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tblCptesRegistradosCont"></tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<style>
+
+
+    .rendgas label {
+        font-family: 'Roboto', sans-serif;
+    }
+
+    .rendgas input, select, span, label {
+        font-family: 'Roboto', sans-serif;
+    }
+
+    table th.ocultar-columna {
+        display: none !important;
+    }
+
+    table tr.ocultar-columna {
+        display: none !important;
+    }
+
+    table td.ocultar-columna {
+        display: none !important;
+    }
+
+    .rendgas #estado-desc {
+        margin-right: 8px;
+    }
+
+    #regComprobModal .kpi-modal-monto1 {
+        text-align: center;
+        background-color: #D5D8DC;
+    }
+
+    #regComprobModal .kpi-modal-monto2 {
+        text-align: center;
+        background-color: #D5D8DC;
+    }
+
+    #regComprobModal .kpi-modal-monto3 {
+        text-align: center;
+        background-color: #D5D8DC;
+    }
+
+
+
+    a.disabled {
+        pointer-events: none;
+        color: #ccc;
+    }
+
+
+    #editComprobModal .kpi-modal-monto1 {
+        text-align: center;
+        background-color: #D5D8DC;
+    }
+
+    #editComprobModal .kpi-modal-monto2 {
+        text-align: center;
+        background-color: #D5D8DC;
+    }
+
+    #editComprobModal .kpi-modal-monto3 {
+        text-align: center;
+        background-color: #D5D8DC;
+    }
+
+    #editComprobModal #list-comprobantes {
+        background-color: #F2F4F4
+    }
+
+
+    #editComprobModal #btnImprimirPDF {
+        background-color: #AF1204;
+        color: #fff;
+    }
+
+
+    .rendgas .icon-pendiente::after {
+        content: url(../../../../Public/icon-pend.png);
+    }
+
+    .rendgas .icon-liberado::after {
+        content: url(../../../../Public/icon-libe.png);
+    }
+
+    .rendgas .icon-aprobado::after {
+        content: url(../../../../Public/icon-apro.png);
+    }
+
+    .rendgas .icon-rechazado::after {
+        content: url(../../../../Public/icon-rech.png);
+    }
+
+    .rendgas .icon-rend-completa::after {
+        content: url(../../../../Public/icon-apro.png);
+    }
+
+    .rendgas .icon-rend-incompleta::after {
+        content: url(../../../../Public/icon-libe.png);
+    }
+
+
+
+    .rendgas .desc-est-pendiente {
+        color: #616A6B;
+    }
+
+    .rendgas .desc-est-liberado {
+        color: #F1C40F;
+    }
+
+    .rendgas .desc-est-aprobado {
+        color: #28B463;
+    }
+
+    .rendgas .desc-est-rechazado {
+        color: #C0392B;
+    }
+
+    .rendgas .desc-est-rend-completa {
+        color: #28B463;
+    }
+
+    .rendgas .desc-est-rend-incompleta {
+        color: #F1C40F;
+    }
+
+
+    @@media (min-width: 320px) and (max-width: 479.98px) {
+    }
+
+    @@media (min-width: 480px) and (max-width: 767.98px) {
+    }
+
+    @@media (min-width: 768px) and (max-width: 991.98px) {
+    }
+
+    @@media (min-width: 992px) and (max-width: 1199.98px) {
+    }
+
+    @@media (min-width: 1200px) {
+    }
+</style>
+
+
+@section scripts {
+    <script>
+
+        const USUARIO = "@Request.RequestContext.HttpContext.Session["usuario"]";
+        const USUARIO_COMPLETO = "@Request.RequestContext.HttpContext.Session["usuario"]" + " - " + "@Request.RequestContext.HttpContext.Session["nombre"]";
+        const PORCENTAJE_IGV = 18;
+
+        var vTipoComprobante1 = [];
+
+        var solicitudSeleccionada = {};
+        var vIdSolicitud = 0;
+        var vCeCo = 0;
+        var vIdRendCompte = 0;
+
+        var iDetalle1 = 0;
+        var iDetalle2 = 0;
+        var iDetalle3 = 0;
+
+        var proveedor = {};
+        var detalleArray = [];
+        var detalleArray3 = [];
+        var detPlaMov = {};
+
+        var detComprobanteArray1 = [];
+        var detComprobanteArray2 = [];
+        var detComprobanteArray3 = [];
+
+        var edetComprobanteArray1 = [];
+        var edetComprobanteArray2 = [];
+        var edetComprobanteArray3 = [];
+
+        var tabSeleccionado = 1; // 1: Factura y Boleta, 2: Planilla Movilidad, 3: Planilla de Movilidada
+
+        var listaComptesIdTipoComp = 0;
+
+        var idsolicitud_dev = 0;
+        var idsecuencia_dev = 0;
+
+        var TIPO_REGISTRO = "";
+        var tiposComprobantesArray = [];
+
+        $(document).ready(function () {
+
+            Inicializar();
+
+            function Inicializar() {
+
+                getTipoComprobantes();
+                getTipoMoneda();
+                getUnidadesMedida();
+                getPeriodos();
+
+                $("#regComprobModal .kpi-modal-monto1").css("background-color", "#ABB2B9");
+                $("#regComprobModal .kpi-modal-monto2").css("background-color", "#ABB2B9");
+                $("#regComprobModal .kpi-modal-monto3").css("background-color", "#ABB2B9");
+
+                $("#txtCodigoModal3").val("0");
+                $("#txtNumPlanillaModal2").val("0");
+
+            }
+
+
+            function setPeriodo() {
+
+                let fechaFormato = new Date();
+
+                let month = '' + (fechaFormato.getMonth() + 1);
+                let year = fechaFormato.getFullYear();
+
+                if (month.length < 2) { month = '0' + month; }
+
+                $("#cbxPeriodoModal1").val("" + [year, month].join('-'));
+                $("#cbxPeriodoModal2").val("" + [year, month].join('-'));
+                $("#cbxPeriodoModal3").val("" + [year, month].join('-'));
+
+                document.getElementById("cbxPeriodoModal1").disabled = true;
+                document.getElementById("cbxPeriodoModal2").disabled = true;
+                document.getElementById("cbxPeriodoModal3").disabled = true;
+            }
+
+
+            function getTipoMoneda() {
+                $.ajax({
+                    type: "GET",
+                    url: '/Finanzas/RG_TiposDeMoneda',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (data) {
+                        $("#cbxMonedaModal1").empty();
+                        $("#cbxMonedaModal2").empty();
+                        $("#cbxMonedaModal3").empty();
+
+                        $.each(data.lista, function () {
+                            $("#cbxMonedaModal1").append($("<option/>").val(this.idTipoMod).text(this.descripcion));
+                            $("#cbxMonedaModal2").append($("<option/>").val(this.idTipoMod).text(this.descripcion));
+                            $("#cbxMonedaModal3").append($("<option/>").val(this.idTipoMod).text(this.descripcion));
+                        });
+
+                        $("#cbxMonedaModal1").val(1);
+                        $("#cbxMonedaModal2").val(1);
+                        $("#cbxMonedaModal3").val(1);
+
+                    },
+                    failure: function () {
+                        console.error('error al cargar tipos periodos');
+                    }
+                });
+            }
+
+            function getPeriodos() {
+
+                $.ajax({
+                    type: "GET",
+                    url: '/Finanzas/RG_Periodos',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (data) {
+
+                        $("#cbxPeriodoModal1").empty();
+                        $("#cbxPeriodoModal2").empty();
+                        $("#cbxPeriodoModal3").empty();
+
+                        $.each(data.lista, function () {
+                            $("#cbxPeriodoModal1").append($("<option/>").val(this.periodo).text(this.periodo));
+                            $("#cbxPeriodoModal2").append($("<option/>").val(this.periodo).text(this.periodo));
+                            $("#cbxPeriodoModal3").append($("<option/>").val(this.periodo).text(this.periodo));
+                        });
+
+                        setPeriodo();
+                    },
+                    failure: function () {
+                        console.error('error al cargar tipos periodos');
+                    }
+                });
+            }
+
+            function getUnidadesMedida() {
+
+                $.ajax({
+                    type: "GET",
+                    url: '/Finanzas/RG_UnidadesMedida',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (data) {
+                        $("#cbxUM1").empty();
+
+                        $.each(data.lista, function () {
+                            $("#cbxUM1").append($("<option/>").val(this.codum).text(this.um));
+                        });
+
+                        $("#cbxUM1").val("UN");
+                    },
+                    failure: function () {
+                        console.error('error al cargar tipos periodos');
+                    }
+                });
+
+            }
+
+            function getTipoComprobantes() {
+                $.ajax({
+                    type: "GET",
+                    url: '/Finanzas/RG_TipoComprobantes',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (data) {
+                        let primerValorBool = true;
+
+                        tiposComprobantesArray = data.lista;
+
+                        $("#cbxTipoCpbteCompModal1").empty();
+                        $("#cbxTipoCpbteCompModal2").empty();
+                        $("#cbxTipoCpbteCompModal3").empty();
+
+
+                        $.each(data.lista, function () {
+                            if (primerValorBool) {
+                                vCodTipoComprobante = this.idTipoComp;
+                            }
+
+                            if (this.idTipoComp == 1 || this.idTipoComp == 2) {
+                                $("#cbxTipoCpbteCompModal1").append($("<option/>").val(this.idTipoComp).text(this.tipoComprobante));
+                            }
+                            else if (this.idTipoComp == 3) {
+                                $("#cbxTipoCpbteCompModal2").append($("<option/>").val(this.idTipoComp).text(this.tipoComprobante));
+                            }
+                            else if (this.idTipoComp == 4) {
+                                $("#cbxTipoCpbteCompModal3").append($("<option/>").val(this.idTipoComp).text(this.tipoComprobante));
+                            }
+
+                            primerValorBool = false;
+                        });
+
+                        cambioTipoCpte(vCodTipoComprobante);
+
+                        $("#cbxTipoCpbteCompModal1").val(vCodTipoComprobante); // Factura o boleta.
+                        $("#cbxTipoCpbteCompModal2").val(3); // Planilla de Movilidad
+                        $("#cbxTipoCpbteCompModal3").val(4); // Planilla de Movilidad
+
+                        document.getElementById("cbxTipoCpbteCompModal2").disabled = true;
+                        document.getElementById("cbxTipoCpbteCompModal3").disabled = true;
+                    },
+                    failure: function () {
+                        console.error('error al cargar tipos periodos');
+                    }
+                });
+            }
+
+
+
+            function cambioTipoCpte(pCodTipoCpte) {
+
+                // Limpiar TAB Factura Boleta
+
+                if (pCodTipoCpte == 1) {
+                    // Factura
+                    document.getElementById("cbxTipoCpbteCompModal1").disabled = false;
+                    document.getElementById("txtSerieModal1").disabled = false;
+                    document.getElementById("txtNumeroModal1").disabled = false;
+                    document.getElementById("txtObsCompModal1").disabled = false;
+
+                    document.getElementById("cbxUM1").disabled = false;
+                    document.getElementById("txtDescripcion1").disabled = false;
+                    //document.getElementById("txtCantidad1").disabled = false;
+                    document.getElementById("txtValorUnitarioTotal1").disabled = false;
+
+                    document.getElementById("idimportetotal1").disabled = true;
+                    document.getElementById("idigv1").disabled = true;
+                    document.getElementById("idtotal1").disabled = true;
+
+                    document.getElementById("txtSerieModal1").focus = true;
+                }
+                else if (pCodTipoCpte == 2) {
+                    // Boleta
+                    document.getElementById("cbxTipoCpbteCompModal1").disabled = false;
+                    document.getElementById("txtSerieModal1").disabled = false;
+                    document.getElementById("txtObsCompModal1").disabled = false;
+
+                    document.getElementById("cbxUM1").disabled = true;
+                    document.getElementById("txtDescripcion1").disabled = false;
+                    //document.getElementById("txtCantidad1").disabled = true;
+                    document.getElementById("txtValorUnitarioTotal1").disabled = false;
+
+                    $("#txtDescripcion1").val("");
+                    $("#cbxUM1").val("UN");
+                    //$("#txtCantidad1").val(1);
+
+                    document.getElementById("txtValorUnitarioTotal1").focus = true;
+
+                }
+
+                detComprobanteArray1 = [];
+
+                let tabla = $("#tblFacturaBoleta").DataTable();
+                tabla.destroy();
+                var tr = "";
+                $("#tblFacturaBoletaContent").html(tr);
+                $("#tblFacturaBoleta").DataTable(
+                    {
+                        'language': { 'url': '/libs/datatables/spanish.json' },
+                        lengthMenu: [[3], [3]]
+                    }
+                );
+
+                document.getElementById("idimportetotal1").disabled = true;
+                document.getElementById("idigv1").disabled = true;
+                document.getElementById("idtotal1").disabled = true;
+
+                $("#idimportetotal1").val("0");
+                $("#idigv1").val("0");
+                $("#idtotal1").val("0");
+            }
+
+
+
+
+            function validacionRegistro() {
+                var respuesta = false;
+
+                if ($("#txtRUCModal").val().trim() == "") {
+                    respuesta = false;
+                    Swal.fire({
+                        title: 'Ingrese un código de RUC',
+                        text: "Textile Sourcing Company",
+                        icon: 'warning',
+                        showConfirmButton: true,
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'Ok'
+
+                    });
+                }
+                else if ($("#txtRSModal").val().trim() == "") {
+                    respuesta = false;
+
+                    Swal.fire({
+                        title: 'Ingrese Razon Social',
+                        text: "Textile Sourcing Company",
+                        icon: 'warning',
+                        showConfirmButton: true,
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'Ok'
+                    });
+                }
+                else {
+                    respuesta = true;
+                }
+
+                return respuesta;
+            }
+
+
+            $('#txtRucCompModal1').keypress(function (event) {
+                var keycode = (event.keyCode ? event.keyCode : event.which);
+
+                if (keycode == '13') {
+
+                    let ruc = $("#txtRucCompModal1").val().trim();
+
+                    if (ruc == "") {
+                        Swal.fire({
+                            title: 'Ingrese RUC',
+                            text: "Textile Sourcing Company",
+                            icon: 'warning',
+                            showConfirmButton: true,
+                            showCancelButton: false,
+                            confirmButtonText: 'Ok',
+                            cancelButtonText: 'Cancel',
+                            focusConfirm: true
+                        }).then(result => {
+                            if (result.value) {
+                                document.getElementById("txtRucCompModal1").focus = true;
+                            }
+                        });
+                    }
+                    else if (ruc.length < 7 || ruc.length > 15) {
+                        Swal.fire({
+                            title: 'Ingrese un número RUC valido por favor',
+                            icon: 'warning',
+                            showConfirmButton: true,
+                            showCancelButton: false,
+                            confirmButtonText: 'Ok',
+                            cancelButtonText: 'Cancel',
+                            focusConfirm: true
+                        }).then(result => {
+                            if (result.value) {
+                                //document.getElementById("idtxtcodigo").focus = true;
+                            }
+                        });
+                    }
+                    else {
+
+                        MostrarCarga("Buscando...");
+
+
+                        $.ajax({
+                            url: "/finanzas/RG_SetProveedorValidar",
+                            type: "POST",
+                            data: { 'opcion': '1', 'tipoPersona': 'J', 'ruc': ruc, 'rs': '', 'direccion': '' },
+                            dataType: "json",
+                            success: function (resultado) {
+
+                                if (resultado.isRedirect) {
+                                    window.location.href = resultado.redirectUrl;
+                                }
+                                else {
+                                    proveedor = resultado.entidad;
+
+                                    if (resultado.entidad.idResponse == 0) {
+
+                                        Swal.fire({
+                                            title: '¿Proveedor no existe, desea crearlo?',
+                                            text: "Textile Sourcing Company",
+                                            icon: 'warning',
+                                            showCancelButton: true,
+                                            confirmButtonColor: '#3085d6',
+                                            cancelButtonColor: '#d33',
+                                            confirmButtonText: 'Si',
+                                            cancelButtonText: 'No'
+                                        }).then((result) => {
+                                            if (result.value) {
+                                                $("#regComprobModal").modal("hide");
+                                                $('#proveedorModal').modal('show');
+                                            }
+                                        });
+                                    }
+                                    else {
+
+                                        $("#txtRSCompModal1").val(resultado.entidad.danvar);
+                                        $("#txtCodSofyaPCModal1").val(resultado.entidad.ctpava + "-" + resultado.entidad.canvar);
+
+                                        mensajePrincipal(true, "Proveedor correcto");
+                                    }
+                                }
+                            },
+                            error: function (xhr, ajaxOptions, thrownError) {
+
+                            }
+                        });
+
+                    }
+
+                }
+            });
+
+            $("#btnRegistrarProveedor").click(function () {
+
+                if (validacionRegistro()) {
+
+                    MostrarCarga("Guardando...");
+
+                    $.ajax({
+                        url: "/finanzas/RG_SetProveedorRegistrar",
+                        type: "POST",
+                        data: {
+                            'opcion': '2',
+                            'tipoPersona': 'J',
+                            'ruc': $("#txtRUCModal").val(),
+                            'rs': $("#txtRSModal").val(),
+                            'direccion': $("#txtDireccionModal").val()
+                        },
+                        dataType: "json",
+                        success: function (resultado) {
+
+                            proveedor = resultado.entidad;
+
+                            if (resultado.isRedirect) {
+                                window.location.href = resultado.redirectUrl;
+                            }
+                            else {
+
+                                if (resultado.entidad.idResponse == 1) {
+                                    mensajePrincipal(true, resultado.entidad.statusResponse);
+                                }
+                                else {
+                                    mensajePrincipal(false, resultado.entidad.statusResponse);
+                                }
+                            }
+
+                            $("#txtRucCompModal1").val(proveedor.creguc);
+                            $("#txtRSCompModal1").val(proveedor.danvar);
+                            $("#txtCodSofyaPCModal1").val(proveedor.ctpava + "-" + proveedor.canvar);
+
+                            $('#proveedorModal').modal('hide');
+                            $("#regComprobModal").modal("show");
+
+                        },
+                        error: function (xhr, ajaxOptions, thrownError) {
+
+                        }
+                    });
+                }
+            });
+
+            $("#btnBuscarPendiente").click(function () {
+
+                $.ajax({
+                    type: "GET",
+                    url: '/finanzas/RG_PendientesRendicion',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (data) {
+
+                        let tabla = $("#tblDetallePendiente").DataTable();
+
+                        tabla.destroy();
+                        var tr = "";
+
+                        data.lista.forEach((obj) => {
+
+                            tr += "<tr> "
+                                + " <td class='ocultar-columna'> " + obj.idSolicitud + "</td>"
+                                + " <td> " + obj.fecha + "</td>"
+                                + " <td> " + obj.codigo + "</td>"
+                                + " <td> " + obj.glosa + "</td>"
+                                + " <td> " + obj.total + "</td>"
+                                + " <td class='text-center'>"
+                                + "     <button data-codigo='" + obj.codigo + "' data-idsolicitud='" + obj.idSolicitud + "' data-toggle='collapse' class='btn btn-sm btn-outline-secondary cseleccionar ml-1'><i class='fas fa-check'></i></button>"
+                                + "</td>"
+                                + "</tr>";
+                        });
+
+                        $("#tblDetallePendienteContent").html(tr);
+
+
+                        $("#tblDetallePendiente").DataTable(
+                            {
+                                'language': { 'url': '/libs/datatables/spanish.json' },
+                                lengthMenu: [[5, 10, 20, -1], [5, 10, 20, 'Todos']]
+                            });
+
+                    },
+                    failure: function () {
+                        console.error('error al cargar los periodos');
+                    }
+                });
+
+
+                $('#modalSolicitudesPendientes').modal('show');
+
+            });
+
+            $("#tblDetallePendiente").on('click', '.cseleccionar', function () {
+                // Modal Detalle, selecciona la solicitud.
+
+                let codigo = $(this).attr("data-codigo");
+                let idsolicitud = $(this).attr("data-idsolicitud");
+
+                $.ajax({
+                    url: "/finanzas/RG_SolBusquedaXCod",
+                    type: "GET",
+                    data: { 'codigo': codigo, 'idSolicitud': idsolicitud },
+                    dataType: "json",
+                    success: function (resultado) {
+
+
+                        if (resultado.isRedirect) {
+                            window.location.href = resultado.redirectUrl;
+                        }
+                        else {
+                            if (resultado.entidad.idSolicitud > 0) {
+
+                                solicitudSeleccionada = resultado.entidad;
+
+                                $("#txtFecha").val(resultado.entidad.fecha);
+                                $("#txtUsuario").val(USUARIO_COMPLETO);
+                                $("#txtTipo").val(resultado.entidad.tipo);
+                                $("#txtGlosa").val(resultado.entidad.observacion);
+                                $("#txtCeCo").val(resultado.entidad.ceco);
+                                $("#txtCodigo").val(resultado.entidad.codigo);
+                                $("#txtColaborador").val(resultado.entidad.colaborador);
+                                $("#txtTotalSol").val(resultado.entidad.simbolo + " " + formatoNumero(resultado.entidad.total));
+
+                                $("#estado-desc").text(resultado.entidad.estado);
+
+                                mensajePrincipal(true, "Mostrando Solicitud");
+                                validarEstadoSolicitud(2, idsolicitud);
+
+                                armarTablaDetalle(resultado.entidad.listaDetalle);
+                                indicadorEstado(resultado.entidad.idEstado);
+
+                                $('#modalSolicitudesPendientes').modal('hide');
+                            }
+                            else {
+                                mensajePrincipal(false, "Solicitud no encontrada");
+                            }
+                        }
+                    },
+                    error: function (xhr, ajaxOptions, thrownError) {
+
+                    }
+                });
+            });
+
+            $("#tblSolicitud").on('click', '.seleccion', function () {
+
+                let idsolicitud = $(this).attr("data-idsolicitud");
+                let secuencia = $(this).attr("data-secuencia");
+                let valor = $(this).attr("data-valor");
+                let totalRestante = $(this).attr("data-restante");
+
+                if ($(this).prop("checked")) {
+
+                    detalleArray.push({ idsolicitud: idsolicitud, secuencia: secuencia, valor: parseFloat(valor), totalrestante: parseFloat(totalRestante) });
+
+                } else {
+
+                    for (var i = 0; i < detalleArray.length; i++) {
+                        if (detalleArray[i].idsolicitud == idsolicitud && detalleArray[i].secuencia == secuencia) {
+                            detalleArray.splice(i, 1);
+                        }
+                    }
+                }
+            });
+
+
+
+
+
+
+            $("#tblSolicitudContent").on("click", ".cRegistrarCpte", function () {
+
+                let idsolicitud = $(this).attr("data-idsolicitud");
+                let secuencia = $(this).attr("data-secuencia");
+                let valor = $(this).attr("data-valor");
+                let totalRestante = $(this).attr("data-restante");
+                let idconceptodet = $(this).attr("data-idconceptodet");
+
+                detalleArray.push({ idsolicitud: idsolicitud, secuencia: secuencia, valor: parseFloat(valor), totalrestante: parseFloat(totalRestante) });
+
+                let valorRestante = 0;
+
+                limpiarControlModal(1);
+                limpiarControlModal(2);
+                limpiarControlModal(3);
+
+                TIPO_REGISTRO = "INSERTAR";
+
+                $("#txtCeCoModal1").val(solicitudSeleccionada.ceco);
+                $("#txtCeCoModal2").val(solicitudSeleccionada.ceco);
+                $("#txtCeCoModal3").val(solicitudSeleccionada.ceco);
+
+                $("#txtDNIModal2").val(solicitudSeleccionada.canvar_bnf);
+                $("#txtDNIModal3").val(solicitudSeleccionada.canvar_bnf);
+                $("#txtApeNomModal2").val(solicitudSeleccionada.colaborador);
+                $("#txtApeNomModal3").val(solicitudSeleccionada.colaborador);
+
+                for (var i = 0; i < detalleArray.length; i++) {
+                    valorRestante = valorRestante + detalleArray[i].totalrestante;
+                }
+
+                $("#kpiMontoSeleecionadoModal1").text(solicitudSeleccionada.simbolo + " " + formatoNumero(valorRestante));
+                $("#kpiMontoSeleecionadoModal2").text(solicitudSeleccionada.simbolo + " " + formatoNumero(valorRestante));
+                $("#kpiMontoSeleecionadoModal3").text(solicitudSeleccionada.simbolo + " " + formatoNumero(valorRestante));
+
+                $("#regComprobModal .kpi-modal-monto1").css("background-color", "#ABB2B9");
+                $("#regComprobModal .kpi-modal-monto2").css("background-color", "#ABB2B9");
+                $("#regComprobModal .kpi-modal-monto3").css("background-color", "#ABB2B9");
+
+
+                if (idconceptodet == "4" || idconceptodet == "8") {
+                    $("#facturaboleta-tab").addClass("disabled");
+                    $("#planillamovilidad-tab").removeClass("disabled");
+                    $("#declaracionjur-tab").addClass("disabled");
+
+                    $('#regComprobModal .nav-tabs #planillamovilidad-tab').tab('show');
+                    tabSeleccionado = 2;
+
+                }
+                else {
+                    $("#facturaboleta-tab").removeClass("disabled");
+                    $("#planillamovilidad-tab").addClass("disabled");
+                    $("#declaracionjur-tab").removeClass("disabled");
+
+                    $("#regComprobModal .nav-tabs #facturaboleta-tab").tab('show');
+                    tabSeleccionado = 1;
+                }
+
+
+                $("#regComprobModal").modal("show");
+
+            });
+
+
+
+            $("#btnRegistrarcomprobante").click(function () {
+
+                if (detalleArray.length > 0) {
+
+                    let valorRestante = 0;
+
+                    limpiarControlModal(1);
+                    limpiarControlModal(2);
+                    limpiarControlModal(3);
+
+
+                    // FACTURA Y BOLETA
+                    $("#facturaboleta-tab").removeClass("disabled");
+                    $("#planillamovilidad-tab").removeClass("disabled");
+                    $("#declaracionjur-tab").removeClass("disabled");
+
+                    $("#regComprobModal .nav-tabs #facturaboleta-tab").tab('show');
+
+                    TIPO_REGISTRO = "INSERTAR";
+
+                    $("#txtCeCoModal1").val(solicitudSeleccionada.ceco);
+                    $("#txtCeCoModal2").val(solicitudSeleccionada.ceco);
+                    $("#txtCeCoModal3").val(solicitudSeleccionada.ceco);
+
+                    $("#txtDNIModal2").val(solicitudSeleccionada.canvar_bnf);
+                    $("#txtDNIModal3").val(solicitudSeleccionada.canvar_bnf);
+                    $("#txtApeNomModal2").val(solicitudSeleccionada.colaborador);
+                    $("#txtApeNomModal3").val(solicitudSeleccionada.colaborador);
+
+                    for (var i = 0; i < detalleArray.length; i++) {
+                        valorRestante = valorRestante + detalleArray[i].totalrestante;
+                    }
+
+                    $("#kpiMontoSeleecionadoModal1").text(solicitudSeleccionada.simbolo + " " + formatoNumero(valorRestante));
+                    $("#kpiMontoSeleecionadoModal2").text(solicitudSeleccionada.simbolo + " " + formatoNumero(valorRestante));
+                    $("#kpiMontoSeleecionadoModal3").text(solicitudSeleccionada.simbolo + " " + formatoNumero(valorRestante));
+
+                    $("#regComprobModal .kpi-modal-monto1").css("background-color", "#ABB2B9");
+                    $("#regComprobModal .kpi-modal-monto2").css("background-color", "#ABB2B9");
+                    $("#regComprobModal .kpi-modal-monto3").css("background-color", "#ABB2B9");
+
+                    $("#regComprobModal").modal("show");
+                }
+                else {
+                    Swal.fire({
+                        title: 'Seleccione el detalle de la Solicitud para le registro de Comprobante',
+                        text: "Textile Sourcing Company",
+                        icon: 'warning',
+                        showConfirmButton: true,
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'Ok'
+                    });
+                }
+            });
+
+        });
+
+
+        $('#proveedorModal').on('shown.bs.modal', function (e) {
+            let rucIngresado = $("#txtRucCompModal1").val();
+
+            $("#txtRUCModal").val(rucIngresado);
+            document.getElementById("txtRSModal").focus = true;
+        });
+
+        $('#proveedorModal').on('hidden.bs.modal', function (e) {
+            $("#txtRUCModal").val("");
+            $("#txtRSModal").val("");
+            $("#txtDireccionModal").val("");
+        });
+
+
+        $('#txtDNIModal2').keypress(function (event) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+
+            if (keycode == '13') {
+                let dni = $("#txtDNIModal2").val().trim();
+                busquedaXDNI(dni, tabSeleccionado)
+            }
+        });
+
+        $('#txtDNIModal3').keypress(function (event) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+
+            if (keycode == '13') {
+                let dni = $("#txtDNIModal3").val().trim();
+                busquedaXDNI(dni, tabSeleccionado)
+            }
+        });
+
+        $('#modalSolDetInsertar').on('hidden.bs.modal', function (e) {
+            $("#txtRUCModal").val("");
+            $("#txtRSModal").val("");
+            $("#txtDireccionModal").val("");
+        });
+
+
+
+        $("#btnAgregarMotivo1").click(function () {
+
+
+            if (validacionDetGuardarCpte(tabSeleccionado)) {
+
+                let cantidad = parseFloat($("#txtCantidad1").val());
+                let valorUnitarioTotal = parseFloat($("#txtValorUnitarioTotal1").val());
+                let valorUnitario = 0;
+
+                if ($("#cbxTipoCpbteCompModal1").val().trim() == "1") {
+                    valorUnitario = (valorUnitarioTotal) / ((PORCENTAJE_IGV / 100) + 1);
+
+                }
+                else if ($("#cbxTipoCpbteCompModal1").val().trim() == "2") {
+                    valorUnitario = (valorUnitarioTotal);
+                }
+
+                let total = (cantidad * valorUnitarioTotal);
+
+
+                const sumDetalleSol = detalleArray.reduce((acc, item) => {
+                    return acc += item.totalrestante
+                }, 0);
+
+                const sumAgregadosDet = detComprobanteArray1.reduce((acc, item) => {
+                    return acc += item.total;
+                }, 0);
+
+
+                if ((sumDetalleSol - (sumAgregadosDet + total)) < 0) {
+                    $("#regComprobModal .kpi-modal-monto1").css("background-color", "#ABB2B9");
+                }
+                else {
+                    $("#regComprobModal .kpi-modal-monto1").css("background-color", "#ABB2B9");
+                }
+
+                iDetalle1++;
+
+                var d = new Date(), month = '' + (d.getMonth() + 1), day = '' + d.getDate(), year = d.getFullYear();
+                if (month.length < 2) { month = '0' + month; }
+                if (day.length < 2) { day = '0' + day; }
+
+                detComprobanteArray1.push({
+                    iDetalle: iDetalle1,
+                    fecha: [year, month, day].join('/'),
+                    fechaBD: [year, month, day].join(''),
+                    detalle1: ($("#cbxTipoCpbteCompModal1").val().trim() == "1" ? $("#txtDescripcion1").val() : $("#txtObsCompModal1").val()),
+                    detalle2: "",
+                    codum: $("#cbxUM1").val(),
+                    valorunit: valorUnitario,
+                    cantidad: cantidad,
+                    total: total
+                });
+
+
+                let tabla = $("#tblFacturaBoleta").DataTable();
+
+                tabla.destroy();
+                var tr = "";
+
+                detComprobanteArray1.forEach((obj) => {
+
+                    tr += "<tr> "
+                        + " <td> " + obj.codum + "</td>"
+                        + " <td> " + obj.detalle1 + "</td>"
+                        + " <td> " + obj.cantidad + "</td>"
+                        + " <td> " + formatoNumero(obj.valorunit) + "</td>"
+                        + " <td> " + formatoNumero(obj.total) + "</td>"
+                        + " <td class='text-center'>"
+                        + "     <button data-idetalle='" + obj.iDetalle + "' data-toggle='collapse' class='btn btn-sm btn-danger cselectEliminar1 ml-1'><i class='fas fa-trash'></i></button>"
+                        + "</td>"
+                        + "</tr>";
+                });
+
+                $("#tblFacturaBoletaContent").html(tr);
+
+                $("#tblFacturaBoleta").DataTable(
+                    {
+                        'language': { 'url': '/libs/datatables/spanish.json' },
+                        lengthMenu: [[3], [3]]
+                    });
+
+
+
+                const importeTotal = detComprobanteArray1.reduce((acc, item) => {
+                    return acc += (item.valorunit);
+                }, 0);
+
+
+                if ($("#cbxTipoCpbteCompModal1").val().trim() == "1") {
+                    // FACTURA
+                    $("#idimportetotal1").val(formatoNumero(importeTotal));
+                    $("#idigv1").val(formatoNumero(importeTotal * (PORCENTAJE_IGV / 100)));
+                    $("#idtotal1").val(formatoNumero(importeTotal + (importeTotal * (PORCENTAJE_IGV / 100))));
+
+                    $("#txtDescripcion1").val("");
+                    $("#txtCantidad1").val("");
+                    $("#txtValorUnitarioTotal1").val("");
+
+                    document.getElementById("cbxUM1").focus = true;
+                }
+                else if ($("#cbxTipoCpbteCompModal1").val().trim() == "2") {
+                    // BOLETA
+                    $("#idimportetotal1").val(formatoNumero(importeTotal));
+                    $("#idigv1").val(0);
+                    $("#idtotal1").val(formatoNumero(importeTotal));
+
+                    $("#cbxUM1").val("UN");
+                    $("#txtDescripcion1").val("");
+                    $("#txtCantidad1").val("1");
+                    $("#txtValorUnitarioTotal1").val("");
+
+                    document.getElementById("txtValorUnitarioTotal1").focus = true;
+                }
+
+                $("#kpiMontoSeleecionadoModal1").text(solicitudSeleccionada.simbolo + " " + formatoNumero(sumDetalleSol - (sumAgregadosDet + total)));
+
+            }
+        });
+
+        $("#btnAgregarMotivo2").click(function () {
+
+            if (validacionDetGuardarCpte(tabSeleccionado)) {
+
+                let importeIngresado = parseFloat($("#txtImporteModal2").val());
+
+                const sumDetalleSol = detalleArray.reduce((acc, item) => {
+                    return acc += item.totalrestante
+                }, 0);
+
+                const sumAgregadosDet = detComprobanteArray2.reduce((acc, item) => {
+                    return acc += (item.valorunit * item.cantidad);
+                }, 0);
+
+
+                if ((sumDetalleSol - (sumAgregadosDet + importeIngresado)) < 0) {
+                    $("#regComprobModal .kpi-modal-monto2").css("background-color", "#ABB2B9");
+                }
+                else {
+                    $("#regComprobModal .kpi-modal-monto2").css("background-color", "#ABB2B9");
+                }
+
+                iDetalle2++;
+
+
+
+                var d = new Date($("#txtFechaModalDet2").val());
+
+                let month = '' + (d.getMonth() + 1);
+
+                let diaNumero = parseInt(d.getDate()) + 1;
+
+                let day = '' + diaNumero;
+                let year = d.getFullYear();
+
+                if (month.length < 2) { month = '0' + month; }
+                if (day.length < 2) { day = '0' + day; }
+
+
+
+                detComprobanteArray2.push({
+                    iDetalle: iDetalle2,
+                    fecha: [year, month, day].join('-'),
+                    fechaBD: [year, month, day].join(''),
+                    detalle1: $("#txtOrgDstModal2").val(),
+                    detalle2: $("#txtMotivoModal2").val(),
+                    codum: "UN", // UNIDAD
+                    valorunit: parseFloat($("#txtImporteModal2").val()),
+                    cantidad: 1
+                });
+
+
+                let tabla = $("#tblPlanillaMovilidad").DataTable();
+
+                tabla.destroy();
+                var tr = "";
+
+                detComprobanteArray2.forEach((obj) => {
+
+                    tr += "<tr> "
+                        + " <td> " + obj.fecha + "</td>"
+                        + " <td> " + obj.detalle1 + "</td>"
+                        + " <td> " + obj.detalle2 + "</td>"
+                        + " <td> " + formatoNumero(obj.valorunit) + "</td>"
+                        + " <td class='text-center'>"
+                        + "     <button data-idetalle='" + obj.iDetalle + "' data-toggle='collapse' class='btn btn-sm btn-danger cselectEliminar2 ml-1'><i class='fas fa-trash'></i></button>"
+                        + "</td>"
+                        + "</tr>";
+                });
+
+                $("#tblPlanillaMovilidadContent").html(tr);
+
+                $("#tblPlanillaMovilidad").DataTable(
+                    {
+                        'language': { 'url': '/libs/datatables/spanish.json' },
+                        lengthMenu: [[3], [3]]
+                    });
+
+                $("#txtOrgDstModal2").val("");
+                $("#txtMotivoModal2").val("");
+                $("#txtImporteModal2").val("0");
+
+                document.getElementById("txtOrgDstModal2").focus = true;
+
+                $("#kpiMontoSeleecionadoModal2").text(solicitudSeleccionada.simbolo + " " + formatoNumero(sumDetalleSol - (sumAgregadosDet + importeIngresado)));
+            }
+
+        });
+
+        $("#btnAgregarMotivo3_1").click(function () {
+
+            if (validacionDetGuardarCpte(tabSeleccionado)) {
+
+                let respuesta = false;
+                let importeIngresado = parseFloat($("#txtMontoDet3_1").val());
+
+                if (importeIngresado == "0" || importeIngresado == "" || typeof (importeIngresado) == "undefined" || isNaN(importeIngresado)) {
+
+                    Swal.fire({
+                        title: 'Ingrese un monto',
+                        text: "Textile Sourcing Company",
+                        icon: 'warning',
+                        showConfirmButton: true,
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'Ok'
+                    });
+                }
+                else if (parseFloat(importeIngresado) <= 0) {
+
+                    Swal.fire({
+                        title: 'Ingrese un monto positivo',
+                        text: "Textile Sourcing Company",
+                        icon: 'warning',
+                        showConfirmButton: true,
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'Ok'
+                    });
+
+                }
+                else {
+
+                    let sumTotal3 = 0;
+                    let v3_TipoMod = $("#cbxMonedaModal3").val();
+                    let v3_maximoS = tiposComprobantesArray.find(x => x.idTipoComp == parseInt($("#cbxTipoCpbteCompModal3").val())).maximoSoles;
+                    let v3_maximoD = tiposComprobantesArray.find(x => x.idTipoComp == parseInt($("#cbxTipoCpbteCompModal3").val())).maximoDolar;
+
+                    // Validar si excede el monto maximo.
+                    if (v3_TipoMod.toString() == 1) {
+
+                        // Soles.
+                        if (detComprobanteArray3.length > 0) {
+                            sumTotal3 = detComprobanteArray3.reduce((acc, item) => {
+                                return acc += item.valorunit * item.cantidad
+                            }, 0);
+                        }
+                        else {
+                            sumTotal3 = parseFloat($("#txtMontoDet3_1").val());
+                        }
+
+                        if (parseFloat(sumTotal3) > v3_maximoS) {
+                            respuesta = false;
+                            Swal.fire({
+                                title: 'El monto máximo permitido es S/.' + v3_maximoS,
+                                text: "Textile Sourcing Company",
+                                icon: 'warning',
+                                showConfirmButton: true,
+                                confirmButtonColor: '#3085d6',
+                                confirmButtonText: 'Ok'
+                            });
+                        }
+                        else {
+                            respuesta = true;
+                        }
+
+                    }
+                    else if (v3_TipoMod.toString() == 2) {
+
+                        // Dolar.
+                        if (detComprobanteArray2.length > 0) {
+                            sumTotal3 = detComprobanteArray3.reduce((acc, item) => {
+                                return acc += item.valorunit * item.cantidad
+                            }, 0);
+                        }
+                        else {
+                            sumTotal3 = parseFloat($("#txtMontoDet3_1").val());
+                        }
+
+
+                        if (parseFloat(sumTotal3) > v3_maximoD) {
+                            respuesta = false;
+                            Swal.fire({
+                                title: 'El monto máximo permitido es U$ ' + v2_maximoD,
+                                text: "Textile Sourcing Company",
+                                icon: 'warning',
+                                showConfirmButton: true,
+                                confirmButtonColor: '#3085d6',
+                                confirmButtonText: 'Ok'
+                            });
+                        }
+                        else {
+                            respuesta = true;
+                        }
+                    }
+
+
+                    // Paso la validacion.
+                    if (respuesta) {
+
+                        const sumDetalleSol = detalleArray.reduce((acc, item) => {
+                            return acc += item.totalrestante
+                        }, 0);
+
+                        const sumAgregadosDet = detComprobanteArray3.reduce((acc, item) => {
+                            return acc += (item.valorunit * item.cantidad);
+                        }, 0);
+
+
+                        if ((sumDetalleSol - (sumAgregadosDet + importeIngresado)) < 0) {
+                            $("#regComprobModal .kpi-modal-monto3").css("background-color", "#ABB2B9");
+                        }
+                        else {
+                            $("#regComprobModal .kpi-modal-monto3").css("background-color", "#ABB2B9");
+                        }
+
+                        iDetalle3++;
+
+                        var d = new Date($("#txtFechaModalDet3_1").val());
+                        let numDia = 0;
+
+
+                        let month = '' + (d.getMonth() + 1);
+
+                        numDia = d.getDate();
+                        numDia = numDia + 1;
+
+                        let day = '' + numDia;
+                        let year = d.getFullYear();
+
+                        if (month.length < 2) { month = '0' + month; }
+                        if (day.length < 2) { day = '0' + day; }
+
+                        detComprobanteArray3.push({
+                            iDetalle: iDetalle3,
+                            fecha: [year, month, day].join('-'),
+                            fechaBD: [year, month, day].join(''),
+                            detalle1: $("#cbxMonedaModal3 option:selected").text(),
+                            detalle2: "",
+                            codum: "UN", // UNIDAD
+                            valorunit: parseFloat($("#txtMontoDet3_1").val()),
+                            cantidad: 1,
+                            seccion: 1
+                        });
+
+                        let tabla = $("#tblDeclaracionJurada3_1").DataTable();
+
+                        tabla.destroy();
+                        var tr = "";
+
+                        detComprobanteArray3.forEach((obj) => {
+                            if (obj.seccion == 1) {
+
+                                tr += "<tr> "
+                                    + " <td> " + obj.fecha + "</td>"
+                                    + " <td> " + obj.detalle1 + "</td>"
+                                    + " <td> " + formatoNumero(obj.valorunit) + "</td>"
+                                    + " <td class='text-center'>"
+                                    + "     <button data-idetalle='" + obj.iDetalle + "' data-toggle='collapse' class='btn btn-sm btn-danger cselectEliminar3_1 ml-1'><i class='fas fa-trash'></i></button>"
+                                    + "</td>"
+                                    + "</tr>";
+                            }
+                        });
+
+                        $("#tblDeclaracionJuradaContent3_1").html(tr);
+
+                        $("#tblDeclaracionJurada3_1").DataTable(
+                            {
+                                'language': { 'url': '/libs/datatables/spanish.json' },
+                                lengthMenu: [[5], [5]]
+                            });
+
+                        $("#txtMontoDet3_1").val("");
+
+                        document.getElementById("txtFechaModalDet3_1").focus = true;
+
+                        $("#kpiMontoSeleecionadoModal3").text(solicitudSeleccionada.simbolo + " " + formatoNumero(sumDetalleSol - (sumAgregadosDet + importeIngresado)));
+
+                    }
+                }
+            }
+        });
+
+
+        $("#btnAgregarMotivo3_2").click(function () {
+
+            if (validacionDetGuardarCpte(tabSeleccionado)) {
+
+                let respuesta = false;
+                let importeIngresado = parseFloat($("#txtMontoDet3_2").val());
+
+                if (importeIngresado == "0" || importeIngresado == "" || typeof (importeIngresado) == "undefined" || isNaN(importeIngresado)) {
+
+                    Swal.fire({
+                        title: 'Ingrese un monto',
+                        text: "Textile Sourcing Company",
+                        icon: 'warning',
+                        showConfirmButton: true,
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'Ok'
+                    });
+                }
+                else if (parseFloat(importeIngresado) <= 0) {
+
+                    Swal.fire({
+                        title: 'Ingrese un monto positivo',
+                        text: "Textile Sourcing Company",
+                        icon: 'warning',
+                        showConfirmButton: true,
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'Ok'
+                    });
+
+                }
+                else {
+
+                    let sumTotal3 = 0;
+                    let v3_TipoMod = $("#cbxMonedaModal3").val();
+                    let v3_maximoS = tiposComprobantesArray.find(x => x.idTipoComp == parseInt($("#cbxTipoCpbteCompModal3").val())).maximoSoles;
+                    let v3_maximoD = tiposComprobantesArray.find(x => x.idTipoComp == parseInt($("#cbxTipoCpbteCompModal3").val())).maximoDolar;
+
+                    // Validar si excede el monto maximo.
+                    if (v3_TipoMod.toString() == 1) {
+
+                        // Soles.
+                        if (detComprobanteArray3.length > 0) {
+                            sumTotal3 = detComprobanteArray3.reduce((acc, item) => {
+                                return acc += item.valorunit * item.cantidad
+                            }, 0);
+                        }
+                        else {
+                            sumTotal3 = parseFloat($("#txtMontoDet3_2").val());
+                        }
+
+                        if (parseFloat(sumTotal3) > v3_maximoS) {
+                            respuesta = false;
+                            Swal.fire({
+                                title: 'El monto máximo permitido es S/.' + v3_maximoS,
+                                text: "Textile Sourcing Company",
+                                icon: 'warning',
+                                showConfirmButton: true,
+                                confirmButtonColor: '#3085d6',
+                                confirmButtonText: 'Ok'
+                            });
+                        }
+                        else {
+                            respuesta = true;
+                        }
+
+                    }
+                    else if (v3_TipoMod.toString() == 2) {
+
+                        // Dolar.
+                        if (detComprobanteArray2.length > 0) {
+                            sumTotal3 = detComprobanteArray3.reduce((acc, item) => {
+                                return acc += item.valorunit * item.cantidad
+                            }, 0);
+                        }
+                        else {
+                            sumTotal3 = parseFloat($("#txtMontoDet3_2").val());
+                        }
+
+                        if (parseFloat(sumTotal3) > v3_maximoD) {
+                            respuesta = false;
+                            Swal.fire({
+                                title: 'El monto máximo permitido es U$ ' + v2_maximoD,
+                                text: "Textile Sourcing Company",
+                                icon: 'warning',
+                                showConfirmButton: true,
+                                confirmButtonColor: '#3085d6',
+                                confirmButtonText: 'Ok'
+                            });
+                        }
+                        else {
+                            respuesta = true;
+                        }
+                    }
+
+
+                    if (respuesta) {
+
+                        const sumDetalleSol = detalleArray.reduce((acc, item) => {
+                            return acc += item.totalrestante
+                        }, 0);
+
+                        const sumAgregadosDet = detComprobanteArray3.reduce((acc, item) => {
+                            return acc += (item.valorunit * item.cantidad);
+                        }, 0);
+
+
+                        if ((sumDetalleSol - (sumAgregadosDet + importeIngresado)) < 0) {
+                            $("#regComprobModal .kpi-modal-monto3").css("background-color", "#ABB2B9");
+                        }
+                        else {
+                            $("#regComprobModal .kpi-modal-monto3").css("background-color", "#ABB2B9");
+                        }
+
+                        iDetalle3++;
+
+                        var d = new Date($("#txtFechaModalDet3_2").val());
+
+                        let numDia = 0;
+
+
+                        let month = '' + (d.getMonth() + 1);
+
+                        numDia = d.getDate();
+                        numDia = numDia + 1;
+
+                        let day = '' + numDia;
+
+                        let year = d.getFullYear();
+
+                        if (month.length < 2) { month = '0' + month; }
+                        if (day.length < 2) { day = '0' + day; }
+
+                        detComprobanteArray3.push({
+                            iDetalle: iDetalle3,
+                            fecha: [year, month, day].join('-'),
+                            fechaBD: [year, month, day].join(''),
+                            detalle1: $("#cbxMonedaModal3 option:selected").text(),
+                            detalle2: "",
+                            codum: "UN", // UNIDAD
+                            valorunit: parseFloat($("#txtMontoDet3_2").val()),
+                            cantidad: 1,
+                            seccion: 2
+                        });
+
+                        let tabla = $("#tblDeclaracionJurada3_2").DataTable();
+
+                        tabla.destroy();
+                        var tr = "";
+
+                        detComprobanteArray3.forEach((obj) => {
+                            if (obj.seccion == 2) {
+
+                                tr += "<tr> "
+                                    + " <td> " + obj.fecha + "</td>"
+                                    + " <td> " + obj.detalle1 + "</td>"
+                                    + " <td> " + formatoNumero(obj.valorunit) + "</td>"
+                                    + " <td class='text-center'>"
+                                    + "     <button data-idetalle='" + obj.iDetalle + "' data-toggle='collapse' class='btn btn-sm btn-danger cselectEliminar3_2 ml-1'><i class='fas fa-trash'></i></button>"
+                                    + "</td>"
+                                    + "</tr>";
+                            }
+                        });
+
+                        $("#tblDeclaracionJuradaContent3_2").html(tr);
+
+                        $("#tblDeclaracionJurada3_2").DataTable(
+                            {
+                                'language': { 'url': '/libs/datatables/spanish.json' },
+                                lengthMenu: [[5], [5]]
+                            });
+
+                        $("#txtMontoDet3_2").val("");
+
+                        document.getElementById("txtFechaModalDet3_2").focus = true;
+
+                        $("#kpiMontoSeleecionadoModal3").text(solicitudSeleccionada.simbolo + " " + formatoNumero(sumDetalleSol - (sumAgregadosDet + importeIngresado)));
+
+                    }
+                }
+            }
+        });
+
+
+
+
+        $("#tblFacturaBoleta").on("click", ".cselectEliminar1", function () {
+
+            let vIDetalle = $(this).attr("data-idetalle");
+
+            for (var i = 0; i < detComprobanteArray1.length; i++) {
+                if (detComprobanteArray1[i].iDetalle == parseInt(vIDetalle)) {
+                    detComprobanteArray1.splice(i, 1);
+                }
+            }
+
+            const sumDetalleSol = detalleArray.reduce((acc, item) => {
+                return acc += item.totalrestante
+            }, 0);
+
+            const sumAgregadosDet = detComprobanteArray1.reduce((acc, item) => {
+                return acc += (item.total);
+            }, 0);
+
+            $("#kpiMontoSeleecionadoModal1").text(solicitudSeleccionada.simbolo + " " + formatoNumero(sumDetalleSol - sumAgregadosDet));
+
+            if ((sumDetalleSol - sumAgregadosDet) < 0) {
+                $("#regComprobModal .kpi-modal-monto1").css("background-color", "#ABB2B9");
+            }
+            else {
+                $("#regComprobModal .kpi-modal-monto1").css("background-color", "#ABB2B9");
+            }
+
+            let tabla = $("#tblFacturaBoleta").DataTable();
+
+            tabla.destroy();
+            var tr = "";
+
+            detComprobanteArray1.forEach((obj) => {
+
+                tr += "<tr> "
+                    + " <td> " + obj.um + "</td>"
+                    + " <td> " + obj.detalle1 + "</td>"
+                    + " <td> " + obj.cantidad + "</td>"
+                    + " <td> " + formatoNumero(obj.valorunit) + "</td>"
+                    + " <td> " + formatoNumero(obj.total) + "</td>"
+                    + " <td class='text-center'>"
+                    + "     <button data-idetalle='" + obj.iDetalle + "' data-toggle='collapse' class='btn btn-sm btn-danger cselectEliminar1 ml-1'><i class='fas fa-trash'></i></button>"
+                    + "</td>"
+                    + "</tr>";
+            });
+
+
+            $("#tblFacturaBoletaContent").html(tr);
+
+            $("#tblFacturaBoleta").DataTable(
+                {
+                    'language': { 'url': '/libs/datatables/spanish.json' },
+                    lengthMenu: [[5], [5]]
+                });
+
+            const importeTotal = detComprobanteArray1.reduce((acc, item) => {
+                return acc += (item.valorunit);
+            }, 0);
+
+
+            if ($("#cbxTipoCpbteCompModal1").val().trim() == "1") {
+                // FACTURA
+                $("#txtDescripcion1").val("");
+                $("#txtCantidad1").val("");
+                $("#txtValorUnitarioTotal1").val("");
+
+                $("#idimportetotal1").val(formatoNumero(importeTotal));
+                $("#idigv1").val(formatoNumero(importeTotal * (PORCENTAJE_IGV / 100)));
+                $("#idtotal1").val(formatoNumero(importeTotal + (importeTotal * (PORCENTAJE_IGV / 100))));
+            }
+            else if ($("#cbxTipoCpbteCompModal1").val().trim() == "2") {
+                // BOLETA
+                $("#txtDescripcion1").val("");
+                $("#txtCantidad1").val("1");
+                $("#txtValorUnitarioTotal1").val("");
+
+                $("#idimportetotal1").val(formatoNumero(importeTotal));
+                $("#idigv1").val(0);
+                $("#idtotal1").val(formatoNumero(importeTotal));
+            }
+
+
+            document.getElementById("cbxUM1").focus = true;
+
+            $("#kpiMontoSeleecionadoModal1").text(solicitudSeleccionada.simbolo + " " + formatoNumero(sumDetalleSol - sumAgregadosDet));
+
+        });
+
+        $("#tblPlanillaMovilidad").on("click", ".cselectEliminar2", function () {
+            let vIDetalle = $(this).attr("data-idetalle");
+
+            for (var i = 0; i < detComprobanteArray2.length; i++) {
+                if (detComprobanteArray2[i].iDetalle == parseInt(vIDetalle)) {
+                    detComprobanteArray2.splice(i, 1);
+                }
+            }
+
+            const sumDetalleSol = detalleArray.reduce((acc, item) => {
+                return acc += item.totalrestante
+            }, 0);
+
+            const sumAgregadosDet = detComprobanteArray2.reduce((acc, item) => {
+                return acc += item.valorunit;
+            }, 0);
+
+            $("#kpiMontoSeleecionadoModal2").text(solicitudSeleccionada.simbolo + " " + formatoNumero(sumDetalleSol - sumAgregadosDet));
+
+            if ((sumDetalleSol - sumAgregadosDet) < 0) {
+                $("#regComprobModal .kpi-modal-monto2").css("background-color", "#ABB2B9");
+            }
+            else {
+                $("#regComprobModal .kpi-modal-monto2").css("background-color", "#ABB2B9");
+            }
+
+            let tabla = $("#tblPlanillaMovilidad").DataTable();
+
+            tabla.destroy();
+            var tr = "";
+
+            detComprobanteArray2.forEach((obj) => {
+
+                tr += "<tr> "
+                    + " <td> " + obj.fecha + "</td>"
+                    + " <td> " + obj.detalle1 + "</td>"
+                    + " <td> " + obj.detalle2 + "</td>"
+                    + " <td> " + formatoNumero(obj.valorunit) + "</td>"
+                    + " <td class='text-center'>"
+                    + "     <button data-idetalle='" + obj.iDetalle + "' data-toggle='collapse' class='btn btn-sm btn-danger cselectEliminar2 ml-1'><i class='fas fa-trash'></i></button>"
+                    + "</td>"
+                    + "</tr>";
+            });
+
+            $("#tblPlanillaMovilidadContent").html(tr);
+
+            $("#tblPlanillaMovilidad").DataTable(
+                {
+                    'language': { 'url': '/libs/datatables/spanish.json' },
+                    lengthMenu: [[5, 10, 20, -1], [5, 10, 20, 'Todos']]
+                });
+
+            $("#txtOrgDstModal2").val("");
+            $("#txtMotivoModal2").val("");
+            $("#txtImporteModal2").val("0");
+
+            document.getElementById("txtOrgDstModal2").focus = true;
+        });
+
+        $("#tblDeclaracionJurada3_1").on("click", ".cselectEliminar3_1", function () {
+            let vIDetalle = $(this).attr("data-idetalle");
+
+            for (var i = 0; i < detComprobanteArray3.length; i++) {
+                if (detComprobanteArray3[i].iDetalle == parseInt(vIDetalle)) {
+                    detComprobanteArray3.splice(i, 1);
+                }
+            }
+
+            const sumDetalleSol = detalleArray.reduce((acc, item) => {
+                return acc += item.totalrestante
+            }, 0);
+
+            const sumAgregadosDet = detComprobanteArray3.reduce((acc, item) => {
+                return acc += item.valorunit;
+            }, 0);
+
+            $("#kpiMontoSeleecionadoModal3").text(solicitudSeleccionada.simbolo + " " + formatoNumero(sumDetalleSol - sumAgregadosDet));
+
+            if ((sumDetalleSol - sumAgregadosDet) < 0) {
+                $("#regComprobModal .kpi-modal-monto3").css("background-color", "#ABB2B9");
+            }
+            else {
+                $("#regComprobModal .kpi-modal-monto3").css("background-color", "#ABB2B9");
+            }
+
+            let tabla = $("#tblDeclaracionJurada3_1").DataTable();
+
+            tabla.destroy();
+            var tr = "";
+
+
+            detComprobanteArray3.forEach((obj) => {
+
+                if (obj.seccion == 1) {
+                    tr += "<tr> "
+                        + " <td> " + obj.fecha + "</td>"
+                        + " <td> " + obj.detalle1 + "</td>"
+                        + " <td> " + formatoNumero(obj.valorunit) + "</td>"
+                        + " <td class='text-center'>"
+                        + "     <button data-idetalle='" + obj.iDetalle + "' data-toggle='collapse' class='btn btn-sm btn-danger cselectEliminar3_1 ml-1'><i class='fas fa-trash'></i></button>"
+                        + "</td>"
+                        + "</tr>";
+                }
+            });
+
+            $("#tblDeclaracionJuradaContent3_1").html(tr);
+
+            $("#tblDeclaracionJurada3_1").DataTable(
+                {
+                    'language': { 'url': '/libs/datatables/spanish.json' },
+                    lengthMenu: [[5], [5]]
+                });
+
+            $("#txtMontoDet3_1").val("");
+
+            document.getElementById("txtFechaModalDet3_1").focus = true;
+        });
+
+        $("#tblDeclaracionJurada3_2").on("click", ".cselectEliminar3_2", function () {
+            let vIDetalle = $(this).attr("data-idetalle");
+
+            for (var i = 0; i < detComprobanteArray3.length; i++) {
+                if (detComprobanteArray3[i].iDetalle == parseInt(vIDetalle)) {
+                    detComprobanteArray3.splice(i, 1);
+                }
+            }
+
+            const sumDetalleSol = detalleArray.reduce((acc, item) => {
+                return acc += item.totalrestante
+            }, 0);
+
+            const sumAgregadosDet = detComprobanteArray3.reduce((acc, item) => {
+                return acc += item.valorunit;
+            }, 0);
+
+            $("#kpiMontoSeleecionadoModal3").text(solicitudSeleccionada.simbolo + " " + formatoNumero(sumDetalleSol - sumAgregadosDet));
+
+            if ((sumDetalleSol - sumAgregadosDet) < 0) {
+                $("#regComprobModal .kpi-modal-monto3").css("background-color", "#ABB2B9");
+            }
+            else {
+                $("#regComprobModal .kpi-modal-monto3").css("background-color", "#ABB2B9");
+            }
+
+            let tabla = $("#tblDeclaracionJurada3_2").DataTable();
+
+            tabla.destroy();
+            var tr = "";
+
+
+            detComprobanteArray3.forEach((obj) => {
+
+                if (obj.seccion == 1) {
+                    tr += "<tr> "
+                        + " <td> " + obj.fecha + "</td>"
+                        + " <td> " + obj.detalle1 + "</td>"
+                        + " <td> " + formatoNumero(obj.valorunit) + "</td>"
+                        + " <td class='text-center'>"
+                        + "     <button data-idetalle='" + obj.iDetalle + "' data-toggle='collapse' class='btn btn-sm btn-danger cselectEliminar3_2 ml-1'><i class='fas fa-trash'></i></button>"
+                        + "</td>"
+                        + "</tr>";
+                }
+            });
+
+            $("#tblDeclaracionJuradaContent3_2").html(tr);
+
+            $("#tblDeclaracionJurada3_2").DataTable(
+                {
+                    'language': { 'url': '/libs/datatables/spanish.json' },
+                    lengthMenu: [[5], [5]]
+                });
+
+            $("#txtMontoDet3_2").val("");
+
+            document.getElementById("txtFechaModalDet3_2").focus = true;
+        });
+
+
+        $("#btnGuardarComprobante").click(function () {
+
+            if (validacionGuardarComp(tabSeleccionado)) {
+
+                let parametro = {};
+                let opcion = 0;
+
+                if (TIPO_REGISTRO == "INSERTAR") {
+                    opcion = 1;
+                }
+                else if (TIPO_REGISTRO == "EDITAR") {
+                    opcion = 6;
+                }
+
+
+                if (tabSeleccionado == 1) {
+
+                    // 1. Facturas / Boletas
+                    parametro = {
+                        'opcion': opcion,
+                        'idRendCompte': vIdRendCompte,
+                        'idTipoComp': parseInt($("#cbxTipoCpbteCompModal1").val()),
+
+                        'nserie': $("#txtSerieModal1").val(),
+                        'ndocof': $("#txtNumeroModal1").val(),
+
+                        'rucDNI': $("#txtRucCompModal1").val(),
+                        'rs': $("#txtRSCompModal1").val(),
+                        'codigoPC': $("#txtCodSofyaPCModal1").val(),
+                        'obs': $("#txtObsCompModal1").val(),
+                        'fechaEmision': FormatoFecha($("#txtFechaModal1").val()),
+                        'codceco': solicitudSeleccionada.codceco,
+                        'idTipoMod': parseInt($("#cbxMonedaModal1").val()),
+                        'porcentajeIGV': (($("#cbxTipoCpbteCompModal1").val().trim() == "1") ? PORCENTAJE_IGV : 0),
+                        'obs1': '',
+                        'obs2': '',
+                        'fecha1': '',
+                        'fecha2': '',
+                        'periodo': $("#cbxPeriodoModal1").val(),
+                        'solitudSeqArray': detalleArray,
+                        'detalleComprobanteArray': detComprobanteArray1
+                    };
+
+                }
+                else if (tabSeleccionado == 2) {
+
+                    // 2. Planilla de Movilidad
+                    parametro = {
+                        'opcion': opcion,
+                        'idRendCompte': vIdRendCompte,
+                        'idTipoComp': 3,
+
+                        'nserie': "000",
+                        'ndocof': FormatoFecha($("#txtFechaModal2").val()),
+
+                        'rucDNI': $("#txtDNIModal2").val(),
+                        'rs': $("#txtApeNomModal2").val(),
+                        'codigoPC': $("#txtDNIModal2").val(),
+                        'obs': "PLANILLA DE MOVILIDAD - " + $("#txtColaborador").val(),
+                        'fechaEmision': $("#txtFechaModal2").val(),
+                        'codceco': solicitudSeleccionada.codceco,
+                        'idTipoMod': parseInt($("#cbxMonedaModal2").val()),
+                        'porcentajeIGV': 0,
+                        'obs1': '',
+                        'obs2': '',
+                        'fecha1': '',
+                        'fecha2': '',
+                        'periodo': $("#cbxPeriodoModal2").val(),
+
+                        'solitudSeqArray': detalleArray,
+                        'detalleComprobanteArray': detComprobanteArray2
+                    };
+
+                }
+                else if (tabSeleccionado == 3) {
+
+                    // 2. Declaracion Jurada
+
+
+                    var dddd = FormatoFecha($("#txtFechaHastaModal3").val());
+
+                    parametro = {
+                        'opcion': opcion,
+                        'idRendCompte': vIdRendCompte,
+                        'idTipoComp': 4,
+
+                        'nserie': "000",
+                        'ndocof': FormatoFecha($("#txtFechaModal3").val()),
+
+                        'rucDNI': $("#txtDNIModal3").val(),
+                        'rs': $("#txtApeNomModal3").val(),
+                        'codigoPC': $("#txtDNIModal3").val(),
+                        'obs': "DECLARACIÓN JURADA - " + $("#txtColaborador").val(),
+                        'fechaEmision': $("#txtFechaModal3").val(),
+                        'codceco': solicitudSeleccionada.codceco,
+                        'idTipoMod': parseInt($("#cbxMonedaModal3").val()),
+                        'porcentajeIGV': 0,
+                        'obs1': $("#txtCiudadModal3").val(),
+                        'obs2': $("#txtPaisModal3").val(),
+                        'fecha1': FormatoFecha($("#txtFechaDesdeModal3").val()),
+                        'fecha2': FormatoFecha($("#txtFechaHastaModal3").val()),
+                        'periodo': $("#cbxPeriodoModal3").val(),
+
+                        'solitudSeqArray': detalleArray,
+                        'detalleComprobanteArray': detComprobanteArray3
+                    };
+                }
+
+
+                $.ajax({
+                    url: "/finanzas/RG_SetRendicionComprobante",
+                    type: "post",
+                    data: parametro,
+                    dataType: "json",
+                    success: function (resultado) {
+
+                        if (resultado.isRedirect) {
+                            window.location.href = resultado.redirectUrl;
+                        }
+                        else {
+                            if (resultado.entidad.idResponse > 0) {
+
+                                detalleArray = [];
+
+                                detComprobanteArray1 = [];
+                                detComprobanteArray2 = [];
+                                detComprobanteArray3 = [];
+
+                                limpiarControlModal(1);
+                                limpiarControlModal(2);
+                                limpiarControlModal(3);
+
+                                validarEstadoSolicitud(2, solicitudSeleccionada.idSolicitud);
+                                actualizarLista(solicitudSeleccionada.idSolicitud);
+
+                                $("#regComprobModal").modal("hide");
+
+                            }
+                            else {
+                                mensajePrincipal(false, resultado.entidad.statusResponse);
+                            }
+                        }
+                    },
+                    error: function (xhr, ajaxOptions, thrownError) {
+
+                    }
+                });
+
+
+
+            }
+        });
+
+        function FormatoFecha(pFecha) {
+            let fechaFormato = new Date(pFecha);
+            let dia = fechaFormato.getDate() + 1;
+
+            let month = '' + (fechaFormato.getMonth() + 1);
+            let day = '' + dia;
+            let year = fechaFormato.getFullYear();
+
+            if (month.length < 2) { month = '0' + month; }
+            if (day.length < 2) { day = '0' + day; }
+
+            return [year, month, day].join('');
+        }
+
+
+        $('#cbxTipoCpbteCompModal1').change(function () {
+
+            var $option = $(this).find('option:selected');
+            let vCodTipoComprobante = parseInt($option.val());
+
+            definirValoresTipoCpte(vCodTipoComprobante);
+
+            detComprobanteArray1 = [];
+
+            let tabla = $("#tblFacturaBoleta").DataTable();
+            tabla.destroy();
+            var tr = "";
+            $("#tblFacturaBoletaContent").html(tr);
+            $("#tblFacturaBoleta").DataTable(
+                {
+                    'language': { 'url': '/libs/datatables/spanish.json' },
+                    lengthMenu: [[3], [3]]
+                }
+            );
+
+            
+        });
+
+
+        function definirValoresTipoCpte(vCodTipoComprobante) {
+            // Limpiar TAB Factura Boleta
+
+            if (vCodTipoComprobante == 1) {
+                // Factura
+                document.getElementById("cbxTipoCpbteCompModal1").disabled = false;
+
+                document.getElementById("txtObsCompModal1").disabled = false;
+
+                document.getElementById("cbxUM1").disabled = false;
+                document.getElementById("txtDescripcion1").disabled = false;
+                document.getElementById("txtCantidad1").disabled = false;
+                document.getElementById("txtValorUnitarioTotal1").disabled = false;
+
+                document.getElementById("idimportetotal1").disabled = true;
+                document.getElementById("idigv1").disabled = true;
+                document.getElementById("idtotal1").disabled = true;
+            }
+            else if (vCodTipoComprobante == 2) {
+                // Boleta
+                document.getElementById("cbxTipoCpbteCompModal1").disabled = false;
+                //document.getElementById("txtSerieNumCompModal1").disabled = false;
+                document.getElementById("txtObsCompModal1").disabled = false;
+
+                document.getElementById("cbxUM1").disabled = true;
+                document.getElementById("txtDescripcion1").disabled = true;
+                document.getElementById("txtCantidad1").disabled = true;
+                document.getElementById("txtValorUnitarioTotal1").disabled = false;
+
+                $("#txtDescripcion1").val("");
+                $("#cbxUM1").val("UN");
+                $("#txtCantidad1").val(1);
+
+                document.getElementById("txtValorUnitarioTotal1").focus = true;
+            }
+
+            document.getElementById("idimportetotal1").disabled = true;
+            document.getElementById("idigv1").disabled = true;
+            document.getElementById("idtotal1").disabled = true;
+
+            $("#idimportetotal1").val("0");
+            $("#idigv1").val("0");
+            $("#idtotal1").val("0");
+
+        }
+        
+
+
+
+
+
+        $("#tabRendicionGastos").on("click", ".ctabRegComp", function () {
+            let index = $(this).attr("data-id");
+            tabSeleccionado = parseInt(index);
+        });
+
+        $('.cfecha').change(function () {
+
+            var inputDate = new Date(this.value);
+            var today = new Date();
+
+            if (inputDate > today) {
+
+                let dd = String(today.getDate()).padStart(2, '0');
+                let mm = String(today.getMonth() + 1).padStart(2, '0');
+                let yyyy = today.getFullYear();
+
+                today = yyyy + '-' + mm + '-' + dd;
+
+                $(this).val(today);
+
+                Swal.fire({
+                    title: 'La fecha no puede ser mayor a la fecha Actual',
+                    text: "Textile Sourcing Company",
+                    icon: 'warning',
+                    showConfirmButton: true,
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'Ok'
+                });
+            }
+
+        });
+
+        $('#regComprobModal').on('shown.bs.modal', function (e) {
+            var now = new Date();
+            var month = (now.getMonth() + 1);
+            var day = now.getDate();
+            if (month < 10)
+                month = "0" + month;
+            if (day < 10)
+                day = "0" + day;
+            var today = now.getFullYear() + '-' + month + '-' + day;
+
+            $('#txtFechaModal1').val(today);
+            $('#txtFechaModal2').val(today);
+            $('#txtFechaModal3').val(today);
+            $('#txtFechaModalDet2').val(today);
+            $('#txtFechaModalDet3').val(today);
+            $('#txtFechaDesdeModal3').val(today);
+            $('#txtFechaHastaModal3').val(today);
+            $('#txtFechaModalDet3_1').val(today);
+            $('#txtFechaModalDet3_2').val(today);
+
+            $("#cbxMonedaModal1").val(solicitudSeleccionada.idTipoMod);
+            $("#cbxMonedaModal2").val(solicitudSeleccionada.idTipoMod);
+            $("#cbxMonedaModal3").val(solicitudSeleccionada.idTipoMod);
+
+            // kkkk
+
+        });
+
+        $('#regComprobModal').on('hidden.bs.modal', function (e) {
+
+            if (TIPO_REGISTRO == "INSERTAR") {
+
+                limpiarControlModal(1);
+                limpiarControlModal(2);
+                limpiarControlModal(3);
+
+                detComprobanteArray1 = [];
+                detComprobanteArray2 = [];
+                detComprobanteArray3 = [];
+
+                detalleArray = [];
+            }
+
+        });
+
+
+        function validacionDetGuardarCpte(tabSeleccion) {
+            let respuesta = false;
+
+            let v1_TipoMod = 0;
+            let v1_maximoS = 0;
+            let v1_maximoD = 0;
+            let v2_TipoMod = 0;
+            let v2_maximoS = 0;
+            let v2_maximoD = 0;
+
+
+            if (tabSeleccion == 1) {
+
+                let tipoComprobante = $('#cbxTipoCpbteCompModal1').val();
+                let sumTotal1 = 0;
+
+                v1_TipoMod = $("#cbxMonedaModal1").val();
+                v1_maximoS = tiposComprobantesArray.find(x => x.idTipoComp == parseInt($("#cbxTipoCpbteCompModal1").val())).maximoSoles;
+                v1_maximoD = tiposComprobantesArray.find(x => x.idTipoComp == parseInt($("#cbxTipoCpbteCompModal1").val())).maximoDolar;
+
+
+                let desc= $("#txtDescripcion1").val();
+
+                if ($("#cbxTipoCpbteCompModal1").val().trim() == "0") {
+                    respuesta = false;
+
+                    Swal.fire({
+                        title: 'Seleccione un Tipo de Comprobante',
+                        text: "Textile Sourcing Company",
+                        icon: 'warning',
+                        showConfirmButton: true,
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'Ok'
+                    });
+                }
+                else if ($("#cbxUM1").val() == "0" && tipoComprobante == "1") {
+                    respuesta = false;
+
+                    Swal.fire({
+                        title: 'Seleccione una unidad de medida por favor',
+                        text: "Textile Sourcing Company",
+                        icon: 'warning',
+                        showConfirmButton: true,
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'Ok'
+                    });
+                }
+                else if ($("#txtDescripcion1").val().trim() == "" && (tipoComprobante == "1")) {
+                    respuesta = false;
+                    Swal.fire({
+                        title: 'Ingrese la descripción por favor',
+                        text: "Textile Sourcing Company",
+                        icon: 'warning',
+                        showConfirmButton: true,
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'Ok'
+                    });
+                }
+                else if (($("#txtCantidad1").val().trim() == "" || $("#txtCantidad1").val() == null || typeof ($("#txtCantidad1").val()) == "undefined") && (tipoComprobante == "1")) {
+                    respuesta = false;
+                    Swal.fire({
+                        title: 'Ingrese la cantidad por favor',
+                        text: "Textile Sourcing Company",
+                        icon: 'warning',
+                        showConfirmButton: true,
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'Ok'
+                    });
+                }
+                else if ((parseFloat($("#txtCantidad1").val()) == 0 || parseFloat($("#txtCantidad1").val()) < 0 || parseFloat($("#txtCantidad1").val()) > 50) && (tipoComprobante == "1")) {
+                    respuesta = false;
+                    Swal.fire({
+                        title: 'Ingrese una cantidad correcta por favor',
+                        text: "Textile Sourcing Company",
+                        icon: 'warning',
+                        showConfirmButton: true,
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'Ok'
+                    });
+                }
+                else if (($("#txtValorUnitarioTotal1").val().trim() == "" || $("#txtValorUnitarioTotal1").val() == null || typeof ($("#txtValorUnitarioTotal1").val()) == "undefined") && (tipoComprobante == "1")) {
+                    respuesta = false;
+                    Swal.fire({
+                        title: 'Ingrese el valor Unitario',
+                        text: "Textile Sourcing Company",
+                        icon: 'warning',
+                        showConfirmButton: true,
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'Ok'
+                    });
+                }
+                else if ((parseFloat($("#txtValorUnitarioTotal1").val()) == 0 || parseFloat($("#txtValorUnitarioTotal1").val()) < 0 || parseFloat($("#txtValorUnitarioTotal1").val()) > 1500) && (tipoComprobante == "1" || tipoComprobante == "2")) {
+                    respuesta = false;
+                    Swal.fire({
+                        title: 'Ingrese un Valor unitario correcto por favor',
+                        text: "Textile Sourcing Company",
+                        icon: 'warning',
+                        showConfirmButton: true,
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'Ok'
+                    });
+                }
+                else if (v1_TipoMod.toString() == 1) {
+
+                    if (detComprobanteArray1.length > 0) {
+                        sumTotal1 = detComprobanteArray1.reduce((acc, item) => {
+                            return acc += item.valorunit * item.cantidad
+                        }, 0);
+                    }
+                    else {
+                        sumTotal1 = parseFloat($("#txtValorUnitarioTotal1").val()) * parseFloat($("#txtCantidad1").val());
+                    }
+
+                    // Soles.
+                    if (sumTotal1 > v1_maximoS) {
+                        respuesta = false;
+                        Swal.fire({
+                            title: 'El monto máximo permitido es S/.' + v1_maximoS,
+                            text: "Textile Sourcing Company",
+                            icon: 'warning',
+                            showConfirmButton: true,
+                            confirmButtonColor: '#3085d6',
+                            confirmButtonText: 'Ok'
+                        });
+                    }
+                    else {
+                        respuesta = true;
+                    }
+
+                }
+                else if (v1_TipoMod.toString() == 2) {
+
+                    // Soles.
+                    if (detComprobanteArray1.length > 0) {
+                        sumTotal1 = detComprobanteArray1.reduce((acc, item) => {
+                            return acc += item.valorunit * item.cantidad
+                        }, 0);
+                    }
+                    else {
+                        sumTotal1 = parseFloat($("#txtValorUnitarioTotal1").val()) * parseFloat($("#txtCantidad1").val());
+                    }
+
+                    if (sumTotal1 > v1_maximoD) {
+                        respuesta = false;
+                        Swal.fire({
+                            title: 'El monto máximo permitido es U$ ' + v1_maximoD,
+                            text: "Textile Sourcing Company",
+                            icon: 'warning',
+                            showConfirmButton: true,
+                            confirmButtonColor: '#3085d6',
+                            confirmButtonText: 'Ok'
+                        });
+                    }
+                    else {
+                        respuesta = true;
+                    }
+                }
+                else {
+                    respuesta = true;
+                }
+
+            }
+            else if (tabSeleccion == 2) {
+
+                v2_TipoMod = $("#cbxMonedaModal2").val();
+                let sumTotal2 = 0;
+
+                v2_maximoS = tiposComprobantesArray.find(x => x.idTipoComp == parseInt($("#cbxTipoCpbteCompModal2").val())).maximoSoles;
+                v2_maximoD = tiposComprobantesArray.find(x => x.idTipoComp == parseInt($("#cbxTipoCpbteCompModal2").val())).maximoDolar;
+
+
+                if ($("#txtApeNomModal2").val().trim() == "") {
+                    respuesta = false;
+
+                    Swal.fire({
+                        title: 'Ingrese Apellidos y Nombres',
+                        text: "Textile Sourcing Company",
+                        icon: 'warning',
+                        showConfirmButton: true,
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'Ok'
+                    });
+                }
+                else if ($("#txtDNIModal2").val().trim() == "") {
+                    respuesta = false;
+
+                    Swal.fire({
+                        title: "Ingrese el número de DNI",
+                        text: "Textile Sourcing Company",
+                        icon: 'warning',
+                        showConfirmButton: true,
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'Ok'
+                    });
+                }
+                else if ($("#txtApeNomModal2").val().trim() == "0 Ninguno" || $("#txtApeNomModal2").val().trim() == "0 Varios") {
+                    respuesta = false;
+
+                    Swal.fire({
+                        title: 'Colaborador no existe',
+                        text: "Textile Sourcing Company",
+                        icon: 'warning',
+                        showConfirmButton: true,
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'Ok'
+                    });
+                }
+                else if ($("#txtOrgDstModal2").val().trim() == "") {
+                    respuesta = false;
+
+                    Swal.fire({
+                        title: 'Ingrese una descripción de Origen/Destino',
+                        text: "Textile Sourcing Company",
+                        icon: 'warning',
+                        showConfirmButton: true,
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'Ok'
+                    });
+                }
+                else if ($("#txtMotivoModal2").val().trim() == "") {
+                    respuesta = false;
+
+                    Swal.fire({
+                        title: 'Ingrese una descripción del motivo',
+                        text: "Textile Sourcing Company",
+                        icon: 'warning',
+                        showConfirmButton: true,
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'Ok'
+                    });
+                }
+                else if ($("#txtImporteModal2").val().trim() == "" || $("#txtImporteModal2").val().trim() == "0") {
+                    respuesta = false;
+
+                    Swal.fire({
+                        title: 'Ingrese el importe por favor',
+                        text: "Textile Sourcing Company",
+                        icon: 'warning',
+                        showConfirmButton: true,
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'Ok'
+                    });
+                }
+                else if (v2_TipoMod.toString() == 1) {
+
+                    // Soles.
+                    if (detComprobanteArray2.length > 0) {
+                        sumTotal2 = detComprobanteArray2.reduce((acc, item) => {
+                            return acc += item.valorunit * item.cantidad
+                        }, 0);
+                    }
+                    else {
+                        sumTotal2 = $("#txtImporteModal2").val();
+                    }
+
+                    if (parseFloat(sumTotal2) > v2_maximoS) {
+                        respuesta = false;
+                        Swal.fire({
+                            title: 'El monto máximo permitido es S/.' + v2_maximoS,
+                            text: "Textile Sourcing Company",
+                            icon: 'warning',
+                            showConfirmButton: true,
+                            confirmButtonColor: '#3085d6',
+                            confirmButtonText: 'Ok'
+                        });
+                    }
+                    else {
+                        respuesta = true;
+                    }
+
+                }
+                else if (v2_TipoMod.toString() == 2) {
+
+                    // Dolar.
+                    if (detComprobanteArray2.length > 0) {
+                        sumTotal2 = detComprobanteArray2.reduce((acc, item) => {
+                            return acc += item.valorunit * item.cantidad
+                        }, 0);
+                    }
+                    else {
+                        sumTotal2 = $("#txtImporteModal2").val();
+                    }
+
+
+                    if (parseFloat(sumTotal2) > v2_maximoD) {
+                        respuesta = false;
+                        Swal.fire({
+                            title: 'El monto máximo permitido es U$ ' + v2_maximoD,
+                            text: "Textile Sourcing Company",
+                            icon: 'warning',
+                            showConfirmButton: true,
+                            confirmButtonColor: '#3085d6',
+                            confirmButtonText: 'Ok'
+                        });
+                    }
+                    else {
+                        respuesta = true;
+                    }
+                }
+                else {
+                    respuesta = true;
+                }
+            }
+            else if (tabSeleccion == 3) {
+
+
+                if ($("#txtCiudadModal3").val().trim() == "") {
+                    respuesta = false;
+
+                    Swal.fire({
+                        title: 'Ingrese el nombre de la Ciudad',
+                        text: "Textile Sourcing Company",
+                        icon: 'warning',
+                        showConfirmButton: true,
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'Ok'
+                    });
+                }
+                else if ($("#txtPaisModal3").val().trim() == "") {
+                    respuesta = false;
+
+                    Swal.fire({
+                        title: "Ingrese el nombre del País",
+                        text: "Textile Sourcing Company",
+                        icon: 'warning',
+                        showConfirmButton: true,
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'Ok'
+                    });
+                }
+                else {
+                    respuesta = true;
+                }
+            }
+
+            return respuesta;
+        }
+
+        function validacionGuardarComp(indexTab) {
+            var respuesta = false;
+
+            if (indexTab == 1) {
+                // Registro de Factura y Boleta
+                let tipoComprobante = $('#cbxTipoCpbteCompModal1').val();
+
+                if ($("#cbxTipoCpbteCompModal1").val().trim() == "0" && (tipoComprobante == "1" || tipoComprobante == "2")) {
+                    respuesta = false;
+
+                    Swal.fire({
+                        title: 'Seleccione un Tipo de Comprobante',
+                        text: "Textile Sourcing Company",
+                        icon: 'warning',
+                        showConfirmButton: true,
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'Ok'
+                    });
+                }
+                else if ($("#txtSerieModal1").val().trim() == "" && (tipoComprobante == "1" || tipoComprobante == "2")) {
+                    respuesta = false;
+
+                    Swal.fire({
+                        title: 'Ingrese al serie del comprobante',
+                        text: "Textile Sourcing Company",
+                        icon: 'warning',
+                        showConfirmButton: true,
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'Ok'
+                    });
+                }
+                else if ($("#txtNumeroModal1").val().trim() == "" && (tipoComprobante == "1" || tipoComprobante == "2")) {
+                    respuesta = false;
+
+                    Swal.fire({
+                        title: 'Ingrese el numero del comprobante',
+                        text: "Textile Sourcing Company",
+                        icon: 'warning',
+                        showConfirmButton: true,
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'Ok'
+                    });
+                }
+                else if ($("#txtRucCompModal1").val().trim() == "" && (tipoComprobante == "1" || tipoComprobante == "2")) {
+                    respuesta = false;
+
+                    Swal.fire({
+                        title: 'Ingrese el número de RUC / DNI',
+                        text: "Textile Sourcing Company",
+                        icon: 'warning',
+                        showConfirmButton: true,
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'Ok'
+                    });
+                }
+                else if ($("#txtCodSofyaPCModal1").val().trim() == "" && (tipoComprobante == "1" || tipoComprobante == "2")) {
+                    respuesta = false;
+
+                    Swal.fire({
+                        title: 'El proveedor debe estar registrado en Sofya para continuar',
+                        text: "Textile Sourcing Company",
+                        icon: 'warning',
+                        showConfirmButton: true,
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'Ok'
+                    });
+                }
+                else if (detComprobanteArray1.length == 0 && (tipoComprobante == "1" || tipoComprobante == "2")) {
+                    respuesta = false;
+
+                    Swal.fire({
+                        title: 'Debe agregar el detalle del comprobante',
+                        text: "Textile Sourcing Company",
+                        icon: 'warning',
+                        showConfirmButton: true,
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'Ok'
+                    });
+                }
+
+                else {
+                    respuesta = true;
+                }
+            }
+            if (indexTab == 2) {
+
+                // Planilla de Movilidad
+
+                if ($("#txtDNIModal2").val().trim() == "") {
+                    respuesta = false;
+
+                    Swal.fire({
+                        title: 'No se encuentra el colaborador',
+                        text: "Textile Sourcing Company",
+                        icon: 'warning',
+                        showConfirmButton: true,
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'Ok'
+                    });
+                }
+                else if (detComprobanteArray2.length == 0) {
+                    respuesta = false;
+
+                    Swal.fire({
+                        title: 'Debe agregar el detalle de Planilla de Movilidad',
+                        text: "Textile Sourcing Company",
+                        icon: 'warning',
+                        showConfirmButton: true,
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'Ok'
+                    });
+                }
+                else {
+                    respuesta = true;
+                }
+            }
+            else if (indexTab == 3) {
+
+                // Declaracion Jurada
+                if ($("#cbxMonedaModal3").val().trim() == "0") {
+                    respuesta = false;
+
+                    Swal.fire({
+                        title: 'Ingrese el tipo de Moneda',
+                        text: "Textile Sourcing Company",
+                        icon: 'warning',
+                        showConfirmButton: true,
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'Ok'
+                    });
+
+                }
+                else if ($("#txtDNIModal3").val().trim() == "") {
+                    respuesta = false;
+
+                    Swal.fire({
+                        title: 'Ingrese el número de DNI por favor',
+                        text: "Textile Sourcing Company",
+                        icon: 'warning',
+                        showConfirmButton: true,
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'Ok'
+                    });
+                }
+                else if (detComprobanteArray3.length == 0) {
+                    respuesta = false;
+
+                    Swal.fire({
+                        title: 'Debe agregar el detalle de la Declaración Jurada',
+                        text: "Textile Sourcing Company",
+                        icon: 'warning',
+                        showConfirmButton: true,
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'Ok'
+                    });
+                }
+                else {
+                    respuesta = true;
+                }
+            }
+
+
+            return respuesta;
+        }
+
+
+        function limpiarControlModal(tabSeleccion) {
+
+            var now = new Date();
+            var month = (now.getMonth() + 1);
+            var day = now.getDate();
+            if (month < 10)
+                month = "0" + month;
+            if (day < 10)
+                day = "0" + day;
+            var today = now.getFullYear() + '-' + month + '-' + day;
+
+
+            if (tabSeleccion == 1) {
+
+                // 1. Factura y Boleta
+                //$("#cbxTipoCpbteCompModal1").val(0);
+
+                let tipoCpte = $("#cbxTipoCpbteCompModal1").val();
+
+                $("#txtFechaModal1").val(today);
+
+                $("#txtSerieModal1").val("");
+                $("#txtNumeroModal1").val("");
+
+                $("#txtRucCompModal1").val("");
+                $("#txtRSCompModal1").val("");
+                $("#txtCodSofyaPCModal1").val("");
+                $("#txtObsCompModal1").val("");
+
+                $("#cbxUM1").val("UN");
+                $("#txtDescripcion1").val("");
+                $("#txtCantidad1").val("");
+                $("#txtValorUnitarioTotal1").val("");
+
+                $("#idimportetotal1").val("0");
+                $("#idigv1").val("0");
+                $("#idtotal1").val("0");
+
+                $("#kpiMontoSeleecionadoModal1").text("0.00");
+                document.getElementById("cbxTipoCpbteCompModal1").disabled = false;
+
+                let tabla = $("#tblFacturaBoleta").DataTable();
+                tabla.destroy();
+                var tr = "";
+                $("#tblFacturaBoletaContent").html(tr);
+                $("#tblFacturaBoleta").DataTable(
+                    {
+                        'language': { 'url': '/libs/datatables/spanish.json' },
+                        lengthMenu: [[3], [3]]
+                    }
+                );
+
+                definirValoresTipoCpte(tipoCpte);
+
+            }
+            else if (tabSeleccion == 2) {
+
+                // 2. Planilla de Movilidad
+                $("#txtNumPlanillaModal2").val("");
+                $("#txtApeNomModal2").val("");
+                $("#txtDNIModal2").val("");
+                $("#txtCeCoModal2").val("");
+
+                $("#txtFechaModal2").val(today);
+                $("#txtOrgDstModal2").val("");
+                $("#txtMotivoModal2").val("");
+                $("#txtImporteModal2").val("");
+
+                let tabla = $("#tblPlanillaMovilidad").DataTable();
+                tabla.destroy();
+                var tr = "";
+                $("#tblPlanillaMovilidadContent").html(tr);
+                $("#tblPlanillaMovilidad").DataTable(
+                    {
+                        'language': { 'url': '/libs/datatables/spanish.json' },
+                        lengthMenu: [[3], [3]]
+                    }
+                );
+
+                $("#kpiMontoSeleecionadoModal2").text("0.00");
+            }
+            else if (tabSeleccion == 3) {
+
+                // 3. Declaración Jurada.
+                $("#txtCodigoModal3").val("");
+
+                $("#txtCiudadModal3").val("");
+                $("#txtPaisModal3").val("");
+
+                $("#txtFechaDesdeModal3").val(today);
+                $("#txtFechaHastaModal3").val(today);
+                $("#txtMotivoModal3").val("");
+                $("#txtImporteModal3").val("");
+
+
+                let tabla1 = $("#tblDeclaracionJurada3_1").DataTable();
+                tabla1.destroy();
+                var tr1 = "";
+                $("#tblDeclaracionJuradaContent3_1").html(tr1);
+                $("#tblDeclaracionJurada3_1").DataTable(
+                    {
+                        'language': { 'url': '/libs/datatables/spanish.json' },
+                        lengthMenu: [[3], [3]]
+                    }
+                );
+
+
+                let tabla2 = $("#tblDeclaracionJurada3_2").DataTable();
+                tabla2.destroy();
+                var tr2 = "";
+                $("#tblDeclaracionJuradaContent3_2").html(tr2);
+                $("#tblDeclaracionJurada3_2").DataTable(
+                    {
+                        'language': { 'url': '/libs/datatables/spanish.json' },
+                        lengthMenu: [[3], [3]]
+                    }
+                );
+
+
+                $("#kpiMontoSeleecionadoModal3").text("0.00");
+            }
+
+            detComprobanteArray = [];
+        }
+
+        function actualizarLista(pIdSolicitud) {
+            $.ajax({
+                url: "/finanzas/RG_SolicitudDetalleRendicion",
+                type: "GET",
+                data: { idSolicitud: pIdSolicitud },
+                dataType: "json",
+                success: function (resultado) {
+
+                    if (resultado.isRedirect) {
+                        window.location.href = resultado.redirectUrl;
+                    }
+                    else {
+                        armarTablaDetalle(resultado.lista);
+                    }
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+
+                }
+            });
+        }
+
+        function validarEstadoSolicitud(pOpcion, pIdSolicitud) {
+
+            $.ajax({
+                url: "/finanzas/RG_ValidarEstadoRendicion",
+                type: "POST",
+                data: {
+                    opcion: pOpcion,
+                    idSolicitud: pIdSolicitud,
+                    codigo: "",
+                    secuencia: 0,
+                    idRendCompte: 0
+                },
+                dataType: "json",
+                success: function (resultado) {
+
+                    if (resultado.isRedirect) {
+                        window.location.href = resultado.redirectUrl;
+                    }
+                    else {
+                        indicadorEstado(resultado.status.idResponse);
+                        $("#estado-desc").text(resultado.status.statusResponse);
+                    }
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+
+                }
+            });
+        }
+
+        function busquedaXDNI(dni, opcionModal) {
+
+            if (dni == "") {
+                Swal.fire({
+                    title: 'Ingrese el número de DNI',
+                    text: "Textile Sourcing Company",
+                    icon: 'warning',
+                    showConfirmButton: true,
+                    showCancelButton: false,
+                    confirmButtonText: 'Ok',
+                    cancelButtonText: 'Cancel',
+                    focusConfirm: true
+                }).then(result => {
+                    if (result.value) {
+                        // Planilla de Movilidad
+                        if (opcionModal == 2) {
+                            document.getElementById("txtDNIModal2").focus = true;
+                        }
+                        else if (opcionModal == 3) {
+                            // Declaracion Jurada
+                            document.getElementById("txtDNIModal3").focus = true;
+                        }
+                    }
+                });
+            }
+            else if (dni.length < 7) {
+                Swal.fire({
+                    title: 'Ingrese un número RUC valido por favor',
+                    icon: 'warning',
+                    showConfirmButton: true,
+                    showCancelButton: false,
+                    confirmButtonText: 'Ok',
+                    cancelButtonText: 'Cancel',
+                    focusConfirm: true
+                }).then(result => {
+                    if (result.value) {
+                        // Planilla de Movilidad
+                        if (opcionModal == 2) {
+                            document.getElementById("txtDNIModal2").focus = true;
+                        }
+                        else if (opcionModal == 3) {
+                            // Declaracion Jurada
+                            document.getElementById("txtDNIModal3").focus = true;
+                        }
+                    }
+                });
+            }
+            else {
+                $.ajax({
+                    type: "GET",
+                    url: '/Finanzas/RG_BuscarColaboradorXDNI',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    data: { dni: dni },
+                    success: function (data) {
+
+                        if (opcionModal == 2) {
+                            // Planilla de Movilidad
+                            $("#txtApeNomModal2").val(data.entidad.codcolaborador + " " + data.entidad.colaborador);
+                        }
+                        else if (opcionModal == 3) {
+                            // Declaracion Jurada
+                            $("#txtApeNomModal3").val(data.entidad.codcolaborador + " " + data.entidad.colaborador);
+                        }
+
+                        if (data.entidad.codcolaborador == "0") {
+
+                            const Toast = Swal.mixin({
+                                toast: true,
+                                position: 'top-end',
+                                showConfirmButton: false,
+                                timer: 2500,
+                                timerProgressBar: true,
+                                didOpen: (toast) => {
+                                    toast.addEventListener('mouseenter', Swal.stopTimer)
+                                    toast.addEventListener('mouseleave', Swal.resumeTimer)
+                                }
+                            })
+
+                            Toast.fire({
+                                icon: 'warning',
+                                title: data.entidad.mensaje
+                            });
+
+                            if (opcionModal == 2) {
+                                // Planilla de Movilidad
+                                document.getElementById("txtDNIModal2").focus = true;
+                            }
+                            else if (opcionModal == 3) {
+                                // Declaracion Jurada
+                                document.getElementById("txtDNIModal3").focus = true;
+                            }
+                        }
+                        else {
+                            if (opcionModal == 2) {
+                                // Planilla de Movilidad
+                                document.getElementById("txtOrgDstModal2").focus = true;
+                            }
+                            else if (opcionModal == 3) {
+                                // Declaracion Jurada
+                                // document.getElementById("txtDNIModal3").focus = true;
+                            }
+                        }
+                    },
+                    failure: function () {
+                        console.error('error al cargar tipos periodos');
+                    }
+                });
+            }
+        }
+
+        function listarDetalle(idRendCompte) {
+
+            $.ajax({
+                url: "/finanzas/RG_RendicionDetalle",
+                type: "GET",
+                data: { idRendCompte: idRendCompte },
+                dataType: "json",
+                success: function (resultado) {
+
+                    if (resultado.isRedirect) {
+                        window.location.href = resultado.redirectUrl;
+                    }
+                    else {
+                        let tabla = $("#tblPlanillaMovilidad").DataTable();
+
+                        tabla.destroy();
+                        var tr = "";
+
+                        resultado.lista.forEach((obj) => {
+
+                            tr += "<tr> "
+                                + " <td> " + obj.fecha + "</td>"
+                                + " <td> " + obj.detalle1 + "</td>"
+                                + " <td> " + obj.detalle2 + "</td>"
+                                + " <td> " + formatoNumero(obj.importe) + "</td>"
+                                + " <td class='text-center'>"
+                                + "     <button data-idRendCompteDet='" + obj.idRendCompteDet + "' data-toggle='collapse' class='btn btn-sm btn-danger cselectEliminar ml-1'><i class='fas fa-trash'></i></button>"
+                                + "</td>"
+                                + "</tr>";
+                        });
+
+                        $("#tblPlanillaMovilidadContent").html(tr);
+
+
+                        $("#tblPlanillaMovilidad").DataTable(
+                            {
+                                dom: 'Bfrtip',
+                                "scrollX": true,
+                                "bSort": true,
+                                buttons: [
+                                    'excel', 'pdf', 'print'
+                                ],
+                                scrollY: '50vh',
+                                scrollCollapse: true,
+                                paging: true,
+                                'language': { 'url': '/libs/datatables/spanish.json' },
+                                lengthMenu: [[5, 10, 20, -1], [5, 10, 20, 'Todos']]
+                            });
+                    }
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+
+                }
+            });
+
+
+        }
+
+        function indicadorEstado(idEstado) {
+
+            if (idEstado == 20) {
+                // Aprobado
+                $("#estado-icon").removeClass("icon-pendiente");
+                $("#estado-icon").removeClass("icon-liberado");
+                $("#estado-icon").removeClass("icon-rechazado");
+                $("#estado-icon").removeClass("icon-rend-completa");
+                $("#estado-icon").removeClass("icon-rend-incompleta");
+                $("#estado-icon").addClass("icon-aprobado");
+
+                $("#estado-desc").removeClass("desc-est-pendiente");
+                $("#estado-desc").removeClass("desc-est-liberado");
+                $("#estado-desc").removeClass("desc-est-rechazado");
+                $("#estado-desc").removeClass("desc-est-rend-completa");
+                $("#estado-desc").removeClass("desc-est-rend-incompleta");
+                $("#estado-desc").addClass("desc-est-aprobado");
+
+            }
+            else if (idEstado == 26) {
+                // Rendicion Incompleta
+                $("#estado-icon").removeClass("icon-pendiente");
+                $("#estado-icon").removeClass("icon-liberado");
+                $("#estado-icon").removeClass("icon-rechazado");
+                $("#estado-icon").removeClass("icon-rend-completa");
+                $("#estado-icon").addClass("icon-rend-incompleta");
+
+                $("#estado-desc").removeClass("desc-est-pendiente");
+                $("#estado-desc").removeClass("desc-est-liberado");
+                $("#estado-desc").removeClass("desc-est-rechazado");
+                $("#estado-desc").removeClass("desc-est-rend-completa");
+                $("#estado-desc").addClass("desc-est-rend-incompleta");
+
+            }
+            else if (idEstado == 21) {
+                // Rendicion Completa
+                $("#estado-ico  n").removeClass("icon-pendiente");
+                $("#estado-icon").removeClass("icon-liberado");
+                $("#estado-icon").removeClass("icon-rechazado");
+                $("#estado-icon").removeClass("icon-rend-incompleta");
+                $("#estado-icon").addClass("icon-rend-completa");
+
+                $("#estado-desc").removeClass("desc-est-pendiente");
+                $("#estado-desc").removeClass("desc-est-liberado");
+                $("#estado-desc").removeClass("desc-est-rechazado");
+                $("#estado-desc").removeClass("desc-est-rend-incompleta");
+                $("#estado-desc").addClass("desc-est-rend-completa");
+            }
+        }
+
+        function formatoNumero(x) {
+            x = x.toFixed(2);
+            return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+
+        function armarTablaDetalle(lista) {
+
+            console.log(lista);
+
+            let tabla = $("#tblSolicitud").DataTable();
+
+            tabla.destroy();
+            var tr = "";
+            let tr_btn_pdf = "";
+            let tr_fin = "";
+            let tr_cptes = "";
+
+
+            lista.forEach((obj) => {
+
+                tr += "<tr> "
+                    + " <td class='ocultar-columna'>" + obj.idSolicitud + "</td>"
+                    + " <td class='ocultar-columna'> " + obj.secuencia + "</td>";
+
+                if (obj.countCpte == 0) {
+                    tr_cptes = " <td class='text-center'>"
+                        + "     <button data-idtipocomp = " + obj.idTipoComp + " data-idsolicitud='" + obj.idSolicitud + "' data-secuencia='" + obj.secuencia + "'  data-valor=" + obj.valor + " data-totalsolicitado = " + obj.totalSolicitado + " data-restante=" + (obj.totalSolicitado - obj.totalRendido) + " data-idconceptodet=" + obj.idConceptoDet + " data-toggle='collapse' class='btn btn-sm btn-info cDetalleComprobante'>0 <i class='fas fa-eye'></i></button>"
+                        + "</td>";
+                }
+                else if (obj.countCpte == 1) {
+                    tr_cptes = " <td class='text-center'>"
+                        + "     <button data-idtipocomp = " + obj.idTipoComp + " data-idsolicitud='" + obj.idSolicitud + "' data-secuencia='" + obj.secuencia + "'  data-valor=" + obj.valor + " data-totalsolicitado = " + obj.totalSolicitado + " data-restante=" + (obj.totalSolicitado - obj.totalRendido) + " data-idconceptodet=" + obj.idConceptoDet + " data-toggle='collapse' class='btn btn-sm btn-info cDetalleComprobante'>" + obj.serieNumero + " <i class='fas fa-eye'></i></button>"
+                        + "</td>";
+                }
+                else {
+                    tr_cptes = " <td class='text-center'>"
+                        + "     <button data-idtipocomp = " + obj.idTipoComp + " data-idsolicitud='" + obj.idSolicitud + "' data-secuencia='" + obj.secuencia + "'  data-valor=" + obj.valor + " data-totalsolicitado = " + obj.totalSolicitado + " data-restante=" + (obj.totalSolicitado - obj.totalRendido) + " data-idconceptodet=" + obj.idConceptoDet + " data-toggle='collapse' class='btn btn-sm btn-info cDetalleComprobante'>2+ <i class='fas fa-eye'></i></button>"
+                        + "</td>";
+
+                }
+
+                tr = tr + tr_cptes;
+
+
+                tr = tr + " <td> " + obj.tipo + "</td>"
+                    + " <td> " + obj.conceptoCab + "</td>"
+                    + " <td> " + obj.conceptoDet + "</td>"
+                    + " <td> " + obj.cantDias + "</td>"
+                    + " <td> " + formatoNumero(obj.valor) + "</td>"
+                    + " <td> " + obj.simbolo + " " + formatoNumero(obj.totalSolicitado) + "</td>"
+                    + " <td> " + obj.simbolo + " " + formatoNumero(obj.totalEntregado) + "</td>"
+                    + " <td> " + obj.simbolo + " " + formatoNumero(obj.totalRendido) + "</td>"
+                    + " <td> " + obj.simbolo + " " + formatoNumero(obj.totalSolicitado - obj.totalRendido) + "</td>"
+
+                    //+ " <td class='text-center'>"
+                    //+ "     <button data-idrendcompte=" + obj.idRendCompte + "  data-idsolicitud='" + obj.idSolicitud + "' data-secuencia='" + obj.secuencia + "'  data-valor=" + obj.valor + " data-totalsolicitado = " + obj.totalSolicitado + " data-restante=" + (obj.totalSolicitado - obj.totalRendido) + " data-idconceptodet=" + obj.idConceptoDet + " data-toggle='collapse' class='btn btn-sm btn-success cEditarCpte' " + ((obj.idRendCompte > 0) ? "  " : " disabled ") + "><i class='fas fa-edit'></i></button>"
+                    //+ "</td>"
+
+                //tr = tr + tr_fin;
+
+
+                //if (obj.idTipoComp == 3 || obj.idTipoComp == 4) {
+                //    tr_btn_pdf =
+                //          " <td class='text-center'>"
+                //        + "     <button data-idtipocomp = " + obj.idTipoComp + " data-idrendcompte=" + obj.idRendCompte + " data-toggle='collapse' class='btn btn-sm btn-danger cImprimirPDF' " + (obj.idRendCompte == 0 ? " disabled " : " ") + "><i class='fas fa-file-pdf'></i></button>"
+                //        + " </td> ";
+                //}
+                //else {
+                //    tr_btn_pdf = " <td class='text-center'></td> ";
+                //}
+
+                //tr = tr + tr_btn_pdf;
+
+                    // OLD
+                    //+ " <td class='text-center'>"
+                    //+ "     <input type='checkbox' data-idsolicitud='" + obj.idSolicitud + "' data-secuencia='" + obj.secuencia + "' data-valor=" + obj.valor + " data-restante=" + (obj.totalSolicitado - obj.totalRendido) + " class='seleccion ml-2' " + (obj.idEstadoDet == 6 ? " disabled " : " ") + ">"
+                    //+ "</td>"
+
+                    + " <td class='text-center'>"
+                    + "     <button data-idsolicitud = " + obj.idSolicitud + " data-secuencia = " + obj.secuencia + " data-idtipocomp = " + obj.idTipoComp + " data-idrendcompte=" + obj.idRendCompte + "  data-valor=" + obj.valor + " data-restante=" + (obj.totalSolicitado - obj.totalRendido) + " data-idconceptodet=" + obj.idConceptoDet + " data-toggle='collapse' class='btn btn-sm btn-primary cRegistrarCpte'><i class='fas fa-save'></i></button>"
+                    + "</td>"
+                    + "</tr>";
+
+                //tr = tr + tr_fin;
+
+
+            });
+
+
+            $("#tblSolicitudContent").html(tr);
+
+            $("#tblSolicitud").DataTable(
+                {
+                    "scrollX": true,
+                    "bSort": true,
+                    buttons: [
+                        'excel', 'pdf', 'print'
+                    ],
+                    scrollY: '50vh',
+                    scrollCollapse: true,
+                    paging: true,
+                    'language': { 'url': '/libs/datatables/spanish.json' },
+                    lengthMenu: [[5, 10, 20, -1], [5, 10, 20, 'Todos']]
+                });
+        }
+
+
+        $("#btnVerRegistrados").click(function () {
+
+            if (validacionVerCmptes()) {
+
+                $.ajax({
+                    url: "@Url.Action("RG_BuscarIdSolicitud", "Finanzas")",
+                    data: {
+                        idSolicitud: solicitudSeleccionada.idSolicitud,
+                    },
+                    success: function (data) {
+                        window.location.href = '@Url.Action("MapearReporteCXSPDF", "Finanzas")'
+                    }
+                });
+
+
+
+                //$.ajax({
+                //    url: "/finanzas/RG_ComprobantesRegistrados",
+                //    type: "GET",
+                //    data: { idSolicitud: solicitudSeleccionada.idSolicitud },
+                //    dataType: "json",
+                //    success: function (resultado) {
+
+                //        console.log("ver Registrados");
+                //        console.log(resultado);
+
+                //        if (resultado.isRedirect) {
+                //            window.location.href = resultado.redirectUrl;
+                //        }
+                //        else {
+                //            let itemList = "";
+                //            let activoPrimero = true;
+                //            let comprobanteCab = 0;
+
+                //            $("#list-comprobantes").empty();
+
+                //            resultado.lista.forEach((obj) => {
+                //                itemList += "<a class='list-group-item list-group-item-action " + (activoPrimero ? " active " : " ") + "' data-toggle='list' role='tab' data-idrendcompte=" + obj.idRendCompte + ">" + obj.serieNumero + "</a>";
+
+                //                if (activoPrimero) {
+                //                    comprobanteCab = obj;
+                //                }
+
+                //                activoPrimero = false;
+                //            });
+
+                //            $("#list-comprobantes").html(itemList);
+
+                //            cargarComprobanteCabecera(comprobanteCab.idRendCompte);
+
+                //            $("#editComprobModal").modal("show");
+                //        }
+                //    },
+                //    error: function (xhr, ajaxOptions, thrownError) {
+
+                //    }
+                //});
+            }
+        });
+
+        function validacionVerCmptes() {
+            var respuesta = false;
+
+            let idSolicitud = solicitudSeleccionada.idSolicitud;
+
+            if (idSolicitud == null || typeof (idSolicitud) == "undefined") {
+                respuesta = false;
+
+                Swal.fire({
+                    title: 'Seleccione una Solicitud por favor',
+                    text: "Textile Sourcing Company",
+                    icon: 'warning',
+                    showConfirmButton: true,
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'Ok'
+                });
+            }
+            else {
+                respuesta = true;
+            }
+
+            return respuesta;
+        }
+
+        $("#list-comprobantes").on("click", "a", function () {
+
+            let idRendCompte = $(this).attr("data-idrendcompte");
+
+            cargarComprobanteCabecera(idRendCompte);
+        });
+
+
+        function getSolicitudComprobante(idRendCompte) {
+
+            $.ajax({
+                url: "/finanzas/RG_SolicitudComprobante",
+                type: "GET",
+                data: { idRendCompte: idRendCompte },
+                dataType: "json",
+                success: function (resultado) {
+                    console.log(resultado);
+                    detalleArray = resultado.lista;
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+
+                }
+            });
+        }
+
+
+        function cargarComprobanteCabecera(pIdRendCompte) {
+
+            $.ajax({
+                url: "/finanzas/RG_ComprobateCabecera",
+                type: "GET",
+                data: { idRendCompte: pIdRendCompte },
+                dataType: "json",
+                success: function (resultado) {
+
+                    if (resultado.isRedirect) {
+                        window.location.href = resultado.redirectUrl;
+                    }
+                    else {
+
+                        listaComptesIdTipoComp = resultado.entidad.idTipoComp;
+                        console.log(resultado.entidad);
+                        if (resultado.entidad.idTipoComp == 1 || resultado.entidad.idTipoComp == 2) {
+
+                            // FACTURA Y BOLETA
+                            $("#facturaboleta-tab").removeClass("disabled");
+                            $("#planillamovilidad-tab").addClass("disabled");
+                            $("#declaracionjur-tab").addClass("disabled");
+
+                            $("#regComprobModal .nav-tabs #facturaboleta-tab").tab('show');
+                            tabSeleccionado = 1;
+
+                            $("#cbxTipoCpbteCompModal1").val(resultado.entidad.idTipoComp);
+                            document.getElementById("cbxTipoCpbteCompModal1").disabled = true;
+
+                            //$("#txtSerieNumCompModal1").val(resultado.entidad.serieNumero);
+                            $("#txtSerieModal1").val(resultado.entidad.nserie);
+                            $("#txtNumeroModal1").val($.trim(resultado.entidad.ndocof));
+
+                            $("#txtFechaModal1").val(resultado.entidad.fechaEmision);
+                            $("#cbxMonedaModal1").val(resultado.entidad.idTipoMod);
+                            $("#cbxPeriodoModal1").val(resultado.entidad.periodo);
+                            $("#txtRucCompModal1").val(resultado.entidad.rucDNI);
+                            $("#txtRSCompModal1").val(resultado.entidad.rs);
+                            $("#txtCodSofyaPCModal1").val(resultado.entidad.codigoPC);
+                            $("#txtObsCompModal1").val(resultado.entidad.obs);
+                            $("#txtCeCoModal1").val(resultado.entidad.ceco);
+
+                            $("#kpiMontoSeleecionadoModal1").text(resultado.entidad.simbolo + " " + formatoNumero(resultado.entidad.totalCmpbnteSolicitud - resultado.entidad.totalCmpbnte));
+
+
+                            if (resultado.entidad.idTipoComp == 1) {
+                                // Factura
+                                $("#idimportetotal1").val(formatoNumero(resultado.entidad.totalCmpbnteBI));
+                                $("#idigv1").val(formatoNumero(resultado.entidad.totalCmpbnteBI * (PORCENTAJE_IGV / 100)));
+                                $("#idtotal1").val(formatoNumero(resultado.entidad.totalCmpbnte));
+                            }
+                            else if (resultado.entidad.idTipoComp == 2) {
+                                // Boleta
+                                $("#idimportetotal1").val(formatoNumero(resultado.entidad.totalCmpbnteBI));
+                                $("#idigv1").val(formatoNumero(0));
+                                $("#idtotal1").val(formatoNumero(resultado.entidad.totalCmpbnte));
+                            }
+
+                            $("#cbxUM1").val("UN");
+                            $("#txtDescripcion1").val("");
+                            $("#txtCantidad1").val("");
+                            $("#txtValorUnitarioTotal1").val("");
+
+                            definirValoresTipoCpte($("#cbxTipoCpbteCompModal1").val());
+                            cargarComprobanteDetalle(resultado.entidad.idRendCompte, resultado.entidad.idTipoComp);
+
+                        }
+                        else if (resultado.entidad.idTipoComp == 3) {
+
+                            // PLANILLA DE MOVILIDADA
+                            $("#facturaboleta-tab").addClass("disabled");
+                            $("#planillamovilidad-tab").removeClass("disabled");
+                            $("#declaracionjur-tab").addClass("disabled");
+
+                            $('#regComprobModal .nav-tabs #planillamovilidad-tab').tab('show');
+                            tabSeleccionado = 2;
+
+                            $("#txtFechaModal2").val(resultado.entidad.fechaEmision);
+                            $("#txtNumPlanillaModal2").val(resultado.entidad.serieNumero);
+                            $("#cbxMonedaModal2").val(resultado.entidad.idTipoMod);
+                            $("#cbxPeriodoModal2").val(resultado.entidad.periodo);
+                            $("#txtDNIModal2").val(resultado.entidad.rucDNI);
+                            $("#txtApeNomModal2").val(resultado.entidad.rs);
+                            $("#txtCeCoModal2").val(resultado.entidad.ceco);
+
+                            $("#kpiMontoSeleecionadoModal2").text(resultado.entidad.simbolo + " " + formatoNumero(resultado.entidad.totalCmpbnteSolicitud - resultado.entidad.totalCmpbnte));
+
+                            cargarComprobanteDetalle(resultado.entidad.idRendCompte, resultado.entidad.idTipoComp);
+                        }
+                        else if (resultado.entidad.idTipoComp == 4) {
+
+                            // DECLARACION JURADA.
+                            $("#facturaboleta-tab").addClass("disabled");
+                            $("#planillamovilidad-tab").addClass("disabled");
+                            $("#declaracionjur-tab").removeClass("disabled");
+
+                            $('#regComprobModal .nav-tabs #declaracionjur-tab').tab('show');
+                            tabSeleccionado = 3;
+
+                            $("#txtFechaModal3").val(resultado.entidad.fechaEmision);
+                            $("#txtCodigoModal3").val(resultado.entidad.serieNumero);
+                            $("#cbxMonedaModal3").val(resultado.entidad.idTipoMod);
+                            $("#cbxPeriodoModal3").val(resultado.entidad.periodo);
+                            $("#txtDNIModal3").val(resultado.entidad.rucDNI);
+                            $("#txtApeNomModal3").val(resultado.entidad.rs);
+                            $("#txtCeCoModal3").val(resultado.entidad.ceco);
+
+                            $("#kpiMontoSeleecionadoModal3").text(resultado.entidad.simbolo + " " + formatoNumero(resultado.entidad.totalCmpbnteSolicitud - resultado.entidad.totalCmpbnte));
+
+                            cargarComprobanteDetalle(resultado.entidad.idRendCompte, resultado.entidad.idTipoComp);
+                        }
+
+
+                        
+                        
+
+                    }
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+
+                }
+            });
+
+        }
+
+        function cargarComprobanteDetalle(pIdRendCompte, pIdTipoComp) {
+
+            $.ajax({
+                url: "/finanzas/RG_ComprobateDetalle",
+                type: "GET",
+                data: { idRendCompte: pIdRendCompte },
+                dataType: "json",
+                success: function (resultado) {
+
+                    if (resultado.isRedirect) {
+                        window.location.href = resultado.redirectUrl;
+                    }
+                    else {
+
+                        if (pIdTipoComp == 1 || pIdTipoComp == 2) {
+
+                            // FACTURA Y BOLETA
+
+                            let tablaFB = $("#tblFacturaBoleta").DataTable();
+
+                            tablaFB.destroy();
+                            var trFB = "";
+                            detComprobanteArray1 = [];
+
+                            resultado.lista.forEach((obj) => {
+
+                                iDetalle1++;
+
+                                detComprobanteArray1.push({
+                                    iDetalle: iDetalle1,
+                                    fecha: obj.fecha,
+                                    fechaBD: obj.fechaBD,
+                                    detalle1: obj.detalle1,
+                                    detalle2: "",
+                                    codum: obj.codum,
+                                    valorunit: obj.valorunit,
+                                    cantidad: obj.cantidad,
+                                    total: obj.total
+                                });
+
+                                trFB += "<tr> "
+                                    + " <td> " + obj.um + "</td>"
+                                    + " <td> " + obj.detalle1 + "</td>"
+                                    + " <td> " + obj.cantidad + "</td>"
+                                    + " <td> " + formatoNumero(obj.valorunit) + "</td>"
+                                    + " <td> " + formatoNumero(obj.total) + "</td>"
+                                    + " <td class='text-center'>"
+                                    + "     <button data-idetalle ='" + iDetalle1 + "' class='btn btn-sm btn-danger cselectEliminar1 ml-1'><i class='fas fa-trash'></i></button>"
+                                    + "</td>"
+                                    + "</tr>";
+                            });
+
+
+                            $("#tblFacturaBoletaContent").html(trFB);
+
+                            $("#tblFacturaBoleta").DataTable(
+                                {
+                                    'language': { 'url': '/libs/datatables/spanish.json' },
+                                    lengthMenu: [[3], [3]]
+                                });
+
+                        }
+                        else if (pIdTipoComp == 3) {
+
+                            // PLANILLA DE MOVILIDAD
+
+                            let tablaPM = $("#tblPlanillaMovilidad").DataTable();
+
+                            tablaPM.destroy();
+                            var trPM = "";
+                            detComprobanteArray2 = [];
+
+                            resultado.lista.forEach((obj) => {
+
+                                iDetalle2++;
+
+                                detComprobanteArray2.push({
+                                    iDetalle: iDetalle2,
+                                    fecha: obj.fecha,
+                                    fechaBD: obj.fechaBD,
+                                    detalle1: obj.detalle1,
+                                    detalle2: obj.detalle2,
+                                    codum: obj.codum, // UNIDAD
+                                    valorunit: obj.valorunit,
+                                    cantidad: obj.cantidad
+                                });
+
+                                trPM += "<tr> "
+                                    + " <td> " + obj.fecha + "</td>"
+                                    + " <td> " + obj.detalle1 + "</td>"
+                                    + " <td> " + obj.detalle2 + "</td>"
+                                    + " <td> " + formatoNumero(obj.valorunit) + "</td>"
+                                    + " <td class='text-center'>"
+                                    + "     <button data-idetalle='" + iDetalle2 + "' data-toggle='collapse' class='btn btn-sm btn-danger cselectEliminar2 ml-1'><i class='fas fa-trash'></i></button>"
+                                    + "</td>"
+                                    + "</tr>";
+                            });
+
+                            $("#tblPlanillaMovilidadContent").html(trPM);
+
+                            $("#tblPlanillaMovilidad").DataTable(
+                                {
+                                    'language': { 'url': '/libs/datatables/spanish.json' },
+                                    lengthMenu: [[3], [3]]
+                                });
+
+                        }
+                        else if (pIdTipoComp == 4) {
+
+                            // DECLARACION JURADA
+
+                            let tablaDJ_1 = $("#tblDeclaracionJurada3_1").DataTable();
+                            let tablaDJ_2 = $("#tblDeclaracionJurada3_2").DataTable();
+
+                            tablaDJ_1.destroy();
+                            tablaDJ_2.destroy();
+
+                            var trDJ_1 = "";
+                            var trDJ_2 = "";
+
+                            detComprobanteArray3 = [];
+
+
+                            resultado.lista.forEach((obj) => {
+
+                                iDetalle3++;
+
+                                detComprobanteArray3.push({
+                                    iDetalle: iDetalle3,
+                                    fecha: obj.fecha,
+                                    fechaBD: obj.fechaBD,
+                                    detalle1: obj.detalle1,
+                                    detalle2: "",
+                                    codum: obj.codum, // UNIDAD
+                                    valorunit: obj.valorunit,
+                                    cantidad: obj.cantidad,
+                                    seccion: obj.seccion
+                                });
+
+                                if (obj.seccion == 1) {
+                                    trDJ_1 += "<tr> "
+                                        + " <td> " + obj.fecha + "</td>"
+                                        + " <td> " + obj.detalle1 + "</td>"
+                                        + " <td> " + formatoNumero(obj.valorunit) + "</td>"
+                                        + " <td class='text-center'>"
+                                        + "     <button data-idetalle='" + iDetalle3 + "' data-toggle='collapse' class='btn btn-sm btn-danger cselectEliminar3_1 ml-1'><i class='fas fa-trash'></i></button>"
+                                        + "</td>"
+                                        + "</tr>";
+                                }
+                                else if (obj.seccion == 2) {
+                                    trDJ_2 += "<tr> "
+                                        + " <td> " + obj.fecha + "</td>"
+                                        + " <td> " + obj.detalle1 + "</td>"
+                                        + " <td> " + formatoNumero(obj.valorunit) + "</td>"
+                                        + " <td class='text-center'>"
+                                        + "     <button data-idetalle='" + iDetalle3 + "' data-toggle='collapse' class='btn btn-sm btn-danger cselectEliminar3_2 ml-1'><i class='fas fa-trash'></i></button>"
+                                        + "</td>"
+                                        + "</tr>";
+                                }
+
+                            });
+
+                            $("#tblDeclaracionJuradaContent3_1").html(trDJ_1);
+                            $("#tblDeclaracionJuradaContent3_2").html(trDJ_2);
+
+                            $("#tblDeclaracionJurada3_1").DataTable(
+                                {
+                                    'language': { 'url': '/libs/datatables/spanish.json' },
+                                    lengthMenu: [[5], [5]]
+                                });
+
+                            $("#tblDeclaracionJurada3_2").DataTable(
+                                {
+                                    'language': { 'url': '/libs/datatables/spanish.json' },
+                                    lengthMenu: [[5], [5]]
+                                });
+                        }
+                    }
+
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+
+                }
+            });
+        }
+
+        function mensajePrincipal(estado, mensaje) {
+            if (estado == true) {
+
+                const Toast = Swal.mixin({
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 2500,
+                    timerProgressBar: true,
+                    didOpen: (toast) => {
+                        toast.addEventListener('mouseenter', Swal.stopTimer)
+                        toast.addEventListener('mouseleave', Swal.resumeTimer)
+                    }
+                })
+
+                Toast.fire({
+                    icon: 'success',
+                    title: mensaje
+                });
+
+            }
+            else if (estado == false) {
+
+                const Toast = Swal.mixin({
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 2500,
+                    timerProgressBar: true,
+                    didOpen: (toast) => {
+                        toast.addEventListener('mouseenter', Swal.stopTimer)
+                        toast.addEventListener('mouseleave', Swal.resumeTimer)
+                    }
+                })
+
+                Toast.fire({
+                    icon: 'error',
+                    title: mensaje
+                });
+
+            }
+        }
+
+        $("#tblCptesRegistradosCont").on("click", ".cImprimirPDF", function () {
+
+            let idTipoComp = $(this).attr("data-idtipocomp");
+            let idRendCompte = $(this).attr("data-idrendcompte");
+
+            $.ajax({
+                url: "@Url.Action("RG_BuscarIdCompte", "Finanzas")",
+                data: {
+                    idTipoComp: idTipoComp,
+                    idRendCompte: idRendCompte
+                },
+                success: function (data) {
+
+                    if (idTipoComp == 3) {
+                        // Planilla de Movilidad
+                        window.location.href = '@Url.Action("MapearReportePLPDF", "Finanzas")'
+                    }
+                    else if (idTipoComp == 4) {
+                        // Declaración Jurada
+                        window.location.href = '@Url.Action("MapearReporteDJPDF", "Finanzas")'
+                    }
+
+                }
+            });
+
+        });
+
+        $("#tblSolicitudContent").on("click", ".cDevolucion", function () {
+
+            idsolicitud_dev = $(this).attr("data-idsolicitud");
+            idsecuencia_dev = $(this).attr("data-secuencia");
+
+
+            $("#registrarDevModal").modal("show");
+
+        });
+
+        $("#tblCptesRegistradosCont").on("click", ".cEditarCpte", function () {
+
+            $("#detComprobantesModal").modal("hide");
+            detalleArray = []; // jjjj
+
+            let idsolicitud = $(this).attr("data-idsolicitud");
+            let secuencia = $(this).attr("data-secuencia");
+            let valor = $(this).attr("data-valor");
+            let totalRestante = $(this).attr("data-restante");
+            let totalsolicitado = $(this).attr("data-totalsolicitado");
+
+            vIdRendCompte = $(this).attr("data-idrendcompte");
+
+            detalleArray.push({ idsolicitud: idsolicitud, secuencia: secuencia, valor: parseFloat(valor), totalrestante: parseFloat(totalsolicitado) });
+
+            TIPO_REGISTRO = "EDITAR";
+            
+            cargarComprobanteCabecera(vIdRendCompte);
+
+            $("#regComprobModal").modal("show");
+        });
+
+
+        $("#tblSolicitudContent").on("click", ".cDetalleComprobante", function () {
+
+            let idsolicitud = $(this).attr("data-idsolicitud");
+            let secuencia = $(this).attr("data-secuencia");
+
+            let v_valor = $(this).attr("data-valor");
+            let v_totalsolicitado = $(this).attr("data-totalsolicitado");
+            let v_restante = $(this).attr("data-restante");
+            let v_idconceptodet = $(this).attr("data-idconceptodet");
+            let v_idtipo = $(this).attr("data-idtipocomp");
+
+
+            $.ajax({
+                type: "GET",
+                url: '/finanzas/RG_CptesRegistrados',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                data: {
+                    'idsolicitud': idsolicitud,
+                    'secuencia': secuencia
+                },
+                success: function (data) {
+
+                    let tabla = $("#tblCptesRegistrados").DataTable();
+
+                    tabla.destroy();
+                    var tr = "";
+                    var tr_btn_pdf = "";
+
+
+                    data.lista.forEach((obj) => {
+
+                        tr += "<tr> "
+                            + " <td> " + obj.numserie + "</td>"
+                            + " <td> " + obj.rs + "</td>"
+                            + " <td> " + obj.simbolo + " " + formatoNumero(obj.total) + "</td>";
+
+
+                        if (v_idtipo == 3 || v_idtipo == 4) {
+                            tr_btn_pdf =
+                                " <td class='text-center'>"
+                            + "     <button data-idtipocomp = " + v_idtipo + " data-idrendcompte=" + obj.idRendCompte + " data-toggle='collapse' class='btn btn-sm btn-danger cImprimirPDF' " + (obj.idRendCompte == 0 ? " disabled " : " ") + "><i class='fas fa-file-pdf'></i></button>"
+                                + " </td> ";
+                        }
+                        else {
+                            tr_btn_pdf = " <td class='text-center'></td> ";
+                        }
+
+                        tr = tr + tr_btn_pdf;
+
+
+                        tr = tr + " <td class='text-center'>"
+                                + "     <button data-idrendcompte=" + obj.idRendCompte + "  data-idsolicitud='" + idsolicitud + "' data-secuencia='" + secuencia + "'  data-valor=" + v_valor + " data-totalsolicitado = " + v_totalsolicitado + " data-restante=" + v_restante + " data-idconceptodet=" + v_idconceptodet + " data-toggle='collapse' class='btn btn-sm btn-success cEditarCpte'><i class='fas fa-edit'></i></button>"
+                                + "</td>"
+
+                                + " <td class='text-center'>"
+                                + "     <button data-idrendcompte=" + obj.idRendCompte + " class='btn btn-sm btn-danger cEliminarCpte'><i class='fas fa-trash'></i></button>"
+                                + "</td>"
+
+                                + "</tr>";
+                    });
+
+                    $("#tblCptesRegistradosCont").html(tr);
+
+                    $("#tblCptesRegistrados").DataTable(
+                        {
+                            searching: false,
+                            paging: false,
+                            info: false,
+                            'language': { 'url': '/libs/datatables/spanish.json' }
+                        });
+
+
+                    $("#detComprobantesModal").modal("show");
+
+                },
+                failure: function () {
+                    console.error('error al cargar los periodos');
+                }
+            });
+
+        });
+
+
+
+        $("#tblCptesRegistradosCont").on("click", ".cEliminarCpte", function () {
+
+            let idRendCompte = $(this).attr("data-idrendcompte");
+
+            if (idRendCompte == "0" || idRendCompte == null || typeof (idRendCompte) == "undefined") {
+
+                const Toast = Swal.mixin({
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 2500,
+                    timerProgressBar: true,
+                    didOpen: (toast) => {
+                        toast.addEventListener('mouseenter', Swal.stopTimer)
+                        toast.addEventListener('mouseleave', Swal.resumeTimer)
+                    }
+                })
+
+                Toast.fire({
+                    icon: 'warning',
+                    title: 'No existe comprobante para eliminar'
+                });
+            }
+            else {
+
+                Swal.fire({
+                    title: '¿Desea Eliminar el Comprobante?',
+                    text:'Textile Sourcing Company',
+                    icon: 'info',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    cancelButtonText: 'Cancelar',
+                    confirmButtonText: 'Ok'
+
+                }).then((result) => {
+
+                    if (result.value) {
+
+                        parametro = {
+                            'opcion': 10,
+                            'idRendCompte': idRendCompte,
+                            'idTipoComp': 0,
+                            'serieNumero': "",
+                            'rucDNI': "",
+                            'rs': "",
+                            'codigoPC': "",
+                            'obs': "",
+                            'fechaEmision': "",
+                            'codceco': 0,
+                            'idTipoMod': 0,
+                            'porcentajeIGV': 0,
+                            'obs1': '',
+                            'obs2': '',
+                            'fecha1': '',
+                            'periodo': "",
+                            'solitudSeqArray': null,
+                            'detalleComprobanteArray': null,
+                            'idSolicitud': 0,
+                            'secuencia': 0
+                        };
+
+                        $.ajax({
+                            url: "/finanzas/RG_SetRendicionComprobante",
+                            type: "post",
+                            data: parametro,
+                            dataType: "json",
+                            success: function (resultado) {
+
+                                if (resultado.isRedirect) {
+                                    window.location.href = resultado.redirectUrl;
+                                }
+                                else {
+                                    if (resultado.entidad.idResponse > 0) {
+
+                                        validarEstadoSolicitud(2, solicitudSeleccionada.idSolicitud);
+                                        actualizarLista(solicitudSeleccionada.idSolicitud);
+
+                                        mensajePrincipal(true, resultado.entidad.statusResponse);
+                                    }
+                                    else {
+                                        mensajePrincipal(false, resultado.entidad.statusResponse);
+                                    }
+
+
+                                    $("#detComprobantesModal").modal("hide");
+                                }
+                            },
+                            error: function (xhr, ajaxOptions, thrownError) {
+
+                            }
+                        });
+
+                    }
+
+                });
+            }
+        });
+
+
+        $('#txtMontoDevolucion').keypress(function (event) {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+
+            if (keycode == '13') {
+
+                let monto = $("#txtMontoDevolucion").val().trim();
+
+                if (monto == "") {
+                    Swal.fire({
+                        title: 'Ingrese el monto por favor',
+                        text: "Textile Sourcing Company",
+                        icon: 'warning',
+                        showConfirmButton: true,
+                        showCancelButton: false,
+                        confirmButtonText: 'Ok',
+                        cancelButtonText: 'Cancel',
+                        focusConfirm: true
+                    }).then(result => {
+                        if (result.value) {
+                            document.getElementById("txtMontoDevolucion").focus = true;
+                        }
+                    });
+                }
+                else if (parseFloat(monto) <= 0 || parseFloat(monto) > 1000) {
+                    Swal.fire({
+                        title: 'Ingrese un monto correcto, por favor',
+                        icon: 'warning',
+                        showConfirmButton: true,
+                        showCancelButton: false,
+                        confirmButtonText: 'Ok',
+                        cancelButtonText: 'Cancel',
+                        focusConfirm: true
+                    }).then(result => {
+                        if (result.value) {
+                            document.getElementById("txtMontoDevolucion").focus = true;
+                        }
+                    });
+                }
+                else {
+
+                    MostrarCarga("Guardando...");
+
+
+                    $.ajax({
+                        url: "/finanzas/RG_SetDevolucionRend",
+                        type: "POST",
+                        data: {
+                            'opcion': 5,
+                            'idsolicitud': idsolicitud_dev,
+                            'secuencia': idsecuencia_dev,
+                            'montoDev': parseFloat(monto)
+                        },
+                        dataType: "json",
+                        success: function (resultado) {
+
+                            if (resultado.isRedirect) {
+                                window.location.href = resultado.redirectUrl;
+                            }
+                            else {
+
+                                if (resultado.entidad.idResponse > 0) {
+
+                                    Swal.fire({
+                                        title: 'Registro Correcto',
+                                        text: 'Textile Sourcing CompanY',
+                                        icon: 'success',
+                                        showConfirmButton: true,
+                                        showCancelButton: false,
+                                        confirmButtonText: 'Ok',
+                                        cancelButtonText: 'Cancel',
+                                        focusConfirm: true
+                                    }).then(result => {
+                                        if (result.value) {
+                                            document.getElementById("txtMontoDevolucion").focus = true;
+                                        }
+                                    });
+                                }
+                                else {
+
+                                    Swal.fire({
+                                        title: 'Ocurrio un error al registrar monto',
+                                        text: 'Textile Sourcing CompanY',
+                                        icon: 'error',
+                                        showConfirmButton: true,
+                                        showCancelButton: false,
+                                        confirmButtonText: 'Ok',
+                                        cancelButtonText: 'Cancel',
+                                        focusConfirm: true
+                                    }).then(result => {
+                                        if (result.value) {
+                                            document.getElementById("txtMontoDevolucion").focus = true;
+                                        }
+                                    });
+
+                                }
+
+                                $("#registrarDevModal").modal("hide");
+                            }
+                        },
+                        error: function (xhr, ajaxOptions, thrownError) {
+
+                        }
+                    });
+
+                }
+
+            }
+        });
+
+        $('#registrarDevModal').on('shown.bs.modal', function (e) {
+            document.getElementById("txtMontoDevolucion").focus = true;
+        });
+
+        $('#registrarDevModal').on('hidden.bs.modal', function (e) {
+            $("#txtMontoDevolucion").val("");
+        });
+
+        $("#btnGuardarDevolucion").click(function () {
+
+            let monto = $("#txtMontoDevolucion").val().trim();
+
+            if (monto == "") {
+                Swal.fire({
+                    title: 'Ingrese el monto por favor',
+                    text: "Textile Sourcing Company",
+                    icon: 'warning',
+                    showConfirmButton: true,
+                    showCancelButton: false,
+                    confirmButtonText: 'Ok',
+                    cancelButtonText: 'Cancel',
+                    focusConfirm: true
+                }).then(result => {
+                    if (result.value) {
+                        document.getElementById("txtMontoDevolucion").focus = true;
+                    }
+                });
+            }
+            else if (parseFloat(monto) <= 0 || parseFloat(monto) > 1000) {
+                Swal.fire({
+                    title: 'Ingrese un monto correcto, por favor',
+                    icon: 'warning',
+                    showConfirmButton: true,
+                    showCancelButton: false,
+                    confirmButtonText: 'Ok',
+                    cancelButtonText: 'Cancel',
+                    focusConfirm: true
+                }).then(result => {
+                    if (result.value) {
+                        document.getElementById("txtMontoDevolucion").focus = true;
+                    }
+                });
+            }
+            else {
+
+                MostrarCarga("Guardando...");
+
+
+                $.ajax({
+                    url: "/finanzas/RG_SetDevolucionRend",
+                    type: "POST",
+                    data: {
+                        'opcion': 5,
+                        'idsolicitud': idsolicitud_dev,
+                        'secuencia': idsecuencia_dev,
+                        'monto': parseFloat(monto)
+                    },
+                    dataType: "json",
+                    success: function (resultado) {
+
+                        if (resultado.isRedirect) {
+                            window.location.href = resultado.redirectUrl;
+                        }
+                        else {
+
+                            if (resultado.entidad.idResponse > 0) {
+
+                                Swal.fire({
+                                    title: 'Registro Correcto',
+                                    text: 'Textile Sourcing CompanY',
+                                    icon: 'success',
+                                    showConfirmButton: true,
+                                    showCancelButton: false,
+                                    confirmButtonText: 'Ok',
+                                    cancelButtonText: 'Cancel',
+                                    focusConfirm: true
+                                }).then(result => {
+                                    if (result.value) {
+                                        document.getElementById("txtMontoDevolucion").focus = true;
+                                    }
+                                });
+                            }
+                            else {
+
+                                Swal.fire({
+                                    title: 'Ocurrio un error al registrar monto',
+                                    text: 'Textile Sourcing CompanY',
+                                    icon: 'error',
+                                    showConfirmButton: true,
+                                    showCancelButton: false,
+                                    confirmButtonText: 'Ok',
+                                    cancelButtonText: 'Cancel',
+                                    focusConfirm: true
+                                }).then(result => {
+                                    if (result.value) {
+                                        document.getElementById("txtMontoDevolucion").focus = true;
+                                    }
+                                });
+
+                            }
+
+                            actualizarLista(solicitudSeleccionada.idSolicitud);
+                            $("#registrarDevModal").modal("hide");
+                        }
+                    },
+                    error: function (xhr, ajaxOptions, thrownError) {
+
+                    }
+                });
+
+            }
+
+
+        });
+
+
+
+    </script>
+
+}
+

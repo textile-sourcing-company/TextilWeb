@@ -1,6 +1,6 @@
 ﻿@{
     ViewBag.Title = "Ingreso de Rectilineos";
-    ViewBag.Modulo = "Almacenes";
+    ViewBag.Modulo = "Corte";
     Layout = "~/Views/Plantillas/_Layout.cshtml";
 }
 
@@ -277,7 +277,7 @@
                             <td id="total_${partida}_primeras"></td>
                         </tr>
                         <tr data-partida='${partida}' data-tipo='2'>
-                            <td>SEGUNDAS</td>
+                            <td>FALLAS</td>
                             ${getTallas(partida, "segunda")}
                             <td id="total_${partida}_segundas"></td>
                         </tr>

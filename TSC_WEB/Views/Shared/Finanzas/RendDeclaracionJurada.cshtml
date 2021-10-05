@@ -1,0 +1,144 @@
+﻿@{
+    Layout = null;
+}
+
+    <div class="row m-2">
+
+        <div class="col-12 col-sm-12 col-md-4 col-lg-3 col-xl-3 p-1">
+            <label for="cbxTipoCpbteCompModal3">Tipo Comprobante:</label>
+            <select class="form-control form-control-sm" id="cbxTipoCpbteCompModal3" disabled></select>
+        </div>
+        <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3 p-1">
+            <label for="txtEmpresaModal3">Empresa:</label>
+            <input id="txtEmpresaModal3" class="form-control form-control-sm" type="text" placeholder="" value="Textile Sourcing Company SAC" disabled>
+        </div>
+        <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3 p-1">
+            <label for="txtFechaModal3">Fecha Emisión:</label>
+            <input id="txtFechaModal3" class="form-control form-control-sm cfecha" type="date" disabled>
+        </div>
+        <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3 p-1">
+            <label for="kpiMontoSeleecionadoModal3">Monto por Rendir</label>
+            <h6 id="kpiMontoSeleecionadoModal3">0</h6>
+        </div>
+
+
+        <div class="col-12 col-sm-12 col-md-4 col-lg-3 col-xl-3 p-1">
+            <label for="cbxPeriodoModal3">Periodo:</label>
+            <select class="form-control form-control-sm" id="cbxPeriodoModal3"></select>
+        </div>
+        <div class="col-12 col-sm-12 col-md-4 col-lg-3 col-xl-3 p-1">
+            <label for="txtCodigoModal3">Codigo Correlativo:</label>
+            <input id="txtCodigoModal3" class="form-control form-control-sm" type="text" maxlength="15" disabled>
+        </div>
+        <div class="col-12 col-sm-12 col-md-4 col-lg-3 col-xl-3 p-1">
+            <label for="cbxMonedaModal3">Moneda:</label>
+            <select class="form-control form-control-sm" id="cbxMonedaModal3" disabled></select>
+        </div>
+
+
+        <div class="col-12 col-sm-4 col-md-4 col-lg-2 col-xl-2 p-1">
+            <label for="txtDNIModal3">DNI:</label>
+            <input id="txtDNIModal3" class="form-control form-control-sm" type="text" placeholder="Buscar por DNI" maxlength="12" disabled>
+        </div>
+        <div class="col-12 col-sm-8 col-md-4 col-lg-5 col-xl-5 p-1">
+            <label for="txtApeNomModal3">Apellidos y Nombres:</label>
+            <input id="txtApeNomModal3" class="form-control form-control-sm" type="text" disabled>
+        </div>
+        <div class="col-12 col-sm-12 col-md-4 col-lg-5 col-xl-5 p-1">
+            <label for="txtCeCoModal3">Centro de Costo:</label>
+            <input id="txtCeCoModal3" class="form-control form-control-sm" type="text" maxlength="200" disabled>
+        </div>
+
+
+        <div class="col-12 col-sm-6 col-md-6 col-lg-3 col-xl-3 p-1">
+            <label for="txtCiudadModal3">Ciudad:</label>
+            <input id="txtCiudadModal3" class="form-control form-control-sm" type="text" placeholder="Ingrese el nombre de la Ciudad" maxlength="100">
+        </div>
+        <div class="col-12 col-sm-6 col-md-6 col-lg-3 col-xl-3 p-1">
+            <label for="txtPaisModal3">País:</label>
+            <input id="txtPaisModal3" class="form-control form-control-sm" placeholder="Ingrese el nombre del País" type="text">
+        </div>
+        <div class="col-12 col-sm-6 col-md-6 col-lg-3 col-xl-3 p-1">
+            <label for="txtFechaDesdeModal3">Fecha Desde:</label>
+            <input id="txtFechaDesdeModal3" class="form-control form-control-sm cfecha" type="date">
+        </div>
+        <div class="col-12 col-sm-6 col-md-6 col-lg-3 col-xl-3 p-1">
+            <label for="txtFechaHastaModal3">Fecha Hasta:</label>
+            <input id="txtFechaHastaModal3" class="form-control form-control-sm cfecha" type="date">
+        </div>
+
+
+
+
+        <div class="card container-fluid mt-2" style="background-color: #F2F4F4">
+            <h6> 1. Gastos de Alimentación y Relacionados (**)</h6>
+            <div class="row">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-5 col-xl-5 p-1">
+                    <label for="txtFechaModalDet3_1">Fecha:</label>
+                    <input id="txtFechaModalDet3_1" class="form-control form-control-sm cfecha" type="date">
+                </div>
+                <div class="col-12 col-sm-12 col-md-12 col-lg-5 col-xl-5 p-1">
+                    <label for="txtMontoDet3_1">Monto:</label>
+                    <input id="txtMontoDet3_1" class="form-control form-control-sm cfecha" type="number">
+                </div>
+                <div class="col-12 col-sm-4 col-md-4 col-lg-2 col-xl-2 p-1">
+                    <label for="btnAgregarMotivo3_1">Agregar:</label>
+                    <button type="button" style="width: 100%" class="btn btn-primary btn-sm" id="btnAgregarMotivo3_1">Agregar</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="container-fluid">
+
+            <table class="table table-sm table-bordered table-striped dt-responsive table-hover nowrap mt-3" id="tblDeclaracionJurada3_1" style="width: 100%">
+                <thead class="thead-light">
+                    <tr>
+                        <th class="all"></th>
+                        <th>Fecha</th>
+                        <th>Moneda</th>
+                        <th class="all">Monto</th>
+                        <th class="all" style="text-align: center">Eliminar</th>
+                    </tr>
+                </thead>
+                <tbody id="tblDeclaracionJuradaContent3_1"></tbody>
+            </table>
+
+        </div>
+
+        <hr />
+
+        <div class="card container-fluid mt-2" style="background-color: #F2F4F4">
+            <h6> 2. Gastos de Movilidad (**)</h6>
+            <div class="row">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-5 col-xl-5 p-1">
+                    <label for="txtFechaModalDet3_2">Fecha:</label>
+                    <input id="txtFechaModalDet3_2" class="form-control form-control-sm cfecha" type="date">
+                </div>
+                <div class="col-12 col-sm-12 col-md-12 col-lg-5 col-xl-5 p-1">
+                    <label for="txtMontoDet3_2">Monto:</label>
+                    <input id="txtMontoDet3_2" class="form-control form-control-sm cfecha" type="number">
+                </div>
+                <div class="col-12 col-sm-4 col-md-4 col-lg-2 col-xl-2 p-1">
+                    <label for="btnAgregarMotivo3_2">Agregar:</label>
+                    <button type="button" style="width: 100%" class="btn btn-primary btn-sm" id="btnAgregarMotivo3_2">Agregar</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="container-fluid">
+            <table class="table table-sm table-bordered table-hover display nowrap mt-3" id="tblDeclaracionJurada3_2" style="width: 100%">
+                <thead class="thead-light">
+                    <tr>
+                        <th class="all"></th>
+                        <th>Fecha</th>
+                        <th>Moneda</th>
+                        <th class="all">Monto</th>
+                        <th class="all" style="text-align: center">Eliminar</th>
+                    </tr>
+                </thead>
+                <tbody id="tblDeclaracionJuradaContent3_2"></tbody>
+            </table>
+        </div>
+
+
+    </div>

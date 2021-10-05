@@ -1,0 +1,190 @@
+﻿@{
+    Layout = null;
+}
+
+
+
+
+<div class="row m-2">
+
+    <div class="row p-2 m-1" style="background-color: #F2F4F4; border-radius: 4px">
+
+
+        <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 p-1">
+            <label for="rcbxConcepCabModal1">Concepto:</label>
+            <select class="form-control form-control-sm" id="rcbxConcepCabModal1"></select>
+        </div>
+
+        <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 p-1">
+            <label for="rcbxConcepDetModal1">Detalle:</label>
+            <select class="form-control form-control-sm" id="rcbxConcepDetModal1"></select>
+        </div>
+
+        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 p-1">
+            <label for="rtxtConsideracionModal1">Consideración:</label>
+            <textarea id="rtxtConsideracionModal1" class="form-control form-control-sm" type="text" disabled></textarea>
+        </div>
+
+        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 p-1">
+            <label for="rtxtObservacionModal1">Observación para el tipo Solicitud:</label>
+            <input id="rtxtObservacionModal1" class="form-control form-control-sm" type="text">
+        </div>
+
+        @*<div class="col-3 p-1">
+                <div style="color:#000000; font-weight: 600;text-align: center">
+                    <label for="ridMontoSolicitadoModal1">Monto máximo</label>
+                </div>
+                <div class="form-control form-control-sm card" style="color:#000000; font-size: 16px; padding: 4px; font-weight: 600;text-align: center">
+                    <span id="ridMontoSolicitadoModal1">0.00</span>
+                </div>
+            </div>*@
+
+    </div>
+
+
+    <div class="col-12 col-sm-4 col-md-4 col-lg-2 col-xl-2 p-1">
+        <label for="rcbxTipoCpbteCompModal1">Tipo Comprobante:</label>
+        <select class="form-control form-control-sm" id="rcbxTipoCpbteCompModal1"></select>
+    </div>
+
+    <div class="col-12 col-sm-4 col-md-4 col-lg-2 col-xl-2 p-1">
+        <label for="rtxtSerieModal1">Serie:</label>
+        <input id="rtxtSerieModal1" class="form-control form-control-sm" type="text" placeholder="Serie">
+    </div>
+
+    <div class="col-12 col-sm-4 col-md-4 col-lg-2 col-xl-2 p-1">
+        <label for="rtxtNumeroModal1">Número:</label>
+        <input id="rtxtNumeroModal1" class="form-control form-control-sm" type="number" placeholder="Número">
+    </div>
+
+    <div class="col-12 col-sm-12 col-md-12 col-lg-3 col-xl-3 p-1">
+        <label for="rtxtFechaModal1">Fecha Emisión:</label>
+        <input class="form-control form-control-sm cfecha" type="date" id="rtxtFechaModal1">
+    </div>
+
+
+    <div class="col-6 col-sm-6 col-md-6 col-lg-3 col-xl-3 p-1">
+        <label for="rcbxMonedaModal1">Moneda:</label>
+        <select class="form-control form-control-sm" id="rcbxMonedaModal1" disabled></select>
+    </div>
+
+
+
+    <div class="col-6 col-sm-6 col-md-6 col-lg-3 col-xl-3 p-1">
+        <label for="rcbxPeriodoModal1">Periodo Sofya:</label>
+        <select class="form-control form-control-sm" id="rcbxPeriodoModal1"></select>
+    </div>
+
+    <div class="col-12 col-sm-12 col-md-12 col-lg-3 col-xl-3 p-1">
+        <label for="rtxtRucCompModal1">RUC / N° DNI:</label>
+        <input id="rtxtRucCompModal1" class="form-control form-control-sm" type="text" maxlength="11" placeholder="Buscar N° RUC <Enter>">
+    </div>
+
+    <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 p-1">
+        <label for="rtxtRSCompModal1">Razon Social:</label>
+        <input id="rtxtRSCompModal1" class="form-control form-control-sm" type="text" placeholder="Razon Social" disabled>
+    </div>
+
+
+
+    <div class="col-12 col-sm-12 col-md-12 col-lg-2 col-xl-2 p-1">
+        <label for="rtxtCodSofyaPCModal1">Código Sofya</label>
+        <input id="rtxtCodSofyaPCModal1" class="form-control form-control-sm" type="text" placeholder="" disabled>
+    </div>
+
+
+    <div class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4 p-1">
+        <label for="rtxtObsCompModal1">Glosa Factura/Boleta:</label>
+        <input id="rtxtObsCompModal1" class="form-control form-control-sm" type="text">
+    </div>
+    <div class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4 p-1">
+        <label for="rtxtCeCoModal1">Centro de Costo:</label>
+        <input id="rtxtCeCoModal1" class="form-control form-control-sm" type="text" disabled>
+    </div>
+
+    <div class="col-12 col-sm-12 col-md-12 col-lg-5 col-xl-2 p-1 d-flex flex-column">
+        <label for="rswtIGV">CON IGV:</label>
+        <input id="rswtIGV" type="checkbox" data-toggle="toggle" data-on="SI" data-off="NO" data-onstyle="primary" data-width="120" data-offstyle="secondary">
+    </div>
+
+
+
+    <div class="card container-fluid mt-2 p-2" style="background-color: #F2F4F4">
+
+
+        <div class="row">
+
+            <div class="col-12 col-sm-12 col-md-12 col-lg-2 col-xl-2 p-1">
+                <label for="rcbxUM1">UM:</label>
+                <select class="form-control form-control-sm" id="rcbxUM1"></select>
+            </div>
+
+            <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 p-1">
+                <label for="rtxtDescripcion1">Producto / Servicio:</label>
+                <input id="rtxtDescripcion1" class="form-control form-control-sm" type="text" maxlength="60" placeholder="">
+            </div>
+            @*<div class="col-2 p-1">
+                    <label for="txtCantidad1">Cantidad:</label>
+                    <input id="txtCantidad1" class="form-control form-control-sm" type="number">
+                </div>*@
+
+            <div class="col-12 col-sm-12 col-md-12 col-lg-2 col-xl-2 p-1">
+                <label for="rtxtValorUnitarioTotal1">Importe total:</label>
+                <input id="rtxtValorUnitarioTotal1" class="form-control form-control-sm" type="number">
+            </div>
+
+            <div class="col-12 col-sm-12 col-md-12 col-lg-2 col-xl-2 p-1">
+                <label for="rbtnAgregarMotivo1">Agregar:</label>
+                <button type="button" style="width: 100%" class="btn btn-primary btn-sm" id="rbtnAgregarMotivo1">Agregar</button>
+            </div>
+
+        </div>
+    </div>
+
+
+    <div class="container-fluid">
+
+        <table class="table table-sm table-bordered table-striped dt-responsive table-hover nowrap mt-3" id="rtblFacturaBoleta" style="width: 100%">
+            <thead class="thead-light">
+                <tr>
+                    <th class="all"></th>
+                    <th>UM</th>
+                    <th class="all">Tipo Concepto</th>
+                    <th>Descripción</th>
+                    @*<th>Cantidad</th>*@
+                    <th>Precio Unit.</th>
+                    <th class="all">Total</th>
+                    <th style="text-align: center">Eliminar</th>
+                </tr>
+            </thead>
+            <tbody id="rtblFacturaBoletaContent"></tbody>
+        </table>
+
+    </div>
+
+    <div class="card p-2 mt-2" style="width: 100%">
+        <div class="d-flex justify-content-around">
+
+            <div class="row">
+                <div class="form-group col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4 mt-1">
+                    <label for="ridimportetotal1">Importe Total: </label>
+                    <input class="form-control form-control-sm" type="number" id="ridimportetotal1" disabled>
+                </div>
+
+                <div class="form-group col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4 mt-1">
+                    <label for="ridigv1">IGV: </label>
+                    <input class="form-control form-control-sm" type="number" id="ridigv1" disabled>
+                </div>
+
+                <div class="form-group col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4 mt-1">
+                    <label for="ridtotal1">Total: </label>
+                    <input class="form-control form-control-sm" type="number" id="ridtotal1" disabled>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+</div>
+

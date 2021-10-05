@@ -7,6 +7,8 @@ namespace TSC_WEB.Models.Entidades.Finanzas.RendicionGastos
 {
     public class SPS_Parametro
     {
+        // Cabecera.
+
         public int opcion { get; set; }
         public int idSolicitud { get; set; }
         public string codigo { get; set; }
@@ -18,8 +20,7 @@ namespace TSC_WEB.Models.Entidades.Finanzas.RendicionGastos
 
         public int codCeCo { get; set; }
         public int idConceptoDet { get; set; }
-        public decimal valor { get; set; }
-
+        
         public int secuencia { get; set; }
         public string usuario { get; set; }
         public string usuarioCompleto { get; set; }
@@ -36,5 +37,13 @@ namespace TSC_WEB.Models.Entidades.Finanzas.RendicionGastos
         public string ctpava_bnf { get; set; }
         public string canvar_bnf { get; set; }
         public string colaborador { get; set; }
+
+        public string codSede { get; set; }
+        public string fechaAplicacion { get; set; }
+
+        // Detalle
+
+        public ConceptoDetalle[] conceptoDetArray { get; set; }
+
     }
 }

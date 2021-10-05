@@ -12,11 +12,20 @@ namespace TSC_WEB.Models.Entidades.Finanzas.RendicionGastos
         public string codigo { get; set; }
         public string observacion { get; set; }
         public string estado { get; set; }
+
         public string tipo { get; set; }
-        public string nivelAprobacion { get; set; }
+        public string colaborador { get; set; }
+        public string ceco { get; set; }
+
+        //public string conceptoCab { get; set; }
+        //public string conceptoDet { get; set; }
         public string moneda { get; set; }
-        public decimal total { get; set; }
-        public decimal totalRend { get; set; }
-        public string usuSolicitante { get; set; }
+
+        public decimal totalsolicitado { get; set; }
+        public decimal totalentregado { get; set; }
+        public decimal totalrendido { get; set; }
+        public decimal totalsaldo { get; set; }
+
+        public string simbolo { get; set; }
     }
 }

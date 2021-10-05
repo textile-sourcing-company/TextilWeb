@@ -19,8 +19,8 @@ namespace TSC_WEB.Models.Entidades.Finanzas.RendicionGastos
         public int codCeCo { get; set; }
         public int idConceptoDet { get; set; }
         public decimal valor { get; set; }
+        
         public string nota { get; set; }
-
         public int secuencia { get; set; }
         public string usuario { get; set; }
         public string usuarioCompleto { get; set; }

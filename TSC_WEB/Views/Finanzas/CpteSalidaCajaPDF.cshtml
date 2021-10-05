@@ -1,0 +1,342 @@
+﻿@model TSC_WEB.Models.Entidades.Finanzas.RendicionGastos.SPG61_CpteSalidaCajaViewModel
+@{
+    Layout = null;
+}
+
+
+<style type="text/css">
+    .cpte-contenedor {
+        padding: 5px;
+        border: 1px solid #000;
+        border-radius: 5px;
+        width: 630px;
+    }
+
+    .tg {
+        border-collapse: collapse;
+        border-spacing: 0;
+        width: 630px;
+        height: 300px;
+        border: 1px solid #fff;
+    }
+
+        .tg td {
+            border-style: solid;
+            border-width: 1px;
+            font-family: Arial, sans-serif;
+            font-size: 12px;
+            overflow: hidden;
+            padding: 5px;
+            word-break: normal;
+            border: 1px solid #fff;
+        }
+
+        .tg th {
+            border-style: solid;
+            border-width: 1px;
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            font-weight: normal;
+            overflow: hidden;
+            padding: 4px;
+            word-break: normal;
+            text-align: center;
+            vertical-align: middle;
+            border: 1px solid #fff;
+        }
+
+
+            .tg th img {
+                width: 70px;
+                height: 40px;
+            }
+
+        .tg .tcabecera .titulo {
+            font-size: 18px;
+            font-weight: 600;
+            min-width: 90px;
+        }
+
+        .tg .tcabecera .monto {
+            padding: 4px;
+            width: 90px;
+        }
+
+            .tg .tcabecera .monto div {
+                font-size: 15px;
+                font-weight: 600;
+                border: 1px solid #000;
+                border-radius: 4px;
+                padding: 5px;
+            }
+
+        .tg .tcabecera .codigo {
+            font-size: 15px;
+            font-weight: 600;
+            width: 530px;
+            text-align: center;
+        }
+
+        .tg .tcabecera .imagen {
+        }
+
+
+        .tg .tcuerpo .firma {
+            border-top: 1px solid #000 !important;
+            font-weight: 600;
+        }
+
+        .tg .tcuerpo .fecha {
+        }
+
+        .tg .tpie .cuadro {
+            font-size: 10px;
+            vertical-align: top;
+            text-align: left;
+            width: 70px;
+        }
+
+        .tg .tpie {
+            height: 17px;
+        }
+</style>
+
+<div class="cpte-contenedor">
+    <table class="tg">
+        <thead>
+            <tr class="tcabecera">
+                <th class="titulo" colspan="2">@Model.tipoDescripcion</th>
+                <th class="monto" colspan="2">
+                    <div>
+                        @Model.simbolo @Model.totalEntregado
+                    </div>
+                </th>
+                <th class="codigo" colspan="2">
+                
+                    @if (Model.idTipo == 1 || Model.idTipo == 2)
+                    {
+                        @Model.serienumcpte
+                    }
+
+                </th>
+                <th class="imagen" colspan="2">
+                    <img src="~/Public/logooriginal.png" alt="" srcset="">
+                </th>
+            </tr>
+        </thead>
+        <tbody class="tcuerpo">
+            <tr style="border-top: 0px solid #fff;">
+                @*<td style="border-top: 1px solid #fff;border-bottom: 1px solid #fff;" colspan="8"></td>*@
+            </tr>
+            <tr style="border-top: 0px solid #fff;">
+                <td class="contenido" colspan="8" rowspan="6" style="border-top: 0px solid #fff;">
+                    Por la suma de <span class="numero-nombre"> @Model.totalLetras </span> , a favor de <span class="colaborador"> @Model.colaborador </span> en concepto de
+                        @Model.observacion
+
+                        <br />
+                        <br />
+
+                        <span style="font-weight: bold">Centro de Costo: </span> @Model.ceco
+
+                        <br />
+                </td>
+            </tr>
+            <tr>
+            </tr>
+            <tr>
+            </tr>
+            <tr>
+            </tr>
+            <tr>
+            </tr>
+            <tr>
+            </tr>
+            <tr>
+            </tr>
+            <tr style="border-top: 0px solid #fff;">
+                <td class="firma" colspan="4">
+                    <br />
+                    <br />
+                    <br />
+                    <div style="border-top: 1px solid #000; width: 80%;margin: auto; text-align: center;">
+                        Firma
+                    </div>
+                </td>
+                <td class="fecha" colspan="4" style="border-top: 0px solid #fff;">
+                    <br />
+                    <br />
+                    <br />
+                    <div style="width: 80%;margin: auto; text-align: center;">
+                        @Model.sede, <span style="border-bottom: 1px solid #000"> @Model.fecha </span>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td class="tg-0lax" colspan="8" style="border-top: 0px solid #fff;"></td>
+            </tr>
+            <tr class="tpie">
+                <td class="tg-0lax" colspan="3"><span style="font-weight:bold;">Nombre: </span>@Model.colaborador  </td>
+                <td class="tg-0lax" colspan="2" rowspan="3"></td>
+                <td class="cuadro" rowspan="3" style="padding-left: 0px; padding-right: 0px;">
+                    <div style="border: 1px solid #000; width: 100%; height: 100%; padding: 0px; border-radius: 3px 0px 0px 3px;">
+                        Hecho por:
+                        <br />
+                        <span style="padding-top: 10px">
+                            @Model.usuarioAprob30
+                        </span>
+                    </div>
+
+                </td>
+                <td class="cuadro" rowspan="3" style="padding-left: 0px; padding-right: 0px;">
+                    <div style="border: 1px solid #000; width: 100%; height: 100%; padding: 0px; border-radius: 0px 0px 0px 0px;">
+                        Contabilidad:
+                    </div>
+                </td>
+                <td class="cuadro" rowspan="3" style="padding-left: 0px;">
+                    <div style="border: 1px solid #000; width: 100%; height: 100%; padding: 0px; border-radius: 0px 3px 3px 0px;">
+                        Caja:
+                    </div>
+                </td>
+            </tr>
+            <tr class="tpie">
+                <td class="tg-0lax" colspan="3"><span style="font-weight:bold;">D.N.I: </span>@Model.dni</td>
+            </tr>
+            <tr class="tpie">
+                <td class="tg-0lax" colspan="3"><span style="font-weight:bold;">Cod. Solicitud: </span>@Model.codigo</td>
+            </tr>
+
+            <tr>
+            </tr>
+            <tr>
+            </tr>
+
+            <tr>
+                <td class="contenido" colspan="8" rowspan="6" style="font-size:11px;">
+                    <span style="font-weight:bold;">NOTA: </span> "El plazo de la rendición es de 48 horas, de no sustentar en el tiempo indicado se procederá a realizar el descuento por nómina"
+                </td>
+            </tr>
+        </tbody>
+
+
+    </table>
+</div>
+
+
+<div class="cpte-contenedor" style="margin-top: 20px;">
+    <table class="tg">
+        <thead>
+            <tr class="tcabecera">
+                <th class="titulo" colspan="2">@Model.tipoDescripcion</th>
+                <th class="monto" colspan="2">
+                    <div>
+                        @Model.simbolo @Model.totalEntregado
+                    </div>
+                </th>
+                <th class="codigo" colspan="2">@Model.serienumcpte</th>
+                <th class="imagen" colspan="2">
+                    <img src="~/Public/logooriginal.png" alt="" srcset="">
+                </th>
+            </tr>
+        </thead>
+        <tbody class="tcuerpo">
+            <tr style="border-top: 0px solid #fff;">
+                @*<td style="border-top: 1px solid #fff;border-bottom: 1px solid #fff;" colspan="8"></td>*@
+            </tr>
+            <tr style="border-top: 0px solid #fff;">
+                <td class="contenido" colspan="8" rowspan="6" style="border-top: 0px solid #fff;">
+                    Por la suma de <span class="numero-nombre"> @Model.totalLetras </span>, a favor de <span class="colaborador"> @Model.colaborador </span> en concepto de <span class="concepto">
+                        @Model.observacion
+
+                        <br />
+                        <br />
+
+                        <span style="font-weight: bold">Centro de Costo: </span> @Model.ceco
+
+                        <br />
+                </td>
+            </tr>
+            <tr>
+            </tr>
+            <tr>
+            </tr>
+            <tr>
+            </tr>
+            <tr>
+            </tr>
+            <tr>
+            </tr>
+            <tr>
+            </tr>
+            <tr style="border-top: 0px solid #fff;">
+                <td class="firma" colspan="4">
+                    <br />
+                    <br />
+                    <br />
+                    <div style="border-top: 1px solid #000; width: 80%;margin: auto; text-align: center;">
+                        Firma
+                    </div>
+                </td>
+                <td class="fecha" colspan="4" style="border-top: 0px solid #fff;">
+                    <br />
+                    <br />
+                    <br />
+                    <div style="width: 80%;margin: auto; text-align: center;">
+                        @Model.sede, <span style="border-bottom: 1px solid #000"> @Model.fecha </span>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td class="tg-0lax" colspan="8" style="border-top: 0px solid #fff;"></td>
+            </tr>
+            <tr class="tpie">
+                <td class="tg-0lax" colspan="3"><span style="font-weight:bold;">Nombre: </span>@Model.colaborador  </td>
+                <td class="tg-0lax" colspan="2" rowspan="3"></td>
+                <td class="cuadro" rowspan="3" style="padding-left: 0px; padding-right: 0px;">
+                    <div style="border: 1px solid #000; width: 100%; height: 100%; padding: 0px; border-radius: 3px 0px 0px 3px;">
+                        Hecho por:
+                        <br />
+                        <span style="padding-top: 10px">
+                            @Model.usuarioAprob30
+                        </span>
+                    </div>
+
+                </td>
+                <td class="cuadro" rowspan="3" style="padding-left: 0px; padding-right: 0px;">
+                    <div style="border: 1px solid #000; width: 100%; height: 100%; padding: 0px; border-radius: 0px 0px 0px 0px;">
+                        Contabilidad:
+                    </div>
+                </td>
+                <td class="cuadro" rowspan="3" style="padding-left: 0px;">
+                    <div style="border: 1px solid #000; width: 100%; height: 100%; padding: 0px; border-radius: 0px 3px 3px 0px;">
+                        Caja:
+                    </div>
+                </td>
+            </tr>
+            <tr class="tpie">
+                <td class="tg-0lax" colspan="3"><span style="font-weight:bold;">D.N.I: </span>@Model.dni</td>
+            </tr>
+            <tr class="tpie">
+                <td class="tg-0lax" colspan="3"><span style="font-weight:bold;">Cod. Solicitud: </span>@Model.codigo</td>
+            </tr>
+
+            <tr>
+            </tr>
+            <tr>
+            </tr>
+
+            <tr>
+                <td class="contenido" colspan="8" rowspan="6" style="font-size:11px;">
+                    <span style="font-weight:bold;">NOTA: </span> "El plazo de la rendición es de 48 horas, de no sustentar en el tiempo indicado se procederá a realizar el descuento por nómina"
+                </td>
+            </tr>
+        </tbody>
+
+
+
+    </table>
+</div>
+
+
+
+
+

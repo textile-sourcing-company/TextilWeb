@@ -9,5 +9,6 @@ namespace TSC_WEB.Models.Entidades.Finanzas.RendicionGastos
     {
         public int idTipoMod { get; set; }
         public string descripcion { get; set; }
+        public string simbolo { get; set; }
     }
 }
