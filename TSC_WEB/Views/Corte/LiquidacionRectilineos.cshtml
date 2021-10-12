@@ -61,6 +61,9 @@
 
     }).ToList() : new List<FichasTallasEntidad>();
 
+    // TOTAL DE MERMA
+    decimal totalmerma = Model.FichaCabecera.mermarecorte + Model.FichaCabecera.mermahilos;
+
 
 
     try
@@ -854,14 +857,30 @@
 
                     <form action="" class="row justify-content-center" id="frmregistro">
 
+                        <div class="col-md-8">
+                            <label for="">Kilos totales</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="txtkilostotales" required value="@totalmerma">
+                                <div class="input-group-append">
+                                    <button class="btn btn-sm btn-block btn-primary" type="button" id="btncalculakilos">
+                                        <i class="fas fa-sync-alt"></i>
+                                    </button>
+                                    @*<span class="input-group-text" id="basic-addon2">@example.com</span>*@
+                                </div>
+                            </div>
+
+
+                        </div>    
+
+
                         <div class="col-md-6">
                             <label for="">Merma de recorte (kg)</label>
-                            <input type="number" class="form-control form-control-sm" id="txtmermacorte" step="0.01" required value="@Model.FichaCabecera.mermarecorte">
+                            <input type="number" class="form-control form-control-sm" readonly id="txtmermacorte" step="0.01" required value="@Model.FichaCabecera.mermarecorte">
                         </div>
 
                         <div class="col-md-6">
                             <label for="">Merma de hilos (kg)</label>
-                            <input type="number" class="form-control form-control-sm" id="txtmermahilos" step="0.01" required value="@Model.FichaCabecera.mermahilos">
+                            <input type="number" class="form-control form-control-sm" readonly id="txtmermahilos" step="0.01" required value="@Model.FichaCabecera.mermahilos">
                         </div>
 
                         @if (Model.FichaCabecera.estado == "PROCESO" || Model.FichaCabecera.estado == "APERTURADO")
@@ -1366,6 +1385,38 @@
 
 
                 });
+
+            });
+
+
+            // CALCULA LOS KILOS
+            $("#btncalculakilos").click(function () {
+
+                let txtkilostotales = document.getElementById("txtkilostotales").value.trim();
+
+                if (txtkilostotales != "") {
+
+                    let mermarecorte = document.getElementById("txtmermacorte");
+                    let mermahilos = document.getElementById("txtmermahilos");
+
+                    let valor_mermarecorte = parseFloat(txtkilostotales) * 0.9;
+                    let valor_mermahilos = parseFloat(txtkilostotales) * 0.1;
+
+                    mermarecorte.value = valor_mermarecorte.toFixed(3);
+                    mermahilos.value = valor_mermahilos.toFixed(3);
+
+
+
+                } else {
+                    Advertir("Ingres datos");
+                }
+
+                
+
+                
+
+
+
 
             });
 

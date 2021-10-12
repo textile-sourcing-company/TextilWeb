@@ -1,0 +1,368 @@
+﻿@model List<TSC_WEB.Models.Entidades.Corte.LiquidacionRectilineos.LiquidacionRectilineosPCPIndividualEntidad>
+
+@using TSC_WEB.Models.Entidades.Corte.LiquidacionRectilineos;
+
+
+@{
+    ViewBag.Title = "Liquidación Rectilíneos (PCP)";
+    ViewBag.Modulo = "Corte";
+    Layout = "~/Views/Plantillas/_Layout.cshtml";
+
+    int cantregistros = Model.Count;
+
+    // TALLAS
+    var tallas = cantregistros > 0 ? Model.GroupBy(std => std.talla).Select(cl => new LiquidacionRectilineosPCPIndividualEntidad
+    {
+        talla = cl.First().talla,
+        ordentalla = cl.First().ordentalla
+
+    }).OrderBy(or => or.ordentalla).ToList() : new List<LiquidacionRectilineosPCPIndividualEntidad> { };
+
+    // TOTAL PROGRAMADO
+    var totalpartida = cantregistros > 0 ?
+    Model.GroupBy(
+        l => new
+        {
+            l.partida,
+            //l.programado,
+            l.talla
+        }
+    ).Select(cl => new LiquidacionRectilineosPCPIndividualEntidad
+    {
+        partida = cl.First().partida,
+        programado = cl.Sum(b => b.programado),
+        talla = cl.First().talla,
+
+    }).ToList() : new List<LiquidacionRectilineosPCPIndividualEntidad>();
+
+    // FICHAS
+    var fichas = cantregistros > 0 ?
+            Model.GroupBy(
+        l => new
+        {
+            l.ficha
+        }
+    ).Select(cl => new LiquidacionRectilineosPCPIndividualEntidad
+    {
+        ficha = cl.First().ficha
+
+    }).ToList() : new List<LiquidacionRectilineosPCPIndividualEntidad>();
+
+    // PESO PROGRAMADO
+    var pesoprogramado = cantregistros > 0 ? Model.Sum(obj => obj.pesoprogramado) : 0;
+
+    // PESO LIQUIDADO
+    var pesoliquidado = cantregistros > 0 ? Model.Sum(obj => obj.pesonetoreal) : 0;
+
+    // MERMA HILO
+    var mermahilo = cantregistros > 0 ? Model[0].mermahilos : 0;
+
+    // MERMA RECORTE
+    var mermarecorte = cantregistros > 0 ? Model[0].mermarecorte : 0;
+
+    var pesoliquidadototal = pesoliquidado + mermahilo + mermarecorte;
+
+    // PORCENTAJE LIQUDIADO
+    var porcentaje_liquidado = pesoprogramado > 0 ? pesoliquidadototal * 100 / pesoprogramado : 0;
+
+    decimal totaltallas = 0;
+    decimal totalprogramado = 0;
+    decimal totalreales = 0;
+    decimal totalpendientes = 0;
+
+
+
+}
+
+@section style{
+
+    <style>
+        .tablefixed {
+            table-layout: fixed;
+        }
+
+        .filafija .partida {
+            width: 80px !important;
+            overflow: auto;
+        }
+
+        .filafija .tallas {
+            width: 40px !important;
+            overflow: auto;
+        }
+    </style>
+
+}
+
+@*PARTIDA*@
+<div class="card card-primary card-outline">
+    <div class="card-header text-center">
+        <h1 class="card-title">DATA GENERAL</h1>
+    </div>
+    <div class="card-body p-0">
+
+        <table class="table table-bordered table-sm table-fixed text-center">
+            <thead class="thead-light">
+                <tr class="filafija">
+                    <th class="border-table partida">PARTIDA</th>
+                    @foreach (var item in tallas)
+                    {
+                        <th class="border-table tallas">@item.talla </th>
+                    }
+                    <th class="border-table tallas">Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>@totalpartida[0].partida</td>
+                    @foreach (var item in tallas)
+                    {
+                        var response = totalpartida.Where(obj =>
+                                   obj.talla == item.talla
+                               ).SingleOrDefault();
+
+                        if (response != null) {
+                            totaltallas += response.programado;
+                        }
+
+
+                        <td class="">@response.programado</td>
+                    }
+                    <td>@totaltallas</td>
+                </tr>
+            </tbody>
+        </table>
+
+
+    </div>
+
+</div>
+
+@*FICHAS*@
+
+@foreach (var ficha in fichas)
+{
+    totalprogramado = 0;
+    totalreales = 0;
+    totalpendientes = 0;
+
+
+    <div class="card ">
+       
+        <div class="card-body p-0">
+
+            <table class="table table-bordered table-sm table-fixed text-center">
+                <thead class="thead-light">
+                    <tr class="filafija">
+                        <th class="border-table partida">@ficha.ficha</th>
+                        @foreach (var item in tallas)
+                        {
+                            <th class="border-table tallas">@item.talla </th>
+                        }
+                        <th class="border-table tallas">Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Programado</td>
+                        @foreach (var item in tallas)
+                        {
+                            var response = Model.Where(obj =>
+                                       obj.talla == item.talla &&
+                                       obj.ficha == ficha.ficha
+                                   ).SingleOrDefault();
+
+                            if (response != null)
+                            {
+                                <td class="">@response.programado</td>
+                                totalprogramado += response.programado;
+                            }
+                            else
+                            {
+                                <td></td>
+                            }
+
+                        }
+                        <td>@totalprogramado</td>
+                    </tr>
+                    <tr>
+                        <td>Real</td>
+                        @foreach (var item in tallas)
+                        {
+                            var response = Model.Where(obj =>
+                                       obj.talla == item.talla &&
+                                       obj.ficha == ficha.ficha
+                                   ).SingleOrDefault();
+
+                            if (response != null)
+                            {
+                                <td class="">@response.realprimera</td>
+                                totalreales += response.realprimera;
+
+                            }
+                            else
+                            {
+                                <td class=""></td>
+                            }
+                        }
+                        <td>@totalreales</td>
+                    </tr>
+                    <tr>
+                        <td>Pendiente</td>
+                        @foreach (var item in tallas)
+                        {
+                            var response = Model.Where(obj =>
+                                       obj.talla == item.talla &&
+                                       obj.ficha == ficha.ficha
+                                   ).SingleOrDefault();
+
+                            if (response != null)
+                            {
+                                <td class="">@response.diferenciacantidad</td>
+                                totalpendientes += response.diferenciacantidad;
+                            }
+                            else
+                            {
+                                <td class=""></td>
+                            }
+
+                        }
+                        <td>@totalpendientes</td>
+                    </tr>
+                </tbody>
+            </table>
+
+
+        </div>
+    </div>
+
+}
+
+<div class="row justify-content-center">
+
+    @*RECORTE*@
+    <div class="col-md-2">
+
+        <div class="card card-outline card-primary">
+            <div class="card-header"></div>
+            <div class="card-body">
+                <div class="form-group-sm">
+                    <label for="">Merma Recorte</label>
+                    <input type="text" class="form-control form-control" readonly value="@mermarecorte">
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    @*HILO*@
+    <div class="col-md-2">
+
+        <div class="card card-outline card-primary">
+            <div class="card-header"></div>
+            <div class="card-body">
+                <div class="form-group-sm">
+                    <label for="">Merma Hilo</label>
+                    <input type="text" class="form-control form-control" readonly value="@mermahilo">
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    @*LIQUIDADO *@
+    <div class="col-md-2">
+
+        <div class="card card-outline card-primary">
+            <div class="card-header"></div>
+            <div class="card-body">
+                <div class="form-group-sm">
+                    <label for="">Liquidado Neto(kg)</label>
+                    <input type="text" class="form-control form-control" readonly value="@pesoliquidado">
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+@* TOTAL *@
+<div class="row justify-content-center">
+
+    <div class="col-md-6">
+
+        <div class="card card-outline card-primary">
+            <div class="card-header"></div>
+            <div class="card-body">
+
+                <div class="row">
+
+                    <div class="form-group-sm col-md-43">
+                        <label for="">Despachados (kg)</label>
+                        <input type="text" class="form-control form-control-sm" name="name" value="@pesoprogramado" readonly />
+                    </div>
+
+                    <div class="form-group-sm col-md-4">
+                        <label for="">Liquidado Bruto (+ mermas)</label>
+                        <input type="text" class="form-control form-control-sm" name="name" value="@pesoliquidadototal" readonly />
+                    </div>
+
+                    <div class="form-group-sm col-md-4">
+                        <label for="">Porcentaje (%)</label>
+                        <input type="text" class="form-control form-control-sm" name="name" value="@Math.Round(porcentaje_liquidado,2)%" readonly />
+                    </div>
+                    
+
+
+                    <div class="form-group-sm text-center col-md-3">
+                        <label for="">&nbsp;</label>
+                        <button class="btn btn-sm btn-success btn-block" type="button" onclick="setEstado('APROBADO',@Model[0].idrectilineohead)">Aprobar</button>
+                    </div>
+
+                    <div class="form-group-sm text-center col-md-3">
+                        <label for="">&nbsp;</label>
+                        <button class="btn btn-sm btn-info btn-block" type="button" onclick="setEstado('APERTURADO',@Model[0].idrectilineohead)">Aperturar</button>
+                    </div>
+
+                </div>
+
+                
+            </div>
+        </div>
+
+
+
+    </div>
+
+</div>
+
+@section scripts{
+
+
+    <script>
+        // ASIGNAMOS ESTADO
+        function setEstado(estado = "", idrectilineo) {
+
+            MostrarCarga();
+
+            post("Corte", "setEstadoRectilineos", {
+                estado, idrectilineo
+            }, true)
+                .then(response => {
+                    //console.log(response);
+                    if (response.success) {
+                        Informar(response.mensaje, 1500);
+                    } else {
+                        Advertir(response.mensaje);
+                    }
+                })
+                .catch(error => {
+                    Advertir("Ocurrio un error");
+                    console.log(error);
+                });
+
+        }
+    </script>
+
+}
