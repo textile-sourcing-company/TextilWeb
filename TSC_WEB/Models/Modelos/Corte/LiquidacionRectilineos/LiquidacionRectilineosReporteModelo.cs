@@ -14,14 +14,21 @@ namespace TSC_WEB.Models.Modelos.Corte.LiquidacionRectilineos
 {
     public class LiquidacionRectilineosReporteModelo
     {
-        private const string formatoporcentaje = "0.00%";
+        //private const string formatoporcentaje = "0.00%";
+        private const string formatoporcentaje = "0.0%";
+
         private const string formatonumero = "0.00";
         public string[] LETRAS = new[] 
         { 
              "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z" ,
              "AA", "AB", "AC", "AD", "AE", "AF", "AG", "AH", "AI", "AJ", "AK", "AL", "AM", "AN", "AO", "AP", "AQ", "AR", "AS", "AT", "AU", "AV", "AW", "AX", "AY", "AZ",
              "BA", "BB", "BC", "BD", "BE", "BF", "BG", "BH", "BI", "BJ", "BK", "BL", "BM", "BN", "BO", "BP", "BQ", "BR", "BS", "BT", "BU", "BV", "BW", "BX", "BY", "BZ" ,
-             "CA", "CB", "CC", "CD", "CE", "CF", "CG", "CH", "CI", "CJ", "CK", "CL", "CM", "CN", "CO", "CP", "CQ", "CR", "CS", "CT", "CU", "CV", "CW", "CX", "CY", "CZ" 
+             "CA", "CB", "CC", "CD", "CE", "CF", "CG", "CH", "CI", "CJ", "CK", "CL", "CM", "CN", "CO", "CP", "CQ", "CR", "CS", "CT", "CU", "CV", "CW", "CX", "CY", "CZ" ,
+             "DA", "DB", "DC", "DD", "DE", "DF", "DG", "DH", "DI", "DJ", "DK", "DL", "DM", "DN", "DO", "DP", "DQ", "DR", "DS", "DT", "DU", "DV", "DW", "DX", "DY", "DZ" ,
+             "EA", "EB", "EC", "ED", "EE", "EF", "EG", "EH", "EI", "EJ", "EK", "EL", "EM", "EN", "EO", "EP", "EQ", "ER", "ES", "ET", "EU", "EV", "EW", "EX", "EY", "EZ" ,
+             "FA", "FB", "FC", "FD", "FE", "FF", "FG", "FH", "FI", "FJ", "FK", "FL", "FM", "FN", "FO", "FP", "FQ", "FR", "FS", "FT", "FU", "FV", "FW", "FX", "FY", "FZ" ,
+             "GA", "GB", "GC", "GD", "GE", "GF", "GG", "GH", "GI", "GJ", "GK", "GL", "GM", "GN", "GO", "GP", "GQ", "GR", "GS", "GT", "GU", "GV", "GW", "GX", "GY", "GZ" ,
+
         }
         ;
 
@@ -36,52 +43,7 @@ namespace TSC_WEB.Models.Modelos.Corte.LiquidacionRectilineos
                 workSheet = package.Workbook.Worksheets.Add("Reporte de Rectilineos");
 
                 int cantregistros = listadatos.Count;
-                int colinicio = 9;
-
-                // TALLAS
-                var tallas = cantregistros > 0 ? listadatos.GroupBy(std => std.talla)
-                    .Select(cl => new ReporteEntidad
-                    {
-                        talla = cl.First().talla,
-                        ordentalla = cl.First().ordentalla
-                    }).OrderBy(or => or.ordentalla).ToList() : new List<ReporteEntidad>();
-
-                var canttallas = tallas.Count;
-
-                //  LISTAS
-                var lista = cantregistros > 0 ? listadatos.GroupBy(
-                        grp => new
-                        {
-                            grp.usuariocrea,
-                            grp.fechamod,
-                            grp.ficha,
-                            grp.partida,
-                            grp.pedido,
-                            grp.combo,
-                            grp.estilotsc,
-                            grp.estilocliente,
-                            grp.tipo,
-                            grp.mermahilos,
-                            grp.mermarecorte
-                        }
-                    ).Select(sel => new ReporteEntidad
-                    {
-                        usuariocrea = sel.First().usuariocrea,
-                        fechamod = sel.First().fechamod,
-                        ficha = sel.First().ficha,
-                        partida = sel.First().partida,
-                        pedido = sel.First().pedido,
-                        combo = sel.First().combo,
-                        estilotsc = sel.First().estilotsc,
-                        estilocliente = sel.First().estilocliente,
-                        tipo = sel.First().tipo,
-                        mermahilos = sel.First().mermahilos,
-                        mermarecorte = sel.First().mermarecorte
-
-                    }).OrderBy(obj => obj.tipo).ThenBy(t => t.ficha).ToList() : new List<ReporteEntidad>();
-
-                lista = lista.Distinct().ToList();
-
+                int colinicio = 10;
 
 
                 // CABECERAS
@@ -94,292 +56,66 @@ namespace TSC_WEB.Models.Modelos.Corte.LiquidacionRectilineos
                 merge("G1:G2", "Combo", true, 1, Color.White, true, true, true, 11, 1, 12);
                 merge("H1:H2", "Estilo TSC", true, 1, Color.White, true, true, true, 11, 1, 12);
                 merge("I1:I2", "Estilo Cliente", true, 1, Color.White, true, true, true, 11, 1, 12);
-
-                // PROGRAMADO GIRADO
-                merge(LETRAS[colinicio] + "1:" + LETRAS[colinicio + (canttallas - 1)] + "1", "Programado/Girado (Unidades)", true, 1, Color.White, true, true, true, 11, 1, 12);
-                // TALLAS
-                setTallas(colinicio, tallas, canttallas);
-                colinicio += canttallas;
-
-                // LIQUIDADO UNIDADES
-                merge(LETRAS[colinicio]+"1:" + LETRAS[colinicio + (canttallas - 1)] + "1", "Liquidado (Unidades)", true, 1, Color.White, true, true, true, 11, 1, 12);
-                // TALLAS
-                setTallas(colinicio, tallas, canttallas);
-                colinicio += canttallas;
-
-                // PENDIENTE DE LIQUIDACION
-                merge(LETRAS[colinicio] + "1:" + LETRAS[colinicio + (canttallas - 1)] + "1", "Pendiente Liquidación por talla (Unidades)", true, 1, Color.White, true, true, true, 11, 1, 12);
-                // TALLAS
-                setTallas(colinicio, tallas, canttallas);
-                colinicio += canttallas;
-
-                // TOTALES
-                merge(LETRAS[colinicio] + "1:" + LETRAS[colinicio] + "2", "Total", true, 1, Color.White, true, true, true, 11, 1, 12);
-                colinicio += 1;
-
-                // % LIQUIDACION POR TALLAS
-                merge(LETRAS[colinicio] + "1:" + LETRAS[colinicio + (canttallas - 1)] + "1", "% Liquidación por talla", true, 1, Color.White, true, true, true, 11, 1, 12);
-                // TALLAS
-                setTallas(colinicio, tallas, canttallas);
-                colinicio += canttallas;
-                merge(LETRAS[colinicio] + "1:" + LETRAS[colinicio] + "2", "Total", true, 1, Color.White, true, true, true, 11, 1, 12);
-                colinicio += 1;
-
-                // Programado (kg)
-                merge(LETRAS[colinicio] + "1:" + LETRAS[colinicio + (canttallas - 1)] + "1", "Programado (kg)", true, 1, Color.White, true, true, true, 11, 1, 12);
-                // TALLAS
-                setTallas(colinicio, tallas, canttallas);
-                colinicio += canttallas;
-                merge(LETRAS[colinicio] + "1:" + LETRAS[colinicio] + "2", "Total", true, 1, Color.White, true, true, true, 11, 1, 12);
-                colinicio += 1;
-
-                // Liquidado (kg)
-                merge(LETRAS[colinicio] + "1:" + LETRAS[colinicio + (canttallas - 1)] + "1", "Liquidado (kg)", true, 1, Color.White, true, true, true, 11, 1, 12);
-                // TALLAS
-                setTallas(colinicio, tallas, canttallas);
-                colinicio += canttallas;
-                merge(LETRAS[colinicio] + "1:" + LETRAS[colinicio] + "2", "Total", true, 1, Color.White, true, true, true, 11, 1, 12);
-                colinicio += 1;
-
-                // Pendiente Liquidación por talla (kg)
-                merge(LETRAS[colinicio] + "1:" + LETRAS[colinicio + (canttallas - 1)] + "1", "Pendiente Liquidación por talla (kg)", true, 1, Color.White, true, true, true, 11, 1, 12);
-                // TALLAS
-                setTallas(colinicio, tallas, canttallas);
-                colinicio += canttallas;
-                merge(LETRAS[colinicio] + "1:" + LETRAS[colinicio] + "2", "Total", true, 1, Color.White, true, true, true, 11, 1, 12);
-                colinicio += 1;
-
-                // % Liquidación por talla (kg)
-                merge(LETRAS[colinicio] + "1:" + LETRAS[colinicio + (canttallas - 1)] + "1", "% Liquidación por talla(kg)", true, 1, Color.White, true, true, true, 11, 1, 12);
-                // TALLAS
-                setTallas(colinicio, tallas, canttallas);
-                colinicio += canttallas;
-                merge(LETRAS[colinicio] + "1:" + LETRAS[colinicio] + "2", "Total", true, 1, Color.White, true, true, true, 11, 1, 12);
-                colinicio += 1;
+                merge("J1:J2", "Cliente", true, 1, Color.White, true, true, true, 11, 1, 12);
 
 
                 // MERMA REAL
-                merge(LETRAS[colinicio] + "1:" + LETRAS[colinicio + 1] + "1", "Merma Real", true, 1, Color.White, true, true, true, 11, 1, 12);
-                merge(LETRAS[colinicio] + "2", "Recorte", true, 1, Color.White, true, true, true, 11, 1, 12);
-                merge(LETRAS[colinicio + 1] + "2", "Hilo", true, 1, Color.White, true, true, true, 11, 1, 12);
+                merge("K1:L1", "Merma Real", true, 1, Color.White, true, true, true, 11, 1, 12);
+                merge("K2", "Recorte", true, 1, Color.White, true, true, true, 11, 1, 12);
+                merge("L2", "Hilo", true, 1, Color.White, true, true, true, 11, 1, 12);
 
-                colinicio += 2;
 
                 // BALANCE GENERAL
-                merge(LETRAS[colinicio] + "1:" + LETRAS[colinicio + 7] + "1", "Balance General", true, 1, Color.White, true, true, true, 11, 1, 12);
-                merge(LETRAS[colinicio] + "2", "Programado total (UN)", true, 1, Color.White, true, true, true, 11, 1, 12);
-                merge(LETRAS[colinicio + 1] + "2", "Liquidado total (UN)", true, 1, Color.White, true, true, true, 11, 1, 12);
-                merge(LETRAS[colinicio + 2] + "2", "Diferencia (UN)", true, 1, Color.White, true, true, true, 11, 1, 12);
-                merge(LETRAS[colinicio + 3] + "2", "Diferencia (%)", true, 1, Color.White, true, true, true, 11, 1, 12);
-                merge(LETRAS[colinicio + 4] + "2", "Programado total (Kg)", true, 1, Color.White, true, true, true, 11, 1, 12);
-                merge(LETRAS[colinicio + 5] + "2", "Liquidado total (Kg)", true, 1, Color.White, true, true, true, 11, 1, 12);
-                merge(LETRAS[colinicio + 6] + "2", "Diferencia (kg)", true, 1, Color.White, true, true, true, 11, 1, 12);
-                merge(LETRAS[colinicio + 7] + "2", "Diferencia (%)", true, 1, Color.White, true, true, true, 11, 1, 12);
+                merge("M1:T1", "Balance General", true, 8, Color.White, true, true, true, 11, 1, 12);
+                merge("M2", "Programado total (UN)", true, 8, Color.White, true, true, true, 11, 1, 12);
+                merge("N2", "Liquidado total (UN)", true, 8, Color.White, true, true, true, 11, 1, 12);
+                merge("O2", "Diferencia (UN)", true, 8, Color.White, true, true, true, 11, 1, 12);
+                merge("P2", "Porcentaje (%)", true, 8, Color.White, true, true, true, 11, 1, 12);
+                merge("Q2", "Programado total (Kg)", true, 8, Color.White, true, true, true, 11, 1, 12);
+                merge("R2", "Liquidado total (Kg)", true, 8, Color.White, true, true, true, 11, 1, 12);
+                merge("S2", "Diferencia (kg)", true, 8, Color.White, true, true, true, 11, 1, 12);
+                merge("T2", "Porcentaje (%)", true, 8, Color.White, true, true, true, 11, 1, 12);
 
 
                 int filainicio = 3;
                 // RECORREMOS VALORES
-                foreach (var item in lista)
+                foreach (var item in listadatos)
                 {   
 
                     // DATOS GENERALES
                     cells(filainicio, 1, item.tipo, Color.White, Color.Black, false, true);
                     cells(filainicio, 2, item.usuariocrea , Color.White, Color.Black, false, true);
-                    cells(filainicio, 3, item.fechamod, Color.White, Color.Black, false, true);
+                    cells(filainicio, 3, item.fechaliquidacion, Color.White, Color.Black, false, true);
                     cells(filainicio, 4, item.ficha, Color.White, Color.Black, false, true);
                     cells(filainicio, 5, item.partida, Color.White, Color.Black, false, true);
                     cells(filainicio, 6, item.pedido, Color.White, Color.Black, false, true);
                     cells(filainicio, 7, item.combo, Color.White, Color.Black, false, true);
                     cells(filainicio, 8, item.estilotsc, Color.White, Color.Black, false, true);
                     cells(filainicio, 9, item.estilocliente, Color.White, Color.Black, false, true);
-
-                    #region VARIABLES
-                        int iniciocolumnadatos = 9;
-                        decimal totalliquidado = 0;
-                        decimal totalprogramado = 0;
-                        decimal totalpendientesun = 0;
-                        decimal totalporcentajeliquidaciontalla = 0;
-                        decimal totalprogramadokg = 0;
-                        decimal totalpesonetoreal = 0;
-                        decimal totalpendienteliquidacionkg = 0;
-                        decimal totalporcentajeliquidaciontallakg = 0;
-
-                    #endregion
-
-                    // CANTIDAD PROGRAMADA
-                    foreach (var talla in tallas)
-                    {
-                        iniciocolumnadatos++;
-
-                        var filtro = listadatos.Where(
-                                obj => obj.ficha == item.ficha && obj.partida == item.partida
-                                && obj.pedido == item.pedido && obj.talla == talla.talla
-                        ).FirstOrDefault();
-
-                        totalprogramado += filtro.programado;
-
-                        cells(filainicio, iniciocolumnadatos, filtro.programado.ToString(), Color.White, Color.Black, false, true);
-
-                    }
-
-                    // LIQUIDADO
-                    foreach (var talla in tallas)
-                    {
-                        iniciocolumnadatos++;
-
-                        var filtro = listadatos.Where(
-                                obj => obj.ficha == item.ficha && obj.partida == item.partida
-                                && obj.pedido == item.pedido && obj.talla == talla.talla
-                        ).FirstOrDefault();
-
-                        totalliquidado += filtro.realprimera;
-
-                        cells(filainicio, iniciocolumnadatos, filtro.realprimera.ToString(), Color.White, Color.Black, false, true);
-
-                    }
-
-                    // PENDIENTES
-                    foreach (var talla in tallas)
-                    {
-                        iniciocolumnadatos++;
-
-                        var filtro = listadatos.Where(
-                                obj => obj.ficha == item.ficha && obj.partida == item.partida
-                                && obj.pedido == item.pedido && obj.talla == talla.talla
-                        ).FirstOrDefault();
-                        totalpendientesun += filtro.pendiente;
-                        cells(filainicio, iniciocolumnadatos, filtro.pendiente.ToString(), Color.White, Color.Black, false, true);
-
-                    }
-
-                    // TOTAL PENDIENTES
-                    iniciocolumnadatos++;
-                    cells(filainicio, iniciocolumnadatos, totalpendientesun.ToString(), Color.White, Color.Black, false, true);
+                    cells(filainicio, 10, item.cliente, Color.White, Color.Black, false, true);
 
 
-                    // % LIQUIDACION POR TALLAS
-                    foreach (var talla in tallas)
-                    {
-                        iniciocolumnadatos++;
-
-                        var filtro = listadatos.Where(
-                                obj => obj.ficha == item.ficha && obj.partida == item.partida
-                                && obj.pedido == item.pedido && obj.talla == talla.talla
-                        ).FirstOrDefault();
-                        totalporcentajeliquidaciontalla += filtro.porcentajeliquidaciontalla;
-                        cells(filainicio, iniciocolumnadatos, filtro.porcentajeliquidaciontalla.ToString(), Color.White, Color.Black, false, true,true);
-
-                    }
-
-                    // TOTAL LIQUIDACION POR TALLAS
-                    iniciocolumnadatos++;
-                    cells(filainicio, iniciocolumnadatos, (totalporcentajeliquidaciontalla / canttallas).ToString(), Color.White, Color.Black, false, true,true);
-
-                    // PROGRAMADO KG
-                    foreach (var talla in tallas)
-                    {
-                        iniciocolumnadatos++;
-
-                        var filtro = listadatos.Where(
-                                obj => obj.ficha == item.ficha && obj.partida == item.partida
-                                && obj.pedido == item.pedido && obj.talla == talla.talla
-                        ).FirstOrDefault();
-                        totalprogramadokg += filtro.pesoprogramado;
-                        cells(filainicio, iniciocolumnadatos, filtro.pesoprogramado.ToString(), Color.White, Color.Black, false, true);
-
-                    }
-
-                    // TOTAL LIQUIDACION POR TALLAS
-                    iniciocolumnadatos++;
-                    cells(filainicio, iniciocolumnadatos, totalprogramadokg.ToString(), Color.White, Color.Black, false, true);
-
-
-                    // REAL KG
-                    foreach (var talla in tallas)
-                    {
-                        iniciocolumnadatos++;
-
-                        var filtro = listadatos.Where(
-                                obj => obj.ficha == item.ficha && obj.partida == item.partida
-                                && obj.pedido == item.pedido && obj.talla == talla.talla
-                        ).FirstOrDefault();
-                        totalpesonetoreal += filtro.pesonetoreal;
-                        cells(filainicio, iniciocolumnadatos, filtro.pesonetoreal.ToString(), Color.White, Color.Black, false, true);
-
-                    }
-
-                    // TOTAL
-                    iniciocolumnadatos++;
-                    cells(filainicio, iniciocolumnadatos, totalpesonetoreal.ToString(), Color.White, Color.Black, false, true);
-
-                    // PENDIENTE LIQUIDACION (KG)
-                    foreach (var talla in tallas)
-                    {
-                        iniciocolumnadatos++;
-
-                        var filtro = listadatos.Where(
-                                obj => obj.ficha == item.ficha && obj.partida == item.partida
-                                && obj.pedido == item.pedido && obj.talla == talla.talla
-                        ).FirstOrDefault();
-                        totalpendienteliquidacionkg += filtro.pendienteliquidacionkg;
-                        cells(filainicio, iniciocolumnadatos, filtro.pendienteliquidacionkg.ToString(), Color.White, Color.Black, false, true);
-
-                    }
-
-                    // TOTAL PENDIENTE LIQUIDACION (KG)
-                    iniciocolumnadatos++;
-                    cells(filainicio, iniciocolumnadatos, totalpendienteliquidacionkg.ToString(), Color.White, Color.Black, false, true);
-
-
-                    // % LIQUIDACION POR TALLAS (KG)
-                    foreach (var talla in tallas)
-                    {
-                        iniciocolumnadatos++;
-
-                        var filtro = listadatos.Where(
-                                obj => obj.ficha == item.ficha && obj.partida == item.partida
-                                && obj.pedido == item.pedido && obj.talla == talla.talla
-                        ).FirstOrDefault();
-                        totalporcentajeliquidaciontallakg += filtro.porcentajeliquidaciontallakg;
-                        cells(filainicio, iniciocolumnadatos, filtro.porcentajeliquidaciontallakg.ToString(), Color.White, Color.Black, false, true,true);
-
-                    }
-
-                    // TOTAL % LIQUIDACION POR TALLAS (KG)
-                    iniciocolumnadatos++;
-                    cells(filainicio, iniciocolumnadatos, (totalporcentajeliquidaciontallakg / canttallas) .ToString(), Color.White, Color.Black, false, true,true);
-
-                    // MERMA
-                    var sumatotal = listadatos.Where(
-                                       obj =>
-                                          obj.partida == item.partida && obj.tipo == item.tipo
-                                    ).Sum(s => s.realprimera);
-
-                    decimal porcentajeficha = totalliquidado / sumatotal;
+                   
 
                     // MERMA RECORTE
-                    item.mermarealrecorte = porcentajeficha * item.mermarecorte;
-                    iniciocolumnadatos++;
-                    cells(filainicio, iniciocolumnadatos, item.mermarealrecorte.ToString(), Color.White, Color.Black, false, true);
+                    cells(filainicio, 11,Convert.ToDouble( item.mermarecorte.ToString()) , Color.White, Color.Black, false, true,false,3);
 
                     // MERMA HILOS
-                    item.mermarealhilo = porcentajeficha * item.mermahilos;
-                    iniciocolumnadatos++;
-                    cells(filainicio, iniciocolumnadatos, item.mermahilos.ToString(), Color.White, Color.Black, false, true);
+                    cells(filainicio, 12, Convert.ToDouble(item.mermahilos.ToString()) , Color.White, Color.Black, false, true,false,3);
 
                     //iniciocolumnadatos++;
 
-                    decimal difunidades = totalliquidado - totalprogramado;
-                    decimal difkilos = totalpesonetoreal - totalprogramadokg;
+                    //decimal difunidades = totalliquidado - totalprogramado;
+                    //decimal difkilos = totalpesonetoreal - totalprogramadokg;
 
-                    cells(filainicio, iniciocolumnadatos + 1, totalprogramado.ToString(), Color.White, Color.Black, false, true);
-                    cells(filainicio, iniciocolumnadatos + 2, totalliquidado.ToString(), Color.White, Color.Black, false, true);
-                    cells(filainicio, iniciocolumnadatos + 3, difunidades.ToString(), Color.White, Color.Black, false, true);
-                    cells(filainicio, iniciocolumnadatos + 4, (totalprogramado > 0 ? difunidades / totalprogramado : 0).ToString() , Color.White, Color.Black, false, true,true);
-                    cells(filainicio, iniciocolumnadatos + 5, totalprogramadokg.ToString(), Color.White, Color.Black, false, true);
-                    cells(filainicio, iniciocolumnadatos + 6, totalpesonetoreal.ToString(), Color.White, Color.Black, false, true);
-                    cells(filainicio, iniciocolumnadatos + 7, difkilos.ToString(), Color.White, Color.Black, false, true);
-                    cells(filainicio, iniciocolumnadatos + 8, (totalprogramadokg > 0 ? difkilos / totalprogramadokg : 0).ToString(), Color.White, Color.Black, false, true,true);
+                    cells(filainicio, 13, item.programado.ToString(), Color.White, Color.Black, false, true);
+                    cells(filainicio, 14, item.realprimera.ToString(), Color.White, Color.Black, false, true);
+                    cells(filainicio, 15, item.pendienteunidades.ToString(), Color.White, Color.Black, false, true);
+                    cells(filainicio, 16, item.porcentajeliquidacion_excel.ToString(), Color.White, Color.Black, false, true,true);
+                    cells(filainicio, 17, item.pesoprogramado.ToString(), Color.White, Color.Black, false, true);
+                    cells(filainicio, 18, item.pesonetoreal.ToString(), Color.White, Color.Black, false, true);
+                    cells(filainicio, 19, item.pendienteliquidacionkg.ToString(), Color.White, Color.Black, false, true);
+                    cells(filainicio, 20, item.porcentajeliquidacionkg_excel.ToString(), Color.White, Color.Black, false, true,true);
 
 
 
@@ -405,12 +141,12 @@ namespace TSC_WEB.Models.Modelos.Corte.LiquidacionRectilineos
 
         #region EXCELES
 
-        private void setTallas(int colinicio, List<ReporteEntidad> tallas, int canttallas)
+        private void setTallas(int colinicio, List<ReporteEntidad> tallas, int canttallas, int backcolor = 1)
         {
             // ARMAMOS TALLAS
             for (int x = colinicio, index = 0; x < (colinicio + canttallas); x++)
             {
-                merge(LETRAS[x] + "2", tallas[index].talla, true, 1, Color.White, true, true, true, 11, 1, 12);
+                merge(LETRAS[x] + "2", tallas[index].talla, true, backcolor, Color.White, true, true, true, 11, 1, 12);
                 index++;
             }
         }
@@ -456,6 +192,12 @@ namespace TSC_WEB.Models.Modelos.Corte.LiquidacionRectilineos
                     break;
                 case 6:
                     workSheet.Cells[rango].Style.Fill.BackgroundColor.SetColor(1, 82, 82, 82);
+                    break;
+                case 7:
+                    workSheet.Cells[rango].Style.Fill.BackgroundColor.SetColor(1, 112, 173, 71);
+                    break;
+                case 8:
+                    workSheet.Cells[rango].Style.Fill.BackgroundColor.SetColor(1, 237, 125, 49);
                     break;
 
             }

@@ -292,6 +292,29 @@ namespace TSC_WEB.Controllers
             }
         }
 
+        // LIQUIDACION RECTILINEOS PCP INDIVIDUAL
+        [HttpGet]
+        public ActionResult getLiquidacionRectilineosPCPIndividual(int idrectilineo)
+        {
+
+            if (Session["usuario"] != null)
+            {
+                //List<LiquidacionRectilineosPCPEntidad> response = new List<LiquidacionRectilineosPCPEntidad>();
+
+                //if (busqueda != "" && busqueda != null)
+                //{
+                //    response = objRectilineosM.getLiquidacionRectilineosPCP(fechai, fechaf, partida, estado, tipo);
+                //    Session["dato_liquidacion_rectilineos_pcp"] = response;
+                //}
+                var response = objRectilineosM.getRectilineosPCP(idrectilineo);
+                return View(response);
+            }
+            else
+            {
+                return Redirect("/");
+            }
+        }
+
 
         #endregion
 

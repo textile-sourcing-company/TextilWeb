@@ -130,47 +130,53 @@
             <thead class="text-center thead-light">
                 <tr>
                     <th class="border-table col-1">Tipo</th>
-                    <th class="border-table col-2">Partida</th>
+                    <th class="border-table col-1">Partida</th>
                     <th class="border-table col-4">Fichas</th>
                     <th class="border-table col-1">Usuario Lib</th>
                     <th class="border-table col-1">Fecha Lib</th>
                     <th class="border-table col-1">Estado</th>
                     <th class="border-table col-2"></th>
+                    <th class="border-table col-1"></th>
                 </tr>
             </thead>
             <tbody>
                 @foreach (var item in Model)
                 {
 
-                    <tr>
-                        <td>@item.tipo</td>
-                        <td>@item.partida</td>
-                        <td>@item.fichas</td>
-                        <td>@item.usuarioliquidacion</td>
-                        <td>@item.fechaliquidacion</td>
+                <tr>
+                    <td>@item.tipo</td>
+                    <td>@item.partida</td>
+                    <td>@item.fichas</td>
+                    <td>@item.usuarioliquidacion</td>
+                    <td>@item.fechaliquidacion</td>
 
-                        <td class="text-center">
-                            <span data-id="@item.idrectilineohead"
-                                  class='badge @item.bgestado cursor-pointer estadorectilineo'
-                                  title='Estado Rectilíneos'>
-                                @item.estado
-                            </span>
-                        </td>
+                    <td class="text-center">
+                        <span data-id="@item.idrectilineohead"
+                              class='badge @item.bgestado cursor-pointer estadorectilineo'
+                              title='Estado Rectilíneos'>
+                            @item.estado
+                        </span>
+                    </td>
 
-                        <td class="text-center">
+                    <td class="text-center">
 
-                            @if (item.estado != "PROCESO")
-                            {
+                        @if (item.estado != "PROCESO")
+                        {
 
-                                <button class="btn btn-sm btn-success aprobarfichas" onclick="setEstado('APROBADO', @item.idrectilineohead )">Aprobar</button>
-                                <button class="btn btn-sm btn-info    aperturarfichas" onclick="setEstado('APERTURADO',@item.idrectilineohead)">Aperturar</button>
+                            <button class="btn btn-sm btn-success aprobarfichas" onclick="setEstado('APROBADO', @item.idrectilineohead )">Aprobar</button>
+                            <button class="btn btn-sm btn-info    aperturarfichas" onclick="setEstado('APERTURADO',@item.idrectilineohead)">Aperturar</button>
 
-                            }
+                        }
 
 
-                        </td>
+                    </td>
+                    <td class="text-center">
+                        <a href="/corte/getLiquidacionRectilineosPCPIndividual?idrectilineo=@item.idrectilineohead" target="_blank">
+                            <i class="fas fa-eye"></i>
+                        </a>
+                    </td>
 
-                    </tr>
+                </tr>
 
                 }
 

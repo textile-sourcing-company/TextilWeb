@@ -554,6 +554,7 @@
     <Compile Include="Models\Entidades\Corte\LiquidacionRectilineos\IngresoRectilineosEntidad.cs" />
     <Compile Include="Models\Entidades\Corte\LiquidacionRectilineos\LiquidacionRectilineosEntidad.cs" />
     <Compile Include="Models\Entidades\Corte\LiquidacionRectilineos\LiquidacionRectilineosPCPEntidad.cs" />
+    <Compile Include="Models\Entidades\Corte\LiquidacionRectilineos\LiquidacionRectilineosPCPIndividualEntidad.cs" />
     <Compile Include="Models\Entidades\Corte\LiquidacionRectilineos\PartidaRectilineoTallasEntidad.cs" />
     <Compile Include="Models\Entidades\Corte\LiquidacionRectilineos\PartidaTelaEntidad.cs" />
     <Compile Include="Models\Entidades\Corte\LiquidacionRectilineos\PartidaTelaRectilineoEntidad.cs" />
@@ -1110,6 +1111,7 @@
     <Content Include="Views\Almacenes\IngresoRectilineos.cshtml" />
     <Content Include="Views\Almacenes\ReporteIngresoRectilineos.cshtml" />
     <Content Include="Views\Corte\getLiquidacionRectilineosPCP.cshtml" />
+    <Content Include="Views\Corte\getLiquidacionRectilineosPCPIndividual.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
