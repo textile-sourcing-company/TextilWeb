@@ -138,7 +138,7 @@ namespace TSC_WEB.Controllers
                 var datosficha = objRectilineosM.getDatosFicha(1, ficha, tipo);
                 var fichastallas = objRectilineosM.getTallasFicha(2, ficha, tipo);
                 var segundastallas = objRectilineosM.getTallasFichaSegundas(3, ficha, tipo);
-
+                var devolucionestallas = objRectilineosM.getDevolucionesTallas(4, ficha, tipo);
 
 
                 return View(
@@ -146,7 +146,8 @@ namespace TSC_WEB.Controllers
                     {
                         FichaCabecera = datosficha,
                         FichaTallas = fichastallas,
-                        SegundasTallas = segundastallas
+                        SegundasTallas = segundastallas,
+                        DevolucionesTallas = devolucionestallas
                     }
                 );
             }
@@ -876,12 +877,21 @@ namespace TSC_WEB.Controllers
             return Json(new { success = response, mensaje = mensaje }, JsonRequestBehavior.AllowGet);
         }
 
-        // TALLAS DE RECTILINEO
+        // TALLAS DE RECTILINEO (SEGGUNDAS)
         [HttpGet]
         public JsonResult saveTallasRectilineoSegundas(int? idrectilineo, string talla, int realsegunda, decimal pesonetosegunda, decimal programadosegunda, int orden)
         {
             string mensaje = string.Empty;
             var response = objRectilineosM.saveTallasSegundas(idrectilineo, talla, realsegunda, pesonetosegunda, programadosegunda, orden, out mensaje);
+            return Json(new { success = response, mensaje = mensaje }, JsonRequestBehavior.AllowGet);
+        }
+
+        // TALLAS DE RECTILINEO (DEVOLUCIONES)
+        [HttpGet]
+        public JsonResult saveTallasRectilineoDevoluciones(int? idrectilineo, string talla, decimal cantidad, decimal kilos, int orden)
+        {
+            string mensaje = string.Empty;
+            var response = objRectilineosM.saveTallasDevoluciones(idrectilineo, talla, cantidad, kilos,orden, out mensaje);
             return Json(new { success = response, mensaje = mensaje }, JsonRequestBehavior.AllowGet);
         }
 
