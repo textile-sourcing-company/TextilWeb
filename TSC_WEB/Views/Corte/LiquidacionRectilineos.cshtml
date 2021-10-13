@@ -19,6 +19,11 @@
     decimal totalundespachado = 0;
     decimal totalpesodespachado = 0;
 
+    decimal total_cant_devo     = 0;
+    decimal total_kilos_devo    = 0;
+
+
+
     var tallas = cantidadtallas > 0 ? Model.FichaTallas.GroupBy(std => std.talla).Select(cl => new FichasTallasEntidad
     {
         talla = cl.First().talla,
@@ -661,7 +666,6 @@
     }
 
     //SEGUNDAS
-
     <form action="" class="card card-primary card-outline" id="frmsegundas" autocomplete="off">
 
         <div class="card-header text-center">
@@ -843,64 +847,110 @@
 
     </form>
 
-    //REGISTRO DE MERMAS
+    //DEVOLUCIONES
+    <form action="" class="card card-primary card-outline" id="frmdevoluciones" autocomplete="off">
 
-    <div class="row justify-content-center">
+        <div class="card-header text-center">
+            <label class="card-title">Devoluciones</label>
+            <div class="card-tools">
+                @if (Model.FichaCabecera.estado == "PROCESO" || Model.FichaCabecera.estado == "APERTURADO")
+                {
+                    <button type="submit" class="btn btn-sm btn-primary">
+                        <i class="fas fa-save"></i>
+                        Guardar
+                    </button>
+                }
 
-        <div class="col-md-4">
+            </div>
+        </div>
+        <div class="card-body">
 
-            <div class="card card-primary card-outline">
-                <div class="card-header">
-
-                </div>
-                <div class="card-body">
-
-                    <form action="" class="row justify-content-center" id="frmregistro">
-
-                        <div class="col-md-8">
-                            <label for="">Kilos totales</label>
-                            <div class="input-group">
-                                <input type="text" class="form-control" id="txtkilostotales" required value="@totalmerma">
-                                <div class="input-group-append">
-                                    <button class="btn btn-sm btn-block btn-primary" type="button" id="btncalculakilos">
-                                        <i class="fas fa-sync-alt"></i>
-                                    </button>
-                                    @*<span class="input-group-text" id="basic-addon2">@example.com</span>*@
-                                </div>
-                            </div>
-
-
-                        </div>    
-
-
-                        <div class="col-md-6">
-                            <label for="">Merma de recorte (kg)</label>
-                            <input type="number" class="form-control form-control-sm" readonly id="txtmermacorte" step="0.01" required value="@Model.FichaCabecera.mermarecorte">
-                        </div>
-
-                        <div class="col-md-6">
-                            <label for="">Merma de hilos (kg)</label>
-                            <input type="number" class="form-control form-control-sm" readonly id="txtmermahilos" step="0.01" required value="@Model.FichaCabecera.mermahilos">
-                        </div>
-
-                        @if (Model.FichaCabecera.estado == "PROCESO" || Model.FichaCabecera.estado == "APERTURADO")
+            <table class="table table-bordered table-sm tablainput tablefixed">
+                @*CABECERA*@
+                <thead class="text-center bg-danger">
+                    <tr class="theadtr">
+                        <th></th>
+                        @foreach (var item in tallas)
                         {
-                            <div class="col-md-4">
-                                <label for="">&nbsp;</label>
-                                <button class="btn btn-primary btn-sm btn-block" type="submit">Guardar</button>
-                            </div>
+                            <th>@item.talla</th>
+                        }
+                        <th class="align-vertical">TOTAL</th>
+                    </tr>
+                </thead>
+                <tbody id="tbodydevoluciones">
+                    <tr>
+                        <th>Cantidad</th>
+                        @foreach (var talla in tallascantidadprimera)
+                         {
+                            var devolucionescant = Model.DevolucionesTallas.Where(obj =>
+                                    obj.talla == talla.talla
+                                ).SingleOrDefault();
+
+                            var id = "devoluciones_cant_" + talla.talla;
+
+                            if (devolucionescant != null)
+                            {
+                                total_cant_devo += devolucionescant.cantidad;
+                                <td> <input type="text" data-orden="@talla.orden" data-talla="@talla.talla" id="@id" class="inputtabla devolucionescant" data-consumo="@talla.consumodespachado" value="@devolucionescant.cantidad"></td>
+
+                            }
+                            else
+                            {
+                                <td><input type="text" data-orden="@talla.orden" data-talla="@talla.talla" id="@id" class="inputtabla devolucionescant" data-consumo="@talla.consumodespachado" value=""></td>
+
+                            }
                         }
 
+                        <td> <input type="text" id="totalcantidaddevuelta" class="inputtabla bg-bloqueado font-weight-bold" value="@total_cant_devo" readonly></td>
+                    </tr>
+
+                    <tr>
+                        <th>Peso Neto total</th>
+                        @foreach (var talla in tallas)
+                        {
+                            var devolucionescant = Model.DevolucionesTallas.Where(obj =>
+                                   obj.talla == talla.talla
+                               ).SingleOrDefault();
+
+                            var id = "devoluciones_kilos_" + talla.talla;
 
 
-                    </form>
+                            if (devolucionescant != null)
+                            {
+                                total_kilos_devo += devolucionescant.kilos;
+                                <td> <input type="text" data-talla="@talla.talla" id="@id"  class="bg-bloqueado inputtabla kilos_devo" value="@devolucionescant.kilos"></td>
+                            }
+                            else
+                            {
+                                <td><input type="text" data-talla="@talla.talla" id="@id" class="bg-bloqueado inputtabla kilos_devo" value="" readonly></td>
+                            }
+                        }
 
-                </div>
-            </div>
+                        <td> <input id="totalkilosdevuelto" type="text" class="inputtabla bg-bloqueado font-weight-bold" value="@total_kilos_devo" readonly></td>
+                    </tr>
+
+                </tbody>
+            </table>
 
         </div>
 
-    </div>
+    </form>
+
+
+    //CERRAR REGISTRO
+    <form action="" class="row justify-content-center mb-2" id="frmregistro">
+
+        @if (Model.FichaCabecera.estado == "PROCESO" || Model.FichaCabecera.estado == "APERTURADO")
+        {
+            <div class="col-md-4">
+                @*<label for="">&nbsp;</label>*@
+                <button class="btn btn-primary btn-sm btn-block" type="submit">Guardar</button>
+            </div>
+        }
+
+    </form>
+
+
 
 }
 
@@ -915,6 +965,7 @@
 
         let formulariosfichas   = document.getElementsByClassName("formulariosfichas");
         let frmsegundas         = document.getElementById("frmsegundas");
+        let frmdevoluciones     = document.getElementById("frmdevoluciones");
         let IDRECTILINEO        = "@Model.FichaCabecera.idrectilineohead" == "" ? null : "@Model.FichaCabecera.idrectilineohead";
         let PARTIDA             = "@Model.FichaCabecera.partidarectilineo" == "" ? null : "@Model.FichaCabecera.partidarectilineo";
         let LOTE                = "@Model.FichaCabecera.lote" == "" ? null : "@Model.FichaCabecera.lote";
@@ -1048,6 +1099,22 @@
             $(`#${total}_${ficha}`).val(totalprimera);
         }
 
+        // TOTAL DE DEVOLUCIONES
+        function gettotalesdevoluciones(clase, total) {
+            // SUMAMOS TOTAL POR FICHA
+            let primeras = $(`.${clase}`);
+
+            let totalprimera = 0;
+            for (let item of primeras) {
+                //console.log(item);
+                let valor = $(item).val() == "" ? 0 : $(item).val().trim();
+                valor = parseFloat(valor);
+                totalprimera += valor;
+            }
+
+            $(`#${total}`).val(totalprimera);
+        }
+
 
         // FUNCION PARA REGISTRAR LAS FICHAS
         async function saveFichas(form) {
@@ -1131,11 +1198,41 @@
                     console.log(response);
 
                 }
-
-
-
             }
+        }
 
+        // FUNCION PARA REGISTRAR DEVOLUCIONES POR TALLA
+        async function saveTallasDevoluciones(idrectilineo) {
+
+            let tbody = document.getElementById("tbodydevoluciones");
+            formularioactivo = tbody;
+
+            let cantidades_devo = tbody.children[0];
+            //let realessegundas = tbody.children[1];
+
+
+
+            // RECORREMOS
+            for (let item of cantidades_devo.querySelectorAll('.inputtabla')) {
+
+                if (!item.readOnly) {
+
+                    // REGISTRAMOS TALLAS
+                    let talla       = item.dataset.talla;
+                    let orden       = item.dataset.orden;
+                    let cantidad    = item.value.trim();
+                    let kilos       = $(`#devoluciones_kilos_${talla}`).val();
+
+                    //console.log(talla,orden,cantidad,kilos);
+
+                    let response = await get("corte", "saveTallasRectilineoDevoluciones", {
+                        talla, kilos, idrectilineo, cantidad, orden
+                    }, true);
+
+                    console.log(response);
+
+                }
+            }
         }
 
 
@@ -1209,8 +1306,11 @@
         // REGISTRAR CABECERA
         async function saveHead(estado = null) {
 
-            let mermarecorte    = document.getElementById("txtmermacorte").value;
-            let mermahilos      = document.getElementById("txtmermahilos").value;
+            //let mermarecorte    = document.getElementById("txtmermacorte").value;
+            //let mermahilos      = document.getElementById("txtmermahilos").value;
+
+            let mermarecorte = 0;
+            let mermahilos = 0;
 
 
             // REGISTRA CABECERA
@@ -1230,7 +1330,6 @@
             return IDRECTILINEO;
 
         }
-
 
         // CALCULTA TOTAL DE PENDIENTES POR TALLA
         function getTotalPendientesTalla(talla) {
@@ -1280,6 +1379,28 @@
             //console.log(talla,programado,pendiente);
 
         }
+
+        // FUNCION PARA CALCULAR KILOS DEVUELTOS
+        $(".devolucionescant").keyup(function () {
+
+            let cantidad = parseFloat($(this).val());
+            //let ficha   = $(this).data("ficha");
+            let talla       = $(this).data("talla");
+            let consumo     = parseFloat($(this).data("consumo"));
+
+            let kilos = cantidad * consumo; 
+
+            // ASIGNAMOS VALOR
+            $(`#devoluciones_kilos_${talla}`).val(kilos.toFixed(2));
+
+            //  TOTAL POR CANTIDAD
+            gettotalesdevoluciones("devolucionescant", "totalcantidaddevuelta");
+
+            // TOTAL POR KILOS
+            gettotalesdevoluciones("kilos_devo", "totalkilosdevuelto");
+
+        });
+
     </script>
 
 
@@ -1382,43 +1503,29 @@
 
                     });
 
+                });
+
+                // EVENTO PARA REGISTRAR DEVOLUCIONES
+                frmdevoluciones.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+
+                    MostrarCarga("Cargando...");
+
+                    // REGISTRAMOS CABECERA
+                    saveHead().then(async (response) => {
+                        let idrectilineohead = response;
+                        // REGISTRAMOS TALLAS (SEGUNDAS)
+                        await saveTallasDevoluciones(idrectilineohead);
 
 
+                        // OCULTAMOS CARGA
+                        OcultarCarga();
+
+                    });
                 });
 
             });
 
-
-            // CALCULA LOS KILOS
-            $("#btncalculakilos").click(function () {
-
-                let txtkilostotales = document.getElementById("txtkilostotales").value.trim();
-
-                if (txtkilostotales != "") {
-
-                    let mermarecorte = document.getElementById("txtmermacorte");
-                    let mermahilos = document.getElementById("txtmermahilos");
-
-                    let valor_mermarecorte = parseFloat(txtkilostotales) * 0.9;
-                    let valor_mermahilos = parseFloat(txtkilostotales) * 0.1;
-
-                    mermarecorte.value = valor_mermarecorte.toFixed(3);
-                    mermahilos.value = valor_mermahilos.toFixed(3);
-
-
-
-                } else {
-                    Advertir("Ingres datos");
-                }
-
-                
-
-                
-
-
-
-
-            });
 
         </script>
 

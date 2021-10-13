@@ -9,6 +9,8 @@ namespace TSC_WEB.Models.Entidades.Corte.LiquidacionRectilineos
     {
         public List<FichasTallasEntidad> FichaTallas { get; set; }
         public List<FichasTallasSegundasEntidad> SegundasTallas { get; set; }
+        public List<DevolucionesEntidad> DevolucionesTallas { get; set; }
+
 
         public FichaDatos FichaCabecera { get; set; }
 

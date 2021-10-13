@@ -167,6 +167,56 @@ namespace TSC_WEB.Models.Modelos.Corte.LiquidacionRectilineos
             return objLista;
         }
 
+        // BUSCAMOS FICHAS PARA SEGUNDAS
+        public List<DevolucionesEntidad> getDevolucionesTallas(int opcion, int? ficha, string tipo)
+        {
+            List<DevolucionesEntidad> objLista = new List<DevolucionesEntidad>();
+
+            if (ficha != null)
+            {
+                OracleCommand comando = new OracleCommand("SYSTEXTILRPT.PQ_LIQUI_RECTILINEO.SPU_GETRECTILINEOS", conexion.Acceder());
+                comando.CommandType = CommandType.StoredProcedure;
+                conexion.Conectar();
+
+                comando.Parameters.Add(new OracleParameter("i_opcion", opcion));
+                comando.Parameters.Add(new OracleParameter("i_ficha", ficha));
+                comando.Parameters.Add(new OracleParameter("i_tipo", tipo));
+                comando.Parameters.Add(new OracleParameter("o_cursor", OracleDbType.RefCursor)).Direction = ParameterDirection.Output;
+
+
+                OracleDataReader registros = comando.ExecuteReader();
+
+                while (registros.Read())
+                {
+                    DevolucionesEntidad obj = new DevolucionesEntidad();
+
+                    if (registros["idrectilineodevolucion"].ToString() != string.Empty)
+                        obj.idrectilineodevolucion = Convert.ToInt32(registros["idrectilineodevolucion"].ToString());
+                    else
+                        obj.idrectilineodevolucion = null;
+
+                    if (registros["idrectilineohead"].ToString() != string.Empty)
+                        obj.idrectilineohead = Convert.ToInt32(registros["idrectilineohead"].ToString());
+                    else
+                        obj.idrectilineohead = null;
+
+                    obj.cantidad = Convert.ToDecimal(registros["cantidad"].ToString());
+                    obj.ordentalla = Convert.ToInt32(registros["ordentalla"].ToString());
+                    obj.talla = registros["talla"].ToString();
+                    obj.kilos = Convert.ToDecimal(registros["kilos"].ToString());
+
+
+                    objLista.Add(obj);
+                }
+
+                conexion.Desconectar();
+            }
+
+
+            return objLista;
+        }
+
+
         // BUSCAMOS DATOS DE LA FICHA (CABECERA)
         public FichaDatos getDatosFicha(int opcion, int? ficha, string tipo)
         {
@@ -407,6 +457,44 @@ namespace TSC_WEB.Models.Modelos.Corte.LiquidacionRectilineos
                 comando.Parameters.Add(new OracleParameter("i_realsegunda", realsegunda));
                 comando.Parameters.Add(new OracleParameter("i_pesonetosegunda", pesonetosegunda));
                 comando.Parameters.Add(new OracleParameter("i_programadosegunda", programadosegunda));
+                comando.Parameters.Add(new OracleParameter("i_orden", orden));
+
+                comando.ExecuteNonQuery();
+
+                mensaje = "Registrado correctamente";
+                retornar = true;
+            }
+            catch (Exception ex)
+            {
+                retornar = false;
+                mensaje = ex.Message;
+            }
+
+            conexion.Desconectar();
+
+
+            return retornar;
+
+        }
+
+        // REGISTRO DE TALLAS SEGUNDAS
+        public bool saveTallasDevoluciones(int? idrectilineo, string talla, decimal cantidad, decimal kilos,int orden, out string mensaje)
+        {
+
+            //FichaDatos obj = new FichaDatos();
+            bool retornar = false;
+            //string id = string.Empty;
+
+            try
+            {
+                OracleCommand comando = new OracleCommand("SYSTEXTILRPT.PQ_LIQUI_RECTILINEO.SPU_DEVOLUCIONESREGISTRO", conexion.Acceder());
+                comando.CommandType = CommandType.StoredProcedure;
+                conexion.Conectar();
+
+                comando.Parameters.Add(new OracleParameter("i_idrectilineo", idrectilineo));
+                comando.Parameters.Add(new OracleParameter("i_talla", talla));
+                comando.Parameters.Add(new OracleParameter("i_cantidad", cantidad));
+                comando.Parameters.Add(new OracleParameter("i_kilos", kilos));
                 comando.Parameters.Add(new OracleParameter("i_orden", orden));
 
                 comando.ExecuteNonQuery();
