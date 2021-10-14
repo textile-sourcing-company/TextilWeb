@@ -47,34 +47,35 @@ namespace TSC_WEB.Models.Modelos.Corte.LiquidacionRectilineos
 
 
                 // CABECERAS
-                merge("A1:A2", "Tipo", true, 1, Color.White, true, true, true, 11, 1, 12);
-                merge("B1:B2", "Usuario", true, 1, Color.White, true, true, true, 11, 1, 12);
-                merge("C1:C2", "Fecha de Liquidación", true, 1, Color.White, true, true, true, 11, 1, 12);
-                merge("D1:D2", "Ficha", true, 1, Color.White, true, true, true, 11, 1, 12);
-                merge("E1:E2", "Partida R.", true, 1, Color.White, true, true, true, 11, 1, 12);
-                merge("F1:F2", "Pedido", true, 1, Color.White, true, true, true, 11, 1, 12);
-                merge("G1:G2", "Combo", true, 1, Color.White, true, true, true, 11, 1, 12);
-                merge("H1:H2", "Estilo TSC", true, 1, Color.White, true, true, true, 11, 1, 12);
-                merge("I1:I2", "Estilo Cliente", true, 1, Color.White, true, true, true, 11, 1, 12);
-                merge("J1:J2", "Cliente", true, 1, Color.White, true, true, true, 11, 1, 12);
+                merge("A1:A2", "Tipo", true, 1, Color.White, true, true, false, 11, 1, 12);
+                merge("B1:B2", "Usuario", true, 1, Color.White, true, true, false, 11, 1, 12);
+                merge("C1:C2", "Fecha de Liquidación", true, 1, Color.White, true, true, false, 11, 1, 12);
+                merge("D1:D2", "Ficha", true, 1, Color.White, true, true, false, 11, 1, 12);
+                merge("E1:E2", "Partida R.", true, 1, Color.White, true, true, false, 11, 1, 12);
+                merge("F1:F2", "Pedido", true, 1, Color.White, true, true, false, 11, 1, 12);
+                merge("G1:G2", "Combo", true, 1, Color.White, true, true, false, 11, 1, 12);
+                merge("H1:H2", "Estilo TSC", true, 1, Color.White, true, true, false, 11, 1, 12);
+                merge("I1:I2", "Estilo Cliente", true, 1, Color.White, true, true, false, 11, 1, 12);
+                merge("J1:J2", "Cliente", true, 1, Color.White, true, true, false, 11, 1, 12);
 
 
                 // MERMA REAL
-                merge("K1:L1", "Merma Real", true, 1, Color.White, true, true, true, 11, 1, 12);
-                merge("K2", "Recorte", true, 1, Color.White, true, true, true, 11, 1, 12);
-                merge("L2", "Hilo", true, 1, Color.White, true, true, true, 11, 1, 12);
+                //merge("K1:L1", "Merma Real", true, 1, Color.White, true, true, true, 11, 1, 12);
+                //merge("K2", "Recorte", true, 1, Color.White, true, true, true, 11, 1, 12);
+                //merge("L2", "Hilo", true, 1, Color.White, true, true, true, 11, 1, 12);
 
 
                 // BALANCE GENERAL
-                merge("M1:T1", "Balance General", true, 8, Color.White, true, true, true, 11, 1, 12);
-                merge("M2", "Programado total (UN)", true, 8, Color.White, true, true, true, 11, 1, 12);
-                merge("N2", "Liquidado total (UN)", true, 8, Color.White, true, true, true, 11, 1, 12);
-                merge("O2", "Diferencia (UN)", true, 8, Color.White, true, true, true, 11, 1, 12);
-                merge("P2", "Porcentaje (%)", true, 8, Color.White, true, true, true, 11, 1, 12);
-                merge("Q2", "Programado total (Kg)", true, 8, Color.White, true, true, true, 11, 1, 12);
-                merge("R2", "Liquidado total (Kg)", true, 8, Color.White, true, true, true, 11, 1, 12);
-                merge("S2", "Diferencia (kg)", true, 8, Color.White, true, true, true, 11, 1, 12);
-                merge("T2", "Porcentaje (%)", true, 8, Color.White, true, true, true, 11, 1, 12);
+                merge("K1:R1", "Balance General", true, 8, Color.White, true, true, false, 11, 1, 12);
+                merge("K2", "Programado total (UN)", true, 8, Color.White, true, true, false, 11, 1, 12);
+                merge("L2", "Liquidado total (UN)", true, 8, Color.White, true, true, false, 11, 1, 12);
+                merge("M2", "Diferencia (UN)", true, 8, Color.White, true, true, false, 11, 1, 12);
+                merge("N2", "Porcentaje (%)", true, 8, Color.White, true, true, false, 11, 1, 12);
+
+                merge("O2", "Programado total (Kg)", true, 9, Color.White, true, true, false, 11, 1, 12);
+                merge("P2", "Liquidado total (Kg)", true, 9, Color.White, true, true, false, 11, 1, 12);
+                merge("Q2", "Diferencia (kg)", true, 9, Color.White, true, true, false, 11, 1, 12);
+                merge("R2", "Porcentaje (%)", true, 9, Color.White, true, true, false , 11, 1, 12);
 
 
                 int filainicio = 3;
@@ -98,24 +99,25 @@ namespace TSC_WEB.Models.Modelos.Corte.LiquidacionRectilineos
                    
 
                     // MERMA RECORTE
-                    cells(filainicio, 11,Convert.ToDouble( item.mermarecorte.ToString()) , Color.White, Color.Black, false, true,false,3);
+                    //cells(filainicio, 11,Convert.ToDouble( item.mermarecorte.ToString()) , Color.White, Color.Black, false, true,false,3);
 
                     // MERMA HILOS
-                    cells(filainicio, 12, Convert.ToDouble(item.mermahilos.ToString()) , Color.White, Color.Black, false, true,false,3);
+                    //cells(filainicio, 12, Convert.ToDouble(item.mermahilos.ToString()) , Color.White, Color.Black, false, true,false,3);
 
                     //iniciocolumnadatos++;
 
                     //decimal difunidades = totalliquidado - totalprogramado;
                     //decimal difkilos = totalpesonetoreal - totalprogramadokg;
 
-                    cells(filainicio, 13, item.programado.ToString(), Color.White, Color.Black, false, true);
-                    cells(filainicio, 14, item.realprimera.ToString(), Color.White, Color.Black, false, true);
-                    cells(filainicio, 15, item.pendienteunidades.ToString(), Color.White, Color.Black, false, true);
-                    cells(filainicio, 16, item.porcentajeliquidacion_excel.ToString(), Color.White, Color.Black, false, true,true);
-                    cells(filainicio, 17, item.pesoprogramado.ToString(), Color.White, Color.Black, false, true);
-                    cells(filainicio, 18, item.pesonetoreal.ToString(), Color.White, Color.Black, false, true);
-                    cells(filainicio, 19, item.pendienteliquidacionkg.ToString(), Color.White, Color.Black, false, true);
-                    cells(filainicio, 20, item.porcentajeliquidacionkg_excel.ToString(), Color.White, Color.Black, false, true,true);
+                    cells(filainicio, 11, item.programado.ToString(), Color.White, Color.Black, false, true);
+                    cells(filainicio, 12, item.realprimera.ToString(), Color.White, Color.Black, false, true);
+                    cells(filainicio, 13, item.pendienteunidades.ToString(), Color.White, Color.Black, false, true);
+                    cells(filainicio, 14, item.porcentajeliquidacion_excel.ToString(), Color.White, Color.Black, false, true,true);
+
+                    cells(filainicio, 15, item.pesoprogramado.ToString(), Color.White, Color.Black, false, true);
+                    cells(filainicio, 16, item.pesonetoreal.ToString(), Color.White, Color.Black, false, true);
+                    cells(filainicio, 17, item.pendienteliquidacionkg.ToString(), Color.White, Color.Black, false, true);
+                    cells(filainicio, 18, item.porcentajeliquidacionkg_excel.ToString(), Color.White, Color.Black, false, true,true);
 
 
 
@@ -124,6 +126,7 @@ namespace TSC_WEB.Models.Modelos.Corte.LiquidacionRectilineos
                 }
 
 
+                workSheet.Cells["A1:R"+ filainicio].AutoFitColumns();
 
 
 
@@ -198,6 +201,9 @@ namespace TSC_WEB.Models.Modelos.Corte.LiquidacionRectilineos
                     break;
                 case 8:
                     workSheet.Cells[rango].Style.Fill.BackgroundColor.SetColor(1, 237, 125, 49);
+                    break;
+                case 9:
+                    workSheet.Cells[rango].Style.Fill.BackgroundColor.SetColor(1, 68, 114, 196);
                     break;
 
             }
