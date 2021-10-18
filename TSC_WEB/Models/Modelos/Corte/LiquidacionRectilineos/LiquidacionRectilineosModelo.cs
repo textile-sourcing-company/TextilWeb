@@ -560,15 +560,15 @@ namespace TSC_WEB.Models.Modelos.Corte.LiquidacionRectilineos
 
                     //obj.talla = registros["talla"].ToString();
 
-                    obj.realprimera = Convert.ToInt32(registros["realprimera"].ToString());
-                    obj.programado = Convert.ToInt32(registros["programado"].ToString());
-                    obj.pesonetoreal = Convert.ToDecimal(registros["pesonetoreal"].ToString());
-                    obj.pesoprogramado = Convert.ToDecimal(registros["pesoprogramado"].ToString());
+                    obj.realprimera = registros["realprimera"].ToString() != string.Empty ? Convert.ToInt32(registros["realprimera"].ToString()) : 0;
+                    obj.programado = registros["programado"].ToString() != string.Empty ? Convert.ToInt32(registros["programado"].ToString()) : 0;
+                    obj.pesonetoreal = registros["pesonetoreal"].ToString() != string.Empty ? Convert.ToDecimal(registros["pesonetoreal"].ToString()) : 0;
+                    obj.pesoprogramado = registros["pesoprogramado"].ToString() != string.Empty ? Convert.ToDecimal(registros["pesoprogramado"].ToString()) : 0;
 
                     //obj.ordentalla = Convert.ToInt32(registros["ordentalla"].ToString());
 
-                    obj.mermahilos = Convert.ToDecimal(registros["mermahilos"].ToString());
-                    obj.mermarecorte = Convert.ToDecimal(registros["mermarecorte"].ToString());
+                    obj.mermahilos = registros["mermahilos"].ToString() != string.Empty ? Convert.ToDecimal(registros["mermahilos"].ToString()) : 0;
+                    obj.mermarecorte = registros["mermarecorte"].ToString() != string.Empty ? Convert.ToDecimal(registros["mermarecorte"].ToString()) : 0;
 
 
 
