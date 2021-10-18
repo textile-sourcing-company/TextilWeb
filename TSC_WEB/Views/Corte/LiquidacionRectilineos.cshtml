@@ -652,7 +652,7 @@
 
                             }
                             <td>
-                                <input type="text" class="inputtabla" id="totalpesoneto_@fichas.ficha" value="@totalesd">
+                                <input type="tel" class="inputtabla" id="totalpesoneto_@fichas.ficha" value="@totalesd">
                             </td>
                         </tr>
 
@@ -891,17 +891,17 @@
                             if (devolucionescant != null)
                             {
                                 total_cant_devo += devolucionescant.cantidad;
-                                <td> <input type="text" data-orden="@talla.orden" data-talla="@talla.talla" id="@id" class="inputtabla devolucionescant" data-consumo="@talla.consumodespachado" value="@devolucionescant.cantidad"></td>
+                                <td> <input type="tel" data-orden="@talla.orden" data-talla="@talla.talla" id="@id" class="inputtabla devolucionescant" data-consumo="@talla.consumodespachado" value="@devolucionescant.cantidad"></td>
 
                             }
                             else
                             {
-                                <td><input type="text" data-orden="@talla.orden" data-talla="@talla.talla" id="@id" class="inputtabla devolucionescant" data-consumo="@talla.consumodespachado" value=""></td>
+                                <td><input type="tel" data-orden="@talla.orden" data-talla="@talla.talla" id="@id" class="inputtabla devolucionescant" data-consumo="@talla.consumodespachado" value=""></td>
 
                             }
                         }
 
-                        <td> <input type="text" id="totalcantidaddevuelta" class="inputtabla bg-bloqueado font-weight-bold" value="@total_cant_devo" readonly></td>
+                        <td> <input type="tel" id="totalcantidaddevuelta" class="inputtabla bg-bloqueado font-weight-bold" value="@total_cant_devo" readonly></td>
                     </tr>
 
                     <tr>
@@ -918,11 +918,11 @@
                             if (devolucionescant != null)
                             {
                                 total_kilos_devo += devolucionescant.kilos;
-                                <td> <input type="text" data-talla="@talla.talla" id="@id"  class="bg-bloqueado inputtabla kilos_devo" value="@devolucionescant.kilos"></td>
+                                <td> <input type="tel" data-talla="@talla.talla" id="@id"  class="bg-bloqueado inputtabla kilos_devo" value="@devolucionescant.kilos"></td>
                             }
                             else
                             {
-                                <td><input type="text" data-talla="@talla.talla" id="@id" class="bg-bloqueado inputtabla kilos_devo" value="" readonly></td>
+                                <td><input type="tel" data-talla="@talla.talla" id="@id" class="bg-bloqueado inputtabla kilos_devo" value="" readonly></td>
                             }
                         }
 
