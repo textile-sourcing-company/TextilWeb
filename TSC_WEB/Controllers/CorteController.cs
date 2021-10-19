@@ -515,8 +515,8 @@ namespace TSC_WEB.Controllers
         public JsonResult RegistrarCorte008(cort008Entidad cort008)
         {
             //bool resul = false;
-            string usuario = Session["usuario"].ToString();
-            cort008.u_registro = usuario;
+            //string usuario = Session["usuario"].ToString();
+            //cort008.u_registro = usuario;
             var resul = objFichas.RegistrarCorte008(cort008);
             return Json(resul, JsonRequestBehavior.AllowGet);
         }
