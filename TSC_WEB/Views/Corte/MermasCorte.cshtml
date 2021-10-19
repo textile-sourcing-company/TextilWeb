@@ -233,7 +233,8 @@
             await get("corte", "RegistrarCorte008", {
                 ficha, orillos, extremos,
                 entrecorte, version, tipotela:tela,
-                combo, turno, etapa, correlativo
+                combo, turno, etapa, correlativo,
+                u_registro: '@Session["usuario"].ToString()'
             }, true)
                 .then(response => {
 
