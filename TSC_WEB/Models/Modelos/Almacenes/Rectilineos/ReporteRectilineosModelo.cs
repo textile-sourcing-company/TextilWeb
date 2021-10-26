@@ -149,13 +149,20 @@ namespace TSC_WEB.Models.Modelos.Almacenes.Rectilineos
                                        fil.tiporectilineo == item.tiporectilineo
                                    ).FirstOrDefault();
 
-                        cells(ifila, icolumnap, primeras.cantidadprimera.ToString(), Color.White, Color.Black, false, true);
+                        if (primeras == null)
+                        {
+                            cells(ifila, icolumnap, "", Color.White, Color.Black, false, true);
+                        }
+                        else
+                        {
+                            cells(ifila, icolumnap, primeras.cantidadprimera.ToString() == "0" ? "" : primeras.cantidadprimera.ToString(), Color.White, Color.Black, false, true);
+                        }
                         icolumnap++;
                     }
 
                     fincolumna = LETRAS[icolumnap - 2];
 
-                    string suma = "SUMA("+iniciocolumna+ ifila+":"+fincolumna + ifila+")";
+                    string suma = "=SUM("+iniciocolumna+ ifila+":"+fincolumna + ifila+")";
                     cellsformula(ifila, icolumnap, suma, Color.White, Color.Black, false, true);
 
                     // ################
@@ -182,11 +189,19 @@ namespace TSC_WEB.Models.Modelos.Almacenes.Rectilineos
                                        fil.tiporectilineo == item.tiporectilineo
                                    ).FirstOrDefault();
 
-                        cells(ifila, icolumnas, segundas.cantidadsegunda.ToString(), Color.White, Color.Black, false, true);
+                        if (segundas == null)
+                        {
+                            cells(ifila, icolumnas, "", Color.White, Color.Black, false, true);
+                        }
+                        else
+                        {
+                            cells(ifila, icolumnas, segundas.cantidadsegunda.ToString() == "0" ? "" : segundas.cantidadsegunda.ToString(), Color.White, Color.Black, false, true);
+                        }
+
                         icolumnas++;
                     }
 
-                    string sumasegundas = "SUMA(" + iniciocolumna + ifila + ":" + fincolumna + ifila + ")";
+                    string sumasegundas = "=SUM(" + iniciocolumna + ifila + ":" + fincolumna + ifila + ")";
                     cellsformula(ifila, icolumnas, sumasegundas, Color.White, Color.Black, false, true);
 
                     // ASIGNAMOS PARTIDA DE TELA
@@ -255,12 +270,20 @@ namespace TSC_WEB.Models.Modelos.Almacenes.Rectilineos
                                        fil.tiporectilineo == item.tiporectilineo
                                    ).FirstOrDefault();
 
-                        cells(ifilanew, icolumnap, primeras.cantidadprimera.ToString(), Color.White, Color.Black, false, true);
+                        if (primeras == null)
+                        {
+                            cells(ifilanew, icolumnap, "", Color.White, Color.Black, false, true);
+                        }
+                        else
+                        {
+                            cells(ifilanew, icolumnap, primeras.cantidadprimera.ToString() == "0" ? "" : primeras.cantidadprimera.ToString(), Color.White, Color.Black, false, true);
+                        }
+
                         icolumnap++;
                     }
 
                     fincolumna = LETRAS[icolumnap - 2];
-                    string suma = "SUMA(" + iniciocolumna + ifilanew + ":" + fincolumna + ifilanew + ")";
+                    string suma = "=SUM(" + iniciocolumna + ifilanew + ":" + fincolumna + ifilanew + ")";
 
                     cellsformula(ifilanew, icolumnap, suma, Color.White, Color.Black, false, true);
 
@@ -287,11 +310,19 @@ namespace TSC_WEB.Models.Modelos.Almacenes.Rectilineos
                                        fil.tiporectilineo == item.tiporectilineo
                                    ).FirstOrDefault();
 
-                        cells(ifilanew, icolumnas, segundas.cantidadsegunda.ToString(), Color.White, Color.Black, false, true);
+                        if (segundas == null)
+                        {
+                            cells(ifilanew, icolumnas, null, Color.White, Color.Black, false, true);
+                        }
+                        else
+                        {
+                            cells(ifilanew, icolumnas, segundas.cantidadsegunda.ToString() == "0" ? "" : segundas.cantidadsegunda.ToString(), Color.White, Color.Black, false, true);
+                        }
+
                         icolumnas++;
                     }
 
-                    string sumasegundas = "SUMA(" + iniciocolumna + ifilanew + ":" + fincolumna + ifilanew + ")";
+                    string sumasegundas = "=SUM(" + iniciocolumna + ifilanew + ":" + fincolumna + ifilanew + ")";
                     cellsformula(ifilanew, icolumnas, sumasegundas, Color.White, Color.Black, false, true);
 
                     ifilanew++;
