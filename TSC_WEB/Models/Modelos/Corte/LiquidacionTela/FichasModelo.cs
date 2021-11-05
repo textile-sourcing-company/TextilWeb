@@ -935,6 +935,10 @@ namespace TSC_WEB.Models.Modelos.Corte.LiquidacionTela
                 {
                     objF.estadocorte = Convert.ToInt16(registros["estadocorte"].ToString());
                     objF.estadotendido = Convert.ToInt16(registros["estadotendido"].ToString());
+                    objF.estadonew = registros["estadonew"].ToString();
+                    objF.colornew = registros["colornew"].ToString();
+
+
                 }
 
             }

@@ -15,6 +15,9 @@ namespace TSC_WEB.Models.Entidades.Corte
         public string fecha { get; set; }
         public string tipo { get; set; }
         public string usuario { get; set; }
+        public string estadonew { get; set; }
+        public string colornew { get; set; }
+
 
 
 
