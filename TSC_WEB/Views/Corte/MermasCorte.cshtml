@@ -75,7 +75,10 @@
             <div class="card-header">
                 <h3 class="card-title">Mermas de Corte</h3>
                 <div class="card-tools">
-                    <button type="button" class="btn btn-tool" data-widget="collapse"><i class="fas fa-minus"></i></button>
+
+                    Estatus de Liquidación de Tendido:
+                    <button class="btn btn-sm btn-primary font-weight-bold " id="btnestatuscorte" type="button">Estado</button>
+                    @*<button type="button" class="btn btn-tool" data-widget="collapse"><i class="fas fa-minus"></i></button>*@
                 </div>
             </div>
 
@@ -211,7 +214,7 @@
                     let extremos = input.find(".extremos").val();
                     let entrecorte = input.find(".entrecorte").val();
                     let correlativo = input.find(".entrecorte").data("correlativo");
-                    
+
                     //let correlativo = null;
                     //console.log(etapa, orillos, extremos, entrecorte, turno);
 
@@ -224,7 +227,7 @@
 
             }
 
-            
+
         }
 
         // FUNCION PARA REGISTRAR INDIVIDUAL
@@ -251,8 +254,8 @@
                     console.log(error);
                     AdvertirMini("Ocurrio un error, contacte a sistemas");
                 });
-            
-                
+
+
         }
 
 
@@ -334,7 +337,7 @@
                     AdvertirMini("Ocurrio un error contacte a sistemas");
                     console.log(error);
                 });
-            
+
         }
 
         // LLENAR DATOS
@@ -370,21 +373,21 @@
                     });
 
                     tr += `
-                            
+
                         <tr>
                             <td></td>
                             <td style='background-color: #e9ecef; border-color: #dee2e6;color: #495057'>Total</td>
                             <td id='totalorillos'>${orillos}</td>
                             <td id='totalextremos'>${extremos}</td>
                             <td id='totalentrecorte'>${entrecorte}</td>
-                        </tr>   
-                        
+                        </tr>
+
                     `;
 
                     //InformarMini("Datos encontrados", 1500);
                     OcultarCarga();
                     $("#tbodyregistros").html(tr);
-                        
+
 
                 })
                 .catch(error => {
@@ -392,7 +395,7 @@
                     console.log(error);
                 });
 
-            
+
 
         }
 
@@ -411,7 +414,7 @@
         // FUNCION QUE DETECTA EL CAMBIO DE CANTIDADES
         $("#tbodyregistros").on("keyup", '.inputtabla', function () {
 
-            
+
             let orillos = calculatotales("orillos");
             let extremos = calculatotales("extremos");
             let entrecorte = calculatotales("entrecorte");
@@ -440,15 +443,46 @@
 
             //let ficha = $("#txtficha").val().trim();
             let response = await get("Corte", "GetEstadosLiquidacion", { ficha, combo, version, tela }, true);
-            //console.log(response);
 
-            //if (response.estadocorte == 2 && (response.estadotendido == 1 || response.estadotendido == 0)) {
+            // REMOVEMOS
+
+            $("#btnestatuscorte").removeClass("btn-primary");
+            $("#btnestatuscorte").removeClass("btn-info");
+            $("#btnestatuscorte").removeClass("btn-success");
+            $("#btnestatuscorte").removeClass("btn-warning");
+
+
+
+            $("#btnestatuscorte").text(response.estadonew);
+            $("#btnestatuscorte").addClass(response.colornew);
+
+
             if (response.estadocorte == 2) {
                 $("#frmregistro").removeClass("d-none");
             } else {
                 $("#frmregistro").addClass("d-none");
             }
 
+
+            //// SIN REGISTRO DE TENDIDO
+            //if (response.estadocorte == 1) {
+            //    $("#btnestatuscorte").text("Sin Registro");
+            //    $("#btnestatuscorte").addClass("btn-danger");
+
+            //}
+
+            //// CERRADO
+            //if (response.estadocorte == 0) {
+            //    $("#btnestatuscorte").text("Cerrado");
+            //    $("#btnestatuscorte").addClass("btn-success");
+            //}
+
+            //// APERTURADO
+            //if (response.estadocorte == 2) {
+            //    $("#btnestatuscorte").text("Aperturado");
+            //    $("#btnestatuscorte").addClass("btn-danger");
+
+            //}
 
         }
 
@@ -492,7 +526,7 @@
 
         // ESTADO DEL TENDIDO
         async function getestadotendido(){
-            
+
             return await get("Corte", "BuscarCabecera", {
                 ficha, combo, version,tela
             },true).then(response => {

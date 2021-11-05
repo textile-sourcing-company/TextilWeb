@@ -663,10 +663,12 @@
 
                     if (valor2 > 0 && valor3 > 0 && valor4 > 0 && valor5 > 0 && valor6 > 0) {
 
+                        MostrarCarga("Registrando...");
+
                         let cantidad = parseFloat($("#txtnum6").val().trim());
                         let pretotal = KGTELALIQUIDADA + cantidad;
 
-                        console.log(cantidad, pretotal, KGTELALIQUIDADA, KGTELADESPACHADA);
+                        //console.log(cantidad, pretotal, KGTELALIQUIDADA, KGTELADESPACHADA);
 
                         //if (pretotal <= (KGTELADESPACHADA + KGTELAADICIONAL)) {
                             await RegistrarEtapas();
@@ -1150,6 +1152,7 @@
                             let response = await seleccionarturno();
 
                             if (response.value) {
+                                //MostrarCarga("Registrando...");
                                 TURNO = response.value;
                                 // REGISTRAMOS MOTIVOS
                                 await registrarmotivos();
